@@ -1,0 +1,28 @@
+[
+  {
+    "tag_name": "v1.0.0",
+    "name": "PhotoChemist v1.0.0",
+    "html_url": "https://github.com/dec18studios/PhotoChemist-OFX/releases/tag/v1.0.0",
+    "body": "Initial public release.\n\n<!-- manager-highlights:start -->\n- 43-band spectral film emulation engine\n- Multiple film stock presets\n- Full GPU acceleration (CUDA, Metal, OpenCL)\n- Status M densitometry\n<!-- manager-highlights:end -->",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-04-03T00:00:00Z",
+    "assets": [
+      {
+        "name": "PhotoChemist_v1.0.0_macOS_universal_portable.zip",
+        "browser_download_url": "https://github.com/dec18studios/PhotoChemist-OFX/releases/download/v1.0.0/PhotoChemist_v1.0.0_macOS_universal_portable.zip",
+        "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "name": "PhotoChemist_v1.0.0_windows_x86_64_portable.zip",
+        "browser_download_url": "https://github.com/dec18studios/PhotoChemist-OFX/releases/download/v1.0.0/PhotoChemist_v1.0.0_windows_x86_64_portable.zip",
+        "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      {
+        "name": "PhotoChemist_v1.0.0_linux_x86_64_portable.tar.gz",
+        "browser_download_url": "https://github.com/dec18studios/PhotoChemist-OFX/releases/download/v1.0.0/PhotoChemist_v1.0.0_linux_x86_64_portable.tar.gz",
+        "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      }
+    ]
+  }
+]

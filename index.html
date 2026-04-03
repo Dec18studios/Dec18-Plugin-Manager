@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dec 18 Studios Plugins</title>
+    <script type="module" src="/src/main.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <aside class="sidebar">
+        <div class="sidebar-primary">
+          <div class="brand">
+            <div class="brand-mark">D18</div>
+            <div>
+              <h1>Dec 18 Studios</h1>
+            </div>
+          </div>
+
+          <section class="panel compact manager-panel">
+            <div class="panel-header">
+              <h2>Manager</h2>
+            </div>
+            <div class="manager-overview">
+              <dl class="manager-summary-list">
+                <div class="manager-summary-row">
+                  <dt>Version:</dt>
+                  <dd id="manager-version">-</dd>
+                </div>
+                <div class="manager-summary-row">
+                  <dt>Platform:</dt>
+                  <dd id="manager-platform">-</dd>
+                </div>
+              </dl>
+              <div class="button-row manager-action-row">
+                <button id="refresh-button" class="primary">Refresh Plugin Catalog</button>
+                <button id="check-updates-button">Check for Manager Updates</button>
+              </div>
+            </div>
+            <details class="manager-details">
+              <summary>Manager details</summary>
+              <dl class="summary-grid manager-details-grid">
+                <div>
+                  <dt>Catalog</dt>
+                  <dd id="catalog-source">-</dd>
+                </div>
+                <div>
+                  <dt>Updater</dt>
+                  <dd id="updater-status">-</dd>
+                </div>
+              </dl>
+              <label class="toggle-row" for="beta-releases-toggle">
+                <span>
+                  <strong>Enable beta releases</strong>
+                  <small>Use public beta builds when a plugin provides them.</small>
+                </span>
+                <input id="beta-releases-toggle" type="checkbox" />
+              </label>
+            </details>
+          </section>
+        </div>
+
+        <section class="panel compact">
+          <div class="panel-header">
+            <h2>Activity</h2>
+          </div>
+          <div id="activity-log" class="activity-log" aria-live="polite"></div>
+        </section>
+
+        <section class="panel compact donate-panel">
+          <div class="panel-header">
+            <h2>Support</h2>
+          </div>
+          <p class="donate-copy">If these plugins help your work, consider supporting Dec 18 Studios.</p>
+          <a id="donate-link" class="donate-button" href="https://dec18studios.com/donate" target="_blank" rel="noreferrer">
+            Support Dec 18 Studios
+          </a>
+        </section>
+      </aside>
+
+      <main class="content">
+        <section id="alert-banner" class="alert-banner hidden" aria-live="assertive">
+          <div>
+            <p class="eyebrow alert-label">Attention</p>
+            <p id="alert-summary"></p>
+            <details id="alert-details" class="alert-details hidden">
+              <summary>Technical details</summary>
+              <pre id="alert-message"></pre>
+            </details>
+          </div>
+          <button id="alert-dismiss" class="ghost-button" type="button">Dismiss</button>
+        </section>
+
+        <section class="panel plugins-panel">
+          <div class="panel-header">
+            <div>
+              <h2 class="plugins-title">Plugins</h2>
+            </div>
+            <div class="plugin-toolbar">
+              <input id="plugin-search" type="search" placeholder="Search plugins..." class="plugin-search" />
+              <select id="category-filter" class="category-filter">
+                <option value="all">All categories</option>
+              </select>
+              <select id="sort-order" class="sort-order">
+                <option value="name">Sort by name</option>
+                <option value="status">Sort by status</option>
+                <option value="category">Sort by category</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="plugin-list" class="plugin-list">
+            <div class="empty-state">Loading plugin status...</div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="release-highlights-dialog" class="release-highlights-dialog">
+      <div class="release-highlights-shell">
+        <div class="release-highlights-header">
+          <div>
+            <p class="eyebrow">Version highlights</p>
+            <h3 id="release-highlights-title"></h3>
+          </div>
+          <button id="release-highlights-close" class="ghost-button" type="button">Close</button>
+        </div>
+        <div id="release-highlights-body" class="release-highlights-body"></div>
+        <div class="release-highlights-footer">
+          <a
+            id="release-highlights-link"
+            class="release-highlights-link"
+            href="#"
+            target="_blank"
+            rel="noreferrer"
+          >
+            View full release notes
+          </a>
+        </div>
+      </div>
+    </dialog>
+  </body>
+</html>

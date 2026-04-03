@@ -1,0 +1,10 @@
+{
+  "generatedAt": "2026-04-03T00:00:00.000Z",
+  "plugins": [
+    {
+      "pluginId": "photochemist",
+      "displayName": "PhotoChemist",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/photochemist/stable.json"
+    }
+  ]
+}

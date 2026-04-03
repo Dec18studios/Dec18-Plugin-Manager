@@ -1,0 +1,74 @@
+{
+  "pluginId": "photochemist",
+  "displayName": "PhotoChemist",
+  "version": "1.0.0",
+  "releaseDate": "2026-04-03T00:00:00Z",
+  "releaseNotesUrl": "https://github.com/dec18studios/PhotoChemist-OFX/releases/tag/v1.0.0",
+  "releaseHighlights": "- 43-band spectral film emulation engine\n- Multiple film stock presets\n- Full GPU acceleration (CUDA, Metal, OpenCL)\n- Status M densitometry",
+  "platforms": [
+    {
+      "platform": "macos",
+      "arch": "universal",
+      "downloadUrl": "https://github.com/dec18studios/PhotoChemist-OFX/releases/download/v1.0.0/PhotoChemist_v1.0.0_macOS_universal.zip",
+      "sha256": "REPLACE_WITH_ACTUAL_SHA256",
+      "packageType": "zip",
+      "bundleName": "PhotoChemist.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.PhotoChemist",
+      "installPath": "/Library/OFX/Plugins",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    },
+    {
+      "platform": "windows",
+      "arch": "x86_64",
+      "downloadUrl": "https://github.com/dec18studios/PhotoChemist-OFX/releases/download/v1.0.0/PhotoChemist_v1.0.0_windows_x86_64.zip",
+      "sha256": "REPLACE_WITH_ACTUAL_SHA256",
+      "packageType": "zip",
+      "bundleName": "PhotoChemist.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.PhotoChemist",
+      "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    },
+    {
+      "platform": "linux",
+      "arch": "x86_64",
+      "downloadUrl": "https://github.com/dec18studios/PhotoChemist-OFX/releases/download/v1.0.0/PhotoChemist_v1.0.0_linux_x86_64.tar.gz",
+      "sha256": "REPLACE_WITH_ACTUAL_SHA256",
+      "packageType": "tar.gz",
+      "bundleName": "PhotoChemist.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.PhotoChemist",
+      "installPath": "/usr/OFX/Plugins",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    }
+  ],
+  "availableVersions": []
+}

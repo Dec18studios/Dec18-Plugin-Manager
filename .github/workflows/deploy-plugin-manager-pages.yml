@@ -1,0 +1,95 @@
+name: Deploy Plugin Manager Pages
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/**"
+      - ".github/workflows/deploy-plugin-manager-pages.yml"
+  release:
+    types:
+      - published
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: plugin-manager-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+
+      - name: Generate plugin channel manifests from latest plugin releases
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p tmp/releases tmp/configs
+
+          # PhotoChemist OFX
+          curl -fsSL \
+            -H "Accept: application/vnd.github.raw" \
+            "https://raw.githubusercontent.com/dec18studios/PhotoChemist-OFX/main/manager-release-config.json" \
+            -o tmp/configs/photochemist-manager-release-config.json
+          curl -fsSL \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            "https://api.github.com/repos/dec18studios/PhotoChemist-OFX/releases?per_page=100" \
+            -o tmp/releases/photochemist-releases.json
+
+          # Add more plugins here as they are released:
+          # curl -fsSL ... -o tmp/configs/PLUGIN-manager-release-config.json
+          # curl -fsSL ... -o tmp/releases/PLUGIN-releases.json
+
+          node tools/generate-plugin-channel-manifests.mjs \
+            --manager-root "$GITHUB_WORKSPACE" \
+            --config "$GITHUB_WORKSPACE/tmp/configs/photochemist-manager-release-config.json" \
+            --releases-json "$GITHUB_WORKSPACE/tmp/releases/photochemist-releases.json"
+
+      - name: Prepare Pages content
+        run: |
+          rm -rf pages-dist
+          cp -R docs pages-dist
+
+      - name: Generate updater feed from latest manager release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+        run: |
+          node tools/generate-updater-feed.mjs --output pages-dist/updates/latest.json
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "pages-dist"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

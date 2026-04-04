@@ -105,6 +105,19 @@ jobs:
 
           echo "::notice::Processed ${PROCESSED}/${#PLUGINS[@]} plugin repos"
 
+      - name: Rewrite download URLs through proxy
+        env:
+          PROXY_BASE: ${{ vars.DOWNLOAD_PROXY_URL || 'https://dec18-download-proxy.dec18studios.workers.dev' }}
+        run: |
+          # Rewrite browser_download_url in manifests to route through the proxy
+          # e.g. https://github.com/dec18studios/Repo/releases/download/v1.0/Asset.zip
+          #   → https://proxy/v1/dec18studios/Repo/releases/download/v1.0/Asset.zip
+          for manifest in docs/plugins/*/stable.json docs/plugins/*/beta.json; do
+            [ -f "$manifest" ] || continue
+            sed -i "s|https://github.com/\([^/]*/[^/]*/releases/download/[^\"]*\)|${PROXY_BASE}/v1/\1|g" "$manifest"
+            echo "::notice::Rewrote download URLs in $(basename $(dirname $manifest))/$(basename $manifest)"
+          done
+
       - name: Prepare Pages content
         run: |
           rm -rf pages-dist

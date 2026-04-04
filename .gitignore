@@ -3,3 +3,7 @@ dist/
 src-tauri/target/
 src-tauri/gen/
 *.log
+
+# License signing — private key + ledger must NEVER be committed
+tools/license-keys/private.pem
+tools/license-keys/ledger.json

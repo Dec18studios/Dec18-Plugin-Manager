@@ -76,6 +76,18 @@
             Support Dec 18 Studios
           </a>
         </section>
+
+        <section class="panel compact license-panel">
+          <div class="panel-header">
+            <h2>Account</h2>
+          </div>
+          <div id="license-status" class="license-status">
+            <p class="license-status-text">Register to download plugins</p>
+          </div>
+          <div class="license-actions">
+            <button id="enter-license-button" class="license-enter-button" type="button">Register / Enter Key</button>
+          </div>
+        </section>
       </aside>
 
       <main class="content">
@@ -137,6 +149,40 @@
             View full release notes
           </a>
         </div>
+      </div>
+    </dialog>
+
+    <dialog id="license-key-dialog" class="license-key-dialog">
+      <div class="license-dialog-shell">
+        <div class="license-dialog-header">
+          <div>
+            <p class="eyebrow">Account</p>
+            <h3 id="license-dialog-title">Register for Dec 18 Studios</h3>
+          </div>
+          <button id="license-dialog-close" class="ghost-button" type="button">Close</button>
+        </div>
+
+        <!-- Register via website (default view) -->
+        <div id="license-register-view" class="license-dialog-body">
+          <p class="license-dialog-hint">Register on the Dec 18 Studios website to get your license key. You'll receive it by email along with the latest download link.</p>
+          <div class="license-dialog-footer register-website-actions">
+            <a id="register-website-link" class="primary register-website-button" href="https://dec18studios.com/register" target="_blank" rel="noreferrer">Register on Website</a>
+          </div>
+          <p class="license-dialog-switch">Already have a key? <button id="switch-to-key-entry" class="link-button" type="button">Enter license key</button></p>
+        </div>
+
+        <!-- Manual key entry -->
+        <div id="license-key-view" class="license-dialog-body hidden">
+          <p class="license-dialog-hint">Paste the license key you received via email.</p>
+          <textarea id="license-key-input" class="license-key-input" rows="3" placeholder="D18.xxxxxx.xxxxxx" spellcheck="false" autocomplete="off"></textarea>
+          <div id="license-key-error" class="license-key-error hidden"></div>
+          <div class="license-dialog-footer">
+            <button id="license-activate-button" class="primary" type="button">Activate</button>
+          </div>
+          <p class="license-dialog-switch">Need a key? <button id="switch-to-register" class="link-button" type="button">Register on website</button></p>
+        </div>
+
+        <div id="license-active-keys" class="license-active-keys"></div>
       </div>
     </dialog>
   </body>

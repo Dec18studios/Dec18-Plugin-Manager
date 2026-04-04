@@ -134,6 +134,12 @@ pub async fn apply_plugin_action(
     let resolved = catalog::resolve_plugin(plugin_id, target_version).await?;
     ensure_supported_package(&resolved.package)?;
     ensure_hosts_closed(&resolved.package.host_processes)?;
+
+    // File-browse mode: simple file copy to a user-chosen directory (no elevated privileges)
+    if resolved.package.install_mode == "file-browse" {
+        return install_file_browse(plugin_id, action, &resolved).await;
+    }
+
     let source_spec = parse_package_source_spec(&resolved.package.download_url);
     let installed_at = Utc::now().to_rfc3339();
     let staging_root = tempdir().context("Failed to create staging directory")?;
@@ -291,6 +297,97 @@ async fn uninstall_plugin(plugin_id: &str, action: &str) -> Result<PluginOperati
         action: action.to_string(),
         status: "success".to_string(),
         message,
+    })
+}
+
+async fn install_file_browse(
+    plugin_id: &str,
+    action: &str,
+    resolved: &crate::models::ResolvedPlugin,
+) -> Result<PluginOperationResult> {
+    use crate::settings;
+
+    // Determine install directory: user's saved DCTL path → manifest default
+    let install_dir = settings::load_settings()
+        .ok()
+        .and_then(|s| s.dctl_install_path)
+        .unwrap_or_else(|| resolved.package.install_path.clone());
+    let install_root = PathBuf::from(&install_dir);
+
+    if !install_root.exists() {
+        fs::create_dir_all(&install_root)
+            .with_context(|| format!("Failed to create install directory {}", install_root.display()))?;
+    }
+
+    let source_spec = parse_package_source_spec(&resolved.package.download_url);
+    let bytes = load_package_bytes(&source_spec.source).await?;
+    verify_archive_hash(&bytes, &resolved.package.sha256)?;
+
+    let staging_root = tempdir().context("Failed to create staging directory")?;
+    let extracted_root = staging_root.path().join("extract");
+    if resolved.package.package_type == "tar.gz" {
+        extract_tar_gz(&bytes, &extracted_root)?;
+    } else {
+        extract_zip(&bytes, &extracted_root)?;
+    }
+
+    // Copy all extracted files into the install directory (flat copy, no sudo)
+    let mut copied_count = 0usize;
+    for entry in WalkDir::new(&extracted_root).min_depth(1) {
+        let entry = entry.context("Failed to walk extracted archive")?;
+        let relative = entry.path().strip_prefix(&extracted_root).unwrap_or(entry.path());
+
+        // Skip __MACOSX and ._ resource forks
+        if relative.components().any(|c| {
+            let name = c.as_os_str().to_string_lossy();
+            name == "__MACOSX" || name.starts_with("._")
+        }) {
+            continue;
+        }
+
+        let dest = install_root.join(relative);
+        if entry.file_type().is_dir() {
+            fs::create_dir_all(&dest)
+                .with_context(|| format!("Failed to create {}", dest.display()))?;
+        } else {
+            if let Some(parent) = dest.parent() {
+                fs::create_dir_all(parent).ok();
+            }
+            fs::copy(entry.path(), &dest)
+                .with_context(|| format!("Failed to copy {} to {}", entry.path().display(), dest.display()))?;
+            copied_count += 1;
+        }
+    }
+
+    // Track the install in the manager state
+    let installed_at = Utc::now().to_rfc3339();
+    let target_file = install_root.join(&resolved.package.bundle_name);
+    let key = install_key(plugin_id, &target_file);
+    let mut state = load_install_state().unwrap_or_default();
+    state.installs.insert(
+        key,
+        InstallRecord {
+            plugin_id: plugin_id.to_string(),
+            bundle_path: target_file.display().to_string(),
+            installed_version: resolved.version.clone(),
+            bundle_identifier: resolved.package.bundle_identifier.clone(),
+            installed_at,
+        },
+    );
+    save_install_state(&state)?;
+
+    Ok(PluginOperationResult {
+        plugin_id: plugin_id.to_string(),
+        action: action.to_string(),
+        status: "success".to_string(),
+        message: format!(
+            "{} {} installed ({} file{}) to {}.",
+            resolved.manifest.display_name,
+            resolved.version,
+            copied_count,
+            if copied_count == 1 { "" } else { "s" },
+            install_root.display()
+        ),
     })
 }
 

@@ -219,6 +219,7 @@ async function buildReleaseFromGitHubRelease(config, release, options = {}) {
       bundleName: rule.bundleName,
       bundleIdentifier: rule.bundleIdentifier,
       installPath: rule.installPath,
+      installMode: rule.installMode || "bundle",
       minManagerVersion: rule.minManagerVersion || config.minManagerVersion,
       hostProcesses: rule.hostProcesses || config.hostProcesses
     });
@@ -244,13 +245,13 @@ async function buildReleaseFromGitHubRelease(config, release, options = {}) {
   };
 }
 
-function updateIndex(indexPath, pluginId, displayName) {
+function updateIndex(indexPath, pluginId, displayName, category) {
   const index = readJson(indexPath);
   index.generatedAt = new Date().toISOString();
   const manifestUrl = `https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/${pluginId}/stable.json`;
   const entries = Array.isArray(index.plugins) ? [...index.plugins] : [];
   const existingIndex = entries.findIndex((entry) => entry.pluginId === pluginId);
-  const nextEntry = { pluginId, displayName, manifestUrl };
+  const nextEntry = { pluginId, displayName, manifestUrl, category: category || null };
 
   if (existingIndex >= 0) {
     entries[existingIndex] = nextEntry;
@@ -292,6 +293,9 @@ async function generateForConfig(configPath, releasesPath, managerRoot) {
   const stableManifest = {
     pluginId: config.pluginId,
     displayName: config.displayName,
+    description: config.description || null,
+    category: config.category || null,
+    tags: config.tags || [],
     version: currentStableRelease.version,
     releaseDate: currentStableRelease.releaseDate,
     releaseNotesUrl: currentStableRelease.releaseNotesUrl,
@@ -308,6 +312,9 @@ async function generateForConfig(configPath, releasesPath, managerRoot) {
     betaManifest = {
       pluginId: config.pluginId,
       displayName: config.displayName,
+      description: config.description || null,
+      category: config.category || null,
+      tags: config.tags || [],
       version: currentBetaRelease.version,
       releaseDate: currentBetaRelease.releaseDate,
       releaseNotesUrl: currentBetaRelease.releaseNotesUrl,
@@ -329,7 +336,7 @@ async function generateForConfig(configPath, releasesPath, managerRoot) {
     removeIfExists(betaPath);
   }
 
-  updateIndex(indexPath, config.pluginId, config.displayName);
+  updateIndex(indexPath, config.pluginId, config.displayName, config.category);
   console.log(`Generated manifests for ${config.pluginId} from ${config.releaseRepo}`);
 }
 

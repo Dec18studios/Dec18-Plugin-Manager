@@ -1,6 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import { relaunch } from "@tauri-apps/plugin-process";
 import { check } from "@tauri-apps/plugin-updater";
+import { open } from "@tauri-apps/plugin-dialog";
 import "./styles.css";
 
 // Ed25519 public key (SPKI DER, base64) — matches tools/license-keys/public.b64
@@ -684,6 +685,13 @@ function renderPlugins() {
 
       <div class="plugin-actions">
         ${isLicensed() ? `
+        ${plugin.installMode === "file-browse" ? `
+        <div class="dctl-path-row">
+          <span class="dctl-path-label">Install to:</span>
+          <span class="dctl-path-value" title="${escapeHtml(plugin.installPath)}">${escapeHtml(plugin.installPath)}</span>
+          <button type="button" class="dctl-change-path-button" data-plugin-id="${plugin.pluginId}">Change</button>
+        </div>
+        ` : ""}
         <button type="button" class="${primaryActionClass(primaryLabel)}" data-plugin-id="${plugin.pluginId}" data-action="${primaryRequest}">${primaryLabel}</button>
         ${
           helperText
@@ -705,6 +713,23 @@ function renderPlugins() {
     if (button) {
       button.addEventListener("click", async () => {
         await applyPluginAction(plugin.pluginId, primaryRequest);
+      });
+    }
+
+    // DCTL / file-browse: "Change" folder button
+    const changePathBtn = card.querySelector(".dctl-change-path-button");
+    if (changePathBtn) {
+      changePathBtn.addEventListener("click", async () => {
+        try {
+          const chosen = await invoke("pick_folder", { startPath: plugin.installPath });
+          if (chosen) {
+            await invoke("set_dctl_install_path", { path: chosen });
+            logActivity(`DCTL install folder changed to ${chosen}`);
+            await refreshDashboard();
+          }
+        } catch (err) {
+          console.error("Folder picker error:", err);
+        }
       });
     }
 

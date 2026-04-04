@@ -88,7 +88,20 @@ fn build_plugin_status(
     package: PlatformPackage,
     install_state: &crate::models::ManagedInstallState,
 ) -> PluginStatus {
-    let target_bundle = PathBuf::from(&package.install_path).join(&package.bundle_name);
+    let is_file_browse = package.install_mode == "file-browse";
+
+    // For file-browse plugins, check the user's chosen path from settings, falling
+    // back to the manifest default. For bundle plugins, always use the manifest path.
+    let effective_install_path = if is_file_browse {
+        crate::settings::load_settings()
+            .ok()
+            .and_then(|s| s.dctl_install_path)
+            .unwrap_or_else(|| package.install_path.clone())
+    } else {
+        package.install_path.clone()
+    };
+
+    let target_bundle = PathBuf::from(&effective_install_path).join(&package.bundle_name);
     let installed = target_bundle.exists();
     let install_key = installer::install_key(&entry.plugin_id, &target_bundle);
     let record = install_state.installs.get(&install_key);
@@ -146,7 +159,7 @@ fn build_plugin_status(
         display_name: manifest.display_name.clone(),
         latest_version: manifest.version.clone(),
         installed_version,
-        install_path: package.install_path.clone(),
+        install_path: effective_install_path,
         bundle_name: package.bundle_name.clone(),
         installed,
         managed_install,
@@ -161,6 +174,7 @@ fn build_plugin_status(
         description: manifest.description.clone(),
         category: entry.category.clone().or_else(|| manifest.category.clone()),
         tags: manifest.tags.clone(),
+        install_mode: package.install_mode.clone(),
     }
 }
 

@@ -53,7 +53,7 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDQ1RURFMUIxRjFCQkYxRUIKUldUcjhidnhzZUh0UlpEbXR2Mm9ScFdjbHRWdkRkbXJMN3NWbnlqRitiMUdEU3NudDBmRW5UQjUK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDRFM0UxQTk1RTQ3NEUxNzEKUldSeDRYVGtsUm8rVHIzaXBGdWFMMGNreEtQQlBoWlRNMTJTL3Vna2hWelk4TjNaVFdRcTBXNEUK",
       "endpoints": [
         "https://dec18studios.github.io/Dec18-Plugin-Manager/updates/latest.json"
       ],

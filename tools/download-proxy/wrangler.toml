@@ -1,0 +1,12 @@
+name = "dec18-download-proxy"
+main = "worker.js"
+compatibility_date = "2024-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+# The public key is NOT a secret — it's the verification key, same one
+# embedded in the Tauri app and frontend.
+[vars]
+PUBLIC_KEY_SPKI_B64 = "MCowBQYDK2VwAyEAAZ7aAuceZRk6w/OQ3LUoYr7/rIZLlE1xHxMh8/Dhjzs="
+
+# Secrets (set via `wrangler secret put GITHUB_PAT`):
+#   GITHUB_PAT  — Fine-grained token with Contents:read on all plugin repos

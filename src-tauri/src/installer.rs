@@ -471,8 +471,19 @@ async fn load_package_bytes(source: &str) -> Result<Vec<u8>> {
         .user_agent("Dec18StudiosPlugins/0.1.0")
         .build()
         .context("Failed to create download client")?;
-    let bytes = client
-        .get(source)
+
+    let mut request = client.get(source);
+
+    // Attach license token when downloading through the proxy
+    if source.contains(".workers.dev/") || source.contains("/v1/dec18studios/") {
+        if let Ok(license_data) = crate::license::load_licenses() {
+            if let Some(token) = license_data.keys.first() {
+                request = request.header("Authorization", format!("Bearer {}", token));
+            }
+        }
+    }
+
+    let bytes = request
         .send()
         .await
         .with_context(|| format!("Failed to download {source}"))?

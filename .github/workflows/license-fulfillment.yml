@@ -1,0 +1,47 @@
+name: License Key Fulfillment
+
+on:
+  schedule:
+    # Every 10 minutes
+    - cron: "*/10 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+env:
+  # ── Squarespace ──
+  # Form block ID for the newsletter signup form.
+  # Find it via: GET https://api.squarespace.com/1.0/commerce/forms
+  # with Authorization: Bearer <your API key>
+  SQUARESPACE_FORM_ID: "REPLACE_ME"
+
+  # ── Email ──
+  FROM_EMAIL: "create@dec18studios.com"
+  FROM_NAME: "Dec 18 Studios"
+
+jobs:
+  fulfill:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Process new subscribers
+        env:
+          SQUARESPACE_API_KEY: ${{ secrets.SQUARESPACE_API_KEY }}
+          LICENSE_SIGNING_PRIVATE_KEY: ${{ secrets.LICENSE_SIGNING_PRIVATE_KEY }}
+          GMAIL_CREDENTIALS: ${{ secrets.GMAIL_CREDENTIALS }}
+          GMAIL_TOKEN: ${{ secrets.GMAIL_TOKEN }}
+        run: node tools/fulfill-licenses.mjs
+
+      - name: Commit processed subscribers
+        run: |
+          git config user.name "license-bot"
+          git config user.email "noreply@dec18studios.com"
+          git add tools/license-keys/processed-subscribers.json
+          git diff --cached --quiet || git commit -m "chore: update processed subscribers [skip ci]"
+          git push

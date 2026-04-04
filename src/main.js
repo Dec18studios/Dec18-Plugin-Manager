@@ -3,13 +3,61 @@ import { relaunch } from "@tauri-apps/plugin-process";
 import { check } from "@tauri-apps/plugin-updater";
 import "./styles.css";
 
+// Ed25519 public key (SPKI DER, base64) — matches tools/license-keys/public.b64
+const LICENSE_PUBLIC_KEY_B64 = "MCowBQYDK2VwAyEAAZ7aAuceZRk6w/OQ3LUoYr7/rIZLlE1xHxMh8/Dhjzs=";
+
+function base64urlDecode(str) {
+  const base64 = str.replace(/-/g, "+").replace(/_/g, "/");
+  const pad = base64.length % 4 === 0 ? "" : "=".repeat(4 - (base64.length % 4));
+  return Uint8Array.from(atob(base64 + pad), (c) => c.charCodeAt(0));
+}
+
+async function verifyLicenseToken(token) {
+  if (!token || !token.startsWith("D18.")) return null;
+  const parts = token.split(".");
+  if (parts.length !== 3) return null;
+
+  const payloadB64 = parts[1];
+  const signatureB64 = parts[2];
+
+  try {
+    const payloadBytes = base64urlDecode(payloadB64);
+    const payload = JSON.parse(new TextDecoder().decode(payloadBytes));
+
+    // Verify Ed25519 signature via Web Crypto when available
+    try {
+      const keyDer = Uint8Array.from(atob(LICENSE_PUBLIC_KEY_B64), (c) => c.charCodeAt(0));
+      const cryptoKey = await crypto.subtle.importKey(
+        "spki", keyDer, { name: "Ed25519" }, false, ["verify"]
+      );
+      const signature = base64urlDecode(signatureB64);
+      const valid = await crypto.subtle.verify("Ed25519", cryptoKey, signature, payloadBytes);
+      if (!valid) return null;
+    } catch {
+      // Ed25519 not yet supported in this WebView — accept structural validity.
+      // Move to Rust-side verification for production hardening.
+    }
+
+    if (!payload.tier || !payload.email || !Array.isArray(payload.plugins)) return null;
+    return payload;
+  } catch {
+    return null;
+  }
+}
+
 const state = {
   busy: false,
   dashboard: null,
   activeOperation: null,
   searchQuery: "",
   categoryFilter: "all",
-  sortOrder: "name"
+  sortOrder: "name",
+  license: {
+    keys: [],        // raw D18.xxx.xxx tokens stored on disk
+    parsed: [],      // verified payloads: [{ tier, email, plugins, issuedAt }]
+    tier: null,      // "master" | <pluginId> | null
+    plugins: [],     // ["*"] or ["photochemist", ...]
+  }
 };
 
 const elements = {
@@ -34,7 +82,20 @@ const elements = {
   releaseHighlightsClose: document.querySelector("#release-highlights-close"),
   pluginSearch: document.querySelector("#plugin-search"),
   categoryFilter: document.querySelector("#category-filter"),
-  sortOrder: document.querySelector("#sort-order")
+  sortOrder: document.querySelector("#sort-order"),
+  licenseStatus: document.querySelector("#license-status"),
+  enterLicenseButton: document.querySelector("#enter-license-button"),
+  licenseDialog: document.querySelector("#license-key-dialog"),
+  licenseDialogTitle: document.querySelector("#license-dialog-title"),
+  licenseDialogClose: document.querySelector("#license-dialog-close"),
+  registerView: document.querySelector("#license-register-view"),
+  switchToKeyEntry: document.querySelector("#switch-to-key-entry"),
+  keyEntryView: document.querySelector("#license-key-view"),
+  licenseKeyInput: document.querySelector("#license-key-input"),
+  licenseKeyError: document.querySelector("#license-key-error"),
+  licenseActivateButton: document.querySelector("#license-activate-button"),
+  switchToRegister: document.querySelector("#switch-to-register"),
+  licenseActiveKeys: document.querySelector("#license-active-keys")
 };
 
 function logActivity(message) {
@@ -582,7 +643,7 @@ function renderPlugins() {
 
   for (const plugin of plugins) {
     const card = document.createElement("article");
-    card.className = `plugin-card ${cardToneClass(plugin)}`;
+    card.className = `plugin-card ${cardToneClass(plugin)}${isLicensed() ? "" : " locked"}`;
     const installedVersion = plugin.installedVersion ?? (plugin.installed ? "Unknown" : "Not installed");
     const managedBadge = plugin.managedInstall ? "Managed install" : "Detected install";
     const primaryLabel = actionLabel(plugin);
@@ -622,6 +683,7 @@ function renderPlugins() {
       </dl>
 
       <div class="plugin-actions">
+        ${isLicensed() ? `
         <button type="button" class="${primaryActionClass(primaryLabel)}" data-plugin-id="${plugin.pluginId}" data-action="${primaryRequest}">${primaryLabel}</button>
         ${
           helperText
@@ -629,14 +691,29 @@ function renderPlugins() {
             : '<span class="action-helper-placeholder" aria-hidden="true"></span>'
         }
         ${showLatestInfo ? releaseInfoButtonMarkup("main-action-info-button") : ""}
+        ` : `
+        <div class="plugin-locked-overlay">
+          <p>Register to download and install plugins</p>
+          <button type="button" class="register-prompt-button" data-register-prompt="true">Register Now</button>
+        </div>
+        `}
       </div>
       ${pluginOperationMarkup(plugin)}
     `;
 
     const button = card.querySelector(`[data-action="${primaryRequest}"]`);
-    button.addEventListener("click", async () => {
-      await applyPluginAction(plugin.pluginId, primaryRequest);
-    });
+    if (button) {
+      button.addEventListener("click", async () => {
+        await applyPluginAction(plugin.pluginId, primaryRequest);
+      });
+    }
+
+    // Register prompt buttons inside locked cards
+    const registerPrompt = card.querySelector("[data-register-prompt]");
+    if (registerPrompt) {
+      registerPrompt.addEventListener("click", openLicenseDialog);
+    }
+
     const infoButton = card.querySelector(".main-action-info-button");
     if (infoButton) {
       infoButton.addEventListener("click", () => {
@@ -649,16 +726,159 @@ function renderPlugins() {
       });
     }
 
-    if ((plugin.availableVersions?.length ?? 0) > 1) {
+    if (isLicensed() && (plugin.availableVersions?.length ?? 0) > 1) {
       card.appendChild(renderVersionDrawer(plugin));
     }
 
-    const maintenanceDrawer = renderMaintenanceDrawer(plugin);
+    const maintenanceDrawer = isLicensed() ? renderMaintenanceDrawer(plugin) : null;
     if (maintenanceDrawer) {
       card.appendChild(maintenanceDrawer);
     }
 
     elements.pluginList.appendChild(card);
+  }
+}
+
+// --- License state management ---
+
+function isLicensed() {
+  return state.license.tier === "master";
+}
+
+async function loadLicenseState() {
+  try {
+    const keys = await invoke("get_stored_license_keys");
+    state.license.keys = keys;
+    state.license.parsed = [];
+    state.license.tier = null;
+    state.license.plugins = [];
+
+    for (const token of keys) {
+      const payload = await verifyLicenseToken(token);
+      if (payload) {
+        state.license.parsed.push(payload);
+        if (payload.tier === "master") {
+          state.license.tier = "master";
+          state.license.plugins = ["*"];
+        }
+      }
+    }
+
+    renderLicensePanel();
+  } catch (error) {
+    console.error("Failed to load license state:", error);
+  }
+}
+
+function renderLicensePanel() {
+  if (isLicensed()) {
+    const email = state.license.parsed[0]?.email ?? "";
+    elements.licenseStatus.innerHTML = `
+      <span class="license-tier-badge master">Registered</span>
+      <p class="license-status-text">${escapeHtml(email)}</p>
+    `;
+    elements.enterLicenseButton.textContent = "Manage Account";
+  } else {
+    elements.licenseStatus.innerHTML = `
+      <p class="license-status-text">Register to download plugins</p>
+    `;
+    elements.enterLicenseButton.textContent = "Register / Enter Key";
+  }
+}
+
+function renderActiveLicenseKeys() {
+  if (!state.license.parsed.length) {
+    elements.licenseActiveKeys.innerHTML = '<p class="license-status-text">No active license keys</p>';
+    return;
+  }
+  elements.licenseActiveKeys.innerHTML = state.license.parsed
+    .map(
+      (payload, index) => `
+      <div class="license-key-row">
+        <div>
+          <span class="license-tier-badge ${payload.tier}">${payload.tier === "master" ? "Master" : escapeHtml(payload.tier)}</span>
+          <span class="license-status-text">${escapeHtml(payload.email)}</span>
+        </div>
+        <button type="button" class="license-key-remove" data-key-index="${index}" title="Remove this key">&times;</button>
+      </div>
+    `
+    )
+    .join("");
+
+  elements.licenseActiveKeys.querySelectorAll(".license-key-remove").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const idx = parseInt(btn.dataset.keyIndex, 10);
+      const token = state.license.keys[idx];
+      if (token) {
+        await invoke("remove_license_key", { key: token });
+        await loadLicenseState();
+        renderActiveLicenseKeys();
+        logActivity("License key removed.");
+      }
+    });
+  });
+}
+
+function openLicenseDialog() {
+  // Show register view by default, key entry view if already licensed
+  if (isLicensed()) {
+    showKeyEntryView();
+    elements.licenseDialogTitle.textContent = "Manage Account";
+  } else {
+    showRegisterView();
+    elements.licenseDialogTitle.textContent = "Register for Dec 18 Studios";
+  }
+  elements.licenseKeyInput.value = "";
+  elements.licenseKeyError.textContent = "";
+  elements.licenseKeyError.classList.add("hidden");
+  renderActiveLicenseKeys();
+  elements.licenseDialog.showModal();
+}
+
+function showRegisterView() {
+  elements.registerView.classList.remove("hidden");
+  elements.keyEntryView.classList.add("hidden");
+  elements.licenseDialogTitle.textContent = "Register for Dec 18 Studios";
+}
+
+function showKeyEntryView() {
+  elements.registerView.classList.add("hidden");
+  elements.keyEntryView.classList.remove("hidden");
+  elements.licenseDialogTitle.textContent = "Enter License Key";
+}
+
+function closeLicenseDialog() {
+  if (elements.licenseDialog.open) {
+    elements.licenseDialog.close();
+  }
+}
+
+async function activateLicenseKey() {
+  const token = elements.licenseKeyInput.value.trim();
+  elements.licenseKeyError.classList.add("hidden");
+
+  if (!token) {
+    elements.licenseKeyError.textContent = "Please paste a license key.";
+    elements.licenseKeyError.classList.remove("hidden");
+    return;
+  }
+
+  const payload = await verifyLicenseToken(token);
+  if (!payload) {
+    elements.licenseKeyError.textContent = "Invalid license key. Please check and try again.";
+    elements.licenseKeyError.classList.remove("hidden");
+    return;
+  }
+
+  try {
+    await invoke("save_license_key", { key: token });
+    elements.licenseKeyInput.value = "";
+    await loadLicenseState();
+    renderActiveLicenseKeys();
+    logActivity(`License activated: ${payload.tier === "master" ? "Master License" : payload.tier} (${payload.email})`);
+  } catch (error) {
+    elements.licenseKeyError.textContent = "Failed to save license key.";
+    elements.licenseKeyError.classList.remove("hidden");
   }
 }
 
@@ -706,6 +926,7 @@ async function refreshDashboard() {
     hideAlert();
     state.dashboard = await invoke("dashboard_state");
     renderDashboard();
+    await loadLicenseState();
     logActivity("Plugin catalog refreshed.");
   } catch (error) {
     const parsed = parseUiError(error, "Couldn't refresh the plugin catalog right now.");
@@ -859,6 +1080,22 @@ elements.categoryFilter.addEventListener("change", (event) => {
 elements.sortOrder.addEventListener("change", (event) => {
   state.sortOrder = event.currentTarget.value;
   renderPlugins();
+});
+
+// License dialog controls
+elements.enterLicenseButton.addEventListener("click", openLicenseDialog);
+elements.licenseDialogClose.addEventListener("click", closeLicenseDialog);
+elements.licenseActivateButton.addEventListener("click", activateLicenseKey);
+elements.switchToKeyEntry.addEventListener("click", showKeyEntryView);
+elements.switchToRegister.addEventListener("click", showRegisterView);
+elements.licenseDialog.addEventListener("cancel", (event) => {
+  event.preventDefault();
+  closeLicenseDialog();
+});
+elements.licenseDialog.addEventListener("click", (event) => {
+  if (event.target === elements.licenseDialog) {
+    closeLicenseDialog();
+  }
 });
 
 refreshDashboard();

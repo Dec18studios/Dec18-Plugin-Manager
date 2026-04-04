@@ -1,5 +1,6 @@
 mod catalog;
 mod installer;
+mod license;
 mod models;
 mod settings;
 
@@ -32,6 +33,27 @@ async fn set_beta_releases_enabled(enabled: bool) -> Result<(), String> {
         .map_err(|error| models::UiError::from_error("settings", &error).to_json_string())
 }
 
+#[tauri::command]
+async fn get_stored_license_keys() -> Result<Vec<String>, String> {
+    let data = license::load_licenses()
+        .map_err(|error| models::UiError::from_error("license", &error).to_json_string())?;
+    Ok(data.keys)
+}
+
+#[tauri::command]
+async fn save_license_key(key: String) -> Result<Vec<String>, String> {
+    let data = license::add_license_key(&key)
+        .map_err(|error| models::UiError::from_error("license", &error).to_json_string())?;
+    Ok(data.keys)
+}
+
+#[tauri::command]
+async fn remove_license_key(key: String) -> Result<Vec<String>, String> {
+    let data = license::remove_license_key(&key)
+        .map_err(|error| models::UiError::from_error("license", &error).to_json_string())?;
+    Ok(data.keys)
+}
+
 pub fn run() {
     let builder = tauri::Builder::default()
         .plugin(tauri_plugin_process::init())
@@ -46,7 +68,10 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             dashboard_state,
             apply_plugin_action,
-            set_beta_releases_enabled
+            set_beta_releases_enabled,
+            get_stored_license_keys,
+            save_license_key,
+            remove_license_key
         ])
         .setup(|app| {
             if let Some(window) = app.get_webview_window("main") {

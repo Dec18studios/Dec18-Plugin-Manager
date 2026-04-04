@@ -36,6 +36,7 @@ sha2 = "0.10"
 sysinfo = "0.38"
 tar = "0.4"
 tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
 tauri-plugin-process = "2"
 tauri-plugin-updater = "2"
 tempfile = "3.10"

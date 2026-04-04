@@ -43,6 +43,7 @@ pub struct PluginStatus {
     pub description: Option<String>,
     pub category: Option<String>,
     pub tags: Vec<String>,
+    pub install_mode: String,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -127,6 +128,12 @@ pub struct PlatformPackage {
     pub install_path: String,
     pub min_manager_version: String,
     pub host_processes: Vec<String>,
+    #[serde(default = "default_install_mode")]
+    pub install_mode: String,
+}
+
+fn default_install_mode() -> String {
+    "bundle".to_string()
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]

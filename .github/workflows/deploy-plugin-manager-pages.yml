@@ -37,40 +37,73 @@ jobs:
 
       - name: Generate plugin channel manifests from latest plugin releases
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # PLUGIN_REPOS_PAT must have 'repo' scope to read private plugin repos.
+          # Add it as a repository secret in Dec18-Plugin-Manager settings.
+          PLUGIN_PAT: ${{ secrets.PLUGIN_REPOS_PAT }}
         run: |
           mkdir -p tmp/releases tmp/configs
 
-          # PhotoChemist OFX — skip gracefully if repo doesn't exist yet
-          PHOTO_CONFIG_OK=false
-          if curl -fsSL \
-            -H "Accept: application/vnd.github.raw" \
-            "https://raw.githubusercontent.com/dec18studios/PhotoChemist-OFX/main/manager-release-config.json" \
-            -o tmp/configs/photochemist-manager-release-config.json 2>/dev/null; then
-            if curl -fsSL \
-              -H "Accept: application/vnd.github+json" \
-              -H "Authorization: Bearer $GITHUB_TOKEN" \
-              "https://api.github.com/repos/dec18studios/PhotoChemist-OFX/releases?per_page=100" \
-              -o tmp/releases/photochemist-releases.json 2>/dev/null; then
-              PHOTO_CONFIG_OK=true
-            fi
-          fi
+          # All plugin repos: REPO_NAME|PLUGIN_ID
+          PLUGINS=(
+            "Hue-Contrast-Compressor-DCTL|hue-contrast-compressor-dctl"
+            "Perfect-Exposure-DCTL|perfect-exposure-dctl"
+            "Volume-Curve-DCTL|volume-curve-dctl"
+            "Grain-By-Greg-DCTL|grain-by-greg-dctl"
+            "Film-Negative-Spac-CST-DCTL|film-negative-spac-cst-dctl"
+            "Saturation-Separator-DCTL|saturation-separator-dctl"
+            "Linear-Ramp-Diagnostic-DCTL|linear-ramp-diagnostic-dctl"
+            "Color-Slice-Omatic-DCTL|color-slice-omatic-dctl"
+            "Dolby-Vision-Spoofer-DCTL|dolby-vision-spoofer-dctl"
+            "Hue-Contrast-Compressor-OFX|hue-contrast-compressor-ofx"
+            "Technically-Technicolor-DRT|technicolor-drt"
+            "PhotoChemist-OFX|photochemist"
+            "OpenDRT-OFX|opendrt-ofx"
+            "IBKeymaster-OFX|ibkeymaster-ofx"
+            "X-Grade-OFX|x-grade-ofx"
+          )
 
-          if [ "$PHOTO_CONFIG_OK" = true ]; then
-            echo "::notice::Generating PhotoChemist manifest from remote release data"
+          PROCESSED=0
+
+          for entry in "${PLUGINS[@]}"; do
+            IFS='|' read -r REPO PLUGIN_ID <<< "$entry"
+            CONFIG_FILE="tmp/configs/${PLUGIN_ID}-config.json"
+            RELEASES_FILE="tmp/releases/${PLUGIN_ID}-releases.json"
+
+            # Fetch config from private repo
+            if ! curl -fsSL \
+              -H "Authorization: token $PLUGIN_PAT" \
+              "https://raw.githubusercontent.com/dec18studios/${REPO}/main/manager-release-config.json" \
+              -o "$CONFIG_FILE" 2>/dev/null; then
+              echo "::notice::${REPO}: no config found — skipping"
+              continue
+            fi
+
+            # Fetch releases
+            if ! curl -fsSL \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer $PLUGIN_PAT" \
+              "https://api.github.com/repos/dec18studios/${REPO}/releases?per_page=100" \
+              -o "$RELEASES_FILE" 2>/dev/null; then
+              echo "::notice::${REPO}: failed to fetch releases — skipping"
+              continue
+            fi
+
+            # Check for at least one stable release with assets
+            STABLE_COUNT=$(jq '[.[] | select(.draft == false and .prerelease == false and (.assets | length > 0))] | length' "$RELEASES_FILE" 2>/dev/null || echo 0)
+            if [ "$STABLE_COUNT" -eq 0 ]; then
+              echo "::notice::${REPO}: no stable releases with assets yet — skipping"
+              continue
+            fi
+
+            echo "::notice::Generating manifests for ${PLUGIN_ID} from ${REPO} (${STABLE_COUNT} stable releases)"
             node tools/generate-plugin-channel-manifests.mjs \
               --manager-root "$GITHUB_WORKSPACE" \
-              --config "$GITHUB_WORKSPACE/tmp/configs/photochemist-manager-release-config.json" \
-              --releases-json "$GITHUB_WORKSPACE/tmp/releases/photochemist-releases.json"
-          elif [ -f docs/plugins/photochemist/manager-release-config.json ]; then
-            echo "::notice::PhotoChemist-OFX repo not available; using local fallback config (no releases to process)"
-          else
-            echo "::notice::No PhotoChemist config found — skipping manifest generation"
-          fi
+              --config "$GITHUB_WORKSPACE/$CONFIG_FILE" \
+              --releases-json "$GITHUB_WORKSPACE/$RELEASES_FILE"
+            PROCESSED=$((PROCESSED + 1))
+          done
 
-          # Add more plugins here as they are released:
-          # curl -fsSL ... -o tmp/configs/PLUGIN-manager-release-config.json
-          # curl -fsSL ... -o tmp/releases/PLUGIN-releases.json
+          echo "::notice::Processed ${PROCESSED}/${#PLUGINS[@]} plugin repos"
 
       - name: Prepare Pages content
         run: |

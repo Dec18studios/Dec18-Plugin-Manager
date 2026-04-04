@@ -8,6 +8,8 @@ use std::path::PathBuf;
 pub struct AppSettings {
     #[serde(default)]
     pub beta_releases_enabled: bool,
+    #[serde(default)]
+    pub dctl_install_path: Option<String>,
 }
 
 pub fn load_settings() -> Result<AppSettings> {

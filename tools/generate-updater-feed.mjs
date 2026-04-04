@@ -91,7 +91,19 @@ async function resolveRelease(repository, token) {
     }
   }
 
-  return githubJson(`https://api.github.com/repos/${repository}/releases/latest`, token);
+  const response = await fetch(`https://api.github.com/repos/${repository}/releases/latest`, {
+    headers: {
+      Accept: "application/vnd.github+json",
+      Authorization: `Bearer ${token}`
+    }
+  });
+  if (response.status === 404) {
+    return null; // No releases yet
+  }
+  if (!response.ok) {
+    throw new Error(`GitHub API request failed: ${response.status} ${response.statusText}`);
+  }
+  return response.json();
 }
 
 async function main() {
@@ -111,6 +123,12 @@ async function main() {
   }
 
   const release = await resolveRelease(repository, token);
+  if (!release) {
+    console.log("No releases found yet — writing empty updater feed placeholder");
+    await mkdir(path.dirname(outputPath), { recursive: true });
+    await writeFile(outputPath, `${JSON.stringify({ version: "0.0.0", notes: "No release yet", pub_date: new Date().toISOString(), platforms: {} }, null, 2)}\n`, "utf8");
+    return;
+  }
   const feed = await buildFeed(release, token);
   await mkdir(path.dirname(outputPath), { recursive: true });
   await writeFile(outputPath, `${JSON.stringify(feed, null, 2)}\n`, "utf8");

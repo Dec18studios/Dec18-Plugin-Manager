@@ -5,5 +5,35 @@
     "name": "Julian Buechner",
     "donationAmount": "10.00",
     "note": "pre-populated — donated before fulfillment pipeline went live"
+  },
+  "nmoldenhauer@media-division.de": {
+    "processedAt": "2026-04-05T04:44:10.164Z",
+    "profileId": "69b594281df61517452948b5",
+    "name": "Nikolas Moldenhauer",
+    "donationAmount": "10.00"
+  },
+  "michael.archibeque@gmail.com": {
+    "processedAt": "2026-04-05T04:44:10.376Z",
+    "profileId": "6993ae75a3e045408b0dd8d2",
+    "name": "Michael Archibeque",
+    "donationAmount": "5.15"
+  },
+  "sanzio.barreto@gmail.com": {
+    "processedAt": "2026-04-05T04:44:10.647Z",
+    "profileId": "692bcf3011f3407c5e407e08",
+    "name": "sanzio barreto",
+    "donationAmount": "10.00"
+  },
+  "geoffsm@gmail.com": {
+    "processedAt": "2026-04-05T04:44:10.857Z",
+    "profileId": "6837a20ab4c1210f94de8791",
+    "name": "Geoff Smith",
+    "donationAmount": "10.30"
+  },
+  "luz00@sfr.fr": {
+    "processedAt": "2026-04-05T04:44:11.167Z",
+    "profileId": "67451523c5e44f29203869c5",
+    "name": "eric morand",
+    "donationAmount": "5.15"
   }
 }

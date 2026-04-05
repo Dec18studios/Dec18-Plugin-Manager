@@ -5,6 +5,8 @@ env:
 
 on:
   workflow_dispatch:
+  repository_dispatch:
+    types: [plugin-release]
   push:
     branches:
       - main

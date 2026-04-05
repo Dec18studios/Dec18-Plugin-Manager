@@ -58,10 +58,9 @@ const privateKey = loadPrivateKey(privateKeyPath);
 const plugins = args.tier === "master" ? ["*"] : (args.plugins ?? [args.tier]);
 
 const payload = {
-  tier: args.tier,
-  email: args.email.trim().toLowerCase(),
-  plugins,
-  issuedAt: new Date().toISOString(),
+  t: args.tier,
+  e: args.email.trim().toLowerCase(),
+  p: plugins,
 };
 
 const key = generateLicenseKey(privateKey, payload);
@@ -73,10 +72,9 @@ console.log("══════════════════════�
 console.log("");
 console.log(key);
 console.log("");
-console.log("  Tier:     ", payload.tier);
-console.log("  Email:    ", payload.email);
-console.log("  Plugins:  ", payload.plugins.join(", "));
-console.log("  Issued:   ", payload.issuedAt);
+console.log("  Tier:     ", payload.t);
+console.log("  Email:    ", payload.e);
+console.log("  Plugins:  ", payload.p.join(", "));
 console.log("═══════════════════════════════════════════════════════════");
 
 // Append to ledger
@@ -85,6 +83,6 @@ let ledger = [];
 if (existsSync(ledgerPath)) {
   ledger = JSON.parse(readFileSync(ledgerPath, "utf8"));
 }
-ledger.push({ ...payload, key, generatedAt: new Date().toISOString() });
+ledger.push({ tier: payload.t, email: payload.e, plugins: payload.p, key, generatedAt: new Date().toISOString() });
 writeFileSync(ledgerPath, JSON.stringify(ledger, null, 2) + "\n", "utf8");
 console.log(`\nAppended to ledger (${ledger.length} total keys issued)`);

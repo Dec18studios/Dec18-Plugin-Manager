@@ -39,7 +39,7 @@ async function verifyLicenseToken(token) {
       // Move to Rust-side verification for production hardening.
     }
 
-    if (!payload.tier || !payload.email || !Array.isArray(payload.plugins)) return null;
+    if (!payload.t || !payload.e || !Array.isArray(payload.p)) return null;
     return payload;
   } catch {
     return null;
@@ -55,7 +55,7 @@ const state = {
   sortOrder: "name",
   license: {
     keys: [],        // raw D18.xxx.xxx tokens stored on disk
-    parsed: [],      // verified payloads: [{ tier, email, plugins, issuedAt }]
+    parsed: [],      // verified payloads: [{ t, e, p }]  (t=tier, e=email, p=plugins)
     tier: null,      // "master" | <pluginId> | null
     plugins: [],     // ["*"] or ["photochemist", ...]
   }
@@ -783,7 +783,7 @@ async function loadLicenseState() {
       const payload = await verifyLicenseToken(token);
       if (payload) {
         state.license.parsed.push(payload);
-        if (payload.tier === "master") {
+        if (payload.t === "master") {
           state.license.tier = "master";
           state.license.plugins = ["*"];
         }
@@ -798,7 +798,7 @@ async function loadLicenseState() {
 
 function renderLicensePanel() {
   if (isLicensed()) {
-    const email = state.license.parsed[0]?.email ?? "";
+    const email = state.license.parsed[0]?.e ?? "";
     elements.licenseStatus.innerHTML = `
       <span class="license-tier-badge master">Registered</span>
       <p class="license-status-text">${escapeHtml(email)}</p>
@@ -822,8 +822,8 @@ function renderActiveLicenseKeys() {
       (payload, index) => `
       <div class="license-key-row">
         <div>
-          <span class="license-tier-badge ${payload.tier}">${payload.tier === "master" ? "Master" : escapeHtml(payload.tier)}</span>
-          <span class="license-status-text">${escapeHtml(payload.email)}</span>
+          <span class="license-tier-badge ${payload.t}">${payload.t === "master" ? "Master" : escapeHtml(payload.t)}</span>
+          <span class="license-status-text">${escapeHtml(payload.e)}</span>
         </div>
         <button type="button" class="license-key-remove" data-key-index="${index}" title="Remove this key">&times;</button>
       </div>
@@ -901,7 +901,7 @@ async function activateLicenseKey() {
     elements.licenseKeyInput.value = "";
     await loadLicenseState();
     renderActiveLicenseKeys();
-    logActivity(`License activated: ${payload.tier === "master" ? "Master License" : payload.tier} (${payload.email})`);
+    logActivity(`License activated: ${payload.t === "master" ? "Master License" : payload.t} (${payload.e})`);
   } catch (error) {
     elements.licenseKeyError.textContent = "Failed to save license key.";
     elements.licenseKeyError.classList.remove("hidden");

@@ -37,10 +37,9 @@ function base64urlEncode(buffer) {
 
 function generateMasterKey(privateKey, email) {
   const payload = {
-    tier: "master",
-    email,
-    plugins: ["*"],
-    issuedAt: new Date().toISOString(),
+    t: "master",
+    e: email,
+    p: ["*"],
   };
   const json = JSON.stringify(payload);
   const payloadB64 = base64urlEncode(Buffer.from(json, "utf8"));

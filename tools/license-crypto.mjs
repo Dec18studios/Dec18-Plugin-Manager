@@ -3,11 +3,11 @@
  *
  * Key format:  D18.<base64url payload>.<base64url signature>
  *
- * Payload JSON:
- *   { tier, email, plugins, issuedAt }
+ * Payload JSON (compact):
+ *   { t, e, p }     (t=tier, e=email, p=plugins)
  *
- * tier = "master" → plugins = ["*"]   (unlocks everything)
- * tier = <pluginId>                   (unlocks that plugin only)
+ * t = "master" → p = ["*"]   (unlocks everything)
+ * t = <pluginId>              (unlocks that plugin only)
  */
 
 import { createPrivateKey, createPublicKey, sign, verify } from "node:crypto";

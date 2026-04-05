@@ -37,6 +37,7 @@ pub async fn build_dashboard_state() -> Result<DashboardState> {
         updater_configured: installer::updater_configured(),
         catalog_url: bundle.source_label.clone(),
         beta_releases_enabled: app_settings.beta_releases_enabled,
+        auto_update_plugins_enabled: app_settings.auto_update_plugins,
     };
 
     let plugins = bundle

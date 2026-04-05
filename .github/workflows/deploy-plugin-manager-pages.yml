@@ -51,7 +51,7 @@ jobs:
             "Perfect-Exposure-DCTL|perfect-exposure-dctl"
             "Volume-Curve-DCTL|volume-curve-dctl"
             "Grain-By-Greg-DCTL|grain-by-greg-dctl"
-            "Film-Negative-Spac-CST-DCTL|film-negative-spac-cst-dctl"
+            "Film-Negative-Space-CST-DCTL|film-negative-spac-cst-dctl"
             "Saturation-Separator-DCTL|saturation-separator-dctl"
             "Linear-Ramp-Diagnostic-DCTL|linear-ramp-diagnostic-dctl"
             "Color-Slice-Omatic-DCTL|color-slice-omatic-dctl"

@@ -533,7 +533,8 @@ h4 {
 
 .plugin-list {
   display: grid;
-  gap: 0.82rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.72rem;
   min-height: 0;
   overflow: auto;
   position: relative;
@@ -550,14 +551,14 @@ h4 {
 
 .plugin-card {
   display: grid;
-  gap: 0.72rem;
+  gap: 0.55rem;
   border: 1px solid var(--panel-edge);
-  border-radius: 24px;
+  border-radius: 18px;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.015)),
     linear-gradient(180deg, rgba(22, 22, 22, 0.96), rgba(31, 38, 46, 0.88));
-  box-shadow: var(--shadow);
-  padding: 0.95rem 1rem;
+  box-shadow: var(--shadow-soft);
+  padding: 0.78rem 0.85rem;
 }
 
 .plugin-card.ok {
@@ -587,10 +588,10 @@ h4 {
 }
 
 .plugin-icon {
-  width: 56px;
-  height: 56px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
-  border-radius: 18px;
+  border-radius: 12px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: linear-gradient(180deg, rgba(10, 12, 16, 0.96), rgba(24, 31, 38, 0.92));
@@ -610,44 +611,38 @@ h4 {
   place-items: center;
   color: var(--blue);
   font-family: var(--font-display);
-  font-size: 1.8rem;
+  font-size: 1.3rem;
 }
 
 .plugin-card h3 {
-  font-size: 1.62rem;
-  line-height: 0.98;
+  font-size: 1.15rem;
+  line-height: 1.05;
 }
 
 .plugin-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.42rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.32rem;
 }
 
 .plugin-meta div {
-  min-width: 132px;
-  padding: 0.38rem 0.58rem 0.42rem;
-  border-radius: 10px;
+  padding: 0.28rem 0.48rem;
+  border-radius: 8px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.015));
 }
 
 .plugin-meta dt {
   color: rgba(255, 255, 255, 0.6);
-  font-size: 0.6rem;
+  font-size: 0.56rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  margin-bottom: 0.08rem;
+  margin-bottom: 0.04rem;
 }
 
 .plugin-meta dd {
   margin: 0;
-  font-size: 0.82rem;
+  font-size: 0.74rem;
   line-height: 1.18;
-}
-
-.plugin-meta div:nth-child(3) {
-  flex: 1 1 240px;
-  min-width: 220px;
 }
 
 .status-pill {
@@ -686,10 +681,10 @@ h4 {
 }
 
 .plugin-actions {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.45rem;
 }
 
 .dctl-path-row {
@@ -737,7 +732,8 @@ h4 {
 }
 
 .plugin-primary-action {
-  min-width: 150px;
+  flex: 1;
+  min-width: 0;
 }
 
 .release-info-button {
@@ -772,8 +768,8 @@ h4 {
 }
 
 button.primary.plugin-install-action {
-  min-width: 168px;
-  padding: 0.92rem 1.24rem;
+  min-width: 0;
+  padding: 0.62rem 0.9rem;
   background: linear-gradient(135deg, #0b4f7a 0%, #1172AE 56%, #083f62 100%);
   border-color: rgba(17, 114, 174, 0.46);
   color: #f5fbff;
@@ -799,7 +795,7 @@ button.primary.plugin-install-action:hover:not(:disabled) {
 }
 
 .plugin-secondary-action {
-  min-width: 138px;
+  min-width: 0;
   border-color: rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.06);
   box-shadow: none;
@@ -1331,13 +1327,8 @@ button.primary.plugin-install-action:hover:not(:disabled) {
     margin-bottom: 0.65rem;
   }
 
-  .plugin-actions {
-    grid-template-columns: auto auto;
-  }
-
-  .action-helper,
-  .action-helper-placeholder {
-    grid-column: 1 / -1;
+  .plugin-list {
+    grid-template-columns: 1fr;
   }
 
   .version-drawer-preview-wrap {
@@ -1357,14 +1348,8 @@ button.primary.plugin-install-action:hover:not(:disabled) {
     justify-content: flex-start;
   }
 
-  .plugin-meta {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .plugin-meta div,
-  .plugin-meta div:nth-child(3) {
-    min-width: 0;
+  .plugin-list {
+    grid-template-columns: 1fr;
   }
 }
 

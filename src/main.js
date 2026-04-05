@@ -67,6 +67,7 @@ const elements = {
   catalogSource: document.querySelector("#catalog-source"),
   updaterStatus: document.querySelector("#updater-status"),
   betaToggle: document.querySelector("#beta-releases-toggle"),
+  autoUpdateToggle: document.querySelector("#auto-update-plugins-toggle"),
   refreshButton: document.querySelector("#refresh-button"),
   updateButton: document.querySelector("#check-updates-button"),
   pluginList: document.querySelector("#plugin-list"),
@@ -914,6 +915,7 @@ function renderDashboard() {
   elements.catalogSource.textContent = `${state.dashboard.catalogSource} feed`;
   elements.updaterStatus.textContent = manager.updaterConfigured ? "Configured" : "Not configured";
   elements.betaToggle.checked = Boolean(manager.betaReleasesEnabled);
+  elements.autoUpdateToggle.checked = Boolean(manager.autoUpdatePluginsEnabled);
 
   // Populate category filter from plugin data
   const categories = new Set();
@@ -939,6 +941,23 @@ async function updateBetaReleasesPreference(enabled) {
     const parsed = parseUiError(error, "Couldn't update beta release settings.");
     showAlert(parsed);
     logActivity(`Beta release setting failed: ${parsed.summary}`);
+  } finally {
+    setBusy(false);
+  }
+}
+
+async function updateAutoUpdatePluginsPreference(enabled) {
+  setBusy(true);
+  try {
+    hideAlert();
+    await invoke("set_auto_update_plugins_enabled", { enabled });
+    logActivity(enabled ? "Auto-update plugins enabled." : "Auto-update plugins disabled.");
+    await refreshDashboard();
+  } catch (error) {
+    elements.autoUpdateToggle.checked = !enabled;
+    const parsed = parseUiError(error, "Couldn't update auto-update settings.");
+    showAlert(parsed);
+    logActivity(`Auto-update setting failed: ${parsed.summary}`);
   } finally {
     setBusy(false);
   }
@@ -1082,6 +1101,9 @@ elements.alertDismiss.addEventListener("click", hideAlert);
 elements.betaToggle.addEventListener("change", (event) => {
   updateBetaReleasesPreference(event.currentTarget.checked);
 });
+elements.autoUpdateToggle.addEventListener("change", (event) => {
+  updateAutoUpdatePluginsPreference(event.currentTarget.checked);
+});
 elements.releaseHighlightsClose.addEventListener("click", closeReleaseHighlightsDialog);
 elements.releaseHighlightsDialog.addEventListener("cancel", (event) => {
   event.preventDefault();
@@ -1123,4 +1145,33 @@ elements.licenseDialog.addEventListener("click", (event) => {
   }
 });
 
-refreshDashboard();
+async function autoUpdatePluginsIfEnabled() {
+  const manager = state.dashboard?.manager;
+  if (!manager?.autoUpdatePluginsEnabled || !isLicensed()) return;
+
+  const updatable = (state.dashboard?.plugins ?? []).filter(
+    (p) => p.needsUpdate && p.installed && p.managedInstall
+  );
+  if (updatable.length === 0) return;
+
+  logActivity(`Auto-updating ${updatable.length} plugin${updatable.length > 1 ? "s" : ""}…`);
+  for (const plugin of updatable) {
+    try {
+      logActivity(`Auto-updating ${plugin.displayName} to ${plugin.latestVersion}…`);
+      await invoke("apply_plugin_action", {
+        pluginId: plugin.pluginId,
+        action: "update",
+        targetVersion: null,
+      });
+      logActivity(`${plugin.displayName} updated to ${plugin.latestVersion}.`);
+    } catch (error) {
+      const parsed = parseUiError(error, `Auto-update failed for ${plugin.displayName}.`);
+      logActivity(`Auto-update failed: ${parsed.summary}`);
+    }
+  }
+  await refreshDashboard();
+}
+
+refreshDashboard().then(() => {
+  autoUpdatePluginsIfEnabled();
+});

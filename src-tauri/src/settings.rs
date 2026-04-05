@@ -9,6 +9,8 @@ pub struct AppSettings {
     #[serde(default)]
     pub beta_releases_enabled: bool,
     #[serde(default)]
+    pub auto_update_plugins: bool,
+    #[serde(default)]
     pub dctl_install_path: Option<String>,
 }
 

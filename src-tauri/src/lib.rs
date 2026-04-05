@@ -35,6 +35,15 @@ async fn set_beta_releases_enabled(enabled: bool) -> Result<(), String> {
 }
 
 #[tauri::command]
+async fn set_auto_update_plugins_enabled(enabled: bool) -> Result<(), String> {
+    let mut current = settings::load_settings()
+        .map_err(|error| models::UiError::from_error("settings", &error).to_json_string())?;
+    current.auto_update_plugins = enabled;
+    settings::save_settings(&current)
+        .map_err(|error| models::UiError::from_error("settings", &error).to_json_string())
+}
+
+#[tauri::command]
 async fn get_stored_license_keys() -> Result<Vec<String>, String> {
     let data = license::load_licenses()
         .map_err(|error| models::UiError::from_error("license", &error).to_json_string())?;
@@ -97,6 +106,7 @@ pub fn run() {
             dashboard_state,
             apply_plugin_action,
             set_beta_releases_enabled,
+            set_auto_update_plugins_enabled,
             get_stored_license_keys,
             save_license_key,
             remove_license_key,

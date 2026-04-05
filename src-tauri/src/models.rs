@@ -19,6 +19,7 @@ pub struct ManagerSummary {
     pub updater_configured: bool,
     pub catalog_url: String,
     pub beta_releases_enabled: bool,
+    pub auto_update_plugins_enabled: bool,
 }
 
 #[derive(Debug, Clone, Serialize)]

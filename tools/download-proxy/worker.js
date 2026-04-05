@@ -76,7 +76,7 @@ async function verifyLicenseToken(token, publicKeyB64) {
   if (!valid) return null;
 
   const payload = JSON.parse(new TextDecoder().decode(payloadBytes));
-  if (!payload.tier || !payload.email || !Array.isArray(payload.plugins)) return null;
+  if (!payload.t || !payload.e || !Array.isArray(payload.p)) return null;
   return payload;
 }
 

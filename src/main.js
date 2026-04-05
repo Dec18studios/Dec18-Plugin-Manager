@@ -645,12 +645,10 @@ function renderPlugins() {
 
   for (const plugin of plugins) {
     const card = document.createElement("article");
-    card.className = `plugin-card ${cardToneClass(plugin)}${isLicensed() ? "" : " locked"}`;
-    const installedVersion = plugin.installedVersion ?? (plugin.installed ? "Unknown" : "Not installed");
-    const managedBadge = plugin.managedInstall ? "Managed install" : "Detected install";
+    card.className = `plugin-card ${cardToneClass(plugin)}`;
+    const installedVersion = plugin.installedVersion ?? (plugin.installed ? "Unknown" : "—");
     const primaryLabel = actionLabel(plugin);
     const primaryRequest = actionRequest(plugin);
-    const helperText = actionHelperText(plugin, primaryLabel);
     const showLatestInfo = hasReleaseHighlights(plugin.releaseHighlights);
     card.innerHTML = `
       <header>
@@ -663,7 +661,6 @@ function renderPlugins() {
         </div>
         <span class="status-pill ${statusClass(plugin.status)} ${plugin.status === "Ready to install" ? "ready" : ""}">${plugin.status}</span>
       </header>
-      ${plugin.description ? `<p class="plugin-description">${escapeHtml(plugin.description)}</p>` : ""}
 
       <dl class="plugin-meta">
         <div>
@@ -674,38 +671,11 @@ function renderPlugins() {
           <dt>Latest</dt>
           <dd>${plugin.latestVersion}</dd>
         </div>
-        <div>
-          <dt>Location</dt>
-          <dd>${plugin.installPath}</dd>
-        </div>
-        <div>
-          <dt>Tracking</dt>
-          <dd>${plugin.installed ? managedBadge : "Ready to install"}</dd>
-        </div>
       </dl>
 
       <div class="plugin-actions">
-        ${isLicensed() ? `
-        ${plugin.installMode === "file-browse" ? `
-        <div class="dctl-path-row">
-          <span class="dctl-path-label">Install to:</span>
-          <span class="dctl-path-value" title="${escapeHtml(plugin.installPath)}">${escapeHtml(plugin.installPath)}</span>
-          <button type="button" class="dctl-change-path-button" data-plugin-id="${plugin.pluginId}">Change</button>
-        </div>
-        ` : ""}
         <button type="button" class="${primaryActionClass(primaryLabel)}" data-plugin-id="${plugin.pluginId}" data-action="${primaryRequest}">${primaryLabel}</button>
-        ${
-          helperText
-            ? `<p class="action-helper">${helperText}</p>`
-            : '<span class="action-helper-placeholder" aria-hidden="true"></span>'
-        }
         ${showLatestInfo ? releaseInfoButtonMarkup("main-action-info-button") : ""}
-        ` : `
-        <div class="plugin-locked-overlay">
-          <p>Register to download and install plugins</p>
-          <button type="button" class="register-prompt-button" data-register-prompt="true">Register Now</button>
-        </div>
-        `}
       </div>
       ${pluginOperationMarkup(plugin)}
     `;
@@ -713,31 +683,27 @@ function renderPlugins() {
     const button = card.querySelector(`[data-action="${primaryRequest}"]`);
     if (button) {
       button.addEventListener("click", async () => {
+        // If not licensed, open the license dialog instead of installing
+        if (!isLicensed()) {
+          openLicenseDialog();
+          return;
+        }
+        // DCTL file-browse: prompt for install folder on first install if no path is saved
+        if (plugin.installMode === "file-browse" && primaryRequest === "install") {
+          try {
+            const savedPath = await invoke("get_dctl_install_path");
+            if (!savedPath) {
+              const chosen = await invoke("pick_folder", { startPath: plugin.installPath });
+              if (!chosen) return; // user cancelled
+              await invoke("set_dctl_install_path", { path: chosen });
+              logActivity(`DCTL install folder set to ${chosen}`);
+            }
+          } catch (err) {
+            console.error("DCTL path prompt error:", err);
+          }
+        }
         await applyPluginAction(plugin.pluginId, primaryRequest);
       });
-    }
-
-    // DCTL / file-browse: "Change" folder button
-    const changePathBtn = card.querySelector(".dctl-change-path-button");
-    if (changePathBtn) {
-      changePathBtn.addEventListener("click", async () => {
-        try {
-          const chosen = await invoke("pick_folder", { startPath: plugin.installPath });
-          if (chosen) {
-            await invoke("set_dctl_install_path", { path: chosen });
-            logActivity(`DCTL install folder changed to ${chosen}`);
-            await refreshDashboard();
-          }
-        } catch (err) {
-          console.error("Folder picker error:", err);
-        }
-      });
-    }
-
-    // Register prompt buttons inside locked cards
-    const registerPrompt = card.querySelector("[data-register-prompt]");
-    if (registerPrompt) {
-      registerPrompt.addEventListener("click", openLicenseDialog);
     }
 
     const infoButton = card.querySelector(".main-action-info-button");

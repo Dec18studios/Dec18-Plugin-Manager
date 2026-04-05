@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 /**
- * License fulfillment — polls Squarespace newsletter form for new
- * subscribers, generates master license keys, emails them via Gmail API.
+ * License fulfillment — polls Squarespace Profiles API for new donors
+ * (donation form = "name your own price" license purchase, $1 min),
+ * generates master license keys, emails them via Gmail API.
  *
  * Required env vars:
- *   SQUARESPACE_API_KEY          — Squarespace API key (Forms permission)
+ *   SQUARESPACE_API_KEY          — Squarespace API key (Profiles permission)
  *   LICENSE_SIGNING_PRIVATE_KEY  — Ed25519 PEM private key (contents, not path)
  *   GMAIL_CREDENTIALS            — Google OAuth client JSON (contents)
  *   GMAIL_TOKEN                  — Google OAuth token JSON (contents)
  *
- * Required workflow env:
- *   SQUARESPACE_FORM_ID          — Form block ID to poll
+ * Optional workflow env:
  *   FROM_EMAIL                   — Sender address
  *   FROM_NAME                    — Sender display name
  */
@@ -48,42 +48,32 @@ function generateMasterKey(privateKey, email) {
   return `D18.${payloadB64}.${base64urlEncode(signature)}`;
 }
 
-// ── Squarespace API ────────────────────────────────────────────────
+// ── Squarespace Profiles API ───────────────────────────────────────
 
-async function fetchFormSubmissions(apiKey, formId) {
-  const url = `https://api.squarespace.com/1.0/commerce/forms/${formId}/submissions`;
-  const res = await fetch(url, {
-    headers: { Authorization: `Bearer ${apiKey}` },
-  });
-  if (!res.ok) {
-    throw new Error(`Squarespace API ${res.status}: ${await res.text()}`);
-  }
-  const data = await res.json();
-  return data.result ?? [];
-}
+async function fetchAllDonors(apiKey) {
+  const donors = [];
+  let url = "https://api.squarespace.com/1.0/profiles";
 
-function extractEmail(submission) {
-  // Squarespace form submissions have a `data` object with field labels as keys.
-  // Newsletter forms typically have an "Email" or "email" field.
-  const fields = submission.data ?? submission.formData ?? {};
-  for (const [key, value] of Object.entries(fields)) {
-    const k = key.toLowerCase();
-    if (k === "email" || k === "email address" || k.includes("email")) {
-      if (typeof value === "string" && value.includes("@")) return value.trim().toLowerCase();
+  while (url) {
+    const res = await fetch(url, {
+      headers: { Authorization: `Bearer ${apiKey}` },
+    });
+    if (!res.ok) {
+      throw new Error(`Squarespace API ${res.status}: ${await res.text()}`);
     }
-  }
-  return null;
-}
+    const data = await res.json();
 
-function extractName(submission) {
-  const fields = submission.data ?? submission.formData ?? {};
-  for (const [key, value] of Object.entries(fields)) {
-    const k = key.toLowerCase();
-    if (k === "name" || k === "first name" || k === "full name") {
-      if (typeof value === "string" && value.trim()) return value.trim();
+    for (const profile of data.profiles ?? []) {
+      const dc = profile.transactionsSummary?.donationCount ?? 0;
+      if (dc > 0) {
+        donors.push(profile);
+      }
     }
+
+    url = data.pagination?.hasNextPage ? data.pagination.nextPageUrl : null;
   }
-  return null;
+
+  return donors;
 }
 
 // ── Gmail API ──────────────────────────────────────────────────────
@@ -111,7 +101,7 @@ function buildLicenseEmail(toEmail, toName, licenseKey) {
   const body = [
     `Hi ${name},`,
     "",
-    "Thanks for registering with Dec 18 Studios! Here's your license key:",
+    "Thanks for your purchase! Here's your Dec 18 Studios license key:",
     "",
     licenseKey,
     "",
@@ -170,16 +160,14 @@ async function main() {
   const privateKeyPem = process.env.LICENSE_SIGNING_PRIVATE_KEY;
   const credentialsJson = process.env.GMAIL_CREDENTIALS;
   const tokenJson = process.env.GMAIL_TOKEN;
-  const formId = process.env.SQUARESPACE_FORM_ID;
 
-  if (!apiKey || !privateKeyPem || !credentialsJson || !tokenJson || !formId) {
+  if (!apiKey || !privateKeyPem || !credentialsJson || !tokenJson) {
     console.log("Missing required env vars — skipping. Set all secrets to enable fulfillment.");
     console.log({
       SQUARESPACE_API_KEY: !!apiKey,
       LICENSE_SIGNING_PRIVATE_KEY: !!privateKeyPem,
       GMAIL_CREDENTIALS: !!credentialsJson,
       GMAIL_TOKEN: !!tokenJson,
-      SQUARESPACE_FORM_ID: formId ?? "(not set)",
     });
     return;
   }
@@ -188,54 +176,58 @@ async function main() {
   const credentials = JSON.parse(credentialsJson);
   const token = JSON.parse(tokenJson);
 
-  // 1. Fetch Squarespace form submissions
-  console.log(`Polling Squarespace form ${formId}...`);
-  const submissions = await fetchFormSubmissions(apiKey, formId);
-  console.log(`Found ${submissions.length} total submissions.`);
+  // 1. Fetch all Squarespace profiles with donationCount > 0
+  console.log("Polling Squarespace profiles for donors...");
+  const donors = await fetchAllDonors(apiKey);
+  console.log(`Found ${donors.length} total donor(s).`);
 
   // 2. Load already-processed ledger
   const processed = loadProcessed();
-  const newSubs = [];
+  const newDonors = [];
 
-  for (const sub of submissions) {
-    const email = extractEmail(sub);
+  for (const profile of donors) {
+    const email = profile.email?.trim().toLowerCase();
     if (!email) continue;
     if (processed[email]) continue;
-    newSubs.push({ email, name: extractName(sub), submissionId: sub.id });
+
+    const name = [profile.firstName, profile.lastName].filter(Boolean).join(" ") || null;
+    const amount = profile.transactionsSummary?.totalDonationAmount?.value ?? "unknown";
+    newDonors.push({ email, name, profileId: profile.id, amount });
   }
 
-  if (!newSubs.length) {
-    console.log("No new subscribers to process.");
+  if (!newDonors.length) {
+    console.log("No new donors to process.");
     return;
   }
 
-  console.log(`Processing ${newSubs.length} new subscriber(s)...`);
+  console.log(`Processing ${newDonors.length} new donor(s)...`);
 
   // 3. Get Gmail access token
   const accessToken = await refreshAccessToken(credentials, token);
 
-  // 4. Generate key + send email for each new subscriber
-  for (const sub of newSubs) {
+  // 4. Generate key + send email for each new donor
+  for (const donor of newDonors) {
     try {
-      const licenseKey = generateMasterKey(privateKey, sub.email);
-      const rawEmail = buildLicenseEmail(sub.email, sub.name, licenseKey);
+      const licenseKey = generateMasterKey(privateKey, donor.email);
+      const rawEmail = buildLicenseEmail(donor.email, donor.name, licenseKey);
       await sendEmail(accessToken, rawEmail);
 
-      processed[sub.email] = {
+      processed[donor.email] = {
         processedAt: new Date().toISOString(),
-        submissionId: sub.submissionId,
-        name: sub.name,
+        profileId: donor.profileId,
+        name: donor.name,
+        donationAmount: donor.amount,
       };
 
-      console.log(`✓ Sent key to ${sub.email}`);
+      console.log(`✓ Sent key to ${donor.email} (donated $${donor.amount})`);
     } catch (err) {
-      console.error(`✗ Failed for ${sub.email}: ${err.message}`);
+      console.error(`✗ Failed for ${donor.email}: ${err.message}`);
     }
   }
 
   // 5. Save updated ledger
   saveProcessed(processed);
-  console.log(`Done. Processed ${Object.keys(processed).length} total subscribers.`);
+  console.log(`Done. Processed ${Object.keys(processed).length} total donor(s).`);
 }
 
 main().catch((err) => {

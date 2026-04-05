@@ -10,12 +10,6 @@ permissions:
   contents: write
 
 env:
-  # ── Squarespace ──
-  # Form block ID for the newsletter signup form.
-  # Find it via: GET https://api.squarespace.com/1.0/commerce/forms
-  # with Authorization: Bearer <your API key>
-  SQUARESPACE_FORM_ID: "REPLACE_ME"
-
   # ── Email ──
   FROM_EMAIL: "create@dec18studios.com"
   FROM_NAME: "Dec 18 Studios"

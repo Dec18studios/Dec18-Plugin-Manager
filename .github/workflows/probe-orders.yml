@@ -21,56 +21,25 @@ jobs:
           import json, sys
           data = json.load(sys.stdin)
           orders = data.get('result', [])
-          print(f'Total orders returned: {len(orders)}')
+          print(f'Total orders: {len(orders)}')
           print()
-          for i, order in enumerate(orders[:10]):
-              print(f'--- Order {i+1} ---')
-              print(f'  id:              {order.get(\"id\",\"?\")}')
-              print(f'  orderNumber:     {order.get(\"orderNumber\",\"?\")}')
-              print(f'  createdOn:       {order.get(\"createdOn\",\"?\")}')
-              print(f'  customerEmail:   {order.get(\"customerEmail\",\"?\")}')
-              print(f'  fulfillStatus:   {order.get(\"fulfillmentStatus\",\"?\")}')
-              print(f'  grandTotal:      {order.get(\"grandTotal\",{})}')
-              items = order.get('lineItems', [])
-              for j, item in enumerate(items):
-                  print(f'  lineItem[{j}]:')
-                  print(f'    productName:   {item.get(\"productName\",\"?\")}')
-                  print(f'    productId:     {item.get(\"productId\",\"?\")}')
-                  print(f'    sku:           {item.get(\"sku\",\"?\")}')
-                  print(f'    variantOptions: {item.get(\"variantOptions\",[])}')
-                  print(f'    unitPricePaid: {item.get(\"unitPricePaid\",{})}')
-              print()
-          if len(orders) > 10:
-              print(f'... and {len(orders)-10} more orders')
-          if not orders:
-              print('No orders found. Full response keys:', list(data.keys()))
-              print('First 500 chars:', json.dumps(data)[:500])
+          print(f'{\"#\":<4} {\"Date\":<12} {\"Name\":<30} {\"Email\":<40} {\"Product\":<25} {\"Total\":>8}')
+          print('-' * 120)
+          for o in orders:
+              ba = o.get('billingAddress', {})
+              sa = o.get('shippingAddress', {})
+              name = f'{ba.get(\"firstName\",\"\") or sa.get(\"firstName\",\"\")} {ba.get(\"lastName\",\"\") or sa.get(\"lastName\",\"\")}'.strip()
+              if not name:
+                  name = o.get('customerEmail','?').split('@')[0]
+              email = o.get('customerEmail','?')
+              date = o.get('createdOn','?')[:10]
+              num = o.get('orderNumber','?')
+              total = o.get('grandTotal',{}).get('value','?')
+              items = o.get('lineItems', [])
+              prod = items[0].get('productName','?') if items else '?'
+              print(f'{num:<4} {date:<12} {name:<30} {email:<40} {prod:<25} \${total:>7}')
           "
           else
-            echo "Error response:"
+            echo "Error: $HTTP_CODE"
             echo "$BODY" | head -20
-          fi
-          
-          echo ""
-          echo "=== Profiles API (for comparison) ==="
-          P_CODE=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: Bearer $SQ_KEY" \
-            "https://api.squarespace.com/1.0/profiles")
-          echo "HTTP Status: $P_CODE"
-          
-          echo ""
-          echo "=== Transactions API ==="
-          T_RESP=$(curl -s -w "\n%{http_code}" -H "Authorization: Bearer $SQ_KEY" \
-            "https://api.squarespace.com/1.0/commerce/transactions?modifiedAfter=2020-01-01T00:00:00Z&modifiedBefore=2027-01-01T00:00:00Z")
-          T_CODE=$(echo "$T_RESP" | tail -1)
-          T_BODY=$(echo "$T_RESP" | sed '$d')
-          echo "HTTP Status: $T_CODE"
-          if [ "$T_CODE" = "200" ]; then
-            echo "$T_BODY" | python3 -c "
-          import json, sys
-          data = json.load(sys.stdin)
-          docs = data.get('documents', [])
-          print(f'Total transactions: {len(docs)}')
-          for i, tx in enumerate(docs[:5]):
-              print(f'  tx[{i}]: total={tx.get(\"totalValue\",{})} date={tx.get(\"createdOn\",\"?\")} email={tx.get(\"customerEmail\",\"?\")}')
-          "
           fi

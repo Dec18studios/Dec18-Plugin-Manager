@@ -1,0 +1,46 @@
+{
+  "pluginId": "resolve-node-toggler",
+  "displayName": "Resolve Node Toggler",
+  "releaseRepo": "dec18studios/Resolve-Node-Toggler",
+  "minManagerVersion": "0.1.0",
+  "hostProcesses": ["Resolve", "DaVinci Resolve"],
+  "requiredFamilies": ["macos", "windows", "linux"],
+  "category": "Workflow",
+  "description": "Keyboard-driven node toggling for DaVinci Resolve with hotkey slots and profile management.",
+  "tags": ["workflow", "nodes", "hotkeys", "toggle"],
+  "assetRules": [
+    {
+      "family": "macos",
+      "platform": "macos",
+      "arch": "universal",
+      "assetPattern": "node-toggle-portable-macos-universal\\.tar\\.gz$",
+      "packageType": "tar.gz",
+      "bundleName": "Node Toggle.app",
+      "bundleIdentifier": "com.dec18studios.nodetoggle",
+      "installPath": "/Applications",
+      "installMode": "file-browse"
+    },
+    {
+      "family": "windows",
+      "platform": "windows",
+      "arch": "x86_64",
+      "assetPattern": "node-toggle-portable-windows-x64\\.zip$",
+      "packageType": "zip",
+      "bundleName": "node-toggle.exe",
+      "bundleIdentifier": "com.dec18studios.nodetoggle",
+      "installPath": "C:\\Program Files\\Dec 18 Studios\\Node Toggle",
+      "installMode": "file-browse"
+    },
+    {
+      "family": "linux",
+      "platform": "linux",
+      "arch": "x86_64",
+      "assetPattern": "node-toggle-portable-linux-x64\\.tar\\.gz$",
+      "packageType": "tar.gz",
+      "bundleName": "node-toggle.AppImage",
+      "bundleIdentifier": "com.dec18studios.nodetoggle",
+      "installPath": "/usr/local/bin",
+      "installMode": "file-browse"
+    }
+  ]
+}

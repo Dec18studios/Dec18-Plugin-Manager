@@ -62,6 +62,7 @@ jobs:
             "OpenDRT-OFX|opendrt-ofx"
             "IBKeymaster-OFX|ibkeymaster-ofx"
             "X-Grade-OFX|x-grade-ofx"
+            "Resolve-Node-Toggler|resolve-node-toggler"
           )
 
           PROCESSED=0

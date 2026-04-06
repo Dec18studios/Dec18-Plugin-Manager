@@ -17,6 +17,7 @@ pub const DEFAULT_CATALOG_URL: &str =
 
 const EMBEDDED_INDEX: &str = include_str!("../../docs/plugins/index.json");
 const EMBEDDED_PHOTOCHEMIST: &str = include_str!("../../docs/plugins/photochemist/stable.json");
+const EMBEDDED_NODE_TOGGLER: &str = include_str!("../../docs/plugins/resolve-node-toggler/stable.json");
 
 #[derive(Debug, Clone)]
 pub struct CatalogBundle {
@@ -175,6 +176,7 @@ fn build_plugin_status(
         description: manifest.description.clone(),
         category: entry.category.clone().or_else(|| manifest.category.clone()),
         tags: manifest.tags.clone(),
+        info_url: manifest.info_url.clone(),
         install_mode: package.install_mode.clone(),
     }
 }
@@ -661,6 +663,7 @@ where
 fn embedded_manifest(plugin_id: &str) -> Result<PluginManifest> {
     let raw = match plugin_id {
         "photochemist" => EMBEDDED_PHOTOCHEMIST,
+        "resolve-node-toggler" => EMBEDDED_NODE_TOGGLER,
         _ => return Err(anyhow!("No embedded manifest available for `{plugin_id}`")),
     };
     serde_json::from_str(raw)

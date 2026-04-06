@@ -22,6 +22,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROCESSED_PATH = join(__dirname, "license-keys", "processed-subscribers.json");
+const LEDGER_PATH = join(__dirname, "license-keys", "ledger.json");
 
 // ── Base64url helpers ──────────────────────────────────────────────
 
@@ -35,16 +36,33 @@ function base64urlEncode(buffer) {
 
 // ── License key generation ─────────────────────────────────────────
 
-function generateMasterKey(privateKey, email) {
-  const payload = {
-    t: "master",
-    e: email,
-    p: ["*"],
-  };
+function generateLicenseKeyFromTier(privateKey, email, tier) {
+  const plugins = tier === "master" ? ["*"] : [tier];
+  const payload = { t: tier, e: email, p: plugins };
+
+  // Add expiration for non-permanent tiers
+  const now = Math.floor(Date.now() / 1000);
+  if (tier === "free")   payload.exp = now + 30 * 86400;
+  if (tier === "annual") payload.exp = now + 365 * 86400;
+
   const json = JSON.stringify(payload);
   const payloadB64 = base64urlEncode(Buffer.from(json, "utf8"));
   const signature = sign(null, Buffer.from(payloadB64, "utf8"), privateKey);
   return `D18.${payloadB64}.${base64urlEncode(signature)}`;
+}
+
+/**
+ * Determine license tier from a Squarespace profile.
+ * Currently all donors get "master". When switching to Squarespace products,
+ * update this to inspect profile.transactionsSummary or order metadata to
+ * map product variants → tier names (free | annual | master).
+ */
+function determineTier(/* profile */) {
+  // TODO: Inspect Squarespace product variant / SKU when products are live.
+  // Example future logic:
+  //   if (profile.orderSummary?.lastProduct?.includes("Annual")) return "annual";
+  //   if (profile.orderSummary?.lastProduct?.includes("Free"))   return "free";
+  return "master";
 }
 
 // ── Squarespace Profiles API ───────────────────────────────────────
@@ -152,6 +170,15 @@ function saveProcessed(ledger) {
   writeFileSync(PROCESSED_PATH, JSON.stringify(ledger, null, 2) + "\n");
 }
 
+function loadLedger() {
+  if (!existsSync(LEDGER_PATH)) return [];
+  return JSON.parse(readFileSync(LEDGER_PATH, "utf8"));
+}
+
+function saveLedger(ledger) {
+  writeFileSync(LEDGER_PATH, JSON.stringify(ledger, null, 2) + "\n");
+}
+
 // ── Main ───────────────────────────────────────────────────────────
 
 async function main() {
@@ -182,6 +209,7 @@ async function main() {
 
   // 2. Load already-processed ledger
   const processed = loadProcessed();
+  const keyLedger = loadLedger();
   const newDonors = [];
 
   for (const profile of donors) {
@@ -191,7 +219,8 @@ async function main() {
 
     const name = [profile.firstName, profile.lastName].filter(Boolean).join(" ") || null;
     const amount = profile.transactionsSummary?.totalDonationAmount?.value ?? "unknown";
-    newDonors.push({ email, name, profileId: profile.id, amount });
+    const tier = determineTier(profile);
+    newDonors.push({ email, name, profileId: profile.id, amount, tier });
   }
 
   if (!newDonors.length) {
@@ -207,7 +236,7 @@ async function main() {
   // 4. Generate key + send email for each new donor
   for (const donor of newDonors) {
     try {
-      const licenseKey = generateMasterKey(privateKey, donor.email);
+      const licenseKey = generateLicenseKeyFromTier(privateKey, donor.email, donor.tier);
       const rawEmail = buildLicenseEmail(donor.email, donor.name, licenseKey);
       await sendEmail(accessToken, rawEmail);
 
@@ -216,17 +245,34 @@ async function main() {
         profileId: donor.profileId,
         name: donor.name,
         donationAmount: donor.amount,
+        tier: donor.tier,
+        key: licenseKey,
       };
 
-      console.log(`✓ Sent key to ${donor.email} (donated $${donor.amount})`);
+      const ledgerEntry = {
+        name: donor.name || '',
+        tier: donor.tier,
+        email: donor.email,
+        plugins: donor.tier === "master" ? ['*'] : [donor.tier],
+        key: licenseKey,
+        generatedAt: new Date().toISOString(),
+      };
+      // Add expiresAt for time-limited tiers
+      if (donor.tier === "free") ledgerEntry.expiresAt = new Date(Date.now() + 30 * 86400000).toISOString();
+      if (donor.tier === "annual") ledgerEntry.expiresAt = new Date(Date.now() + 365 * 86400000).toISOString();
+
+      keyLedger.push(ledgerEntry);
+
+      console.log(`✓ Sent ${donor.tier} key to ${donor.email} (donated $${donor.amount})`);
     } catch (err) {
       console.error(`✗ Failed for ${donor.email}: ${err.message}`);
     }
   }
 
-  // 5. Save updated ledger
+  // 5. Save updated ledger + subscriber list
   saveProcessed(processed);
-  console.log(`Done. Processed ${Object.keys(processed).length} total donor(s).`);
+  saveLedger(keyLedger);
+  console.log(`Done. Processed ${Object.keys(processed).length} total donor(s), ${keyLedger.length} ledger entries.`);
 }
 
 main().catch((err) => {

@@ -1505,6 +1505,16 @@ button.primary.plugin-install-action:hover:not(:disabled) {
   color: var(--gold);
 }
 
+.license-tier-badge.annual {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.license-tier-badge.free {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+}
+
 .license-tier-badge.plugin {
   background: var(--blue-soft);
   color: var(--blue);

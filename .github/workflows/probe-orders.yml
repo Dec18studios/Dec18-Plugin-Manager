@@ -11,7 +11,7 @@ jobs:
         run: |
           echo "=== Orders API ==="
           RESP=$(curl -s -w "\n%{http_code}" -H "Authorization: Bearer $SQ_KEY" \
-            "https://api.squarespace.com/1.0/commerce/orders?modifiedAfter=2020-01-01T00:00:00Z")
+            "https://api.squarespace.com/1.0/commerce/orders?modifiedAfter=2020-01-01T00:00:00Z&modifiedBefore=2027-01-01T00:00:00Z")
           HTTP_CODE=$(echo "$RESP" | tail -1)
           BODY=$(echo "$RESP" | sed '$d')
           echo "HTTP Status: $HTTP_CODE"
@@ -60,7 +60,7 @@ jobs:
           echo ""
           echo "=== Transactions API ==="
           T_RESP=$(curl -s -w "\n%{http_code}" -H "Authorization: Bearer $SQ_KEY" \
-            "https://api.squarespace.com/1.0/commerce/transactions?modifiedAfter=2020-01-01T00:00:00Z")
+            "https://api.squarespace.com/1.0/commerce/transactions?modifiedAfter=2020-01-01T00:00:00Z&modifiedBefore=2027-01-01T00:00:00Z")
           T_CODE=$(echo "$T_RESP" | tail -1)
           T_BODY=$(echo "$T_RESP" | sed '$d')
           echo "HTTP Status: $T_CODE"

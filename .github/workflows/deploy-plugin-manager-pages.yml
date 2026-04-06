@@ -13,9 +13,6 @@ on:
     paths:
       - "docs/**"
       - ".github/workflows/deploy-plugin-manager-pages.yml"
-  release:
-    types:
-      - published
 
 permissions:
   contents: read
@@ -136,10 +133,10 @@ jobs:
           node tools/generate-updater-feed.mjs --output pages-dist/updates/latest.json
 
       - name: Configure Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: "pages-dist"
 

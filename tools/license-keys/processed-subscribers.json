@@ -4,36 +4,42 @@
     "profileId": "69cd2ce46a416c39d387b4b4",
     "name": "Julian Buechner",
     "donationAmount": "10.00",
-    "note": "pre-populated — donated before fulfillment pipeline went live"
+    "note": "pre-populated — donated before fulfillment pipeline went live",
+    "key": "D18.eyJ0IjoibWFzdGVyIiwiZSI6Imp1bGlhbkBwaXhsYmF5LnR2IiwicCI6WyIqIl19.X9NRRJW-aQ1oVhzLfKM7OkcNqVeEaWFSkay5LIpNN4U8nZ8UzNUeYzuFnbRFiCWiLZq9-tDquxHk76GfQ0-pBQ"
   },
   "nmoldenhauer@media-division.de": {
     "processedAt": "2026-04-05T04:44:10.164Z",
     "profileId": "69b594281df61517452948b5",
     "name": "Nikolas Moldenhauer",
-    "donationAmount": "10.00"
+    "donationAmount": "10.00",
+    "key": "D18.eyJ0IjoibWFzdGVyIiwiZSI6Im5tb2xkZW5oYXVlckBtZWRpYS1kaXZpc2lvbi5kZSIsInAiOlsiKiJdfQ.S14m5WY1aaGxK0OfPotrU61H9yteCHqXSU6T_gPNE3uZD86Hae1M-l46oSFDV_LpLAQ_wtDwBFOQ9sC8gzCMCg"
   },
   "michael.archibeque@gmail.com": {
     "processedAt": "2026-04-05T04:44:10.376Z",
     "profileId": "6993ae75a3e045408b0dd8d2",
     "name": "Michael Archibeque",
-    "donationAmount": "5.15"
+    "donationAmount": "5.15",
+    "key": "D18.eyJ0IjoibWFzdGVyIiwiZSI6Im1pY2hhZWwuYXJjaGliZXF1ZUBnbWFpbC5jb20iLCJwIjpbIioiXX0.BlUlbcqWHG6fjA0-o4FJh1RovSfydkmZ1AeVb4GfPEdaH40CXVAOhDIZzwrLFmY7YVcwu7vnFbU5ktDnypJTDg"
   },
   "sanzio.barreto@gmail.com": {
     "processedAt": "2026-04-05T04:44:10.647Z",
     "profileId": "692bcf3011f3407c5e407e08",
     "name": "sanzio barreto",
-    "donationAmount": "10.00"
+    "donationAmount": "10.00",
+    "key": "D18.eyJ0IjoibWFzdGVyIiwiZSI6InNhbnppby5iYXJyZXRvQGdtYWlsLmNvbSIsInAiOlsiKiJdfQ.o8RFxpsciqzPERGVm-P9C3tHy3jS6anmo8NPaHRgzZOr6chRXHKiBIsUXzyBo4I2N4uriRT7iVJLy61j5YlTCA"
   },
   "geoffsm@gmail.com": {
     "processedAt": "2026-04-05T04:44:10.857Z",
     "profileId": "6837a20ab4c1210f94de8791",
     "name": "Geoff Smith",
-    "donationAmount": "10.30"
+    "donationAmount": "10.30",
+    "key": "D18.eyJ0IjoibWFzdGVyIiwiZSI6Imdlb2Zmc21AZ21haWwuY29tIiwicCI6WyIqIl19.FY9y5BlJ3WztIFQ4ysksSai18NCelFZ3Kr06JvpuL5zmGlcvhKrFOiCfTrUfhc3jm_9_eMbtaqWeyOBT2jUZBQ"
   },
   "luz00@sfr.fr": {
     "processedAt": "2026-04-05T04:44:11.167Z",
     "profileId": "67451523c5e44f29203869c5",
     "name": "eric morand",
-    "donationAmount": "5.15"
+    "donationAmount": "5.15",
+    "key": "D18.eyJ0IjoibWFzdGVyIiwiZSI6Imx1ejAwQHNmci5mciIsInAiOlsiKiJdfQ.zx5JcpLiLFZzYj0RDhzF8TJBLrEKweDHzPOwJMxTrm3hCXYucvoY8Ixq2tF3Ldg_OskauAzSOz6HJSQNQCSQAw"
   }
 }

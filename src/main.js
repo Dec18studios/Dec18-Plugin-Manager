@@ -40,6 +40,12 @@ async function verifyLicenseToken(token) {
     }
 
     if (!payload.t || !payload.e || !Array.isArray(payload.p)) return null;
+
+    // Check expiration — keys with an `exp` field (unix seconds) expire
+    if (typeof payload.exp === "number" && Date.now() / 1000 > payload.exp) {
+      return null;  // expired
+    }
+
     return payload;
   } catch {
     return null;
@@ -735,7 +741,7 @@ function renderPlugins() {
 // --- License state management ---
 
 function isLicensed() {
-  return state.license.tier === "master";
+  return state.license.tier != null;
 }
 
 async function loadLicenseState() {
@@ -746,13 +752,17 @@ async function loadLicenseState() {
     state.license.tier = null;
     state.license.plugins = [];
 
+    const tierPriority = { master: 3, annual: 2, free: 1 };
+
     for (const token of keys) {
       const payload = await verifyLicenseToken(token);
       if (payload) {
         state.license.parsed.push(payload);
-        if (payload.t === "master") {
-          state.license.tier = "master";
-          state.license.plugins = ["*"];
+        const rank = tierPriority[payload.t] ?? 1;
+        const currentRank = tierPriority[state.license.tier] ?? 0;
+        if (rank > currentRank) {
+          state.license.tier = payload.t;
+          state.license.plugins = payload.p;
         }
       }
     }
@@ -766,9 +776,22 @@ async function loadLicenseState() {
 function renderLicensePanel() {
   if (isLicensed()) {
     const email = state.license.parsed[0]?.e ?? "";
+    const tier = state.license.tier;
+    const tierLabel = tier === "master" ? "Master" : tier === "annual" ? "Annual" : tier === "free" ? "Free" : tier;
+    const badgeClass = tier === "master" ? "master" : tier === "annual" ? "annual" : "free";
+    let expiryNote = "";
+    const activeParsed = state.license.parsed.find(p => p.t === tier);
+    if (activeParsed?.exp) {
+      const expDate = new Date(activeParsed.exp * 1000);
+      const daysLeft = Math.ceil((expDate - Date.now()) / 86400000);
+      expiryNote = daysLeft > 0
+        ? `<p class="license-status-text" style="font-size:.75rem;opacity:.7">Expires in ${daysLeft} day${daysLeft !== 1 ? "s" : ""}</p>`
+        : "";
+    }
     elements.licenseStatus.innerHTML = `
-      <span class="license-tier-badge master">Registered</span>
+      <span class="license-tier-badge ${badgeClass}">${escapeHtml(tierLabel)}</span>
       <p class="license-status-text">${escapeHtml(email)}</p>
+      ${expiryNote}
     `;
     elements.enterLicenseButton.textContent = "Manage Account";
   } else {
@@ -786,15 +809,27 @@ function renderActiveLicenseKeys() {
   }
   elements.licenseActiveKeys.innerHTML = state.license.parsed
     .map(
-      (payload, index) => `
+      (payload, index) => {
+        const tierLabel = payload.t === "master" ? "Master" : payload.t === "annual" ? "Annual" : payload.t === "free" ? "Free" : escapeHtml(payload.t);
+        let expInfo = "";
+        if (payload.exp) {
+          const expDate = new Date(payload.exp * 1000);
+          const daysLeft = Math.ceil((expDate - Date.now()) / 86400000);
+          expInfo = daysLeft > 0
+            ? `<span class="license-status-text" style="font-size:.7rem;opacity:.6;margin-left:8px">· ${daysLeft}d left</span>`
+            : `<span class="license-status-text" style="font-size:.7rem;color:var(--accent);margin-left:8px">· expired</span>`;
+        }
+        return `
       <div class="license-key-row">
         <div>
-          <span class="license-tier-badge ${payload.t}">${payload.t === "master" ? "Master" : escapeHtml(payload.t)}</span>
+          <span class="license-tier-badge ${payload.t}">${tierLabel}</span>
           <span class="license-status-text">${escapeHtml(payload.e)}</span>
+          ${expInfo}
         </div>
         <button type="button" class="license-key-remove" data-key-index="${index}" title="Remove this key">&times;</button>
       </div>
-    `
+    `;
+      }
     )
     .join("");
 

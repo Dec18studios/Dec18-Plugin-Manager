@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dec 18 Studios &mdash; License Manager</title>
+<style>
+:root{--bg:#1a1a2e;--surface:#16213e;--surface-hover:#1c2a4a;--border:#2a3a5c;--text:#e0e0e0;--text-muted:#8892a8;--accent:#e94560;--accent-hover:#ff6b81;--green:#4ade80;--blue:#60a5fa;--yellow:#fbbf24}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;padding:24px;min-height:100vh}
+h1{font-size:1.5rem;font-weight:600;margin-bottom:4px;color:#fff}
+.subtitle{color:var(--text-muted);font-size:.85rem;margin-bottom:24px}
+.stats{display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 20px;min-width:140px}
+.stat-card .label{color:var(--text-muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em}
+.stat-card .value{font-size:1.8rem;font-weight:700;color:#fff}
+.toolbar{display:flex;gap:12px;margin-bottom:16px;align-items:center;flex-wrap:wrap}
+.toolbar input[type="text"]{flex:1;min-width:200px;padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:.9rem;outline:none}
+.toolbar input[type="text"]:focus{border-color:var(--accent)}
+.toolbar input[type="text"]::placeholder{color:var(--text-muted)}
+button{padding:8px 16px;border:none;border-radius:6px;font-size:.85rem;font-weight:600;cursor:pointer;transition:background .15s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-hover)}
+.btn-secondary{background:var(--surface);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{background:var(--surface-hover)}
+.btn-sm{padding:4px 10px;font-size:.78rem}
+table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+thead th{text-align:left;padding:10px 14px;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);background:rgba(0,0,0,.2);border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap}
+thead th:hover{color:var(--text)}
+thead th .sort-arrow{margin-left:4px;font-size:.65rem}
+tbody tr{border-bottom:1px solid var(--border)}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--surface-hover)}
+td{padding:10px 14px;font-size:.85rem;vertical-align:middle}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.72rem;font-weight:600;text-transform:uppercase}
+.badge-master{background:rgba(233,69,96,.2);color:var(--accent)}
+.badge-annual{background:rgba(96,165,250,.2);color:var(--blue)}
+.badge-free{background:rgba(255,255,255,.08);color:var(--text-muted)}
+.badge-plugin{background:rgba(96,165,250,.2);color:var(--blue)}
+.badge-expired{background:rgba(233,69,96,.15);color:var(--accent);font-size:.65rem;margin-left:4px}
+.key-cell{font-family:"SF Mono","Fira Code","Consolas",monospace;font-size:.72rem;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-muted);cursor:pointer}
+.key-cell:hover{color:var(--text)}
+.donation{color:var(--green);font-weight:600}
+.empty-state{text-align:center;padding:48px 20px;color:var(--text-muted)}
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;justify-content:center;align-items:center}
+.modal-backdrop.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px;width:460px;max-width:95vw}
+.modal h2{font-size:1.15rem;margin-bottom:20px;color:#fff}
+.modal label{display:block;font-size:.78rem;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.modal input,.modal select{width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:.9rem;margin-bottom:14px;outline:none}
+.modal input:focus,.modal select:focus{border-color:var(--accent)}
+.modal .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
+.modal .key-output{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:12px;font-family:"SF Mono","Fira Code",monospace;font-size:.75rem;word-break:break-all;color:var(--green);margin-bottom:14px;max-height:120px;overflow-y:auto}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--surface);border:1px solid var(--green);color:var(--green);padding:10px 18px;border-radius:8px;font-size:.85rem;opacity:0;transform:translateY(10px);transition:all .3s;z-index:200}
+.toast.show{opacity:1;transform:translateY(0)}
+.loading{text-align:center;padding:80px 20px;color:var(--text-muted)}
+.loading .spinner{display:inline-block;width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error-banner{background:rgba(233,69,96,.15);border:1px solid var(--accent);color:var(--accent);padding:16px 20px;border-radius:8px;text-align:center;margin-bottom:24px}
+.error-banner code{display:block;margin-top:8px;font-size:.85rem;color:var(--text)}
+</style>
+</head>
+<body>
+<h1>Dec 18 Studios &mdash; License Manager</h1>
+<p class="subtitle">View license registrations, search by name or email, and issue new keys.</p>
+<div id="loadingScreen" class="loading"><div class="spinner"></div><p>Loading license data&hellip;</p></div>
+<div id="errorScreen" style="display:none;"></div>
+<div id="mainApp" style="display:none;">
+  <div class="stats" id="statsRow"></div>
+  <div class="toolbar">
+    <input type="text" id="searchInput" placeholder="Search by name, email, or key...">
+    <button class="btn-primary" id="btnNewKey">+ New License Key</button>
+    <button class="btn-secondary" id="btnExportCSV">Export CSV</button>
+  </div>
+  <table><thead><tr id="tableHead"></tr></thead><tbody id="tableBody"></tbody></table>
+</div>
+<div class="modal-backdrop" id="newKeyModal">
+  <div class="modal">
+    <h2>Issue New License Key</h2>
+    <div id="modalFormArea">
+      <label for="newName">Name</label>
+      <input type="text" id="newName" placeholder="Jane Doe">
+      <label for="newEmail">Email</label>
+      <input type="email" id="newEmail" placeholder="jane@example.com">
+      <label for="newTier">Tier</label>
+      <select id="newTier">
+        <option value="master">Master — permanent (all plugins)</option>
+        <option value="annual">Annual — 1 year (all plugins)</option>
+        <option value="free">Free — 30 days (all plugins)</option>
+        <option value="photochemist">PhotoChemist (permanent)</option>
+        <option value="resolve-node-toggler">Resolve Node Toggler (permanent)</option>
+      </select>
+      <div id="genError" style="color:var(--accent);font-size:.8rem;margin-bottom:8px;display:none;"></div>
+    </div>
+    <div id="modalResultArea" style="display:none;">
+      <label>Generated Key</label>
+      <div class="key-output" id="generatedKeyOutput"></div>
+      <p style="font-size:.78rem;color:var(--text-muted);margin-bottom:12px;">Key saved to ledger.json and added to the table.</p>
+    </div>
+    <div class="actions">
+      <button class="btn-secondary" id="btnModalClose">Close</button>
+      <button class="btn-primary" id="btnModalGenerate">Generate Key</button>
+      <button class="btn-primary" id="btnModalCopy" style="display:none;">Copy Key</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+var mergedData=[], hasPrivateKey=false, sortCol="date", sortAsc=false;
+var columns=[
+  {key:"name",label:"Name"},{key:"email",label:"Email"},{key:"tier",label:"Tier"},
+  {key:"donation",label:"Donation"},{key:"key",label:"License Key"},{key:"expires",label:"Expires"},{key:"date",label:"Issued"}
+];
+
+async function boot(){
+  try{
+    var res=await fetch("/api/data");
+    if(!res.ok) throw new Error("Server returned "+res.status);
+    var data=await res.json();
+    hasPrivateKey=data.hasPrivateKey;
+    mergeData(data.ledger, data.subscribers);
+    document.getElementById("loadingScreen").style.display="none";
+    document.getElementById("mainApp").style.display="block";
+    renderStats(); renderTable();
+  }catch(err){
+    document.getElementById("loadingScreen").style.display="none";
+    var es=document.getElementById("errorScreen");
+    es.style.display="block";
+    es.innerHTML="<div class=\"error-banner\">Failed to load data. Is the server running?<code>node tools/license-server.mjs</code></div>";
+  }
+}
+
+function mergeData(ledger, subscribers){
+  var subMap={};
+  Object.keys(subscribers).forEach(function(email){ subMap[email.toLowerCase()]=subscribers[email]; });
+  mergedData=ledger.map(function(entry){
+    var email=(entry.email||"").toLowerCase();
+    var sub=subMap[email];
+    return {
+      name: entry.name||(sub?sub.name:"")||"",
+      email: email,
+      tier: entry.tier||"",
+      plugins: (entry.plugins||[]).join(", "),
+      key: entry.key||"",
+      donation: (sub?sub.donationAmount:"")||"",
+      date: entry.generatedAt||entry.issuedAt||"",
+      expires: entry.expiresAt||"",
+      source: sub?"squarespace":"manual"
+    };
+  });
+  var ledgerEmails={};
+  mergedData.forEach(function(d){ ledgerEmails[d.email]=true; });
+  Object.keys(subscribers).forEach(function(email){
+    var le=email.toLowerCase();
+    if(!ledgerEmails[le]){
+      var info=subscribers[email];
+      mergedData.push({
+        name: info.name||"", email: le, tier: "", plugins: "",
+        key: "(no key issued)", donation: info.donationAmount||"",
+        date: info.processedAt||"", expires: "", source: "squarespace-only"
+      });
+    }
+  });
+}
+
+function renderStats(){
+  var t=mergedData.length;
+  var m=mergedData.filter(function(d){return d.tier==="master";}).length;
+  var a=mergedData.filter(function(d){return d.tier==="annual";}).length;
+  var f=mergedData.filter(function(d){return d.tier==="free";}).length;
+  var don=mergedData.reduce(function(s,d){return s+(parseFloat(d.donation)||0);},0);
+  var k=mergedData.filter(function(d){return d.key&&d.key.charAt(0)!=="(";}).length;
+  document.getElementById("statsRow").innerHTML=
+    "<div class=\"stat-card\"><div class=\"label\">Total Licensees</div><div class=\"value\">"+t+"</div></div>"+
+    "<div class=\"stat-card\"><div class=\"label\">Master</div><div class=\"value\">"+m+"</div></div>"+
+    "<div class=\"stat-card\"><div class=\"label\">Annual</div><div class=\"value\">"+a+"</div></div>"+
+    "<div class=\"stat-card\"><div class=\"label\">Free</div><div class=\"value\">"+f+"</div></div>"+
+    "<div class=\"stat-card\"><div class=\"label\">Keys Issued</div><div class=\"value\">"+k+"</div></div>"+
+    "<div class=\"stat-card\"><div class=\"label\">Total Donations</div><div class=\"value\">$"+don.toFixed(2)+"</div></div>"+
+    "<div class=\"stat-card\"><div class=\"label\">Signing Key</div><div class=\"value\" style=\"font-size:1rem;color:"+(hasPrivateKey?"var(--green)":"var(--text-muted)")+"\">"+(hasPrivateKey?"\u2713 Available":"\u2717 Missing")+"</div></div>";
+}
+
+function renderTableHead(){
+  var tr=document.getElementById("tableHead");
+  tr.innerHTML=columns.map(function(col){
+    var arrow=sortCol===col.key?(sortAsc?"\u25B2":"\u25BC"):"";
+    return "<th data-col=\""+col.key+"\">"+col.label+"<span class=\"sort-arrow\">"+arrow+"</span></th>";
+  }).join("")+"<th style=\"width:60px;\"></th>";
+  tr.querySelectorAll("th[data-col]").forEach(function(th){
+    th.addEventListener("click", function(){
+      if(sortCol===th.dataset.col){sortAsc=!sortAsc;}else{sortCol=th.dataset.col;sortAsc=true;}
+      renderTable();
+    });
+  });
+}
+
+function renderTable(){
+  var query=document.getElementById("searchInput").value.toLowerCase().trim();
+  var filtered=mergedData;
+  if(query){
+    filtered=mergedData.filter(function(d){
+      return d.name.toLowerCase().indexOf(query)!==-1||
+        d.email.toLowerCase().indexOf(query)!==-1||
+        d.key.toLowerCase().indexOf(query)!==-1||
+        d.tier.toLowerCase().indexOf(query)!==-1;
+    });
+  }
+  filtered=filtered.slice().sort(function(a,b){
+    var va=a[sortCol]||"",vb=b[sortCol]||"";
+    if(sortCol==="donation"){va=parseFloat(va)||0;vb=parseFloat(vb)||0;}
+    else if(sortCol==="date"||sortCol==="expires"){va=new Date(va||0).getTime();vb=new Date(vb||0).getTime();}
+    else{va=String(va).toLowerCase();vb=String(vb).toLowerCase();}
+    if(va<vb)return sortAsc?-1:1;if(va>vb)return sortAsc?1:-1;return 0;
+  });
+  renderTableHead();
+  var tbody=document.getElementById("tableBody");
+  if(filtered.length===0){
+    tbody.innerHTML="<tr><td colspan=\""+(columns.length+1)+"\" class=\"empty-state\">No results found</td></tr>";return;
+  }
+  tbody.innerHTML=filtered.map(function(d){
+    var tierClass=d.tier==="master"?"master":d.tier==="annual"?"annual":d.tier==="free"?"free":"plugin";
+    var tierLabel=d.tier==="master"?"Master":d.tier==="annual"?"Annual":d.tier==="free"?"Free":d.tier;
+    var tierBadge=d.tier?"<span class=\"badge badge-"+tierClass+"\">"+escapeHtml(tierLabel)+"</span>":"\u2014";
+    var donStr=d.donation?"<span class=\"donation\">$"+parseFloat(d.donation).toFixed(2)+"</span>":"\u2014";
+    var dateStr=d.date?new Date(d.date).toLocaleDateString("en-US",{year:"numeric",month:"short",day:"numeric"}):"\u2014";
+    var expStr="\u2014";
+    if(d.expires){
+      var expDate=new Date(d.expires);
+      var now=Date.now();
+      if(expDate.getTime()<now){
+        expStr="<span style=\"color:var(--accent)\">Expired "+expDate.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})+"</span>";
+      }else{
+        var daysLeft=Math.ceil((expDate.getTime()-now)/86400000);
+        expStr=expDate.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})+" <span style=\"color:var(--text-muted);font-size:.75rem\">("+daysLeft+"d)</span>";
+      }
+    }else if(d.tier==="master"||d.tier){
+      expStr="<span style=\"color:var(--text-muted)\">\u221E</span>";
+    }
+    var keyDisp=d.key.charAt(0)==="("?"<span style=\"color:var(--text-muted)\">"+escapeHtml(d.key)+"</span>":escapeHtml(d.key);
+    return "<tr><td>"+(escapeHtml(d.name)||"<span style=\"color:var(--text-muted)\">\u2014</span>")+"</td>"+
+      "<td>"+escapeHtml(d.email)+"</td><td>"+tierBadge+"</td><td>"+donStr+"</td>"+
+      "<td class=\"key-cell\" title=\"Click to copy\" data-key=\""+escapeAttr(d.key)+"\">"+keyDisp+"</td>"+
+      "<td>"+expStr+"</td>"+
+      "<td>"+dateStr+"</td>"+
+      "<td><button class=\"btn-secondary btn-sm copy-btn\" data-key=\""+escapeAttr(d.key)+"\">Copy</button></td></tr>";
+  }).join("");
+  tbody.querySelectorAll(".key-cell,.copy-btn").forEach(function(el){
+    el.addEventListener("click", function(){
+      var key=el.dataset.key;
+      if(key&&key.charAt(0)!=="("){navigator.clipboard.writeText(key).then(function(){showToast("Key copied to clipboard");});}
+    });
+  });
+}
+
+document.getElementById("searchInput").addEventListener("input", renderTable);
+
+var modal=document.getElementById("newKeyModal");
+
+document.getElementById("btnNewKey").addEventListener("click", function(){
+  if(!hasPrivateKey){showToast("No private.pem found \u2014 cannot issue keys");return;}
+  document.getElementById("modalFormArea").style.display="block";
+  document.getElementById("modalResultArea").style.display="none";
+  document.getElementById("btnModalGenerate").style.display="";
+  document.getElementById("btnModalCopy").style.display="none";
+  document.getElementById("genError").style.display="none";
+  document.getElementById("newName").value="";
+  document.getElementById("newEmail").value="";
+  document.getElementById("newTier").value="master";
+  modal.classList.add("open");
+});
+
+document.getElementById("btnModalClose").addEventListener("click", function(){modal.classList.remove("open");});
+modal.addEventListener("click", function(e){if(e.target===modal)modal.classList.remove("open");});
+
+document.getElementById("btnModalGenerate").addEventListener("click", async function(){
+  var name=document.getElementById("newName").value.trim();
+  var email=document.getElementById("newEmail").value.trim().toLowerCase();
+  var tier=document.getElementById("newTier").value;
+  var ge=document.getElementById("genError");
+  if(!email||email.indexOf("@")===-1){ge.textContent="Please enter a valid email address.";ge.style.display="block";return;}
+  var btn=document.getElementById("btnModalGenerate");
+  try{
+    btn.disabled=true; btn.textContent="Generating\u2026";
+    var res=await fetch("/api/generate-key",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({name:name,email:email,tier:tier})
+    });
+    var data=await res.json();
+    if(!res.ok) throw new Error(data.error||"Server error");
+    var plugins=tier==="master"?["*"]:[tier];
+    mergedData.push({
+      name:name, email:email, tier:tier, plugins:plugins.join(", "),
+      key:data.key, donation:"", date:data.entry.generatedAt,
+      expires:data.entry.expiresAt||"", source:"manual"
+    });
+    document.getElementById("modalFormArea").style.display="none";
+    document.getElementById("modalResultArea").style.display="block";
+    btn.style.display="none";
+    document.getElementById("btnModalCopy").style.display="";
+    document.getElementById("generatedKeyOutput").textContent=data.key;
+    renderStats(); renderTable();
+    showToast("Key issued for "+email+" \u2014 saved to ledger.json");
+  }catch(err){
+    ge.textContent="Error: "+err.message; ge.style.display="block";
+  }finally{
+    btn.disabled=false; btn.textContent="Generate Key";
+  }
+});
+
+document.getElementById("btnModalCopy").addEventListener("click", function(){
+  navigator.clipboard.writeText(document.getElementById("generatedKeyOutput").textContent)
+    .then(function(){showToast("Key copied to clipboard");});
+});
+
+document.getElementById("btnExportCSV").addEventListener("click", function(){
+  var hdr=["Name","Email","Tier","Donation","License Key","Expires","Issued"];
+  var rows=mergedData.map(function(d){
+    return [d.name,d.email,d.tier,d.donation,d.key,d.expires?new Date(d.expires).toISOString():"never",d.date?new Date(d.date).toISOString():""];
+  });
+  var csv=[hdr].concat(rows).map(function(r){
+    return r.map(function(c){return "\""+String(c).replace(/"/g,"\"\"")+"\"";}).join(",");
+  }).join("\n");
+  var blob=new Blob([csv],{type:"text/csv"});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement("a");
+  a.href=url; a.download="licenses-"+new Date().toISOString().slice(0,10)+".csv";
+  a.click(); URL.revokeObjectURL(url);
+  showToast("CSV exported");
+});
+
+function escapeHtml(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML;}
+function escapeAttr(s){return s.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function showToast(msg){var t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(function(){t.classList.remove("show");},2000);}
+
+boot();
+</script>
+</body>
+</html>

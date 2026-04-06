@@ -1,53 +1,66 @@
 {
   "pluginId": "resolve-node-toggler",
   "displayName": "Resolve Node Toggler",
-  "category": "Workflow",
   "description": "Keyboard-driven node toggling for DaVinci Resolve with hotkey slots and profile management.",
-  "tags": ["workflow", "nodes", "hotkeys", "toggle"],
-  "channel": "stable",
-  "generatedAt": "2026-04-06T00:00:00.000Z",
+  "category": "Workflow",
+  "tags": [
+    "workflow",
+    "nodes",
+    "hotkeys",
+    "toggle"
+  ],
+  "infoUrl": null,
   "version": "2.0.0",
-  "releaseDate": "2026-04-06T00:00:00Z",
+  "releaseDate": "2026-04-06T16:38:09Z",
   "releaseNotesUrl": "https://github.com/Dec18studios/Resolve-Node-Toggler/releases/tag/v2.0.0",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://github.com/Dec18studios/Resolve-Node-Toggler/releases/download/v2.0.0/node-toggle-portable-macos-universal.tar.gz",
-      "sha256": "PLACEHOLDER_WILL_BE_OVERWRITTEN_BY_PAGES_DEPLOY",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Resolve-Node-Toggler/releases/download/v2.0.0/node-toggle-portable-macos-universal.tar.gz",
+      "sha256": "c4fac02fb4815455525b1647e72fd50888db829e04bdfcbfb35eb3d1c4863116",
       "packageType": "tar.gz",
       "bundleName": "Node Toggle.app",
       "bundleIdentifier": "com.dec18studios.nodetoggle",
       "installPath": "/Applications",
       "installMode": "file-browse",
       "minManagerVersion": "0.1.0",
-      "hostProcesses": ["Resolve", "DaVinci Resolve"]
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve"
+      ]
     },
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Resolve-Node-Toggler/releases/download/v2.0.0/node-toggle-portable-windows-x64.zip",
-      "sha256": "PLACEHOLDER_WILL_BE_OVERWRITTEN_BY_PAGES_DEPLOY",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Resolve-Node-Toggler/releases/download/v2.0.0/node-toggle-portable-windows-x64.zip",
+      "sha256": "38e3dec1e0b2fc2eaadda803e29eb702562fb0d84df220627134f2908da3eaa5",
       "packageType": "zip",
       "bundleName": "node-toggle.exe",
       "bundleIdentifier": "com.dec18studios.nodetoggle",
       "installPath": "C:\\Program Files\\Dec 18 Studios\\Node Toggle",
       "installMode": "file-browse",
       "minManagerVersion": "0.1.0",
-      "hostProcesses": ["Resolve", "DaVinci Resolve"]
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve"
+      ]
     },
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Resolve-Node-Toggler/releases/download/v2.0.0/node-toggle-portable-linux-x64.tar.gz",
-      "sha256": "PLACEHOLDER_WILL_BE_OVERWRITTEN_BY_PAGES_DEPLOY",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Resolve-Node-Toggler/releases/download/v2.0.0/node-toggle-portable-linux-x64.tar.gz",
+      "sha256": "52b667702ed84522160b966394d7f7d608810a6e4c9c04a3dfc04e679a330742",
       "packageType": "tar.gz",
       "bundleName": "node-toggle.AppImage",
       "bundleIdentifier": "com.dec18studios.nodetoggle",
       "installPath": "/usr/local/bin",
       "installMode": "file-browse",
       "minManagerVersion": "0.1.0",
-      "hostProcesses": ["Resolve", "DaVinci Resolve"]
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve"
+      ]
     }
   ],
   "availableVersions": []

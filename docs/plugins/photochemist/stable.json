@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "releaseDate": "2026-04-03T00:00:00Z",
   "releaseNotesUrl": "https://github.com/dec18studios/PhotoChemist-OFX/releases/tag/v1.0.0",
-  "releaseHighlights": "- 43-band spectral film emulation engine\n- Multiple film stock presets\n- Full GPU acceleration (CUDA, Metal, OpenCL)\n- Status M densitometry",
+  "releaseHighlights": "- 43-band spectral film emulation engine\n- Multiple film stock presets\n- Full GPU acceleration (CUDA, Metal, OpenCL)\n- Status M densitometry",\n  "infoUrl": "https://dec18studios.com/photochemist",
   "platforms": [
     {
       "platform": "macos",

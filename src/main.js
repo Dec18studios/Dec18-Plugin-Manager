@@ -676,6 +676,7 @@ function renderPlugins() {
       <div class="plugin-actions">
         <button type="button" class="${primaryActionClass(primaryLabel)}" data-plugin-id="${plugin.pluginId}" data-action="${primaryRequest}">${primaryLabel}</button>
         ${showLatestInfo ? releaseInfoButtonMarkup("main-action-info-button") : ""}
+        ${plugin.infoUrl ? `<a href="${escapeHtml(plugin.infoUrl)}" target="_blank" rel="noreferrer" class="plugin-info-link" title="Tutorials &amp; info">&#8505;</a>` : ""}
       </div>
       ${pluginOperationMarkup(plugin)}
     `;

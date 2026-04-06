@@ -767,6 +767,28 @@ h4 {
   justify-self: end;
 }
 
+.plugin-info-link {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+
+.plugin-info-link:hover {
+  background: rgba(74, 158, 199, 0.18);
+  border-color: rgba(74, 158, 199, 0.3);
+  color: #dff6fb;
+}
+
 button.primary.plugin-install-action {
   min-width: 0;
   padding: 0.62rem 0.9rem;

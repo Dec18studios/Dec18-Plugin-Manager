@@ -44,6 +44,7 @@ pub struct PluginStatus {
     pub description: Option<String>,
     pub category: Option<String>,
     pub tags: Vec<String>,
+    pub info_url: Option<String>,
     pub install_mode: String,
 }
 
@@ -88,6 +89,8 @@ pub struct PluginManifest {
     pub category: Option<String>,
     #[serde(default)]
     pub tags: Vec<String>,
+    #[serde(default)]
+    pub info_url: Option<String>,
     pub platforms: Vec<PlatformPackage>,
     #[serde(default)]
     pub available_versions: Vec<PluginRelease>,

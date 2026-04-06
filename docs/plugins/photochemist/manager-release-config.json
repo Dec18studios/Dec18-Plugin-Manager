@@ -17,6 +17,7 @@
   "category": "Film Emulation",
   "description": "43-band spectral film emulation engine with multiple film stock presets and full GPU acceleration.",
   "tags": ["film", "spectral", "color", "emulation", "grain"],
+  "infoUrl": "https://dec18studios.com/photochemist",
   "assetRules": [
     {
       "family": "macos",

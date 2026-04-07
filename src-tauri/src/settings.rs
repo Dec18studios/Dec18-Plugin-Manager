@@ -1,5 +1,6 @@
 use anyhow::{anyhow, Context, Result};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::fs;
 use std::path::PathBuf;
 
@@ -12,6 +13,8 @@ pub struct AppSettings {
     pub auto_update_plugins: bool,
     #[serde(default)]
     pub dctl_install_path: Option<String>,
+    #[serde(default)]
+    pub plugin_install_paths: HashMap<String, String>,
 }
 
 pub fn load_settings() -> Result<AppSettings> {

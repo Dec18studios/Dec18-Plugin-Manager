@@ -81,6 +81,22 @@ async fn set_dctl_install_path(path: String) -> Result<(), String> {
 }
 
 #[tauri::command]
+async fn get_plugin_install_path(plugin_id: String) -> Result<Option<String>, String> {
+    let current = settings::load_settings()
+        .map_err(|error| models::UiError::from_error("settings", &error).to_json_string())?;
+    Ok(current.plugin_install_paths.get(&plugin_id).cloned())
+}
+
+#[tauri::command]
+async fn set_plugin_install_path(plugin_id: String, path: String) -> Result<(), String> {
+    let mut current = settings::load_settings()
+        .map_err(|error| models::UiError::from_error("settings", &error).to_json_string())?;
+    current.plugin_install_paths.insert(plugin_id, path);
+    settings::save_settings(&current)
+        .map_err(|error| models::UiError::from_error("settings", &error).to_json_string())
+}
+
+#[tauri::command]
 async fn pick_folder(app: tauri::AppHandle, start_path: Option<String>) -> Result<Option<String>, String> {
     let mut builder = app.dialog().file();
     if let Some(ref start) = start_path {
@@ -93,6 +109,7 @@ async fn pick_folder(app: tauri::AppHandle, start_path: Option<String>) -> Resul
 pub fn run() {
     let builder = tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_process::init())
         .plugin({
             let updater = tauri_plugin_updater::Builder::new();
@@ -112,6 +129,8 @@ pub fn run() {
             remove_license_key,
             get_dctl_install_path,
             set_dctl_install_path,
+            get_plugin_install_path,
+            set_plugin_install_path,
             pick_folder
         ])
         .setup(|app| {

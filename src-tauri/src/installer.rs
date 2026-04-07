@@ -133,11 +133,11 @@ pub async fn apply_plugin_action(
 
     let resolved = catalog::resolve_plugin(plugin_id, target_version).await?;
     ensure_supported_package(&resolved.package)?;
-    ensure_hosts_closed(&resolved.package.host_processes)?;
+    let host_was_running = any_host_running(&resolved.package.host_processes);
 
     // File-browse mode: simple file copy to a user-chosen directory (no elevated privileges)
     if resolved.package.install_mode == "file-browse" {
-        return install_file_browse(plugin_id, action, &resolved).await;
+        return install_file_browse(plugin_id, action, &resolved, host_was_running).await;
     }
 
     let source_spec = parse_package_source_spec(&resolved.package.download_url);
@@ -230,22 +230,27 @@ pub async fn apply_plugin_action(
     );
     save_install_state(&state)?;
 
+    let mut message = format!(
+        "{} {} installed to {}.",
+        resolved.manifest.display_name,
+        resolved.version,
+        install_root.display()
+    );
+    if host_was_running && needs_host_restart(&resolved.manifest.plugin_type) {
+        message.push_str(" Restart DaVinci Resolve to load the changes.");
+    }
+
     Ok(PluginOperationResult {
         plugin_id: plugin_id.to_string(),
         action: action.to_string(),
         status: "success".to_string(),
-        message: format!(
-            "{} {} installed to {}.",
-            resolved.manifest.display_name,
-            resolved.version,
-            install_root.display()
-        ),
+        message,
     })
 }
 
 async fn uninstall_plugin(plugin_id: &str, action: &str) -> Result<PluginOperationResult> {
     let resolved = catalog::resolve_plugin(plugin_id, None).await?;
-    ensure_hosts_closed(&resolved.package.host_processes)?;
+    let host_was_running = any_host_running(&resolved.package.host_processes);
 
     let install_root = PathBuf::from(&resolved.package.install_path);
     let target_bundle = install_root.join(&resolved.package.bundle_name);
@@ -279,7 +284,7 @@ async fn uninstall_plugin(plugin_id: &str, action: &str) -> Result<PluginOperati
     state.installs.remove(&install_key);
     save_install_state(&state)?;
 
-    let message = if bundle_exists {
+    let mut message = if bundle_exists {
         format!(
             "{} was uninstalled from {}.",
             resolved.manifest.display_name,
@@ -291,6 +296,9 @@ async fn uninstall_plugin(plugin_id: &str, action: &str) -> Result<PluginOperati
             resolved.manifest.display_name
         )
     };
+    if host_was_running && needs_host_restart(&resolved.manifest.plugin_type) {
+        message.push_str(" Restart DaVinci Resolve to unload the plugin.");
+    }
 
     Ok(PluginOperationResult {
         plugin_id: plugin_id.to_string(),
@@ -304,6 +312,7 @@ async fn install_file_browse(
     plugin_id: &str,
     action: &str,
     resolved: &crate::models::ResolvedPlugin,
+    host_was_running: bool,
 ) -> Result<PluginOperationResult> {
     use crate::settings;
 
@@ -390,18 +399,23 @@ async fn install_file_browse(
     );
     save_install_state(&state)?;
 
+    let mut message = format!(
+        "{} {} installed ({} file{}) to {}.",
+        resolved.manifest.display_name,
+        resolved.version,
+        copied_count,
+        if copied_count == 1 { "" } else { "s" },
+        install_root.display()
+    );
+    if host_was_running && needs_host_restart(&resolved.manifest.plugin_type) {
+        message.push_str(" Restart DaVinci Resolve to load the changes.");
+    }
+
     Ok(PluginOperationResult {
         plugin_id: plugin_id.to_string(),
         action: action.to_string(),
         status: "success".to_string(),
-        message: format!(
-            "{} {} installed ({} file{}) to {}.",
-            resolved.manifest.display_name,
-            resolved.version,
-            copied_count,
-            if copied_count == 1 { "" } else { "s" },
-            install_root.display()
-        ),
+        message,
     })
 }
 
@@ -509,9 +523,11 @@ async fn load_package_bytes(source: &str) -> Result<Vec<u8>> {
     Ok(bytes.to_vec())
 }
 
-fn ensure_hosts_closed(host_processes: &[String]) -> Result<()> {
+fn any_host_running(host_processes: &[String]) -> bool {
+    if host_processes.is_empty() {
+        return false;
+    }
     let system = System::new_all();
-    let mut running = Vec::new();
     let candidates: Vec<String> = host_processes
         .iter()
         .map(|candidate| normalize_process_name(candidate))
@@ -530,20 +546,17 @@ fn ensure_hosts_closed(host_processes: &[String]) -> Result<()> {
             .iter()
             .any(|candidate| *candidate == normalized_name || *candidate == normalized_exe)
         {
-            running.push(process_name);
+            return true;
         }
     }
+    false
+}
 
-    if running.is_empty() {
-        return Ok(());
+fn needs_host_restart(plugin_type: &Option<String>) -> bool {
+    match plugin_type.as_deref() {
+        Some("dctl") | Some("ofx") => true,
+        _ => false,
     }
-
-    running.sort();
-    running.dedup();
-    bail!(
-        "Close the running host applications before installing: {}",
-        running.join(", ")
-    )
 }
 
 fn normalize_process_name(value: &str) -> String {

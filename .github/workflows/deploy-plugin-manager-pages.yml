@@ -7,6 +7,8 @@ on:
   workflow_dispatch:
   repository_dispatch:
     types: [plugin-release]
+  release:
+    types: [published]
   push:
     branches:
       - main

@@ -208,3 +208,18 @@ jobs:
             src-tauri/target/release/bundle/appimage/*.AppImage
             src-tauri/target/release/bundle/appimage/*.AppImage.sig
           if-no-files-found: error
+
+  publish_release:
+    needs: [prepare_release, build]
+    if: needs.prepare_release.outputs.should_build == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Publish draft release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="plugin-manager-v${{ needs.prepare_release.outputs.app_version }}"
+          gh release edit "$TAG" --draft=false --repo "$GITHUB_REPOSITORY"
+          echo "Published release $TAG"

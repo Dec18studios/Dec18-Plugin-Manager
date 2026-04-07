@@ -1,6 +1,6 @@
 [package]
 name = "dec18-studios-plugins"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 description = "Cross-platform desktop manager for Dec 18 Studios OFX plugins"
 
@@ -37,6 +37,7 @@ sysinfo = "0.38"
 tar = "0.4"
 tauri = { version = "2", features = [] }
 tauri-plugin-dialog = "2"
+tauri-plugin-opener = "2"
 tauri-plugin-process = "2"
 tauri-plugin-updater = "2"
 tempfile = "3.10"

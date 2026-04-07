@@ -698,15 +698,23 @@ function renderPlugins() {
           openLicenseDialog();
           return;
         }
-        // DCTL file-browse: prompt for install folder on first install if no path is saved
+        // DCTL file-browse: prompt for install folder on first install if no per-plugin path is saved
         if (plugin.installMode === "file-browse" && primaryRequest === "install") {
           try {
-            const savedPath = await invoke("get_dctl_install_path");
-            if (!savedPath) {
-              const chosen = await invoke("pick_folder", { startPath: plugin.installPath });
+            const perPluginPath = await invoke("get_plugin_install_path", { pluginId: plugin.pluginId });
+            if (!perPluginPath) {
+              // Fall back to global DCTL path as the starting directory for the picker
+              const globalPath = await invoke("get_dctl_install_path");
+              const startDir = globalPath || plugin.installPath;
+              const chosen = await invoke("pick_folder", { startPath: startDir });
               if (!chosen) return; // user cancelled
-              await invoke("set_dctl_install_path", { path: chosen });
-              logActivity(`DCTL install folder set to ${chosen}`);
+              await invoke("set_plugin_install_path", { pluginId: plugin.pluginId, path: chosen });
+              // Also set global DCTL path if not yet set (first-time convenience)
+              if (!globalPath) {
+                await invoke("set_dctl_install_path", { path: chosen });
+              }
+              logActivity(`Install folder for ${plugin.displayName} set to ${chosen}`);
+              updateFolderRow(card, chosen);
             }
           } catch (err) {
             console.error("DCTL path prompt error:", err);

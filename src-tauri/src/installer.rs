@@ -307,10 +307,13 @@ async fn install_file_browse(
 ) -> Result<PluginOperationResult> {
     use crate::settings;
 
-    // Determine install directory: user's saved DCTL path → manifest default
+    // Determine install directory: per-plugin path → global DCTL path → manifest default
     let install_dir = settings::load_settings()
         .ok()
-        .and_then(|s| s.dctl_install_path)
+        .and_then(|s| {
+            s.plugin_install_paths.get(plugin_id).cloned()
+                .or(s.dctl_install_path)
+        })
         .unwrap_or_else(|| resolved.package.install_path.clone());
     let install_root = PathBuf::from(&install_dir);
 

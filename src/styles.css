@@ -1871,3 +1871,67 @@ button.primary.plugin-install-action:hover:not(:disabled) {
   text-align: center;
   padding: 0.5rem;
 }
+
+/* ── Tab bar (My Plugins / Free Tools) ── */
+.tab-bar {
+  display: flex;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.tab-button {
+  padding: 0.5rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary, #888);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  white-space: nowrap;
+}
+
+.tab-button:hover {
+  color: var(--text-primary, #eee);
+}
+
+.tab-button.active {
+  color: var(--accent, #e8543e);
+  border-bottom-color: var(--accent, #e8543e);
+}
+
+/* Stack tab-bar + toolbar vertically inside plugins panel header */
+.plugins-panel > .panel-header {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.plugins-panel > .panel-header .plugin-toolbar {
+  justify-content: flex-end;
+}
+
+/* ── License tier pill (Free / Subscription) ── */
+.license-tier-pill {
+  display: inline-block;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  vertical-align: middle;
+  margin-left: 0.25rem;
+}
+
+.license-tier-pill.free {
+  background: rgba(76, 175, 80, 0.18);
+  color: #66bb6a;
+}
+
+.license-tier-pill.subscription {
+  background: rgba(255, 183, 77, 0.15);
+  color: #ffb74d;
+}

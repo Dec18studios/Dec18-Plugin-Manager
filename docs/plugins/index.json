@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-05T00:00:00.000Z",
+  "generatedAt": "2026-04-07T00:00:00.000Z",
   "plugins": [
     {
       "pluginId": "photochemist",
@@ -10,6 +10,12 @@
       "pluginId": "resolve-node-toggler",
       "displayName": "Resolve Node Toggler",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/resolve-node-toggler/stable.json"
+    },
+    {
+      "pluginId": "rgb-chips-dctl",
+      "displayName": "RGB Chips",
+      "licenseTier": "free",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/rgb-chips-dctl/stable.json"
     }
   ]
 }

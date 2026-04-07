@@ -1,0 +1,71 @@
+{
+  "pluginId": "rgb-chips-dctl",
+  "displayName": "RGB Chips",
+  "description": "Displays RGB parade-style color chips overlay for exposure and white balance evaluation. By Thatcher Freeman.",
+  "type": "dctl",
+  "category": "Utility",
+  "licenseTier": "free",
+  "tags": [
+    "utility",
+    "color",
+    "exposure",
+    "free",
+    "3rd-party"
+  ],
+  "infoUrl": "https://github.com/thatcherfreeman/utility-dctls",
+  "version": "1.0.0",
+  "releaseDate": "2026-04-07T00:00:00Z",
+  "releaseNotesUrl": "https://github.com/thatcherfreeman/utility-dctls",
+  "releaseHighlights": "Initial release via Dec 18 Plugin Manager.\n- RGB parade-style color chips overlay\n- Useful for exposure and white balance evaluation\n- Free community tool by Thatcher Freeman",
+  "platforms": [
+    {
+      "platform": "macos",
+      "arch": "universal",
+      "downloadUrl": "https://raw.githubusercontent.com/thatcherfreeman/utility-dctls/main/Utilities/RGB%20Chips.dctl",
+      "sha256": "63ea985d8b9b0ae2deac9e4f4ed97a41fdac249cbaf5e3005a42b5411d50a8e3",
+      "packageType": "raw",
+      "bundleName": "RGB Chips.dctl",
+      "bundleIdentifier": "com.thatcherfreeman.rgb-chips",
+      "installPath": "/Library/Application Support/Blackmagic Design/DaVinci Resolve/LUT/DCTL",
+      "installMode": "file-browse",
+      "minManagerVersion": "0.1.8",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve"
+      ]
+    },
+    {
+      "platform": "windows",
+      "arch": "x86_64",
+      "downloadUrl": "https://raw.githubusercontent.com/thatcherfreeman/utility-dctls/main/Utilities/RGB%20Chips.dctl",
+      "sha256": "63ea985d8b9b0ae2deac9e4f4ed97a41fdac249cbaf5e3005a42b5411d50a8e3",
+      "packageType": "raw",
+      "bundleName": "RGB Chips.dctl",
+      "bundleIdentifier": "com.thatcherfreeman.rgb-chips",
+      "installPath": "C:\\ProgramData\\Blackmagic Design\\DaVinci Resolve\\Support\\LUT\\DCTL",
+      "installMode": "file-browse",
+      "minManagerVersion": "0.1.8",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve"
+      ]
+    },
+    {
+      "platform": "linux",
+      "arch": "x86_64",
+      "downloadUrl": "https://raw.githubusercontent.com/thatcherfreeman/utility-dctls/main/Utilities/RGB%20Chips.dctl",
+      "sha256": "63ea985d8b9b0ae2deac9e4f4ed97a41fdac249cbaf5e3005a42b5411d50a8e3",
+      "packageType": "raw",
+      "bundleName": "RGB Chips.dctl",
+      "bundleIdentifier": "com.thatcherfreeman.rgb-chips",
+      "installPath": "/opt/resolve/LUT/DCTL",
+      "installMode": "file-browse",
+      "minManagerVersion": "0.1.8",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve"
+      ]
+    }
+  ],
+  "availableVersions": []
+}

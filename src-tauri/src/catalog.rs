@@ -18,6 +18,7 @@ pub const DEFAULT_CATALOG_URL: &str =
 const EMBEDDED_INDEX: &str = include_str!("../../docs/plugins/index.json");
 const EMBEDDED_PHOTOCHEMIST: &str = include_str!("../../docs/plugins/photochemist/stable.json");
 const EMBEDDED_NODE_TOGGLER: &str = include_str!("../../docs/plugins/resolve-node-toggler/stable.json");
+const EMBEDDED_RGB_CHIPS: &str = include_str!("../../docs/plugins/rgb-chips-dctl/stable.json");
 
 #[derive(Debug, Clone)]
 pub struct CatalogBundle {
@@ -178,6 +179,9 @@ fn build_plugin_status(
         plugin_type: entry.plugin_type.clone().or_else(|| manifest.plugin_type.clone()),
         tags: manifest.tags.clone(),
         info_url: manifest.info_url.clone(),
+        license_tier: entry.license_tier.clone()
+            .or_else(|| manifest.license_tier.clone())
+            .unwrap_or_else(|| "subscription".to_string()),
         install_mode: package.install_mode.clone(),
     }
 }
@@ -665,6 +669,7 @@ fn embedded_manifest(plugin_id: &str) -> Result<PluginManifest> {
     let raw = match plugin_id {
         "photochemist" => EMBEDDED_PHOTOCHEMIST,
         "resolve-node-toggler" => EMBEDDED_NODE_TOGGLER,
+        "rgb-chips-dctl" => EMBEDDED_RGB_CHIPS,
         _ => return Err(anyhow!("No embedded manifest available for `{plugin_id}`")),
     };
     serde_json::from_str(raw)

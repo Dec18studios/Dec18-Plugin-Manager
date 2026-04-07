@@ -61,6 +61,7 @@ const state = {
   searchQuery: "",
   categoryFilter: "all",
   sortOrder: "name",
+  activeTab: "my-plugins",
   license: {
     keys: [],        // raw D18.xxx.xxx tokens stored on disk
     parsed: [],      // verified payloads: [{ t, e, p }]  (t=tier, e=email, p=plugins)
@@ -637,6 +638,14 @@ function renderPlugins() {
 
   // Filter by search query
   let plugins = allPlugins;
+
+  // Filter by active tab
+  if (state.activeTab === "free-tools") {
+    plugins = plugins.filter((plugin) => plugin.licenseTier === "free");
+  } else {
+    plugins = plugins.filter((plugin) => plugin.licenseTier !== "free");
+  }
+
   if (state.searchQuery) {
     const query = state.searchQuery.toLowerCase();
     plugins = plugins.filter((plugin) => {
@@ -671,11 +680,19 @@ function renderPlugins() {
       const catCmp = (a.category ?? "ZZZ").localeCompare(b.category ?? "ZZZ");
       if (catCmp !== 0) return catCmp;
     }
+    if (state.sortOrder === "license") {
+      const tierRank = (tier) => tier === "free" ? 0 : 1;
+      const diff = tierRank(a.licenseTier) - tierRank(b.licenseTier);
+      if (diff !== 0) return diff;
+    }
     return a.displayName.localeCompare(b.displayName);
   });
 
   if (!plugins.length) {
-    elements.pluginList.innerHTML = `<div class="empty-state">No plugins match your filter.</div>`;
+    const emptyMsg = state.activeTab === "free-tools"
+      ? "No free 3rd party tools match your filter."
+      : "No plugins match your filter.";
+    elements.pluginList.innerHTML = `<div class="empty-state">${emptyMsg}</div>`;
     return;
   }
 
@@ -696,6 +713,7 @@ function renderPlugins() {
           <h3>${plugin.displayName}</h3>
           ${plugin.type ? `<span class="plugin-type-badge type-${escapeHtml(plugin.type)}">${escapeHtml(plugin.type)}</span>` : ""}
           ${plugin.category ? `<span class="plugin-category-badge">${escapeHtml(plugin.category)}</span>` : ""}
+          ${plugin.licenseTier === "free" ? `<span class="license-tier-pill free">Free</span>` : `<span class="license-tier-pill subscription">License</span>`}
           </div>
         </div>
         <span class="status-pill ${statusClass(plugin.status)} ${plugin.status === "Ready to install" ? "ready" : ""}">${plugin.status}</span>
@@ -723,8 +741,8 @@ function renderPlugins() {
     const button = card.querySelector(`[data-action="${primaryRequest}"]`);
     if (button) {
       button.addEventListener("click", async () => {
-        // If not licensed, open the license dialog instead of installing
-        if (!isLicensed()) {
+        // Free-tier plugins don't require a license; all others do
+        if (plugin.licenseTier !== "free" && !isLicensed()) {
           openLicenseDialog();
           return;
         }
@@ -767,7 +785,7 @@ function renderPlugins() {
     }
 
     // Add folder picker row for DCTL / file-browse plugins
-    if (plugin.installMode === "file-browse" && isLicensed()) {
+    if (plugin.installMode === "file-browse" && (isLicensed() || plugin.licenseTier === "free")) {
       invoke("get_plugin_install_path", { pluginId: plugin.pluginId }).then((perPath) => {
         const folderRow = renderFolderRow(plugin, perPath || null);
         // Insert before any drawers or at end of card
@@ -780,11 +798,11 @@ function renderPlugins() {
       });
     }
 
-    if (isLicensed() && (plugin.availableVersions?.length ?? 0) > 1) {
+    if ((isLicensed() || plugin.licenseTier === "free") && (plugin.availableVersions?.length ?? 0) > 1) {
       card.appendChild(renderVersionDrawer(plugin));
     }
 
-    const maintenanceDrawer = isLicensed() ? renderMaintenanceDrawer(plugin) : null;
+    const maintenanceDrawer = (isLicensed() || plugin.licenseTier === "free") ? renderMaintenanceDrawer(plugin) : null;
     if (maintenanceDrawer) {
       card.appendChild(maintenanceDrawer);
     }
@@ -1184,6 +1202,16 @@ elements.categoryFilter.addEventListener("change", (event) => {
 elements.sortOrder.addEventListener("change", (event) => {
   state.sortOrder = event.currentTarget.value;
   renderPlugins();
+});
+
+// Tab bar controls
+document.querySelectorAll(".tab-button").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-button").forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    state.activeTab = btn.dataset.tab;
+    renderPlugins();
+  });
 });
 
 // License dialog controls

@@ -47,6 +47,7 @@ pub struct PluginStatus {
     pub plugin_type: Option<String>,
     pub tags: Vec<String>,
     pub info_url: Option<String>,
+    pub license_tier: String,
     pub install_mode: String,
 }
 
@@ -76,6 +77,8 @@ pub struct CatalogEntry {
     pub category: Option<String>,
     #[serde(default, rename = "type")]
     pub plugin_type: Option<String>,
+    #[serde(default)]
+    pub license_tier: Option<String>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -97,6 +100,8 @@ pub struct PluginManifest {
     pub tags: Vec<String>,
     #[serde(default)]
     pub info_url: Option<String>,
+    #[serde(default)]
+    pub license_tier: Option<String>,
     pub platforms: Vec<PlatformPackage>,
     #[serde(default)]
     pub available_versions: Vec<PluginRelease>,

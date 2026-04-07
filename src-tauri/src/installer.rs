@@ -326,40 +326,51 @@ async fn install_file_browse(
     let bytes = load_package_bytes(&source_spec.source).await?;
     verify_archive_hash(&bytes, &resolved.package.sha256)?;
 
-    let staging_root = tempdir().context("Failed to create staging directory")?;
-    let extracted_root = staging_root.path().join("extract");
-    if resolved.package.package_type == "tar.gz" {
-        extract_tar_gz(&bytes, &extracted_root)?;
+    let copied_count;
+
+    if resolved.package.package_type == "raw" {
+        // Single-file download — write directly to install directory
+        let dest = install_root.join(&resolved.package.bundle_name);
+        fs::write(&dest, &bytes)
+            .with_context(|| format!("Failed to write {} to {}", resolved.package.bundle_name, dest.display()))?;
+        copied_count = 1;
     } else {
-        extract_zip(&bytes, &extracted_root)?;
-    }
-
-    // Copy all extracted files into the install directory (flat copy, no sudo)
-    let mut copied_count = 0usize;
-    for entry in WalkDir::new(&extracted_root).min_depth(1) {
-        let entry = entry.context("Failed to walk extracted archive")?;
-        let relative = entry.path().strip_prefix(&extracted_root).unwrap_or(entry.path());
-
-        // Skip __MACOSX and ._ resource forks
-        if relative.components().any(|c| {
-            let name = c.as_os_str().to_string_lossy();
-            name == "__MACOSX" || name.starts_with("._")
-        }) {
-            continue;
-        }
-
-        let dest = install_root.join(relative);
-        if entry.file_type().is_dir() {
-            fs::create_dir_all(&dest)
-                .with_context(|| format!("Failed to create {}", dest.display()))?;
+        let staging_root = tempdir().context("Failed to create staging directory")?;
+        let extracted_root = staging_root.path().join("extract");
+        if resolved.package.package_type == "tar.gz" {
+            extract_tar_gz(&bytes, &extracted_root)?;
         } else {
-            if let Some(parent) = dest.parent() {
-                fs::create_dir_all(parent).ok();
-            }
-            fs::copy(entry.path(), &dest)
-                .with_context(|| format!("Failed to copy {} to {}", entry.path().display(), dest.display()))?;
-            copied_count += 1;
+            extract_zip(&bytes, &extracted_root)?;
         }
+
+        // Copy all extracted files into the install directory (flat copy, no sudo)
+        let mut count = 0usize;
+        for entry in WalkDir::new(&extracted_root).min_depth(1) {
+            let entry = entry.context("Failed to walk extracted archive")?;
+            let relative = entry.path().strip_prefix(&extracted_root).unwrap_or(entry.path());
+
+            // Skip __MACOSX and ._ resource forks
+            if relative.components().any(|c| {
+                let name = c.as_os_str().to_string_lossy();
+                name == "__MACOSX" || name.starts_with("._")
+            }) {
+                continue;
+            }
+
+            let dest = install_root.join(relative);
+            if entry.file_type().is_dir() {
+                fs::create_dir_all(&dest)
+                    .with_context(|| format!("Failed to create {}", dest.display()))?;
+            } else {
+                if let Some(parent) = dest.parent() {
+                    fs::create_dir_all(parent).ok();
+                }
+                fs::copy(entry.path(), &dest)
+                    .with_context(|| format!("Failed to copy {} to {}", entry.path().display(), dest.display()))?;
+                count += 1;
+            }
+        }
+        copied_count = count;
     }
 
     // Track the install in the manager state

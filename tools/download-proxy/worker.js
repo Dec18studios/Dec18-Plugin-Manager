@@ -68,14 +68,16 @@ async function verifyLicenseToken(token, publicKeyB64) {
   const parts = token.split(".");
   if (parts.length !== 3) return null;
 
-  const payloadBytes = base64urlDecode(parts[1]);
+  // The server signs the base64url string as UTF-8 bytes, NOT the decoded payload
+  const payloadB64 = parts[1];
+  const messageBytes = new TextEncoder().encode(payloadB64);
   const signature = base64urlDecode(parts[2]);
 
   const key = await importPublicKey(publicKeyB64);
-  const valid = await crypto.subtle.verify("Ed25519", key, signature, payloadBytes);
+  const valid = await crypto.subtle.verify("Ed25519", key, signature, messageBytes);
   if (!valid) return null;
 
-  const payload = JSON.parse(new TextDecoder().decode(payloadBytes));
+  const payload = JSON.parse(new TextDecoder().decode(base64urlDecode(payloadB64)));
   if (!payload.t || !payload.e || !Array.isArray(payload.p)) return null;
   return payload;
 }

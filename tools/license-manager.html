@@ -58,11 +58,24 @@ td{padding:10px 14px;font-size:.85rem;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
 .error-banner{background:rgba(233,69,96,.15);border:1px solid var(--accent);color:var(--accent);padding:16px 20px;border-radius:8px;text-align:center;margin-bottom:24px}
 .error-banner code{display:block;margin-top:8px;font-size:.85rem;color:var(--text)}
+.editable-cell{cursor:pointer;border-bottom:1px dashed transparent;transition:border-color .15s}
+.editable-cell:hover{border-bottom-color:var(--text-muted)}
+.editable-cell input{background:var(--bg);border:1px solid var(--accent);border-radius:4px;color:var(--text);padding:2px 6px;font-size:.85rem;width:100%;outline:none}
+.row-actions{display:flex;gap:4px;align-items:center}
+.btn-icon{padding:4px 8px;font-size:.75rem;line-height:1;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--text-muted);cursor:pointer;transition:all .15s}
+.btn-icon:hover{border-color:var(--accent);color:var(--accent)}
+.btn-icon.send{color:var(--green);border-color:var(--green);opacity:.7}
+.btn-icon.send:hover{opacity:1}
+.btn-icon:disabled{opacity:.3;cursor:not-allowed}
+.email-status{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;color:var(--text-muted);margin-left:8px}
+.email-status .dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+.email-status .dot.ok{background:var(--green)}
+.email-status .dot.no{background:var(--text-muted)}
 </style>
 </head>
 <body>
 <h1>Dec 18 Studios &mdash; License Manager</h1>
-<p class="subtitle">View license registrations, search by name or email, and issue new keys.</p>
+<p class="subtitle">View license registrations, search by name or email, and issue new keys.<span id="emailStatus" class="email-status"></span></p>
 <div id="loadingScreen" class="loading"><div class="spinner"></div><p>Loading license data&hellip;</p></div>
 <div id="errorScreen" style="display:none;"></div>
 <div id="mainApp" style="display:none;">
@@ -101,12 +114,13 @@ td{padding:10px 14px;font-size:.85rem;vertical-align:middle}
       <button class="btn-secondary" id="btnModalClose">Close</button>
       <button class="btn-primary" id="btnModalGenerate">Generate Key</button>
       <button class="btn-primary" id="btnModalCopy" style="display:none;">Copy Key</button>
+      <button class="btn-primary" id="btnModalSendEmail" style="display:none;background:var(--green);color:#1a1a2e;">Send Email</button>
     </div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
 <script>
-var mergedData=[], hasPrivateKey=false, sortCol="date", sortAsc=false;
+var mergedData=[], hasPrivateKey=false, hasGmailCreds=false, sortCol="date", sortAsc=false;
 var columns=[
   {key:"name",label:"Name"},{key:"email",label:"Email"},{key:"tier",label:"Tier"},
   {key:"donation",label:"Donation"},{key:"key",label:"License Key"},{key:"expires",label:"Expires"},{key:"date",label:"Issued"}
@@ -122,6 +136,15 @@ async function boot(){
     document.getElementById("loadingScreen").style.display="none";
     document.getElementById("mainApp").style.display="block";
     renderStats(); renderTable();
+    // Check Gmail email capability
+    try{
+      var emailRes=await fetch("/api/email-status");
+      if(emailRes.ok){var emailData=await emailRes.json();hasGmailCreds=emailData.hasGmailCreds;}
+    }catch(e){}
+    var es=document.getElementById("emailStatus");
+    es.innerHTML=hasGmailCreds
+      ?"<span class=\"dot ok\"></span>Email enabled"
+      :"<span class=\"dot no\"></span>Email not configured";
   }catch(err){
     document.getElementById("loadingScreen").style.display="none";
     var es=document.getElementById("errorScreen");
@@ -133,10 +156,11 @@ async function boot(){
 function mergeData(ledger, subscribers){
   var subMap={};
   Object.keys(subscribers).forEach(function(email){ subMap[email.toLowerCase()]=subscribers[email]; });
-  mergedData=ledger.map(function(entry){
+  mergedData=ledger.map(function(entry,idx){
     var email=(entry.email||"").toLowerCase();
     var sub=subMap[email];
     return {
+      _ledgerIdx: idx,
       name: entry.name||(sub?sub.name:"")||"",
       email: email,
       tier: entry.tier||"",
@@ -155,6 +179,7 @@ function mergeData(ledger, subscribers){
     if(!ledgerEmails[le]){
       var info=subscribers[email];
       mergedData.push({
+        _ledgerIdx: -1,
         name: info.name||"", email: le, tier: "", plugins: "",
         key: "(no key issued)", donation: info.donationAmount||"",
         date: info.processedAt||"", expires: "", source: "squarespace-only"
@@ -217,7 +242,7 @@ function renderTable(){
   if(filtered.length===0){
     tbody.innerHTML="<tr><td colspan=\""+(columns.length+1)+"\" class=\"empty-state\">No results found</td></tr>";return;
   }
-  tbody.innerHTML=filtered.map(function(d){
+  tbody.innerHTML=filtered.map(function(d,i){
     var tierClass=d.tier==="master"?"master":d.tier==="annual"?"annual":d.tier==="free"?"free":"plugin";
     var tierLabel=d.tier==="master"?"Master":d.tier==="annual"?"Annual":d.tier==="free"?"Free":d.tier;
     var tierBadge=d.tier?"<span class=\"badge badge-"+tierClass+"\">"+escapeHtml(tierLabel)+"</span>":"\u2014";
@@ -237,17 +262,66 @@ function renderTable(){
       expStr="<span style=\"color:var(--text-muted)\">\u221E</span>";
     }
     var keyDisp=d.key.charAt(0)==="("?"<span style=\"color:var(--text-muted)\">"+escapeHtml(d.key)+"</span>":escapeHtml(d.key);
-    return "<tr><td>"+(escapeHtml(d.name)||"<span style=\"color:var(--text-muted)\">\u2014</span>")+"</td>"+
-      "<td>"+escapeHtml(d.email)+"</td><td>"+tierBadge+"</td><td>"+donStr+"</td>"+
+    var hasKey=d.key&&d.key.charAt(0)!=="(";
+    return "<tr data-idx=\""+d._ledgerIdx+"\">"+
+      "<td class=\"editable-cell\" data-field=\"name\" data-idx=\""+d._ledgerIdx+"\">"+(escapeHtml(d.name)||"<span style=\"color:var(--text-muted)\">\u2014</span>")+"</td>"+
+      "<td class=\"editable-cell\" data-field=\"email\" data-idx=\""+d._ledgerIdx+"\">"+escapeHtml(d.email)+"</td>"+
+      "<td>"+tierBadge+"</td><td>"+donStr+"</td>"+
       "<td class=\"key-cell\" title=\"Click to copy\" data-key=\""+escapeAttr(d.key)+"\">"+keyDisp+"</td>"+
       "<td>"+expStr+"</td>"+
       "<td>"+dateStr+"</td>"+
-      "<td><button class=\"btn-secondary btn-sm copy-btn\" data-key=\""+escapeAttr(d.key)+"\">Copy</button></td></tr>";
+      "<td><div class=\"row-actions\">"+
+        "<button class=\"btn-icon copy-btn\" data-key=\""+escapeAttr(d.key)+"\" title=\"Copy key\""+(hasKey?"":' disabled')+">&#x2398;</button>"+
+        "<button class=\"btn-icon send send-btn\" data-email=\""+escapeAttr(d.email)+"\" data-name=\""+escapeAttr(d.name)+"\" data-key=\""+escapeAttr(d.key)+"\" title=\"Send key via email\""+(hasKey&&hasGmailCreds?"":' disabled')+">&#x2709;</button>"+
+      "</div></td></tr>";
   }).join("");
   tbody.querySelectorAll(".key-cell,.copy-btn").forEach(function(el){
     el.addEventListener("click", function(){
       var key=el.dataset.key;
       if(key&&key.charAt(0)!=="("){navigator.clipboard.writeText(key).then(function(){showToast("Key copied to clipboard");});}
+    });
+  });
+  // Inline editing for name/email cells
+  tbody.querySelectorAll(".editable-cell").forEach(function(cell){
+    cell.addEventListener("dblclick", function(){
+      if(cell.querySelector("input")) return;
+      var field=cell.dataset.field;
+      var idx=parseInt(cell.dataset.idx,10);
+      var current=mergedData.find(function(d){return d._ledgerIdx===idx;});
+      if(!current) return;
+      var oldVal=current[field]||"";
+      var inp=document.createElement("input");
+      inp.type=field==="email"?"email":"text";
+      inp.value=oldVal;
+      cell.textContent="";
+      cell.appendChild(inp);
+      inp.focus();
+      inp.select();
+      function commit(){
+        var newVal=inp.value.trim();
+        if(field==="email") newVal=newVal.toLowerCase();
+        if(newVal===oldVal){cell.textContent=oldVal||"\u2014";return;}
+        var body={index:idx};
+        body[field]=newVal;
+        fetch("/api/update-entry",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})
+          .then(function(r){return r.json();})
+          .then(function(data){
+            if(data.error){showToast("Error: "+data.error);cell.textContent=oldVal||"\u2014";return;}
+            current[field]=newVal;
+            if(data.newKey) current.key=data.newKey;
+            showToast(field.charAt(0).toUpperCase()+field.slice(1)+" updated"+(data.newKey?" — key regenerated":""));
+            renderTable();
+          })
+          .catch(function(){showToast("Failed to update");cell.textContent=oldVal||"\u2014";});
+      }
+      inp.addEventListener("blur", commit);
+      inp.addEventListener("keydown", function(e){if(e.key==="Enter"){e.preventDefault();inp.blur();}if(e.key==="Escape"){cell.textContent=oldVal||"\u2014";}});
+    });
+  });
+  // Send email per row
+  tbody.querySelectorAll(".send-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      sendKeyEmail(btn.dataset.email, btn.dataset.name, btn.dataset.key, btn);
     });
   });
 }
@@ -262,6 +336,7 @@ document.getElementById("btnNewKey").addEventListener("click", function(){
   document.getElementById("modalResultArea").style.display="none";
   document.getElementById("btnModalGenerate").style.display="";
   document.getElementById("btnModalCopy").style.display="none";
+  document.getElementById("btnModalSendEmail").style.display="none";
   document.getElementById("genError").style.display="none";
   document.getElementById("newName").value="";
   document.getElementById("newEmail").value="";
@@ -290,6 +365,7 @@ document.getElementById("btnModalGenerate").addEventListener("click", async func
     if(!res.ok) throw new Error(data.error||"Server error");
     var plugins=tier==="master"?["*"]:[tier];
     mergedData.push({
+      _ledgerIdx: mergedData.filter(function(d){return d._ledgerIdx>=0;}).length,
       name:name, email:email, tier:tier, plugins:plugins.join(", "),
       key:data.key, donation:"", date:data.entry.generatedAt,
       expires:data.entry.expiresAt||"", source:"manual"
@@ -298,6 +374,9 @@ document.getElementById("btnModalGenerate").addEventListener("click", async func
     document.getElementById("modalResultArea").style.display="block";
     btn.style.display="none";
     document.getElementById("btnModalCopy").style.display="";
+    var sendBtn=document.getElementById("btnModalSendEmail");
+    if(hasGmailCreds&&email){sendBtn.style.display="";sendBtn.dataset.email=email;sendBtn.dataset.name=name;sendBtn.dataset.key=data.key;}
+    else{sendBtn.style.display="none";}
     document.getElementById("generatedKeyOutput").textContent=data.key;
     renderStats(); renderTable();
     showToast("Key issued for "+email+" \u2014 saved to ledger.json");
@@ -311,6 +390,11 @@ document.getElementById("btnModalGenerate").addEventListener("click", async func
 document.getElementById("btnModalCopy").addEventListener("click", function(){
   navigator.clipboard.writeText(document.getElementById("generatedKeyOutput").textContent)
     .then(function(){showToast("Key copied to clipboard");});
+});
+
+document.getElementById("btnModalSendEmail").addEventListener("click", function(){
+  var btn=document.getElementById("btnModalSendEmail");
+  sendKeyEmail(btn.dataset.email, btn.dataset.name, btn.dataset.key, btn);
 });
 
 document.getElementById("btnExportCSV").addEventListener("click", function(){
@@ -332,6 +416,23 @@ document.getElementById("btnExportCSV").addEventListener("click", function(){
 function escapeHtml(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML;}
 function escapeAttr(s){return s.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 function showToast(msg){var t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(function(){t.classList.remove("show");},2000);}
+
+async function sendKeyEmail(email, name, key, btn){
+  if(!email||!key||key.charAt(0)==="("){showToast("No valid key to send");return;}
+  var origText=btn.textContent||btn.innerHTML;
+  btn.disabled=true;btn.textContent="Sending\u2026";
+  try{
+    var res=await fetch("/api/send-key-email",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:email,name:name,key:key})});
+    var data=await res.json();
+    if(!res.ok) throw new Error(data.error||"Server error");
+    showToast("Email sent to "+email);
+    btn.textContent="\u2713 Sent";
+    setTimeout(function(){btn.innerHTML=origText;btn.disabled=false;},3000);
+  }catch(err){
+    showToast("Email failed: "+err.message);
+    btn.innerHTML=origText;btn.disabled=false;
+  }
+}
 
 boot();
 </script>

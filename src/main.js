@@ -32,7 +32,9 @@ async function verifyLicenseToken(token) {
         "spki", keyDer, { name: "Ed25519" }, false, ["verify"]
       );
       const signature = base64urlDecode(signatureB64);
-      const valid = await crypto.subtle.verify("Ed25519", cryptoKey, signature, payloadBytes);
+      // Server signs the base64url string, not the decoded bytes
+      const signedMsg = new TextEncoder().encode(payloadB64);
+      const valid = await crypto.subtle.verify("Ed25519", cryptoKey, signature, signedMsg);
       if (!valid) return null;
     } catch {
       // Ed25519 not yet supported in this WebView — accept structural validity.
@@ -662,6 +664,7 @@ function renderPlugins() {
           ${pluginIconMarkup(plugin)}
           <div>
           <h3>${plugin.displayName}</h3>
+          ${plugin.type ? `<span class="plugin-type-badge type-${escapeHtml(plugin.type)}">${escapeHtml(plugin.type)}</span>` : ""}
           ${plugin.category ? `<span class="plugin-category-badge">${escapeHtml(plugin.category)}</span>` : ""}
           </div>
         </div>

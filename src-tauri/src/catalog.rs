@@ -175,6 +175,7 @@ fn build_plugin_status(
         available_versions,
         description: manifest.description.clone(),
         category: entry.category.clone().or_else(|| manifest.category.clone()),
+        plugin_type: entry.plugin_type.clone().or_else(|| manifest.plugin_type.clone()),
         tags: manifest.tags.clone(),
         info_url: manifest.info_url.clone(),
         install_mode: package.install_mode.clone(),

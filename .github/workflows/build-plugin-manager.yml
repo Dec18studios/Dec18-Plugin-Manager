@@ -49,20 +49,26 @@ jobs:
           APP_VERSION: ${{ steps.version.outputs.app_version }}
           RUN_ATTEMPT: ${{ github.run_attempt }}
         run: |
+          $ErrorActionPreference = 'Stop'
           $tag = "plugin-manager-v$env:APP_VERSION"
           $releasesJson = gh api "repos/$env:GITHUB_REPOSITORY/releases?per_page=100"
           $releases = $releasesJson | ConvertFrom-Json
           $release = $releases | Where-Object { $_.tag_name -eq $tag } | Select-Object -First 1
           if (-not $release) {
             Write-Host "No existing release found for $tag. Creating draft release shell."
-            $createdReleaseJson = gh api "repos/$env:GITHUB_REPOSITORY/releases" `
-              --method POST `
-              --field tag_name="$tag" `
-              --field target_commitish="$env:GITHUB_SHA" `
-              --field name="Dec 18 Studios Plugins v$env:APP_VERSION" `
-              --field body="See the release assets for desktop build artifacts." `
-              --raw-field draft=true `
-              --raw-field prerelease=false
+            $bodyJson = @{
+              tag_name         = $tag
+              target_commitish = $env:GITHUB_SHA
+              name             = "Dec 18 Studios Plugins v$env:APP_VERSION"
+              body             = "See the release assets for desktop build artifacts."
+              draft            = $true
+              prerelease       = $false
+            } | ConvertTo-Json -Compress
+            $createdReleaseJson = $bodyJson | gh api "repos/$env:GITHUB_REPOSITORY/releases" --method POST --input -
+            if ($LASTEXITCODE -ne 0) {
+              Write-Error "Failed to create draft release for $tag"
+              exit 1
+            }
             $createdRelease = $createdReleaseJson | ConvertFrom-Json
             "should_build=true" >> $env:GITHUB_OUTPUT
             Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "Created draft release shell for $tag."

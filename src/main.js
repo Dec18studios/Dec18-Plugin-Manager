@@ -478,6 +478,36 @@ function uninstallConfirmationMessage(plugin) {
   return `${intro}\n\n${warning}`;
 }
 
+function renderFolderRow(plugin, currentPath) {
+  const row = document.createElement("div");
+  row.className = "dctl-folder-row";
+  const displayPath = currentPath || "Not set — will prompt on install";
+  row.innerHTML = `
+    <div class="dctl-folder-info">
+      <span class="dctl-folder-label">Install folder</span>
+      <span class="dctl-folder-path" title="${escapeHtml(displayPath)}">${escapeHtml(displayPath)}</span>
+    </div>
+    <button type="button" class="dctl-folder-change" title="Change install folder">Change</button>
+  `;
+  row.querySelector(".dctl-folder-change").addEventListener("click", async () => {
+    const startDir = currentPath || plugin.installPath;
+    const chosen = await invoke("pick_folder", { startPath: startDir });
+    if (!chosen) return;
+    await invoke("set_plugin_install_path", { pluginId: plugin.pluginId, path: chosen });
+    logActivity(`Install folder for ${plugin.displayName} set to ${chosen}`);
+    updateFolderRow(row.closest(".plugin-card"), chosen);
+  });
+  return row;
+}
+
+function updateFolderRow(card, newPath) {
+  const pathEl = card.querySelector(".dctl-folder-path");
+  if (pathEl) {
+    pathEl.textContent = newPath;
+    pathEl.title = newPath;
+  }
+}
+
 function renderMaintenanceDrawer(plugin) {
   if (!plugin.installed) return null;
 
@@ -733,6 +763,20 @@ function renderPlugins() {
           releaseNotesUrl: plugin.releaseNotesUrl,
           releaseHighlights: plugin.releaseHighlights
         });
+      });
+    }
+
+    // Add folder picker row for DCTL / file-browse plugins
+    if (plugin.installMode === "file-browse" && isLicensed()) {
+      invoke("get_plugin_install_path", { pluginId: plugin.pluginId }).then((perPath) => {
+        const folderRow = renderFolderRow(plugin, perPath || null);
+        // Insert before any drawers or at end of card
+        const firstDrawer = card.querySelector(".version-drawer, .maintenance-drawer");
+        if (firstDrawer) {
+          card.insertBefore(folderRow, firstDrawer);
+        } else {
+          card.appendChild(folderRow);
+        }
       });
     }
 

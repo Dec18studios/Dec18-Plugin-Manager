@@ -1,6 +1,7 @@
 {
   "pluginId": "photochemist",
   "displayName": "PhotoChemist",
+  "type": "ofx",
   "version": "1.0.0",
   "releaseDate": "2026-04-03T00:00:00Z",
   "releaseNotesUrl": "https://github.com/dec18studios/PhotoChemist-OFX/releases/tag/v1.0.0",

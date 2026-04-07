@@ -1464,6 +1464,31 @@ button.primary.plugin-install-action:hover:not(:disabled) {
   vertical-align: middle;
 }
 
+/* ── Product type badge (App / OFX / DCTL) ── */
+.plugin-type-badge {
+  display: inline-block;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  vertical-align: middle;
+  margin-left: 0.25rem;
+}
+.plugin-type-badge.type-app {
+  background: rgba(96, 165, 250, 0.18);
+  color: #60a5fa;
+}
+.plugin-type-badge.type-ofx {
+  background: rgba(233, 69, 96, 0.18);
+  color: #e94560;
+}
+.plugin-type-badge.type-dctl {
+  background: rgba(251, 191, 36, 0.18);
+  color: #fbbf24;
+}
+
 /* ── Plugin description ── */
 .plugin-description {
   font-size: 0.82rem;

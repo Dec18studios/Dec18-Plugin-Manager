@@ -2,6 +2,7 @@
   "pluginId": "resolve-node-toggler",
   "displayName": "Resolve Node Toggler",
   "description": "Keyboard-driven node toggling for DaVinci Resolve with hotkey slots and profile management.",
+  "type": "app",
   "category": "Workflow",
   "tags": [
     "workflow",

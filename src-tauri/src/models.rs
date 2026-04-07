@@ -43,6 +43,8 @@ pub struct PluginStatus {
     pub available_versions: Vec<VersionOption>,
     pub description: Option<String>,
     pub category: Option<String>,
+    #[serde(rename = "type")]
+    pub plugin_type: Option<String>,
     pub tags: Vec<String>,
     pub info_url: Option<String>,
     pub install_mode: String,
@@ -72,6 +74,8 @@ pub struct CatalogEntry {
     pub manifest_url: String,
     #[serde(default)]
     pub category: Option<String>,
+    #[serde(default, rename = "type")]
+    pub plugin_type: Option<String>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -87,6 +91,8 @@ pub struct PluginManifest {
     pub description: Option<String>,
     #[serde(default)]
     pub category: Option<String>,
+    #[serde(default, rename = "type")]
+    pub plugin_type: Option<String>,
     #[serde(default)]
     pub tags: Vec<String>,
     #[serde(default)]

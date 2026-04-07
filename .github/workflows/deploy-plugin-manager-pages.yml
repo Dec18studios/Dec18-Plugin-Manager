@@ -7,8 +7,9 @@ on:
   workflow_dispatch:
   repository_dispatch:
     types: [plugin-release]
-  release:
-    types: [published]
+  workflow_run:
+    workflows: ["Build Dec 18 Studios Plugins"]
+    types: [completed]
   push:
     branches:
       - main
@@ -28,6 +29,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     steps:
       - uses: actions/checkout@v5
         with:

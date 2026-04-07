@@ -426,8 +426,8 @@ fn parse_package_source_spec(raw: &str) -> PackageSourceSpec {
 }
 
 fn ensure_supported_package(package: &PlatformPackage) -> Result<()> {
-    if package.package_type != "zip" && package.package_type != "bundle-dir" && package.package_type != "tar.gz" {
-        bail!("Only zip, tar.gz, and bundle-dir plugin packages are supported in v1");
+    if package.package_type != "zip" && package.package_type != "bundle-dir" && package.package_type != "tar.gz" && package.package_type != "raw" {
+        bail!("Only zip, tar.gz, raw, and bundle-dir plugin packages are supported in v1");
     }
     if (package.package_type == "zip" || package.package_type == "tar.gz") && package.sha256.starts_with("REPLACE_") {
         bail!("The manifest for this plugin still contains a placeholder checksum.");

@@ -1,6 +1,6 @@
 [package]
 name = "dec18-studios-plugins"
-version = "0.1.6"
+version = "0.1.7"
 edition = "2021"
 description = "Cross-platform desktop manager for Dec 18 Studios OFX plugins"
 

@@ -1020,6 +1020,60 @@ button.primary.plugin-install-action:hover:not(:disabled) {
   line-height: 1.45;
 }
 
+/* ── DCTL folder row ── */
+
+.dctl-folder-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.5rem 0.76rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+    linear-gradient(180deg, rgba(18, 18, 18, 0.9), rgba(28, 35, 43, 0.84));
+}
+
+.dctl-folder-info {
+  display: grid;
+  gap: 0.08rem;
+  min-width: 0;
+}
+
+.dctl-folder-label {
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.dctl-folder-path {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dctl-folder-change {
+  flex-shrink: 0;
+  padding: 0.28rem 0.62rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.dctl-folder-change:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
 .maintenance-drawer {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;

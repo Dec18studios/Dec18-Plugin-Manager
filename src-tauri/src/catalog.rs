@@ -19,6 +19,14 @@ const EMBEDDED_INDEX: &str = include_str!("../../docs/plugins/index.json");
 const EMBEDDED_PHOTOCHEMIST: &str = include_str!("../../docs/plugins/photochemist/stable.json");
 const EMBEDDED_NODE_TOGGLER: &str = include_str!("../../docs/plugins/resolve-node-toggler/stable.json");
 const EMBEDDED_RGB_CHIPS: &str = include_str!("../../docs/plugins/rgb-chips-dctl/stable.json");
+const EMBEDDED_DOLBY_SPOOFER: &str = include_str!("../../docs/plugins/dolby-vision-spoofer-dctl/stable.json");
+const EMBEDDED_FILM_NEG_CST: &str = include_str!("../../docs/plugins/film-negative-space-cst-dctl/stable.json");
+const EMBEDDED_GRAIN_BY_GREG: &str = include_str!("../../docs/plugins/grain-by-greg-dctl/stable.json");
+const EMBEDDED_HUE_CONTRAST: &str = include_str!("../../docs/plugins/hue-contrast-compressor-dctl/stable.json");
+const EMBEDDED_LINEAR_RAMP: &str = include_str!("../../docs/plugins/linear-ramp-diagnostic-dctl/stable.json");
+const EMBEDDED_PERFECT_EXPOSURE: &str = include_str!("../../docs/plugins/perfect-exposure-dctl/stable.json");
+const EMBEDDED_SATURATION_SEP: &str = include_str!("../../docs/plugins/saturation-separator-dctl/stable.json");
+const EMBEDDED_VOLUME_CURVE: &str = include_str!("../../docs/plugins/volume-curve-dctl/stable.json");
 
 #[derive(Debug, Clone)]
 pub struct CatalogBundle {
@@ -670,6 +678,14 @@ fn embedded_manifest(plugin_id: &str) -> Result<PluginManifest> {
         "photochemist" => EMBEDDED_PHOTOCHEMIST,
         "resolve-node-toggler" => EMBEDDED_NODE_TOGGLER,
         "rgb-chips-dctl" => EMBEDDED_RGB_CHIPS,
+        "dolby-vision-spoofer-dctl" => EMBEDDED_DOLBY_SPOOFER,
+        "film-negative-space-cst-dctl" => EMBEDDED_FILM_NEG_CST,
+        "grain-by-greg-dctl" => EMBEDDED_GRAIN_BY_GREG,
+        "hue-contrast-compressor-dctl" => EMBEDDED_HUE_CONTRAST,
+        "linear-ramp-diagnostic-dctl" => EMBEDDED_LINEAR_RAMP,
+        "perfect-exposure-dctl" => EMBEDDED_PERFECT_EXPOSURE,
+        "saturation-separator-dctl" => EMBEDDED_SATURATION_SEP,
+        "volume-curve-dctl" => EMBEDDED_VOLUME_CURVE,
         _ => return Err(anyhow!("No embedded manifest available for `{plugin_id}`")),
     };
     serde_json::from_str(raw)

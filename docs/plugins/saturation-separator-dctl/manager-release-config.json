@@ -1,0 +1,56 @@
+{
+  "pluginId": "saturation-separator-dctl",
+  "displayName": "Saturation Separator",
+  "releaseRepo": "dec18studios/Saturation-Separator-DCTL",
+  "minManagerVersion": "0.1.0",
+  "hostProcesses": [
+    "Resolve",
+    "DaVinci Resolve"
+  ],
+  "requiredFamilies": [
+    "universal"
+  ],
+  "category": "Color Grading",
+  "description": "Isolates and controls saturation bands independently for precise color grading.",
+  "tags": [
+    "saturation",
+    "separator",
+    "color grading",
+    "DCTL"
+  ],
+  "assetRules": [
+    {
+      "family": "universal",
+      "platform": "macos",
+      "arch": "universal",
+      "assetPattern": "Saturation.Separator.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "GE Saturation Seperator.dctle",
+      "bundleIdentifier": "com.dec18studios.saturation-separator-dctl",
+      "installPath": "/Library/Application Support/Blackmagic Design/DaVinci Resolve/LUT/DCTL",
+      "installMode": "file-browse"
+    },
+    {
+      "family": "universal",
+      "platform": "windows",
+      "arch": "x86_64",
+      "assetPattern": "Saturation.Separator.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "GE Saturation Seperator.dctle",
+      "bundleIdentifier": "com.dec18studios.saturation-separator-dctl",
+      "installPath": "C:\\ProgramData\\Blackmagic Design\\DaVinci Resolve\\Support\\LUT\\DCTL",
+      "installMode": "file-browse"
+    },
+    {
+      "family": "universal",
+      "platform": "linux",
+      "arch": "x86_64",
+      "assetPattern": "Saturation.Separator.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "GE Saturation Seperator.dctle",
+      "bundleIdentifier": "com.dec18studios.saturation-separator-dctl",
+      "installPath": "/opt/resolve/LUT/DCTL",
+      "installMode": "file-browse"
+    }
+  ]
+}

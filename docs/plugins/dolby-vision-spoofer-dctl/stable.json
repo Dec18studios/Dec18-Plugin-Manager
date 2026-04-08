@@ -1,0 +1,68 @@
+{
+  "pluginId": "dolby-vision-spoofer-dctl",
+  "displayName": "Dolby Vision Spoofer",
+  "description": "Workflow DCTL that spoofs Dolby Vision metadata for testing and development purposes.",
+  "category": "Workflow",
+  "tags": [
+    "dolby",
+    "vision",
+    "workflow",
+    "HDR",
+    "DCTL"
+  ],
+  "infoUrl": null,
+  "version": "1.0.0",
+  "releaseDate": "2026-04-08T21:22:16Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/Dolby-Vision-Spoofer-DCTL/releases/tag/v1.0.0",
+  "platforms": [
+    {
+      "platform": "macos",
+      "arch": "universal",
+      "downloadUrl": "https://github.com/Dec18studios/Dolby-Vision-Spoofer-DCTL/releases/download/v1.0.0/Dolby-Vision-Spoofer-v1.0.0.zip",
+      "sha256": "461494181e5947ec9f08ac74ad83ed528aeccc10379ad0e7e1063b8e2d5e7df4",
+      "packageType": "zip",
+      "bundleName": "GE Dolby Vision Spoof.dctle",
+      "bundleIdentifier": "com.dec18studios.dolby-vision-spoofer-dctl",
+      "installPath": "/Library/Application Support/Blackmagic Design/DaVinci Resolve/LUT/DCTL",
+      "installMode": "file-browse",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve"
+      ]
+    },
+    {
+      "platform": "windows",
+      "arch": "x86_64",
+      "downloadUrl": "https://github.com/Dec18studios/Dolby-Vision-Spoofer-DCTL/releases/download/v1.0.0/Dolby-Vision-Spoofer-v1.0.0.zip",
+      "sha256": "461494181e5947ec9f08ac74ad83ed528aeccc10379ad0e7e1063b8e2d5e7df4",
+      "packageType": "zip",
+      "bundleName": "GE Dolby Vision Spoof.dctle",
+      "bundleIdentifier": "com.dec18studios.dolby-vision-spoofer-dctl",
+      "installPath": "C:\\ProgramData\\Blackmagic Design\\DaVinci Resolve\\Support\\LUT\\DCTL",
+      "installMode": "file-browse",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve"
+      ]
+    },
+    {
+      "platform": "linux",
+      "arch": "x86_64",
+      "downloadUrl": "https://github.com/Dec18studios/Dolby-Vision-Spoofer-DCTL/releases/download/v1.0.0/Dolby-Vision-Spoofer-v1.0.0.zip",
+      "sha256": "461494181e5947ec9f08ac74ad83ed528aeccc10379ad0e7e1063b8e2d5e7df4",
+      "packageType": "zip",
+      "bundleName": "GE Dolby Vision Spoof.dctle",
+      "bundleIdentifier": "com.dec18studios.dolby-vision-spoofer-dctl",
+      "installPath": "/opt/resolve/LUT/DCTL",
+      "installMode": "file-browse",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve"
+      ]
+    }
+  ],
+  "availableVersions": []
+}

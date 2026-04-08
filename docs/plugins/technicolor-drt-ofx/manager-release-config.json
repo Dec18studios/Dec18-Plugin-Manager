@@ -1,0 +1,32 @@
+{
+  "pluginId": "technicolor-drt-ofx",
+  "displayName": "Technicolor DRT OFX",
+  "releaseRepo": "dec18studios/Technically-Technicolor-DRT",
+  "minManagerVersion": "0.1.0",
+  "hostProcesses": [
+    "Resolve",
+    "DaVinci Resolve",
+    "Fusion",
+    "Fusion Studio",
+    "Nuke",
+    "NukeX",
+    "NukeStudio",
+    "Hiero"
+  ],
+  "requiredFamilies": ["macos"],
+  "category": "Film Emulation",
+  "description": "Technicolor dye-transfer inspired Display Render Transform OFX plugin.",
+  "tags": ["technicolor", "drt", "film", "color"],
+  "assetRules": [
+    {
+      "family": "macos",
+      "platform": "macos",
+      "arch": "universal",
+      "assetPattern": "Technicolor-DRT-OFX.*macOS.*universal.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "TechnicolorDRT.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.TechnicolorDRT",
+      "installPath": "/Library/OFX/Plugins"
+    }
+  ]
+}

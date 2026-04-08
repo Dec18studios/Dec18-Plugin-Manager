@@ -1,0 +1,32 @@
+{
+  "pluginId": "hue-contrast-compressor-ofx",
+  "displayName": "Hue Contrast Compressor OFX",
+  "releaseRepo": "dec18studios/Hue-Contrast-Compressor-OFX",
+  "minManagerVersion": "0.1.0",
+  "hostProcesses": [
+    "Resolve",
+    "DaVinci Resolve",
+    "Fusion",
+    "Fusion Studio",
+    "Nuke",
+    "NukeX",
+    "NukeStudio",
+    "Hiero"
+  ],
+  "requiredFamilies": ["macos"],
+  "category": "Color",
+  "description": "GPU-accelerated hue shift compression OFX plugin for DaVinci Resolve.",
+  "tags": ["hue", "contrast", "color", "compression"],
+  "assetRules": [
+    {
+      "family": "macos",
+      "platform": "macos",
+      "arch": "universal",
+      "assetPattern": "Hue-Contrast-Compressor-OFX.*macOS.*universal.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "ContrastSatVolume.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.ContrastSatVolume",
+      "installPath": "/Library/OFX/Plugins"
+    }
+  ]
+}

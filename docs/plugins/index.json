@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-08T21:44:13.949Z",
+  "generatedAt": "2026-04-08T22:08:19.498Z",
   "plugins": [
     {
       "pluginId": "dolby-vision-spoofer-dctl",
@@ -24,6 +24,12 @@
       "displayName": "Hue Contrast Compressor",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/hue-contrast-compressor-dctl/stable.json",
       "category": "Color Grading"
+    },
+    {
+      "pluginId": "hue-contrast-compressor-ofx",
+      "displayName": "Hue Contrast Compressor OFX",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/hue-contrast-compressor-ofx/stable.json",
+      "category": "Color"
     },
     {
       "pluginId": "linear-ramp-diagnostic-dctl",
@@ -58,6 +64,12 @@
       "displayName": "Saturation Separator",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/saturation-separator-dctl/stable.json",
       "category": "Color Grading"
+    },
+    {
+      "pluginId": "technicolor-drt-ofx",
+      "displayName": "Technicolor DRT OFX",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/technicolor-drt-ofx/stable.json",
+      "category": "Film Emulation"
     },
     {
       "pluginId": "volume-curve-dctl",

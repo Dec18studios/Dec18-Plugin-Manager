@@ -646,6 +646,8 @@ function renderPlugins() {
     plugins = plugins.filter((plugin) => (plugin.type ?? "").toLowerCase() === "ofx");
   } else if (state.activeTab === "dctl") {
     plugins = plugins.filter((plugin) => (plugin.type ?? "").toLowerCase() === "dctl");
+  } else if (state.activeTab === "app") {
+    plugins = plugins.filter((plugin) => (plugin.type ?? "").toLowerCase() === "app");
   } else if (state.activeTab === "3rd-party") {
     plugins = plugins.filter((plugin) => (plugin.type ?? "").toLowerCase() === "3rd-party");
   }

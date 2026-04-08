@@ -27,6 +27,8 @@ const EMBEDDED_LINEAR_RAMP: &str = include_str!("../../docs/plugins/linear-ramp-
 const EMBEDDED_PERFECT_EXPOSURE: &str = include_str!("../../docs/plugins/perfect-exposure-dctl/stable.json");
 const EMBEDDED_SATURATION_SEP: &str = include_str!("../../docs/plugins/saturation-separator-dctl/stable.json");
 const EMBEDDED_VOLUME_CURVE: &str = include_str!("../../docs/plugins/volume-curve-dctl/stable.json");
+const EMBEDDED_HUE_CONTRAST_OFX: &str = include_str!("../../docs/plugins/hue-contrast-compressor-ofx/stable.json");
+const EMBEDDED_TECHNICOLOR_DRT: &str = include_str!("../../docs/plugins/technicolor-drt-ofx/stable.json");
 
 #[derive(Debug, Clone)]
 pub struct CatalogBundle {
@@ -686,6 +688,8 @@ fn embedded_manifest(plugin_id: &str) -> Result<PluginManifest> {
         "perfect-exposure-dctl" => EMBEDDED_PERFECT_EXPOSURE,
         "saturation-separator-dctl" => EMBEDDED_SATURATION_SEP,
         "volume-curve-dctl" => EMBEDDED_VOLUME_CURVE,
+        "hue-contrast-compressor-ofx" => EMBEDDED_HUE_CONTRAST_OFX,
+        "technicolor-drt-ofx" => EMBEDDED_TECHNICOLOR_DRT,
         _ => return Err(anyhow!("No embedded manifest available for `{plugin_id}`")),
     };
     serde_json::from_str(raw)

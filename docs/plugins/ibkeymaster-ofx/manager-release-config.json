@@ -1,0 +1,53 @@
+{
+  "pluginId": "ibkeymaster-ofx",
+  "displayName": "IBKeymaster",
+  "releaseRepo": "dec18studios/IBKeymaster",
+  "minManagerVersion": "0.1.0",
+  "hostProcesses": [
+    "Resolve",
+    "DaVinci Resolve",
+    "Fusion",
+    "Fusion Studio",
+    "Nuke",
+    "NukeX",
+    "NukeStudio",
+    "Hiero"
+  ],
+  "requiredFamilies": ["macos", "windows", "linux"],
+  "category": "Keying",
+  "description": "GPU-accelerated OFX IBK keyer — a port of Nuke's IBKnife keying toolset for DaVinci Resolve and other OFX hosts.",
+  "tags": ["keying", "IBK", "green screen", "chroma key", "compositing"],
+  "infoUrl": "https://dec18studios.com/ibkeymaster",
+  "assetRules": [
+    {
+      "family": "macos",
+      "platform": "macos",
+      "arch": "universal",
+      "assetPattern": "IBKeymaster\\.ofx\\.(?:metal|Metal).*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "IBKeymaster.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.IBKeymaster",
+      "installPath": "/Library/OFX/Plugins"
+    },
+    {
+      "family": "windows",
+      "platform": "windows",
+      "arch": "x86_64",
+      "assetPattern": "IBKeyer-Win64.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "IBKeymaster.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.IBKeymaster",
+      "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins"
+    },
+    {
+      "family": "linux",
+      "platform": "linux",
+      "arch": "x86_64",
+      "assetPattern": "IBKeyer-linux-x86_64.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "IBKeymaster.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.IBKeymaster",
+      "installPath": "/usr/OFX/Plugins"
+    }
+  ]
+}

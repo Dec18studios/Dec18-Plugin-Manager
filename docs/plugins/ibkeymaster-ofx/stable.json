@@ -1,0 +1,86 @@
+{
+  "pluginId": "ibkeymaster-ofx",
+  "displayName": "IBKeymaster",
+  "description": "GPU-accelerated OFX IBK keyer — a port of Nuke's IBKnife keying toolset for DaVinci Resolve and other OFX hosts.",
+  "category": "Keying",
+  "tags": [
+    "keying",
+    "IBK",
+    "green screen",
+    "chroma key",
+    "compositing"
+  ],
+  "infoUrl": "https://dec18studios.com/ibkeymaster",
+  "version": "1.5-macupdate",
+  "releaseDate": "2026-03-19T14:25:54Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/IBKeymaster/releases/tag/V1.5-macupdate",
+  "platforms": [
+    {
+      "platform": "macos",
+      "arch": "universal",
+      "downloadUrl": "https://github.com/Dec18studios/IBKeymaster/releases/download/V1.5-macupdate/IBKeymaster.ofx.metal.zip",
+      "sha256": "c333bf7e3024f316eb190ab6ddddaf85bb5f6bb9467fa9ff39dc368d8df699c8",
+      "packageType": "zip",
+      "bundleName": "IBKeymaster.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.IBKeymaster",
+      "installPath": "/Library/OFX/Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    },
+    {
+      "platform": "windows",
+      "arch": "x86_64",
+      "downloadUrl": "https://github.com/Dec18studios/IBKeymaster/releases/download/V1.5-macupdate/IBKeyer-Win64-portable.zip",
+      "sha256": "672ad928c16a0fcf16ad1b7ed9762deeffb2045e7297bdaa8c9b25f2f53934cb",
+      "packageType": "zip",
+      "bundleName": "IBKeymaster.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.IBKeymaster",
+      "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    },
+    {
+      "platform": "linux",
+      "arch": "x86_64",
+      "downloadUrl": "https://github.com/Dec18studios/IBKeymaster/releases/download/V1.5-macupdate/IBKeyer-linux-x86_64.zip",
+      "sha256": "c02a547e3638040d769b403081886ecd16804ff66715b4130b6377e08f3c26a6",
+      "packageType": "zip",
+      "bundleName": "IBKeymaster.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.IBKeymaster",
+      "installPath": "/usr/OFX/Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    }
+  ],
+  "availableVersions": []
+}

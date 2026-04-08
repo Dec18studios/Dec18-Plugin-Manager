@@ -73,7 +73,7 @@ const body = [
   "Paste this key into the Dec 18 Studios Plugin Manager to unlock all plugins.",
   "",
   "If you haven't downloaded the Plugin Manager yet, grab it from:",
-  "https://github.com/Dec18studios/Dec18-Plugin-Manager/releases",
+  "https://github.com/Dec18studios/Dec18-Plugin-Manager/releases/latest/",
   "",
   "Cheers,",
   "Greg \u2014 Dec 18 Studios",

@@ -69,7 +69,7 @@ if (!existsSync(privateKeyPath)) {
 }
 
 const privateKey = loadPrivateKey(privateKeyPath);
-const plugins = args.tier === "master" ? ["*"] : (args.plugins ?? [args.tier]);
+const plugins = (args.tier === "master" || args.tier === "annual") ? ["*"] : (args.plugins ?? [args.tier]);
 
 const exp = expirationForTier(args.tier, args.expiry);
 const payload = {

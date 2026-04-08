@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Process new subscribers
+      - name: Process new Happy Little Noder purchases
         env:
           SQUARESPACE_API_KEY: ${{ secrets.SQUARESPACE_API_KEY }}
           LICENSE_SIGNING_PRIVATE_KEY: ${{ secrets.LICENSE_SIGNING_PRIVATE_KEY }}

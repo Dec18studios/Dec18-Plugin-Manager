@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * License fulfillment — polls Squarespace Profiles API for new donors
- * (donation form = "name your own price" license purchase, $1 min),
- * generates master license keys, emails them via Gmail API.
+ * License fulfillment — polls Squarespace Commerce Orders API for purchases
+ * of the "Happy Little Noders" subscription product, generates master license
+ * keys, and emails them via Gmail API.
  *
  * Required env vars:
- *   SQUARESPACE_API_KEY          — Squarespace API key (Profiles permission)
+ *   SQUARESPACE_API_KEY          — Squarespace API key (Commerce Orders permission)
  *   LICENSE_SIGNING_PRIVATE_KEY  — Ed25519 PEM private key (contents, not path)
  *   GMAIL_CREDENTIALS            — Google OAuth client JSON (contents)
  *   GMAIL_TOKEN                  — Google OAuth token JSON (contents)
@@ -24,6 +24,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROCESSED_PATH = join(__dirname, "license-keys", "processed-subscribers.json");
 const LEDGER_PATH = join(__dirname, "license-keys", "ledger.json");
 
+/** The Squarespace product name that triggers license fulfillment. */
+const TARGET_PRODUCT = "Happy Little Noders";
+
 // ── Base64url helpers ──────────────────────────────────────────────
 
 function base64urlEncode(buffer) {
@@ -37,7 +40,7 @@ function base64urlEncode(buffer) {
 // ── License key generation ─────────────────────────────────────────
 
 function generateLicenseKeyFromTier(privateKey, email, tier) {
-  const plugins = tier === "master" ? ["*"] : [tier];
+  const plugins = (tier === "master" || tier === "annual") ? ["*"] : [tier];
   const payload = { t: tier, e: email, p: plugins };
 
   // Add expiration for non-permanent tiers
@@ -52,45 +55,56 @@ function generateLicenseKeyFromTier(privateKey, email, tier) {
 }
 
 /**
- * Determine license tier from a Squarespace profile.
- * Currently all donors get "master". When switching to Squarespace products,
- * update this to inspect profile.transactionsSummary or order metadata to
- * map product variants → tier names (free | annual | master).
+ * Determine license tier from a Squarespace order.
+ * All "Happy Little Noder Subscription" purchasers get "master".
+ * Extend this to inspect line item variant/SKU if you add more tiers.
  */
-function determineTier(/* profile */) {
-  // TODO: Inspect Squarespace product variant / SKU when products are live.
-  // Example future logic:
-  //   if (profile.orderSummary?.lastProduct?.includes("Annual")) return "annual";
-  //   if (profile.orderSummary?.lastProduct?.includes("Free"))   return "free";
-  return "master";
+function determineTier(/* order */) {
+  return "annual";
 }
 
-// ── Squarespace Profiles API ───────────────────────────────────────
+// ── Squarespace Commerce Orders API ────────────────────────────────
 
-async function fetchAllDonors(apiKey) {
-  const donors = [];
-  let url = "https://api.squarespace.com/1.0/profiles";
+/**
+ * Fetch all orders that contain the target product.
+ * Uses cursor-based pagination via the Commerce Orders endpoint.
+ * Does not filter by fulfillment status — digital subscriptions
+ * may not have an explicit fulfillment state.
+ */
+async function fetchSubscriptionOrders(apiKey) {
+  const orders = [];
+  let cursor = null;
 
-  while (url) {
+  while (true) {
+    const params = new URLSearchParams();
+    if (cursor) params.set("cursor", cursor);
+    const url = `https://api.squarespace.com/1.0/commerce/orders?${params}`;
+
     const res = await fetch(url, {
       headers: { Authorization: `Bearer ${apiKey}` },
     });
     if (!res.ok) {
-      throw new Error(`Squarespace API ${res.status}: ${await res.text()}`);
+      throw new Error(`Squarespace Orders API ${res.status}: ${await res.text()}`);
     }
     const data = await res.json();
 
-    for (const profile of data.profiles ?? []) {
-      const dc = profile.transactionsSummary?.donationCount ?? 0;
-      if (dc > 0) {
-        donors.push(profile);
+    for (const order of data.result ?? []) {
+      const hasTarget = (order.lineItems ?? []).some(
+        (li) => li.productName === TARGET_PRODUCT
+      );
+      if (hasTarget) {
+        orders.push(order);
       }
     }
 
-    url = data.pagination?.hasNextPage ? data.pagination.nextPageUrl : null;
+    if (data.pagination?.hasNextPage && data.pagination.nextPageCursor) {
+      cursor = data.pagination.nextPageCursor;
+    } else {
+      break;
+    }
   }
 
-  return donors;
+  return orders;
 }
 
 // ── Gmail API ──────────────────────────────────────────────────────
@@ -125,7 +139,7 @@ function buildLicenseEmail(toEmail, toName, licenseKey) {
     "Paste this key into the Dec 18 Studios Plugin Manager to unlock all plugins.",
     "",
     "If you haven't downloaded the Plugin Manager yet, grab it from:",
-    "https://github.com/Dec18studios/Dec18-Plugin-Manager/releases",
+    "https://github.com/Dec18studios/Dec18-Plugin-Manager/releases/latest/",
     "",
     "Cheers,",
     "Greg — Dec 18 Studios",
@@ -202,77 +216,79 @@ async function main() {
   const credentials = JSON.parse(credentialsJson);
   const token = JSON.parse(tokenJson);
 
-  // 1. Fetch all Squarespace profiles with donationCount > 0
-  console.log("Polling Squarespace profiles for donors...");
-  const donors = await fetchAllDonors(apiKey);
-  console.log(`Found ${donors.length} total donor(s).`);
+  // 1. Fetch all Squarespace orders containing the target product
+  console.log(`Polling Squarespace orders for "${TARGET_PRODUCT}" purchases...`);
+  const orders = await fetchSubscriptionOrders(apiKey);
+  console.log(`Found ${orders.length} fulfilled order(s) with "${TARGET_PRODUCT}".`);
 
   // 2. Load already-processed ledger
   const processed = loadProcessed();
   const keyLedger = loadLedger();
-  const newDonors = [];
+  const newPurchasers = [];
 
-  for (const profile of donors) {
-    const email = profile.email?.trim().toLowerCase();
+  for (const order of orders) {
+    const email = order.customerEmail?.trim().toLowerCase();
     if (!email) continue;
     if (processed[email]) continue;
 
-    const name = [profile.firstName, profile.lastName].filter(Boolean).join(" ") || null;
-    const amount = profile.transactionsSummary?.totalDonationAmount?.value ?? "unknown";
-    const tier = determineTier(profile);
-    newDonors.push({ email, name, profileId: profile.id, amount, tier });
+    const ba = order.billingAddress ?? order.shippingAddress ?? {};
+    const name = [ba.firstName, ba.lastName].filter(Boolean).join(" ") || null;
+    const total = order.grandTotal?.value ?? "unknown";
+    const tier = determineTier(order);
+    newPurchasers.push({ email, name, orderId: order.id, orderNumber: order.orderNumber, amount: total, tier });
   }
 
-  if (!newDonors.length) {
-    console.log("No new donors to process.");
+  if (!newPurchasers.length) {
+    console.log("No new purchasers to process.");
     return;
   }
 
-  console.log(`Processing ${newDonors.length} new donor(s)...`);
+  console.log(`Processing ${newPurchasers.length} new purchaser(s)...`);
 
   // 3. Get Gmail access token
   const accessToken = await refreshAccessToken(credentials, token);
 
-  // 4. Generate key + send email for each new donor
-  for (const donor of newDonors) {
+  // 4. Generate key + send email for each new purchaser
+  for (const purchaser of newPurchasers) {
     try {
-      const licenseKey = generateLicenseKeyFromTier(privateKey, donor.email, donor.tier);
-      const rawEmail = buildLicenseEmail(donor.email, donor.name, licenseKey);
+      const licenseKey = generateLicenseKeyFromTier(privateKey, purchaser.email, purchaser.tier);
+      const rawEmail = buildLicenseEmail(purchaser.email, purchaser.name, licenseKey);
       await sendEmail(accessToken, rawEmail);
 
-      processed[donor.email] = {
+      processed[purchaser.email] = {
         processedAt: new Date().toISOString(),
-        profileId: donor.profileId,
-        name: donor.name,
-        donationAmount: donor.amount,
-        tier: donor.tier,
+        orderId: purchaser.orderId,
+        orderNumber: purchaser.orderNumber,
+        name: purchaser.name,
+        amount: purchaser.amount,
+        tier: purchaser.tier,
         key: licenseKey,
       };
 
       const ledgerEntry = {
-        name: donor.name || '',
-        tier: donor.tier,
-        email: donor.email,
-        plugins: donor.tier === "master" ? ['*'] : [donor.tier],
+        name: purchaser.name || '',
+        tier: purchaser.tier,
+        email: purchaser.email,
+        plugins: (purchaser.tier === "master" || purchaser.tier === "annual") ? ['*'] : [purchaser.tier],
         key: licenseKey,
         generatedAt: new Date().toISOString(),
       };
       // Add expiresAt for time-limited tiers
-      if (donor.tier === "free") ledgerEntry.expiresAt = new Date(Date.now() + 30 * 86400000).toISOString();
-      if (donor.tier === "annual") ledgerEntry.expiresAt = new Date(Date.now() + 365 * 86400000).toISOString();
+      if (purchaser.tier === "free") ledgerEntry.expiresAt = new Date(Date.now() + 30 * 86400000).toISOString();
+      if (purchaser.tier === "annual") ledgerEntry.expiresAt = new Date(Date.now() + 365 * 86400000).toISOString();
 
       keyLedger.push(ledgerEntry);
 
-      console.log(`✓ Sent ${donor.tier} key to ${donor.email} (donated $${donor.amount})`);
+      console.log(`✓ Sent ${purchaser.tier} key to ${purchaser.email} (order #${purchaser.orderNumber}, $${purchaser.amount})`);
     } catch (err) {
-      console.error(`✗ Failed for ${donor.email}: ${err.message}`);
+      console.error(`✗ Failed for ${purchaser.email}: ${err.message}`);
     }
   }
 
   // 5. Save updated ledger + subscriber list
   saveProcessed(processed);
   saveLedger(keyLedger);
-  console.log(`Done. Processed ${Object.keys(processed).length} total donor(s), ${keyLedger.length} ledger entries.`);
+  console.log(`Done. Processed ${Object.keys(processed).length} total subscriber(s), ${keyLedger.length} ledger entries.`);
 }
 
 main().catch((err) => {

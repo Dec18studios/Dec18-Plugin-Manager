@@ -131,7 +131,7 @@ const server = createServer(async (req, res) => {
       return;
     }
     const safeTier = typeof tier === "string" && tier ? tier : "master";
-    const plugins = safeTier === "master" ? ["*"] : [safeTier];
+    const plugins = (safeTier === "master" || safeTier === "annual") ? ["*"] : [safeTier];
     const exp = expirationForTier(safeTier);
     const key = generateMasterKey(privateKey, safeTier, email.toLowerCase(), plugins, exp);
     const now = new Date().toISOString();
@@ -169,7 +169,7 @@ const server = createServer(async (req, res) => {
       // If email changed and key exists, regenerate key with new email
       if (privateKey && oldEmail !== entry.email && entry.key && entry.key.startsWith("D18.")) {
         const tier = entry.tier || "master";
-        const plugins = entry.plugins || (tier === "master" ? ["*"] : [tier]);
+        const plugins = entry.plugins || ((tier === "master" || tier === "annual") ? ["*"] : [tier]);
         const exp = entry.expiresAt ? Math.floor(new Date(entry.expiresAt).getTime() / 1000) : expirationForTier(tier);
         entry.key = generateMasterKey(privateKey, tier, entry.email, plugins, exp);
         changed.key = entry.key;
@@ -228,7 +228,7 @@ const server = createServer(async (req, res) => {
         "Paste this key into the Dec 18 Studios Plugin Manager to unlock all plugins.",
         "",
         "If you haven't downloaded the Plugin Manager yet, grab it from:",
-        "https://github.com/Dec18studios/Dec18-Plugin-Manager/releases",
+        "https://github.com/Dec18studios/Dec18-Plugin-Manager/releases/latest/",
         "",
         "Cheers,",
         "Greg \u2014 Dec 18 Studios",

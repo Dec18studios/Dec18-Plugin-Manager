@@ -1,79 +1,105 @@
 {
-  "generatedAt": "2026-04-08T22:08:19.498Z",
+  "generatedAt": "2026-04-08T22:40:34.718Z",
   "plugins": [
     {
       "pluginId": "dolby-vision-spoofer-dctl",
       "displayName": "Dolby Vision Spoofer",
+      "type": "DCTL",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/dolby-vision-spoofer-dctl/stable.json",
       "category": "Workflow"
     },
     {
       "pluginId": "film-negative-space-cst-dctl",
       "displayName": "Film Negative Space CST",
+      "type": "DCTL",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/film-negative-space-cst-dctl/stable.json",
       "category": "Film Emulation"
     },
     {
       "pluginId": "grain-by-greg-dctl",
       "displayName": "Grain By Greg",
+      "type": "DCTL",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/grain-by-greg-dctl/stable.json",
       "category": "Film Emulation"
     },
     {
       "pluginId": "hue-contrast-compressor-dctl",
       "displayName": "Hue Contrast Compressor",
+      "type": "DCTL",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/hue-contrast-compressor-dctl/stable.json",
       "category": "Color Grading"
     },
     {
       "pluginId": "hue-contrast-compressor-ofx",
       "displayName": "Hue Contrast Compressor OFX",
+      "type": "OFX",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/hue-contrast-compressor-ofx/stable.json",
       "category": "Color"
     },
     {
+      "pluginId": "ibkeymaster-ofx",
+      "displayName": "IBKeymaster",
+      "type": "OFX",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/ibkeymaster-ofx/stable.json",
+      "category": "Keying"
+    },
+    {
+      "pluginId": "ibkeymaster-ofx",
+      "displayName": "IBKeymaster",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/ibkeymaster-ofx/stable.json",
+      "category": "Keying"
+    },
+    {
       "pluginId": "linear-ramp-diagnostic-dctl",
       "displayName": "Linear Ramp Diagnostic",
+      "type": "DCTL",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/linear-ramp-diagnostic-dctl/stable.json",
       "category": "Diagnostics"
     },
     {
       "pluginId": "perfect-exposure-dctl",
       "displayName": "Perfect Exposure",
+      "type": "DCTL",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/perfect-exposure-dctl/stable.json",
       "category": "Workflow"
     },
     {
       "pluginId": "photochemist",
       "displayName": "PhotoChemist",
+      "type": "OFX",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/photochemist/stable.json"
     },
     {
       "pluginId": "resolve-node-toggler",
       "displayName": "Resolve Node Toggler",
+      "type": "3rd-party",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/resolve-node-toggler/stable.json"
     },
     {
       "pluginId": "rgb-chips-dctl",
       "displayName": "RGB Chips",
+      "type": "3rd-party",
       "licenseTier": "free",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/rgb-chips-dctl/stable.json"
     },
     {
       "pluginId": "saturation-separator-dctl",
       "displayName": "Saturation Separator",
+      "type": "DCTL",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/saturation-separator-dctl/stable.json",
       "category": "Color Grading"
     },
     {
       "pluginId": "technicolor-drt-ofx",
       "displayName": "Technicolor DRT OFX",
+      "type": "OFX",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/technicolor-drt-ofx/stable.json",
       "category": "Film Emulation"
     },
     {
       "pluginId": "volume-curve-dctl",
       "displayName": "Volume Curve",
+      "type": "DCTL",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/volume-curve-dctl/stable.json",
       "category": "Color Grading"
     }

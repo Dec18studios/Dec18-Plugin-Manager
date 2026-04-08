@@ -60,8 +60,9 @@ const state = {
   activeOperation: null,
   searchQuery: "",
   categoryFilter: "all",
+  registrationFilter: "all",
   sortOrder: "name",
-  activeTab: "my-plugins",
+  activeTab: "all",
   license: {
     keys: [],        // raw D18.xxx.xxx tokens stored on disk
     parsed: [],      // verified payloads: [{ t, e, p }]  (t=tier, e=email, p=plugins)
@@ -93,6 +94,7 @@ const elements = {
   releaseHighlightsClose: document.querySelector("#release-highlights-close"),
   pluginSearch: document.querySelector("#plugin-search"),
   categoryFilter: document.querySelector("#category-filter"),
+  registrationFilter: document.querySelector("#registration-filter"),
   sortOrder: document.querySelector("#sort-order"),
   licenseStatus: document.querySelector("#license-status"),
   enterLicenseButton: document.querySelector("#enter-license-button"),
@@ -640,9 +642,19 @@ function renderPlugins() {
   let plugins = allPlugins;
 
   // Filter by active tab
-  if (state.activeTab === "free-tools") {
+  if (state.activeTab === "ofx") {
+    plugins = plugins.filter((plugin) => (plugin.type ?? "").toLowerCase() === "ofx");
+  } else if (state.activeTab === "dctl") {
+    plugins = plugins.filter((plugin) => (plugin.type ?? "").toLowerCase() === "dctl");
+  } else if (state.activeTab === "3rd-party") {
+    plugins = plugins.filter((plugin) => (plugin.type ?? "").toLowerCase() === "3rd-party");
+  }
+  // "all" tab shows everything
+
+  // Filter by registration requirement
+  if (state.registrationFilter === "free") {
     plugins = plugins.filter((plugin) => plugin.licenseTier === "free");
-  } else {
+  } else if (state.registrationFilter === "registration") {
     plugins = plugins.filter((plugin) => plugin.licenseTier !== "free");
   }
 
@@ -689,10 +701,7 @@ function renderPlugins() {
   });
 
   if (!plugins.length) {
-    const emptyMsg = state.activeTab === "free-tools"
-      ? "No free 3rd party tools match your filter."
-      : "No plugins match your filter.";
-    elements.pluginList.innerHTML = `<div class="empty-state">${emptyMsg}</div>`;
+    elements.pluginList.innerHTML = `<div class="empty-state">No plugins match your filter.</div>`;
     return;
   }
 
@@ -1197,6 +1206,10 @@ elements.pluginSearch.addEventListener("input", (event) => {
 });
 elements.categoryFilter.addEventListener("change", (event) => {
   state.categoryFilter = event.currentTarget.value;
+  renderPlugins();
+});
+elements.registrationFilter.addEventListener("change", (event) => {
+  state.registrationFilter = event.currentTarget.value;
   renderPlugins();
 });
 elements.sortOrder.addEventListener("change", (event) => {

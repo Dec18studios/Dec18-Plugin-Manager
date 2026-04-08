@@ -113,13 +113,20 @@
         <section class="panel plugins-panel">
           <div class="panel-header">
             <div class="tab-bar">
-              <button class="tab-button active" data-tab="my-plugins">Dec.18 Studios Tools</button>
-              <button class="tab-button" data-tab="free-tools">Additional Free Tools</button>
+              <button class="tab-button active" data-tab="all">All Tools</button>
+              <button class="tab-button" data-tab="ofx">OFX</button>
+              <button class="tab-button" data-tab="dctl">DCTL</button>
+              <button class="tab-button" data-tab="3rd-party">3rd Party</button>
             </div>
             <div class="plugin-toolbar">
               <input id="plugin-search" type="search" placeholder="Search plugins..." class="plugin-search" />
               <select id="category-filter" class="category-filter">
                 <option value="all">All categories</option>
+              </select>
+              <select id="registration-filter" class="category-filter">
+                <option value="all">All access</option>
+                <option value="free">Free</option>
+                <option value="registration">Registration required</option>
               </select>
               <select id="sort-order" class="sort-order">
                 <option value="name">Sort by name</option>

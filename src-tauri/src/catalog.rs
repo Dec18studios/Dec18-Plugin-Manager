@@ -28,6 +28,7 @@ const EMBEDDED_PERFECT_EXPOSURE: &str = include_str!("../../docs/plugins/perfect
 const EMBEDDED_SATURATION_SEP: &str = include_str!("../../docs/plugins/saturation-separator-dctl/stable.json");
 const EMBEDDED_VOLUME_CURVE: &str = include_str!("../../docs/plugins/volume-curve-dctl/stable.json");
 const EMBEDDED_HUE_CONTRAST_OFX: &str = include_str!("../../docs/plugins/hue-contrast-compressor-ofx/stable.json");
+const EMBEDDED_IBKEYMASTER: &str = include_str!("../../docs/plugins/ibkeymaster-ofx/stable.json");
 const EMBEDDED_TECHNICOLOR_DRT: &str = include_str!("../../docs/plugins/technicolor-drt-ofx/stable.json");
 
 #[derive(Debug, Clone)]
@@ -689,6 +690,7 @@ fn embedded_manifest(plugin_id: &str) -> Result<PluginManifest> {
         "saturation-separator-dctl" => EMBEDDED_SATURATION_SEP,
         "volume-curve-dctl" => EMBEDDED_VOLUME_CURVE,
         "hue-contrast-compressor-ofx" => EMBEDDED_HUE_CONTRAST_OFX,
+        "ibkeymaster-ofx" => EMBEDDED_IBKEYMASTER,
         "technicolor-drt-ofx" => EMBEDDED_TECHNICOLOR_DRT,
         _ => return Err(anyhow!("No embedded manifest available for `{plugin_id}`")),
     };

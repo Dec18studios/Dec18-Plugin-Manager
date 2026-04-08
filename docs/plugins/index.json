@@ -1,6 +1,42 @@
 {
-  "generatedAt": "2026-04-07T00:00:00.000Z",
+  "generatedAt": "2026-04-08T21:44:13.949Z",
   "plugins": [
+    {
+      "pluginId": "dolby-vision-spoofer-dctl",
+      "displayName": "Dolby Vision Spoofer",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/dolby-vision-spoofer-dctl/stable.json",
+      "category": "Workflow"
+    },
+    {
+      "pluginId": "film-negative-space-cst-dctl",
+      "displayName": "Film Negative Space CST",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/film-negative-space-cst-dctl/stable.json",
+      "category": "Film Emulation"
+    },
+    {
+      "pluginId": "grain-by-greg-dctl",
+      "displayName": "Grain By Greg",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/grain-by-greg-dctl/stable.json",
+      "category": "Film Emulation"
+    },
+    {
+      "pluginId": "hue-contrast-compressor-dctl",
+      "displayName": "Hue Contrast Compressor",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/hue-contrast-compressor-dctl/stable.json",
+      "category": "Color Grading"
+    },
+    {
+      "pluginId": "linear-ramp-diagnostic-dctl",
+      "displayName": "Linear Ramp Diagnostic",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/linear-ramp-diagnostic-dctl/stable.json",
+      "category": "Diagnostics"
+    },
+    {
+      "pluginId": "perfect-exposure-dctl",
+      "displayName": "Perfect Exposure",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/perfect-exposure-dctl/stable.json",
+      "category": "Workflow"
+    },
     {
       "pluginId": "photochemist",
       "displayName": "PhotoChemist",
@@ -16,6 +52,18 @@
       "displayName": "RGB Chips",
       "licenseTier": "free",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/rgb-chips-dctl/stable.json"
+    },
+    {
+      "pluginId": "saturation-separator-dctl",
+      "displayName": "Saturation Separator",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/saturation-separator-dctl/stable.json",
+      "category": "Color Grading"
+    },
+    {
+      "pluginId": "volume-curve-dctl",
+      "displayName": "Volume Curve",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/volume-curve-dctl/stable.json",
+      "category": "Color Grading"
     }
   ]
 }

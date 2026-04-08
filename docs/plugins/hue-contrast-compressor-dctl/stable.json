@@ -1,0 +1,67 @@
+{
+  "pluginId": "hue-contrast-compressor-dctl",
+  "displayName": "Hue Contrast Compressor",
+  "description": "Compresses hue shifts caused by contrast adjustments, keeping colors clean through the tonal range.",
+  "category": "Color Grading",
+  "tags": [
+    "hue",
+    "contrast",
+    "color grading",
+    "DCTL"
+  ],
+  "infoUrl": null,
+  "version": "1.0.0",
+  "releaseDate": "2026-04-05T00:40:56Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/Hue-Contrast-Compressor-DCTL/releases/tag/v1.0.0",
+  "platforms": [
+    {
+      "platform": "macos",
+      "arch": "universal",
+      "downloadUrl": "https://github.com/Dec18studios/Hue-Contrast-Compressor-DCTL/releases/download/v1.0.0/Hue-Contrast-Compressor-v1.0.0.zip",
+      "sha256": "f576868b5ac01716ceee8e3f287b2200a0e9e0ee91e3ab97c8de95950c83cc1e",
+      "packageType": "zip",
+      "bundleName": "GE Contrast Hue Compressor.dctle",
+      "bundleIdentifier": "com.dec18studios.hue-contrast-compressor-dctl",
+      "installPath": "/Library/Application Support/Blackmagic Design/DaVinci Resolve/LUT/DCTL",
+      "installMode": "file-browse",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve"
+      ]
+    },
+    {
+      "platform": "windows",
+      "arch": "x86_64",
+      "downloadUrl": "https://github.com/Dec18studios/Hue-Contrast-Compressor-DCTL/releases/download/v1.0.0/Hue-Contrast-Compressor-v1.0.0.zip",
+      "sha256": "f576868b5ac01716ceee8e3f287b2200a0e9e0ee91e3ab97c8de95950c83cc1e",
+      "packageType": "zip",
+      "bundleName": "GE Contrast Hue Compressor.dctle",
+      "bundleIdentifier": "com.dec18studios.hue-contrast-compressor-dctl",
+      "installPath": "C:\\ProgramData\\Blackmagic Design\\DaVinci Resolve\\Support\\LUT\\DCTL",
+      "installMode": "file-browse",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve"
+      ]
+    },
+    {
+      "platform": "linux",
+      "arch": "x86_64",
+      "downloadUrl": "https://github.com/Dec18studios/Hue-Contrast-Compressor-DCTL/releases/download/v1.0.0/Hue-Contrast-Compressor-v1.0.0.zip",
+      "sha256": "f576868b5ac01716ceee8e3f287b2200a0e9e0ee91e3ab97c8de95950c83cc1e",
+      "packageType": "zip",
+      "bundleName": "GE Contrast Hue Compressor.dctle",
+      "bundleIdentifier": "com.dec18studios.hue-contrast-compressor-dctl",
+      "installPath": "/opt/resolve/LUT/DCTL",
+      "installMode": "file-browse",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve"
+      ]
+    }
+  ],
+  "availableVersions": []
+}

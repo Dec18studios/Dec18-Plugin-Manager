@@ -1,0 +1,56 @@
+{
+  "pluginId": "hue-contrast-compressor-dctl",
+  "displayName": "Hue Contrast Compressor",
+  "releaseRepo": "dec18studios/Hue-Contrast-Compressor-DCTL",
+  "minManagerVersion": "0.1.0",
+  "hostProcesses": [
+    "Resolve",
+    "DaVinci Resolve"
+  ],
+  "requiredFamilies": [
+    "universal"
+  ],
+  "category": "Color Grading",
+  "description": "Compresses hue shifts caused by contrast adjustments, keeping colors clean through the tonal range.",
+  "tags": [
+    "hue",
+    "contrast",
+    "color grading",
+    "DCTL"
+  ],
+  "assetRules": [
+    {
+      "family": "universal",
+      "platform": "macos",
+      "arch": "universal",
+      "assetPattern": "Hue.Contrast.Compressor.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "GE Contrast Hue Compressor.dctle",
+      "bundleIdentifier": "com.dec18studios.hue-contrast-compressor-dctl",
+      "installPath": "/Library/Application Support/Blackmagic Design/DaVinci Resolve/LUT/DCTL",
+      "installMode": "file-browse"
+    },
+    {
+      "family": "universal",
+      "platform": "windows",
+      "arch": "x86_64",
+      "assetPattern": "Hue.Contrast.Compressor.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "GE Contrast Hue Compressor.dctle",
+      "bundleIdentifier": "com.dec18studios.hue-contrast-compressor-dctl",
+      "installPath": "C:\\ProgramData\\Blackmagic Design\\DaVinci Resolve\\Support\\LUT\\DCTL",
+      "installMode": "file-browse"
+    },
+    {
+      "family": "universal",
+      "platform": "linux",
+      "arch": "x86_64",
+      "assetPattern": "Hue.Contrast.Compressor.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "GE Contrast Hue Compressor.dctle",
+      "bundleIdentifier": "com.dec18studios.hue-contrast-compressor-dctl",
+      "installPath": "/opt/resolve/LUT/DCTL",
+      "installMode": "file-browse"
+    }
+  ]
+}

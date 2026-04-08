@@ -1,0 +1,69 @@
+{
+  "pluginId": "film-negative-space-cst-dctl",
+  "displayName": "Film Negative Space CST",
+  "description": "Film negative color space transform DCTL for authentic film emulation workflows.",
+  "category": "Film Emulation",
+  "tags": [
+    "film",
+    "negative",
+    "CST",
+    "color space",
+    "emulation",
+    "DCTL"
+  ],
+  "infoUrl": null,
+  "version": "1.0.0",
+  "releaseDate": "2026-04-05T00:41:33Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/Film-Negative-Space-CST-DCTL/releases/tag/v1.0.0",
+  "platforms": [
+    {
+      "platform": "macos",
+      "arch": "universal",
+      "downloadUrl": "https://github.com/Dec18studios/Film-Negative-Space-CST-DCTL/releases/download/v1.0.0/Film-Negative-Spac-CST-v1.0.0.zip",
+      "sha256": "aed6f024aa8849fe2c19bf5acdb872dff0f9eea71cd353e2c6ff0393d8a99d81",
+      "packageType": "zip",
+      "bundleName": "GE Film Negative Space CST.dctle",
+      "bundleIdentifier": "com.dec18studios.film-negative-space-cst-dctl",
+      "installPath": "/Library/Application Support/Blackmagic Design/DaVinci Resolve/LUT/DCTL",
+      "installMode": "file-browse",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve"
+      ]
+    },
+    {
+      "platform": "windows",
+      "arch": "x86_64",
+      "downloadUrl": "https://github.com/Dec18studios/Film-Negative-Space-CST-DCTL/releases/download/v1.0.0/Film-Negative-Spac-CST-v1.0.0.zip",
+      "sha256": "aed6f024aa8849fe2c19bf5acdb872dff0f9eea71cd353e2c6ff0393d8a99d81",
+      "packageType": "zip",
+      "bundleName": "GE Film Negative Space CST.dctle",
+      "bundleIdentifier": "com.dec18studios.film-negative-space-cst-dctl",
+      "installPath": "C:\\ProgramData\\Blackmagic Design\\DaVinci Resolve\\Support\\LUT\\DCTL",
+      "installMode": "file-browse",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve"
+      ]
+    },
+    {
+      "platform": "linux",
+      "arch": "x86_64",
+      "downloadUrl": "https://github.com/Dec18studios/Film-Negative-Space-CST-DCTL/releases/download/v1.0.0/Film-Negative-Spac-CST-v1.0.0.zip",
+      "sha256": "aed6f024aa8849fe2c19bf5acdb872dff0f9eea71cd353e2c6ff0393d8a99d81",
+      "packageType": "zip",
+      "bundleName": "GE Film Negative Space CST.dctle",
+      "bundleIdentifier": "com.dec18studios.film-negative-space-cst-dctl",
+      "installPath": "/opt/resolve/LUT/DCTL",
+      "installMode": "file-browse",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve"
+      ]
+    }
+  ],
+  "availableVersions": []
+}

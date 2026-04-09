@@ -5,6 +5,7 @@
       "pluginId": "dolby-vision-spoofer-dctl",
       "displayName": "Dolby Vision Spoofer",
       "type": "DCTL",
+      "licenseTier": "subscription",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/dolby-vision-spoofer-dctl/stable.json",
       "category": "Workflow"
     },
@@ -20,6 +21,7 @@
       "pluginId": "grain-by-greg-dctl",
       "displayName": "Grain By Greg",
       "type": "DCTL",
+      "licenseTier": "subscription",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/grain-by-greg-dctl/stable.json",
       "category": "Film Emulation"
     },
@@ -27,6 +29,7 @@
       "pluginId": "hue-contrast-compressor-dctl",
       "displayName": "Hue Contrast Compressor",
       "type": "DCTL",
+      "licenseTier": "subscription",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/hue-contrast-compressor-dctl/stable.json",
       "category": "Color Grading"
     },
@@ -34,6 +37,7 @@
       "pluginId": "hue-contrast-compressor-ofx",
       "displayName": "Hue Contrast Compressor OFX",
       "type": "OFX",
+      "licenseTier": "subscription",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/hue-contrast-compressor-ofx/stable.json",
       "category": "Color"
     },
@@ -41,6 +45,7 @@
       "pluginId": "ibkeymaster-ofx",
       "displayName": "IBKeymaster",
       "type": "OFX",
+      "licenseTier": "subscription",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/ibkeymaster-ofx/stable.json",
       "category": "Keying"
     },
@@ -64,6 +69,7 @@
       "pluginId": "photochemist",
       "displayName": "PhotoChemist",
       "type": "OFX",
+      "licenseTier": "subscription",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/photochemist/stable.json"
     },
     {
@@ -84,6 +90,7 @@
       "pluginId": "saturation-separator-dctl",
       "displayName": "Saturation Separator",
       "type": "DCTL",
+      "licenseTier": "subscription",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/saturation-separator-dctl/stable.json",
       "category": "Color Grading"
     },
@@ -91,6 +98,7 @@
       "pluginId": "technicolor-drt-ofx",
       "displayName": "Technicolor DRT OFX",
       "type": "OFX",
+      "licenseTier": "subscription",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/technicolor-drt-ofx/stable.json",
       "category": "Film Emulation"
     },

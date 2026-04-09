@@ -66,6 +66,7 @@ jobs:
             "IBKeymaster-OFX|ibkeymaster-ofx"
             "X-Grade-OFX|x-grade-ofx"
             "Resolve-Node-Toggler|resolve-node-toggler"
+            "SplitToneX-OFX|split-tone-x-ofx"
           )
 
           PROCESSED=0
@@ -156,3 +157,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+

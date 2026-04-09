@@ -76,11 +76,17 @@ jobs:
             CONFIG_FILE="tmp/configs/${PLUGIN_ID}-config.json"
             RELEASES_FILE="tmp/releases/${PLUGIN_ID}-releases.json"
 
-            # Fetch config from private repo
-            if ! curl -fsSL \
+            # Fetch config from private repo; fall back to local copy in docs/plugins/ if present
+            LOCAL_CONFIG="docs/plugins/${PLUGIN_ID}/manager-release-config.json"
+            if curl -fsSL \
               -H "Authorization: token $PLUGIN_PAT" \
               "https://raw.githubusercontent.com/dec18studios/${REPO}/main/manager-release-config.json" \
               -o "$CONFIG_FILE" 2>/dev/null; then
+              : # remote fetch succeeded
+            elif [ -f "$LOCAL_CONFIG" ]; then
+              echo "::notice::${REPO}: remote config unavailable, using local fallback"
+              cp "$LOCAL_CONFIG" "$CONFIG_FILE"
+            else
               echo "::notice::${REPO}: no config found — skipping"
               continue
             fi
@@ -157,4 +163,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-

@@ -251,7 +251,14 @@ function updateIndex(indexPath, pluginId, displayName, category) {
   const manifestUrl = `https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/${pluginId}/stable.json`;
   const entries = Array.isArray(index.plugins) ? [...index.plugins] : [];
   const existingIndex = entries.findIndex((entry) => entry.pluginId === pluginId);
-  const nextEntry = { pluginId, displayName, manifestUrl, category: category || null };
+  const existing = existingIndex >= 0 ? entries[existingIndex] : {};
+  const nextEntry = {
+    ...existing,
+    pluginId,
+    displayName,
+    manifestUrl,
+    category: category || existing.category || null,
+  };
 
   if (existingIndex >= 0) {
     entries[existingIndex] = nextEntry;

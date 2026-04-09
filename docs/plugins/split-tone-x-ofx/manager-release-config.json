@@ -1,0 +1,44 @@
+{
+  "pluginId": "split-tone-x-ofx",
+  "displayName": "SplitToneX",
+  "releaseRepo": "Dec18studios/SplitToneX-OFX",
+  "minManagerVersion": "0.1.0",
+  "hostProcesses": ["Resolve", "DaVinci Resolve", "Fusion", "Fusion Studio", "Nuke", "NukeX", "NukeStudio", "Hiero"],
+  "requiredFamilies": ["macos"],
+  "category": "Color Grading",
+  "description": "Dual-engine split toning (PT quintic-Bézier + M sinusoidal) with optional serial chaining, Film Density H-D curve, SatSelect gating, and diagnostic overlays. Full GPU acceleration on macOS (Metal) and Windows/Linux (CUDA).",
+  "licenseTier": "subscription",
+  "tags": ["split tone", "color grading", "OFX", "GPU", "film density"],
+  "assetRules": [
+    {
+      "family": "macos",
+      "platform": "macos",
+      "arch": "universal",
+      "assetPattern": "SplitToneX.*macOS.*universal.*\.zip$",
+      "packageType": "zip",
+      "bundleName": "SplitToneX.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.SplitToneX",
+      "installPath": "/Library/OFX/Plugins"
+    },
+    {
+      "family": "windows",
+      "platform": "windows",
+      "arch": "x86_64",
+      "assetPattern": "SplitToneX.*windows.*\.zip$",
+      "packageType": "zip",
+      "bundleName": "SplitToneX.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.SplitToneX",
+      "installPath": "C:\Program Files\Common Files\OFX\Plugins"
+    },
+    {
+      "family": "linux",
+      "platform": "linux",
+      "arch": "x86_64",
+      "assetPattern": "SplitToneX.*linux.*\.zip$",
+      "packageType": "zip",
+      "bundleName": "SplitToneX.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.SplitToneX",
+      "installPath": "/usr/OFX/Plugins"
+    }
+  ]
+}

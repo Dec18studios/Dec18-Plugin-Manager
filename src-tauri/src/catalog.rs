@@ -30,6 +30,7 @@ const EMBEDDED_VOLUME_CURVE: &str = include_str!("../../docs/plugins/volume-curv
 const EMBEDDED_HUE_CONTRAST_OFX: &str = include_str!("../../docs/plugins/hue-contrast-compressor-ofx/stable.json");
 const EMBEDDED_IBKEYMASTER: &str = include_str!("../../docs/plugins/ibkeymaster-ofx/stable.json");
 const EMBEDDED_TECHNICOLOR_DRT: &str = include_str!("../../docs/plugins/technicolor-drt-ofx/stable.json");
+const EMBEDDED_SPLIT_TONE_X: &str = include_str!("../../docs/plugins/split-tone-x-ofx/stable.json");
 
 #[derive(Debug, Clone)]
 pub struct CatalogBundle {
@@ -692,6 +693,7 @@ fn embedded_manifest(plugin_id: &str) -> Result<PluginManifest> {
         "hue-contrast-compressor-ofx" => EMBEDDED_HUE_CONTRAST_OFX,
         "ibkeymaster-ofx" => EMBEDDED_IBKEYMASTER,
         "technicolor-drt-ofx" => EMBEDDED_TECHNICOLOR_DRT,
+        "split-tone-x-ofx" => EMBEDDED_SPLIT_TONE_X,
         _ => return Err(anyhow!("No embedded manifest available for `{plugin_id}`")),
     };
     serde_json::from_str(raw)

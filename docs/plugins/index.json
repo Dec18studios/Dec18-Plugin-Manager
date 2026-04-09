@@ -95,6 +95,14 @@
       "category": "Color Grading"
     },
     {
+      "pluginId": "split-tone-x-ofx",
+      "displayName": "SplitToneX",
+      "type": "OFX",
+      "licenseTier": "subscription",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/split-tone-x-ofx/stable.json",
+      "category": "Color Grading"
+    },
+    {
       "pluginId": "technicolor-drt-ofx",
       "displayName": "Technicolor DRT OFX",
       "type": "OFX",

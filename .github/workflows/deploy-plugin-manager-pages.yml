@@ -110,11 +110,14 @@ jobs:
             fi
 
             echo "::notice::Generating manifests for ${PLUGIN_ID} from ${REPO} (${STABLE_COUNT} stable releases)"
-            node tools/generate-plugin-channel-manifests.mjs \
+            if node tools/generate-plugin-channel-manifests.mjs \
               --manager-root "$GITHUB_WORKSPACE" \
               --config "$GITHUB_WORKSPACE/$CONFIG_FILE" \
-              --releases-json "$GITHUB_WORKSPACE/$RELEASES_FILE"
-            PROCESSED=$((PROCESSED + 1))
+              --releases-json "$GITHUB_WORKSPACE/$RELEASES_FILE"; then
+              PROCESSED=$((PROCESSED + 1))
+            else
+              echo "::error::${PLUGIN_ID}: manifest generation failed — skipping (check assetPattern in manager-release-config.json)"
+            fi
           done
 
           echo "::notice::Processed ${PROCESSED}/${#PLUGINS[@]} plugin repos"

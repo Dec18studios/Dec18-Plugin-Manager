@@ -10,7 +10,8 @@
 
 import { createServer } from "node:http";
 import { createPrivateKey, sign } from "node:crypto";
-import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
@@ -25,6 +26,12 @@ const GMAIL_CREDS_PATH = join(KEYS_DIR, "gmail-credentials.json");
 const GMAIL_TOKEN_PATH = join(KEYS_DIR, "gmail-token.json");
 
 const PORT = parseInt(process.env.PORT || "9218", 10);
+
+// ── Plugin catalog paths ───────────────────────────────────────────
+const REPO_ROOT    = join(__dirname, "..");
+const PLUGINS_DIR  = join(REPO_ROOT, "docs", "plugins");
+const INDEX_PATH   = join(PLUGINS_DIR, "index.json");
+const WORKFLOW_YML = join(REPO_ROOT, ".github", "workflows", "deploy-plugin-manager-pages.yml");
 
 // ── Helpers ────────────────────────────────────────────────────────
 
@@ -278,6 +285,560 @@ const server = createServer(async (req, res) => {
     }
     saveJSON(LEDGER_PATH, body);
     json(res, 200, { ok: true });
+    return;
+  }
+
+  // ── GET /api/plugins — list all plugins with live metadata ──
+  if (url.pathname === "/api/plugins" && req.method === "GET") {
+    const index = loadJSON(INDEX_PATH, { plugins: [] });
+    const plugins = (index.plugins ?? []).map((p) => {
+      const stablePath = join(PLUGINS_DIR, p.pluginId, "stable.json");
+      const configPath = join(PLUGINS_DIR, p.pluginId, "manager-release-config.json");
+      const stable = loadJSON(stablePath, null);
+      const config = loadJSON(configPath, null);
+      return {
+        ...p,
+        description: config?.description ?? null,
+        releaseRepo:  config?.releaseRepo  ?? null,
+        version:      stable?.version      ?? null,
+        releaseDate:  stable?.releaseDate  ?? null,
+        hasRelease:   !!stable,
+        hasConfig:    !!config,
+      };
+    });
+    // Also flag any pluginId dirs that exist locally but aren't in index
+    const knownIds = new Set(plugins.map((p) => p.pluginId));
+    try {
+      for (const entry of readdirSync(PLUGINS_DIR, { withFileTypes: true })) {
+        if (!entry.isDirectory()) continue;
+        const id = entry.name.toLowerCase();
+        if (knownIds.has(id) || knownIds.has(entry.name)) continue;
+        const configPath = join(PLUGINS_DIR, entry.name, "manager-release-config.json");
+        const config = loadJSON(configPath, null);
+        if (config) {
+          plugins.push({
+            pluginId: config.pluginId ?? entry.name,
+            displayName: config.displayName ?? entry.name,
+            type: null,
+            licenseTier: null,
+            manifestUrl: null,
+            category: config.category ?? null,
+            description: config.description ?? null,
+            releaseRepo: config.releaseRepo ?? null,
+            version: null,
+            releaseDate: null,
+            hasRelease: false,
+            hasConfig: true,
+            unlisted: true,
+          });
+        }
+      }
+    } catch {}
+    json(res, 200, { plugins });
+    return;
+  }
+
+  // ── POST /api/plugins/update-meta — edit tier or category ──
+  if (url.pathname === "/api/plugins/update-meta" && req.method === "POST") {
+    let body;
+    try { body = JSON.parse(await readBody(req)); }
+    catch { json(res, 400, { error: "Invalid JSON" }); return; }
+
+    const { pluginId, licenseTier, category } = body;
+    if (!pluginId) { json(res, 400, { error: "pluginId required" }); return; }
+
+    // Update index.json
+    const index = loadJSON(INDEX_PATH, { plugins: [] });
+    const plugin = (index.plugins ?? []).find((p) => p.pluginId === pluginId);
+    if (!plugin) { json(res, 404, { error: "Plugin not found in index" }); return; }
+    if (typeof licenseTier === "string") plugin.licenseTier = licenseTier;
+    if (typeof category   === "string") plugin.category    = category;
+    saveJSON(INDEX_PATH, index);
+
+    // Mirror to local manager-release-config.json if present
+    const configPath = join(PLUGINS_DIR, pluginId, "manager-release-config.json");
+    if (existsSync(configPath)) {
+      const config = loadJSON(configPath, {});
+      if (typeof category === "string") config.category = category;
+      saveJSON(configPath, config);
+    }
+
+    json(res, 200, { ok: true, plugin });
+    return;
+  }
+
+  // ── POST /api/plugins/add — scaffold a new plugin ──
+  if (url.pathname === "/api/plugins/add" && req.method === "POST") {
+    let body;
+    try { body = JSON.parse(await readBody(req)); }
+    catch { json(res, 400, { error: "Invalid JSON" }); return; }
+
+    const { displayName, pluginId, type, category, description, licenseTier, repoName,
+            assetPattern, bundleName, createRepo } = body;
+    if (!displayName || !pluginId || !type) {
+      json(res, 400, { error: "displayName, pluginId, and type are required" }); return;
+    }
+
+    const safeRepo    = repoName  || pluginId;
+    const safeTier    = licenseTier || "subscription";
+    const safePattern = assetPattern || `${displayName.replace(/\s+/g, ".")}.*\\.zip$`;
+    const safeBundle  = bundleName  || (type === "DCTL" ? `${displayName}.dctle` : `${displayName}.ofx.bundle`);
+    const bundleId    = `com.dec18studios.${pluginId}`;
+
+    let assetRules;
+    if (type === "DCTL") {
+      const rule = (platform, installPath) => ({
+        family: "universal", platform, arch: "universal",
+        assetPattern: safePattern, packageType: "zip",
+        bundleName: safeBundle, bundleIdentifier: bundleId,
+        installPath, installMode: "file-browse",
+      });
+      assetRules = [
+        rule("macos",   "/Library/Application Support/Blackmagic Design/DaVinci Resolve/LUT/DCTL"),
+        rule("windows", "C:\\ProgramData\\Blackmagic Design\\DaVinci Resolve\\Support\\LUT\\DCTL"),
+        rule("linux",   "/opt/resolve/LUT/DCTL"),
+      ];
+    } else {
+      const ext = type === "App" ? ".tar.gz" : ".ofx.bundle";
+      assetRules = [
+        { family:"macos",   platform:"macos",   arch:"universal", assetPattern:`${displayName.replace(/\s/g,"")}.*macOS.*universal.*\\.zip$`,        packageType:"zip",    bundleName:safeBundle, bundleIdentifier:bundleId, installPath:"/Library/OFX/Plugins" },
+        { family:"windows", platform:"windows", arch:"x86_64",    assetPattern:`${displayName.replace(/\s/g,"")}.*[Ww]indows.*x86_64.*\\.zip$`,      packageType:"zip",    bundleName:safeBundle, bundleIdentifier:bundleId, installPath:"C:\\Program Files\\Common Files\\OFX\\Plugins" },
+        { family:"linux",   platform:"linux",   arch:"x86_64",    assetPattern:`${displayName.replace(/\s/g,"")}.*linux.*x86_64.*\\.tar\\.gz$`,      packageType:"tar.gz", bundleName:safeBundle, bundleIdentifier:bundleId, installPath:"/usr/OFX/Plugins" },
+      ];
+    }
+
+    const config = {
+      pluginId, displayName,
+      releaseRepo: `dec18studios/${safeRepo}`,
+      minManagerVersion: "0.1.0",
+      hostProcesses: type === "DCTL"
+        ? ["Resolve", "DaVinci Resolve"]
+        : ["Resolve", "DaVinci Resolve", "Fusion", "Fusion Studio"],
+      requiredFamilies: type === "DCTL" ? ["universal"] : ["macos", "windows", "linux"],
+      category: category || "Uncategorized",
+      description: description || "",
+      tags: [],
+      assetRules,
+    };
+
+    // Write local plugin dir + config
+    const pluginDir = join(PLUGINS_DIR, pluginId);
+    mkdirSync(pluginDir, { recursive: true });
+    saveJSON(join(pluginDir, "manager-release-config.json"), config);
+
+    // Add to index.json (skip if already present)
+    const index = loadJSON(INDEX_PATH, { generatedAt: new Date().toISOString(), plugins: [] });
+    if (!index.plugins) index.plugins = [];
+    const alreadyInIndex = index.plugins.some((p) => p.pluginId === pluginId);
+    if (!alreadyInIndex) {
+      index.plugins.push({
+        pluginId, displayName, type,
+        licenseTier: safeTier,
+        manifestUrl: `https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/${pluginId}/stable.json`,
+        category: category || "Uncategorized",
+      });
+      saveJSON(INDEX_PATH, index);
+    }
+
+    // Patch PLUGINS array in workflow YAML
+    const alreadyInWorkflow = (() => {
+      try { return readFileSync(WORKFLOW_YML, "utf8").includes(`"${pluginId}"`); } catch { return false; }
+    })();
+    let workflowPatched = false;
+    if (!alreadyInWorkflow) {
+      try {
+        const yaml = readFileSync(WORKFLOW_YML, "utf8");
+        const newEntry = `            "${safeRepo}|${pluginId}"`;
+        const patched = yaml.replace(
+          /(          PLUGINS=\([\s\S]*?)(\n          \))/,
+          `$1\n${newEntry}$2`
+        );
+        if (patched !== yaml) {
+          writeFileSync(WORKFLOW_YML, patched, "utf8");
+          workflowPatched = true;
+        }
+      } catch (err) {
+        console.error("Workflow patch failed:", err.message);
+      }
+    }
+
+    // Optionally create GitHub repo
+    let repoCreated = false;
+    let repoError   = null;
+    if (createRepo) {
+      try {
+        execSync(
+          `gh repo create Dec18studios/${safeRepo} --private --description ${JSON.stringify(description || displayName)}`,
+          { cwd: REPO_ROOT, stdio: "pipe" }
+        );
+        repoCreated = true;
+      } catch (err) {
+        repoError = err.stderr?.toString().trim() || err.message;
+      }
+    }
+
+    json(res, 200, { ok: true, pluginId, config, alreadyInIndex, workflowPatched, repoCreated, repoError });
+    return;
+  }
+
+  // ── POST /api/plugins/rebuild — trigger GH Actions deploy ──
+  if (url.pathname === "/api/plugins/rebuild" && req.method === "POST") {
+    try {
+      execSync("gh workflow run deploy-plugin-manager-pages.yml", { cwd: REPO_ROOT, stdio: "pipe" });
+      json(res, 200, { ok: true });
+    } catch (err) {
+      json(res, 500, { error: err.stderr?.toString().trim() || err.message });
+    }
+    return;
+  }
+
+  // ── POST /api/plugins/inject-workflow — push a build workflow template to a plugin repo ──
+  if (url.pathname === "/api/plugins/inject-workflow" && req.method === "POST") {
+    let body;
+    try { body = JSON.parse(await readBody(req)); }
+    catch { json(res, 400, { error: "Invalid JSON" }); return; }
+
+    const { repoName, pluginType, displayName, bundleName } = body;
+    if (!repoName || !pluginType) {
+      json(res, 400, { error: "repoName and pluginType required" }); return;
+    }
+
+    // ── Tauri App workflow template ──────────────────────────────────
+    const tauriWorkflow = `name: Build ${displayName || repoName}
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "src/**"
+      - "src-tauri/**"
+      - "sidecar/**"
+      - "index.html"
+      - "package.json"
+      - "package-lock.json"
+      - "vite.config.js"
+      - ".github/workflows/build.yml"
+
+jobs:
+  prepare_release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      app_version: \${{ steps.version.outputs.app_version }}
+      should_build: \${{ steps.release_guard.outputs.should_build }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+
+      - name: Resolve app version
+        id: version
+        run: echo "app_version=\$(node -p "require('./package.json').version")" >> "\$GITHUB_OUTPUT"
+
+      - name: Guard release state
+        id: release_guard
+        shell: pwsh
+        env:
+          GH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+          APP_VERSION: \${{ steps.version.outputs.app_version }}
+          RUN_ATTEMPT: \${{ github.run_attempt }}
+        run: |
+          \$tag = "v\$env:APP_VERSION"
+          \$releases = gh api "repos/\$env:GITHUB_REPOSITORY/releases?per_page=100" | ConvertFrom-Json
+          \$release = \$releases | Where-Object { \$_.tag_name -eq \$tag } | Select-Object -First 1
+          if (-not \$release) {
+            gh api "repos/\$env:GITHUB_REPOSITORY/releases" --method POST \`
+              --field tag_name="\$tag" --field target_commitish="\$env:GITHUB_SHA" \`
+              --field name="${displayName || repoName} v\$env:APP_VERSION" \`
+              --field body="See the release assets for desktop build artifacts." \`
+              --raw-field draft=true --raw-field prerelease=false | Out-Null
+            "should_build=true" >> \$env:GITHUB_OUTPUT
+            exit 0
+          }
+          if (\$release.draft -and [int]\$env:RUN_ATTEMPT -gt 1) {
+            "should_build=true" >> \$env:GITHUB_OUTPUT
+          } else {
+            "should_build=false" >> \$env:GITHUB_OUTPUT
+          }
+
+  build:
+    needs: prepare_release
+    if: needs.prepare_release.outputs.should_build == 'true'
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows-latest
+            args: "--bundles nsis"
+          - platform: macos-latest
+            args: "--target universal-apple-darwin --bundles app,dmg"
+          - platform: ubuntu-latest
+            args: "--bundles appimage"
+    runs-on: \${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: npm
+          cache-dependency-path: "package-lock.json"
+      - run: npm install
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install macOS universal targets
+        if: matrix.platform == 'macos-latest'
+        run: rustup target add x86_64-apple-darwin aarch64-apple-darwin
+      - name: Install Linux build dependencies
+        if: matrix.platform == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential curl file libayatana-appindicator3-dev \\
+            librsvg2-dev libssl-dev libwebkit2gtk-4.1-dev libxdo-dev patchelf wget
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: "src-tauri -> target"
+      - name: Build and draft release
+        uses: tauri-apps/tauri-action@action-v0.6.0
+        env:
+          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: \${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: \${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          projectPath: "."
+          tagName: v__VERSION__
+          releaseName: "${displayName || repoName} v__VERSION__"
+          releaseBody: "See the release assets for desktop build artifacts."
+          releaseDraft: true
+          prerelease: false
+          args: \${{ matrix.args }}
+
+  publish_release:
+    needs: [prepare_release, build]
+    if: needs.prepare_release.outputs.should_build == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Publish draft release
+        env:
+          GH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release edit "v\${{ needs.prepare_release.outputs.app_version }}" \\
+            --draft=false --repo "\$GITHUB_REPOSITORY"
+`;
+
+    // ── CMake OFX workflow template ──────────────────────────────────
+    const safeBundleName = bundleName || `${displayName || repoName}.ofx.bundle`;
+    const pluginSlug     = displayName ? displayName.replace(/\s+/g, "") : repoName.replace(/-OFX$/, "");
+    const ofxWorkflow = `name: Build ${displayName || repoName}
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "src/**"
+      - "CMakeLists.txt"
+      - "cmake/**"
+      - ".github/workflows/build.yml"
+
+jobs:
+  prepare_release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      version: \${{ steps.version.outputs.version }}
+      should_build: \${{ steps.guard.outputs.should_build }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read version
+        id: version
+        run: echo "version=\$(cat VERSION 2>/dev/null || echo '1.0.0')" >> "\$GITHUB_OUTPUT"
+      - name: Guard release
+        id: guard
+        env:
+          GH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+          VERSION: \${{ steps.version.outputs.version }}
+        run: |
+          TAG="v\$VERSION"
+          if gh release view "\$TAG" --repo "\$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "should_build=false" >> "\$GITHUB_OUTPUT"
+          else
+            echo "should_build=true" >> "\$GITHUB_OUTPUT"
+          fi
+
+  build:
+    needs: prepare_release
+    if: needs.prepare_release.outputs.should_build == 'true'
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            suffix: macOS-universal
+            cmake_extra: -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+          - os: windows-latest
+            suffix: Windows-x86_64
+            cmake_extra: ""
+          - os: ubuntu-latest
+            suffix: Linux-x86_64
+            cmake_extra: ""
+    runs-on: \${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release \${{ matrix.cmake_extra }}
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Package
+        shell: bash
+        env:
+          VERSION: \${{ needs.prepare_release.outputs.version }}
+          SUFFIX: \${{ matrix.suffix }}
+        run: |
+          mkdir -p dist
+          BUNDLE="${safeBundleName}"
+          ZIP="${pluginSlug}-v\${VERSION}-\${SUFFIX}.zip"
+          # Adjust the path below to match where CMake outputs the bundle
+          cd build && zip -r "../dist/\${ZIP}" "\${BUNDLE}" 2>/dev/null || \\
+            find . -name "*.ofx" -o -name "*.ofx.bundle" | xargs zip "../dist/\${ZIP}"
+
+      - name: Create or update release
+        env:
+          GH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+          VERSION: \${{ needs.prepare_release.outputs.version }}
+        run: |
+          TAG="v\$VERSION"
+          gh release create "\$TAG" dist/*.zip \\
+            --repo "\$GITHUB_REPOSITORY" \\
+            --title "${displayName || repoName} v\$VERSION" \\
+            --notes "" 2>/dev/null || \\
+          gh release upload "\$TAG" dist/*.zip --repo "\$GITHUB_REPOSITORY" --clobber
+`;
+
+    const workflowYaml = pluginType === "App" ? tauriWorkflow : ofxWorkflow;
+    const workflowB64  = Buffer.from(workflowYaml, "utf8").toString("base64");
+
+    const tmpDir = join(tmpdir(), `d18-wf-${Date.now()}`);
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+
+      // Push .github/workflows/build.yml via GitHub Contents API
+      const payloadPath = join(tmpDir, "wf-payload.json");
+      writeFileSync(payloadPath, JSON.stringify({
+        message: `ci: add ${pluginType === "App" ? "Tauri" : "CMake OFX"} build workflow`,
+        content: workflowB64,
+      }));
+      execSync(
+        `gh api repos/dec18studios/${repoName}/contents/.github/workflows/build.yml --method PUT --input "${payloadPath}"`,
+        { cwd: REPO_ROOT, stdio: "pipe" }
+      );
+
+      json(res, 200, { ok: true, workflowType: pluginType === "App" ? "tauri" : "cmake-ofx" });
+    } catch (err) {
+      json(res, 500, { error: err.stderr?.toString().trim() || err.message });
+    } finally {
+      try { rmSync(tmpDir, { recursive: true, force: true }); } catch {}
+    }
+    return;
+  }
+
+  // ── POST /api/plugins/create-release — zip file + gh release create ──
+  if (url.pathname === "/api/plugins/create-release" && req.method === "POST") {
+    let body;
+    try { body = JSON.parse(await readBody(req)); }
+    catch { json(res, 400, { error: "Invalid JSON" }); return; }
+
+    const { pluginId, repoName, version, fileName, fileBase64 } = body;
+    if (!repoName || !version || !fileName || !fileBase64) {
+      json(res, 400, { error: "repoName, version, fileName, and fileBase64 are required" }); return;
+    }
+
+    const tag     = `v${version.replace(/^v/, "")}`;
+    const zipName = `${repoName}-${tag}.zip`;
+    const tmpDir  = join(tmpdir(), `d18-release-${Date.now()}`);
+
+    try {
+      mkdirSync(tmpDir, { recursive: true });
+
+      // Write the uploaded file to a temp dir
+      const rawPath = join(tmpDir, fileName);
+      writeFileSync(rawPath, Buffer.from(fileBase64, "base64"));
+
+      // Determine the asset to upload
+      // If the user uploaded a zip/tar directly, use it as-is; otherwise zip the raw file.
+      let assetPath;
+      const isAlreadyArchive = /\.(zip|tar\.gz|tgz)$/i.test(fileName);
+      if (isAlreadyArchive) {
+        assetPath = rawPath;
+      } else {
+        const zipPath = join(tmpDir, zipName);
+        execSync(`zip "${zipPath}" "${fileName}"`, { cwd: tmpDir, stdio: "pipe" });
+        assetPath = zipPath;
+      }
+
+      // Ensure the GitHub repo has at least one commit by pushing manager-release-config.json
+      // via the GitHub Contents API so `gh release create` can succeed on a fresh repo.
+      const configSrc = join(PLUGINS_DIR, pluginId, "manager-release-config.json");
+      if (existsSync(configSrc)) {
+        const content = readFileSync(configSrc).toString("base64");
+        const payloadPath = join(tmpDir, "gh-contents-payload.json");
+        writeFileSync(payloadPath, JSON.stringify({
+          message: "chore: initial repo setup with manager-release-config",
+          content,
+        }));
+        try {
+          execSync(
+            `gh api repos/dec18studios/${repoName}/contents/manager-release-config.json --method PUT --input "${payloadPath}"`,
+            { cwd: REPO_ROOT, stdio: "pipe" }
+          );
+        } catch {
+          // Already exists or repo isn't empty — fine, carry on.
+        }
+      }
+
+      // Create the GitHub release and attach the asset
+      execSync(
+        `gh release create "${tag}" "${assetPath}" --repo "dec18studios/${repoName}" --title "${tag}" --notes ""`,
+        { cwd: REPO_ROOT, stdio: "pipe" }
+      );
+
+      json(res, 200, { ok: true, tag, assetName: isAlreadyArchive ? fileName : zipName });
+    } catch (err) {
+      json(res, 500, { error: err.stderr?.toString().trim() || err.message });
+    } finally {
+      try { rmSync(tmpDir, { recursive: true, force: true }); } catch {}
+    }
+    return;
+  }
+
+  // ── GET /api/github-status — check gh CLI auth ──
+  if (url.pathname === "/api/github-status" && req.method === "GET") {
+    try {
+      const out = execSync("gh auth status 2>&1", { cwd: REPO_ROOT }).toString();
+      json(res, 200, { ok: true, detail: out.split("\n")[0] });
+    } catch {
+      json(res, 200, { ok: false });
+    }
     return;
   }
 

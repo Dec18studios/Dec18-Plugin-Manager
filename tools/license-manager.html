@@ -3,27 +3,37 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dec 18 Studios &mdash; License Manager</title>
+<title>Dec 18 Studios &mdash; Admin</title>
 <style>
 :root{--bg:#1a1a2e;--surface:#16213e;--surface-hover:#1c2a4a;--border:#2a3a5c;--text:#e0e0e0;--text-muted:#8892a8;--accent:#e94560;--accent-hover:#ff6b81;--green:#4ade80;--blue:#60a5fa;--yellow:#fbbf24}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;padding:24px;min-height:100vh}
 h1{font-size:1.5rem;font-weight:600;margin-bottom:4px;color:#fff}
-.subtitle{color:var(--text-muted);font-size:.85rem;margin-bottom:24px}
+.subtitle{color:var(--text-muted);font-size:.85rem;margin-bottom:16px}
+/* ── Tabs ── */
+.tabs{display:flex;gap:0;margin-bottom:24px;border-bottom:1px solid var(--border)}
+.tab{padding:10px 20px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text-muted);cursor:pointer;font-size:.9rem;font-weight:500;margin-bottom:-1px;transition:color .15s,border-color .15s}
+.tab.active{border-bottom-color:var(--accent);color:#fff}
+.tab:hover:not(.active){color:var(--text)}
+.panel{display:none}.panel.active{display:block}
+/* ── Stats ── */
 .stats{display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 20px;min-width:140px}
 .stat-card .label{color:var(--text-muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em}
 .stat-card .value{font-size:1.8rem;font-weight:700;color:#fff}
+/* ── Toolbar ── */
 .toolbar{display:flex;gap:12px;margin-bottom:16px;align-items:center;flex-wrap:wrap}
 .toolbar input[type="text"]{flex:1;min-width:200px;padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:.9rem;outline:none}
 .toolbar input[type="text"]:focus{border-color:var(--accent)}
 .toolbar input[type="text"]::placeholder{color:var(--text-muted)}
-button{padding:8px 16px;border:none;border-radius:6px;font-size:.85rem;font-weight:600;cursor:pointer;transition:background .15s}
-.btn-primary{background:var(--accent);color:#fff}
-.btn-primary:hover{background:var(--accent-hover)}
-.btn-secondary{background:var(--surface);color:var(--text);border:1px solid var(--border)}
-.btn-secondary:hover{background:var(--surface-hover)}
+/* ── Buttons ── */
+button{padding:8px 16px;border:none;border-radius:6px;font-size:.85rem;font-weight:600;cursor:pointer;transition:background .15s,opacity .15s}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-hover)}
+.btn-secondary{background:var(--surface);color:var(--text);border:1px solid var(--border)}.btn-secondary:hover{background:var(--surface-hover)}
+.btn-green{background:rgba(74,222,128,.15);color:var(--green);border:1px solid rgba(74,222,128,.3)}.btn-green:hover{background:rgba(74,222,128,.25)}
 .btn-sm{padding:4px 10px;font-size:.78rem}
+button:disabled{opacity:.4;cursor:not-allowed}
+/* ── Table ── */
 table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:8px;overflow:hidden;border:1px solid var(--border)}
 thead th{text-align:left;padding:10px 14px;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);background:rgba(0,0,0,.2);border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap}
 thead th:hover{color:var(--text)}
@@ -32,61 +42,126 @@ tbody tr{border-bottom:1px solid var(--border)}
 tbody tr:last-child{border-bottom:none}
 tbody tr:hover{background:var(--surface-hover)}
 td{padding:10px 14px;font-size:.85rem;vertical-align:middle}
+/* ── Badges ── */
 .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.72rem;font-weight:600;text-transform:uppercase}
 .badge-master{background:rgba(233,69,96,.2);color:var(--accent)}
 .badge-annual{background:rgba(96,165,250,.2);color:var(--blue)}
 .badge-free{background:rgba(255,255,255,.08);color:var(--text-muted)}
+.badge-subscription{background:rgba(251,191,36,.15);color:var(--yellow)}
 .badge-plugin{background:rgba(96,165,250,.2);color:var(--blue)}
-.badge-expired{background:rgba(233,69,96,.15);color:var(--accent);font-size:.65rem;margin-left:4px}
+.badge-dctl{background:rgba(96,165,250,.15);color:var(--blue)}
+.badge-ofx{background:rgba(233,69,96,.15);color:var(--accent)}
+.badge-app{background:rgba(74,222,128,.15);color:var(--green)}
+.badge-ok{background:rgba(74,222,128,.15);color:var(--green)}
+.badge-pending{background:rgba(251,191,36,.15);color:var(--yellow)}
+.badge-unlisted{background:rgba(255,255,255,.06);color:var(--text-muted)}
+/* ── Inline editing ── */
+.editable-cell{cursor:pointer;border-bottom:1px dashed transparent;transition:border-color .15s}
+.editable-cell:hover{border-bottom-color:var(--text-muted)}
+.editable-cell input,.editable-cell select{background:var(--bg);border:1px solid var(--accent);border-radius:4px;color:var(--text);padding:2px 6px;font-size:.85rem;width:100%;outline:none}
+/* ── Tier toggle ── */
+.tier-toggle{display:inline-flex;align-items:center;gap:6px;cursor:pointer;padding:3px 8px;border-radius:4px;border:1px solid var(--border);font-size:.75rem;font-weight:600;transition:all .15s;background:transparent;color:var(--text-muted)}
+.tier-toggle:hover{border-color:var(--accent);color:var(--text)}
+.tier-toggle.is-free{border-color:rgba(255,255,255,.15);color:var(--text-muted)}
+.tier-toggle.is-subscription{border-color:rgba(251,191,36,.3);color:var(--yellow)}
+/* ── Misc ── */
 .key-cell{font-family:"SF Mono","Fira Code","Consolas",monospace;font-size:.72rem;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-muted);cursor:pointer}
 .key-cell:hover{color:var(--text)}
 .donation{color:var(--green);font-weight:600}
 .empty-state{text-align:center;padding:48px 20px;color:var(--text-muted)}
-.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;justify-content:center;align-items:center}
+.row-actions{display:flex;gap:4px;align-items:center}
+.btn-icon{padding:4px 8px;font-size:.75rem;line-height:1;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--text-muted);cursor:pointer;transition:all .15s}
+.btn-icon:hover{border-color:var(--accent);color:var(--accent)}
+.btn-icon.send{color:var(--green);border-color:var(--green);opacity:.7}.btn-icon.send:hover{opacity:1}
+.btn-icon:disabled{opacity:.3;cursor:not-allowed}
+.email-status{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;color:var(--text-muted);margin-left:8px}
+.email-status .dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+.email-status .dot.ok{background:var(--green)}.email-status .dot.no{background:var(--text-muted)}
+/* ── Modal ── */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;justify-content:center;align-items:flex-start;padding-top:60px;overflow-y:auto}
 .modal-backdrop.open{display:flex}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px;width:460px;max-width:95vw}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px;width:500px;max-width:95vw;margin-bottom:40px}
 .modal h2{font-size:1.15rem;margin-bottom:20px;color:#fff}
 .modal label{display:block;font-size:.78rem;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
-.modal input,.modal select{width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:.9rem;margin-bottom:14px;outline:none}
-.modal input:focus,.modal select:focus{border-color:var(--accent)}
+.modal input,.modal select,.modal textarea{width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:.9rem;margin-bottom:14px;outline:none;font-family:inherit}
+.modal textarea{resize:vertical;min-height:60px}
+.modal input:focus,.modal select:focus,.modal textarea:focus{border-color:var(--accent)}
 .modal .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
 .modal .key-output{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:12px;font-family:"SF Mono","Fira Code",monospace;font-size:.75rem;word-break:break-all;color:var(--green);margin-bottom:14px;max-height:120px;overflow-y:auto}
+.modal .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal .form-row > div{display:flex;flex-direction:column}
+.modal .form-row label{margin-bottom:4px}
+.modal .form-row input,.modal .form-row select{margin-bottom:0}
+.modal .hint{font-size:.74rem;color:var(--text-muted);margin-top:-10px;margin-bottom:14px}
+.modal .section-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:14px;margin-top:4px}
+.modal .checkbox-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;cursor:pointer;font-size:.85rem;color:var(--text)}
+.modal .checkbox-row input[type="checkbox"]{width:auto;margin:0;accent-color:var(--accent)}
+/* ── Toast ── */
 .toast{position:fixed;bottom:24px;right:24px;background:var(--surface);border:1px solid var(--green);color:var(--green);padding:10px 18px;border-radius:8px;font-size:.85rem;opacity:0;transform:translateY(10px);transition:all .3s;z-index:200}
 .toast.show{opacity:1;transform:translateY(0)}
+.toast.error{border-color:var(--accent);color:var(--accent)}
+/* ── States ── */
 .loading{text-align:center;padding:80px 20px;color:var(--text-muted)}
 .loading .spinner{display:inline-block;width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:16px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .error-banner{background:rgba(233,69,96,.15);border:1px solid var(--accent);color:var(--accent);padding:16px 20px;border-radius:8px;text-align:center;margin-bottom:24px}
 .error-banner code{display:block;margin-top:8px;font-size:.85rem;color:var(--text)}
-.editable-cell{cursor:pointer;border-bottom:1px dashed transparent;transition:border-color .15s}
-.editable-cell:hover{border-bottom-color:var(--text-muted)}
-.editable-cell input{background:var(--bg);border:1px solid var(--accent);border-radius:4px;color:var(--text);padding:2px 6px;font-size:.85rem;width:100%;outline:none}
-.row-actions{display:flex;gap:4px;align-items:center}
-.btn-icon{padding:4px 8px;font-size:.75rem;line-height:1;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--text-muted);cursor:pointer;transition:all .15s}
-.btn-icon:hover{border-color:var(--accent);color:var(--accent)}
-.btn-icon.send{color:var(--green);border-color:var(--green);opacity:.7}
-.btn-icon.send:hover{opacity:1}
-.btn-icon:disabled{opacity:.3;cursor:not-allowed}
-.email-status{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;color:var(--text-muted);margin-left:8px}
-.email-status .dot{width:6px;height:6px;border-radius:50%;display:inline-block}
-.email-status .dot.ok{background:var(--green)}
-.email-status .dot.no{background:var(--text-muted)}
+.result-box{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:12px;font-size:.8rem;color:var(--text-muted);margin-bottom:14px;line-height:1.7}
+.result-box .ok{color:var(--green)}.result-box .warn{color:var(--yellow)}.result-box .err{color:var(--accent)}
 </style>
 </head>
 <body>
-<h1>Dec 18 Studios &mdash; License Manager</h1>
-<p class="subtitle">View license registrations, search by name or email, and issue new keys.<span id="emailStatus" class="email-status"></span></p>
-<div id="loadingScreen" class="loading"><div class="spinner"></div><p>Loading license data&hellip;</p></div>
-<div id="errorScreen" style="display:none;"></div>
-<div id="mainApp" style="display:none;">
-  <div class="stats" id="statsRow"></div>
-  <div class="toolbar">
-    <input type="text" id="searchInput" placeholder="Search by name, email, or key...">
-    <button class="btn-primary" id="btnNewKey">+ New License Key</button>
-    <button class="btn-secondary" id="btnExportCSV">Export CSV</button>
-  </div>
-  <table><thead><tr id="tableHead"></tr></thead><tbody id="tableBody"></tbody></table>
+<h1>Dec 18 Studios &mdash; Admin</h1>
+<p class="subtitle">License manager &amp; plugin catalog<span id="emailStatus" class="email-status"></span></p>
+
+<div class="tabs">
+  <button class="tab active" data-tab="licenses">Licenses</button>
+  <button class="tab" data-tab="plugins">Plugin Catalog</button>
 </div>
+
+<!-- ═══════════════════════════════════════ LICENSES PANEL ═══ -->
+<div id="panel-licenses" class="panel active">
+  <div id="licLoadingScreen" class="loading"><div class="spinner"></div><p>Loading license data&hellip;</p></div>
+  <div id="licErrorScreen" style="display:none;"></div>
+  <div id="licMainApp" style="display:none;">
+    <div class="stats" id="statsRow"></div>
+    <div class="toolbar">
+      <input type="text" id="searchInput" placeholder="Search by name, email, or key…">
+      <button class="btn-primary" id="btnNewKey">+ New License Key</button>
+      <button class="btn-secondary" id="btnExportCSV">Export CSV</button>
+    </div>
+    <table><thead><tr id="tableHead"></tr></thead><tbody id="tableBody"></tbody></table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ PLUGINS PANEL ═══ -->
+<div id="panel-plugins" class="panel">
+  <div id="plugLoadingScreen" class="loading"><div class="spinner"></div><p>Loading plugin catalog&hellip;</p></div>
+  <div id="plugErrorScreen" style="display:none;"></div>
+  <div id="plugMainApp" style="display:none;">
+    <div class="stats" id="plugStatsRow"></div>
+    <div class="toolbar">
+      <input type="text" id="plugSearchInput" placeholder="Search plugins…">
+      <button class="btn-primary" id="btnAddPlugin">+ Add Plugin</button>
+      <button class="btn-green" id="btnRebuild">&#x21BB; Rebuild Catalog</button>
+    </div>
+    <table>
+      <thead><tr>
+        <th data-pcol="displayName">Name <span class="sort-arrow"></span></th>
+        <th data-pcol="type">Type <span class="sort-arrow"></span></th>
+        <th data-pcol="category">Category <span class="sort-arrow"></span></th>
+        <th data-pcol="licenseTier">Tier <span class="sort-arrow"></span></th>
+        <th data-pcol="version">Version <span class="sort-arrow"></span></th>
+        <th data-pcol="releaseDate">Released <span class="sort-arrow"></span></th>
+        <th>Status</th>
+        <th style="width:80px;"></th>
+      </tr></thead>
+      <tbody id="plugTableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════ NEW LICENSE KEY MODAL ═══ -->
 <div class="modal-backdrop" id="newKeyModal">
   <div class="modal">
     <h2>Issue New License Key</h2>
@@ -118,25 +193,182 @@ td{padding:10px 14px;font-size:.85rem;vertical-align:middle}
     </div>
   </div>
 </div>
+
+<!-- ═══════════ ADD PLUGIN MODAL ═══ -->
+<div class="modal-backdrop" id="addPluginModal">
+  <div class="modal">
+    <h2>Add New Plugin</h2>
+
+    <div id="addPluginForm">
+      <div class="section-label">Identity</div>
+      <div class="form-row" style="margin-bottom:14px;">
+        <div>
+          <label for="apDisplayName">Display Name</label>
+          <input type="text" id="apDisplayName" placeholder="Happy Little Noder">
+        </div>
+        <div>
+          <label for="apType">Type</label>
+          <select id="apType">
+            <option value="DCTL">DCTL</option>
+            <option value="OFX">OFX</option>
+            <option value="App">App</option>
+          </select>
+        </div>
+      </div>
+      <label for="apPluginId">Plugin ID <span style="color:var(--text-muted);font-weight:400;">(auto-generated)</span></label>
+      <input type="text" id="apPluginId" placeholder="happy-little-noder-dctl">
+      <div class="form-row" style="margin-bottom:14px;">
+        <div>
+          <label for="apCategory">Category</label>
+          <select id="apCategory">
+            <option>Color Grading</option>
+            <option>Film Emulation</option>
+            <option>Workflow</option>
+            <option>Diagnostics</option>
+            <option>DRT</option>
+            <option>Keying</option>
+            <option>Uncategorized</option>
+          </select>
+        </div>
+        <div>
+          <label for="apTier">License Tier</label>
+          <select id="apTier">
+            <option value="subscription">Subscription</option>
+            <option value="free">Free</option>
+          </select>
+        </div>
+      </div>
+      <label for="apDescription">Description</label>
+      <textarea id="apDescription" placeholder="What this tool does…"></textarea>
+
+      <div class="section-label">GitHub</div>
+      <label for="apRepoName">Repo Name <span style="color:var(--text-muted);font-weight:400;">(auto-generated)</span></label>
+      <input type="text" id="apRepoName" placeholder="Happy-Little-Noder-DCTL">
+      <label class="checkbox-row">
+        <input type="checkbox" id="apCreateRepo" checked>
+        Create private GitHub repo (Dec18studios/&lt;repo&gt;)
+      </label>
+
+      <div id="apDctlSection">
+        <div class="section-label">DCTL File</div>
+        <label for="apDctleFile">Select your encrypted .dctle file</label>
+        <input type="file" id="apDctleFile" accept=".dctle" style="color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:6px 10px;margin-bottom:6px;">
+        <p class="hint">Bundle name is filled automatically from the filename.</p>
+        <label for="apBundleName">Bundle filename (auto-filled)</label>
+        <input type="text" id="apBundleName" placeholder="GE Happy Little Noder V1.dctle">
+        <label for="apAssetPattern" style="display:none;"><span id="apAssetPatternLabel">Asset filename pattern</span></label>
+        <input type="text" id="apAssetPattern" placeholder="" style="display:none;">
+      </div>
+
+      <div id="apOfxSection" style="display:none;">
+        <div class="section-label">Build Pipeline (OFX — CMake)</div>
+        <div style="background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.2);border-radius:6px;padding:12px 14px;margin-bottom:14px;font-size:.82rem;line-height:1.7;color:var(--text-muted);">
+          OFX plugins are <strong style="color:var(--text)">compiled from source</strong> — not uploaded as files.<br>
+          The workflow: push C++ source → CI builds macOS/Windows/Linux → GitHub Release created automatically.
+        </div>
+        <label for="apBundleName2">Bundle name (.ofx.bundle)</label>
+        <input type="text" id="apBundleName2" placeholder="HappyLittleNoder.ofx.bundle">
+        <label class="checkbox-row" style="margin-bottom:6px;">
+          <input type="checkbox" id="apInjectOFXWorkflow" checked>
+          Inject CMake build workflow into the new repo
+        </label>
+        <p class="hint" style="padding-left:24px;">Pushes <code style="color:var(--text)">.github/workflows/build.yml</code> — a CMake cross-platform starter. Customize to match your build setup before pushing source.</p>
+      </div>
+
+      <div id="apAppSection" style="display:none;">
+        <div class="section-label">Build Pipeline (App — Tauri)</div>
+        <div style="background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);border-radius:6px;padding:12px 14px;margin-bottom:14px;font-size:.82rem;line-height:1.7;color:var(--text-muted);">
+          Tauri apps are <strong style="color:var(--text)">built by CI</strong> — not uploaded as files.<br>
+          The workflow: push source → CI compiles macOS universal / Windows NSIS / Linux AppImage → release published automatically.
+        </div>
+        <label class="checkbox-row" style="margin-bottom:6px;">
+          <input type="checkbox" id="apInjectTauriWorkflow" checked>
+          Inject Tauri build workflow into the new repo
+        </label>
+        <p class="hint" style="padding-left:24px;">Pushes the proven Tauri CI template (same as Node Toggler). Requires <code style="color:var(--text)">TAURI_SIGNING_PRIVATE_KEY</code> secret on the new repo.</p>
+      </div>
+
+      <div id="apDctlReleaseSection">
+        <div class="section-label" style="margin-top:4px;">Initial Release (optional)</div>
+        <label class="checkbox-row">
+          <input type="checkbox" id="apUploadRelease">
+          Create first GitHub Release from this file
+        </label>
+        <div id="apReleaseFields" style="display:none;padding-left:4px;">
+          <label for="apVersion">Version number</label>
+          <input type="text" id="apVersion" placeholder="1.0.0" style="max-width:160px;">
+          <p class="hint">Creates tag <code style="color:var(--text)">v1.0.0</code> and uploads <code style="color:var(--text)">{RepoName}-v1.0.0.zip</code> as the release asset.</p>
+        </div>
+      </div>
+
+      <div id="apError" style="color:var(--accent);font-size:.8rem;margin-bottom:8px;display:none;"></div>
+    </div>
+
+    <div id="addPluginResult" style="display:none;">
+      <div class="result-box" id="addPluginResultBox"></div>
+      <div id="apReleaseStatus" style="display:none;">
+        <div class="section-label" style="margin-top:16px;">Release Upload</div>
+        <div class="result-box" id="apReleaseResultBox"><div class="loading" style="padding:20px 0;"><div class="spinner" style="width:20px;height:20px;border-width:2px;margin-bottom:8px;"></div><p style="font-size:.8rem;">Creating GitHub Release&hellip;</p></div></div>
+      </div>
+      <p style="font-size:.78rem;color:var(--text-muted);margin-top:12px;margin-bottom:0;">
+        Commit &amp; push <code style="color:var(--text)">docs/plugins/</code> and the workflow YAML, then hit <strong>Rebuild Catalog</strong>.
+      </p>
+    </div>
+
+    <div class="actions">
+      <button class="btn-secondary" id="btnAddPluginClose">Close</button>
+      <button class="btn-primary" id="btnAddPluginSubmit">Create Plugin</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
+
 <script>
+// ═══════════════════════════════════════════════════
+// Shared utilities
+// ═══════════════════════════════════════════════════
+function escapeHtml(s){var d=document.createElement("div");d.textContent=String(s||"");return d.innerHTML;}
+function escapeAttr(s){return String(s||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+var _toastTimer;
+function showToast(msg, isError){
+  var t=document.getElementById("toast");
+  t.textContent=msg;
+  t.className="toast show"+(isError?" error":"");
+  clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(function(){t.classList.remove("show");},2500);
+}
+
+// Tab switching
+document.querySelectorAll(".tab").forEach(function(tab){
+  tab.addEventListener("click",function(){
+    document.querySelectorAll(".tab").forEach(function(t){t.classList.remove("active");});
+    document.querySelectorAll(".panel").forEach(function(p){p.classList.remove("active");});
+    tab.classList.add("active");
+    document.getElementById("panel-"+tab.dataset.tab).classList.add("active");
+    if(tab.dataset.tab==="plugins" && !pluginsLoaded) loadPlugins();
+  });
+});
+
+// ═══════════════════════════════════════════════════
+// LICENSES TAB
+// ═══════════════════════════════════════════════════
 var mergedData=[], hasPrivateKey=false, hasGmailCreds=false, sortCol="date", sortAsc=false;
 var columns=[
   {key:"name",label:"Name"},{key:"email",label:"Email"},{key:"tier",label:"Tier"},
   {key:"donation",label:"Donation"},{key:"key",label:"License Key"},{key:"expires",label:"Expires"},{key:"date",label:"Issued"}
 ];
 
-async function boot(){
+async function bootLicenses(){
   try{
     var res=await fetch("/api/data");
     if(!res.ok) throw new Error("Server returned "+res.status);
     var data=await res.json();
     hasPrivateKey=data.hasPrivateKey;
-    mergeData(data.ledger, data.subscribers);
-    document.getElementById("loadingScreen").style.display="none";
-    document.getElementById("mainApp").style.display="block";
+    mergeData(data.ledger,data.subscribers);
+    document.getElementById("licLoadingScreen").style.display="none";
+    document.getElementById("licMainApp").style.display="block";
     renderStats(); renderTable();
-    // Check Gmail email capability
     try{
       var emailRes=await fetch("/api/email-status");
       if(emailRes.ok){var emailData=await emailRes.json();hasGmailCreds=emailData.hasGmailCreds;}
@@ -146,44 +378,36 @@ async function boot(){
       ?"<span class=\"dot ok\"></span>Email enabled"
       :"<span class=\"dot no\"></span>Email not configured";
   }catch(err){
-    document.getElementById("loadingScreen").style.display="none";
-    var es=document.getElementById("errorScreen");
+    document.getElementById("licLoadingScreen").style.display="none";
+    var es=document.getElementById("licErrorScreen");
     es.style.display="block";
     es.innerHTML="<div class=\"error-banner\">Failed to load data. Is the server running?<code>node tools/license-server.mjs</code></div>";
   }
 }
 
-function mergeData(ledger, subscribers){
+function mergeData(ledger,subscribers){
   var subMap={};
-  Object.keys(subscribers).forEach(function(email){ subMap[email.toLowerCase()]=subscribers[email]; });
+  Object.keys(subscribers).forEach(function(email){subMap[email.toLowerCase()]=subscribers[email];});
   mergedData=ledger.map(function(entry,idx){
     var email=(entry.email||"").toLowerCase();
     var sub=subMap[email];
-    return {
-      _ledgerIdx: idx,
-      name: entry.name||(sub?sub.name:"")||"",
-      email: email,
-      tier: entry.tier||"",
-      plugins: (entry.plugins||[]).join(", "),
-      key: entry.key||"",
-      donation: (sub?sub.donationAmount:"")||"",
-      date: entry.generatedAt||entry.issuedAt||"",
-      expires: entry.expiresAt||"",
-      source: sub?"squarespace":"manual"
-    };
+    return{_ledgerIdx:idx,name:entry.name||(sub?sub.name:"")||"",email:email,tier:entry.tier||"",
+      plugins:(entry.plugins||[]).join(", "),key:entry.key||"",donation:(sub?sub.donationAmount:"")||"",
+      date:entry.generatedAt||entry.issuedAt||"",expires:entry.expiresAt||"",source:sub?"squarespace":"manual"};
   });
   var ledgerEmails={};
-  mergedData.forEach(function(d){ ledgerEmails[d.email]=true; });
+  mergedData.forEach(function(d){ledgerEmails[d.email]=true;});
   Object.keys(subscribers).forEach(function(email){
     var le=email.toLowerCase();
     if(!ledgerEmails[le]){
       var info=subscribers[email];
-      mergedData.push({
-        _ledgerIdx: -1,
-        name: info.name||"", email: le, tier: "", plugins: "",
-        key: "(no key issued)", donation: info.donationAmount||"",
-        date: info.processedAt||"", expires: "", source: "squarespace-only"
-      });
+      var subTier=info.tier||"";
+      var subKey=info.key||"(no key issued)";
+      var subPlugins=(subTier==="master"||subTier==="annual")?"*":subTier;
+      mergedData.push({_ledgerIdx:-1,name:info.name||"",email:le,
+        tier:subTier,plugins:subPlugins,key:subKey,
+        donation:info.donationAmount||info.amount||"",
+        date:info.processedAt||"",expires:info.expiresAt||"",source:"squarespace"});
     }
   });
 }
@@ -196,23 +420,20 @@ function renderStats(){
   var don=mergedData.reduce(function(s,d){return s+(parseFloat(d.donation)||0);},0);
   var k=mergedData.filter(function(d){return d.key&&d.key.charAt(0)!=="(";}).length;
   document.getElementById("statsRow").innerHTML=
-    "<div class=\"stat-card\"><div class=\"label\">Total Licensees</div><div class=\"value\">"+t+"</div></div>"+
-    "<div class=\"stat-card\"><div class=\"label\">Master</div><div class=\"value\">"+m+"</div></div>"+
-    "<div class=\"stat-card\"><div class=\"label\">Annual</div><div class=\"value\">"+a+"</div></div>"+
-    "<div class=\"stat-card\"><div class=\"label\">Free</div><div class=\"value\">"+f+"</div></div>"+
-    "<div class=\"stat-card\"><div class=\"label\">Keys Issued</div><div class=\"value\">"+k+"</div></div>"+
-    "<div class=\"stat-card\"><div class=\"label\">Total Donations</div><div class=\"value\">$"+don.toFixed(2)+"</div></div>"+
-    "<div class=\"stat-card\"><div class=\"label\">Signing Key</div><div class=\"value\" style=\"font-size:1rem;color:"+(hasPrivateKey?"var(--green)":"var(--text-muted)")+"\">"+(hasPrivateKey?"\u2713 Available":"\u2717 Missing")+"</div></div>";
+    card("Total Licensees",t)+card("Master",m)+card("Annual",a)+card("Free",f)+
+    card("Keys Issued",k)+card("Total Revenue","$"+don.toFixed(2))+
+    "<div class=\"stat-card\"><div class=\"label\">Signing Key</div><div class=\"value\" style=\"font-size:1rem;color:"+(hasPrivateKey?"var(--green)":"var(--text-muted)")+"\">"+(hasPrivateKey?"&#10003; Ready":"&#10007; Missing")+"</div></div>";
 }
+function card(label,value){return"<div class=\"stat-card\"><div class=\"label\">"+label+"</div><div class=\"value\">"+value+"</div></div>";}
 
 function renderTableHead(){
   var tr=document.getElementById("tableHead");
   tr.innerHTML=columns.map(function(col){
-    var arrow=sortCol===col.key?(sortAsc?"\u25B2":"\u25BC"):"";
-    return "<th data-col=\""+col.key+"\">"+col.label+"<span class=\"sort-arrow\">"+arrow+"</span></th>";
+    var arrow=sortCol===col.key?(sortAsc?"&#9650;":"&#9660;"):"";
+    return"<th data-col=\""+col.key+"\">"+col.label+"<span class=\"sort-arrow\">"+arrow+"</span></th>";
   }).join("")+"<th style=\"width:60px;\"></th>";
   tr.querySelectorAll("th[data-col]").forEach(function(th){
-    th.addEventListener("click", function(){
+    th.addEventListener("click",function(){
       if(sortCol===th.dataset.col){sortAsc=!sortAsc;}else{sortCol=th.dataset.col;sortAsc=true;}
       renderTable();
     });
@@ -224,10 +445,8 @@ function renderTable(){
   var filtered=mergedData;
   if(query){
     filtered=mergedData.filter(function(d){
-      return d.name.toLowerCase().indexOf(query)!==-1||
-        d.email.toLowerCase().indexOf(query)!==-1||
-        d.key.toLowerCase().indexOf(query)!==-1||
-        d.tier.toLowerCase().indexOf(query)!==-1;
+      return d.name.toLowerCase().indexOf(query)!==-1||d.email.toLowerCase().indexOf(query)!==-1||
+        d.key.toLowerCase().indexOf(query)!==-1||d.tier.toLowerCase().indexOf(query)!==-1;
     });
   }
   filtered=filtered.slice().sort(function(a,b){
@@ -239,10 +458,8 @@ function renderTable(){
   });
   renderTableHead();
   var tbody=document.getElementById("tableBody");
-  if(filtered.length===0){
-    tbody.innerHTML="<tr><td colspan=\""+(columns.length+1)+"\" class=\"empty-state\">No results found</td></tr>";return;
-  }
-  tbody.innerHTML=filtered.map(function(d,i){
+  if(!filtered.length){tbody.innerHTML="<tr><td colspan=\""+(columns.length+1)+"\" class=\"empty-state\">No results found</td></tr>";return;}
+  tbody.innerHTML=filtered.map(function(d){
     var tierClass=d.tier==="master"?"master":d.tier==="annual"?"annual":d.tier==="free"?"free":"plugin";
     var tierLabel=d.tier==="master"?"Master":d.tier==="annual"?"Annual":d.tier==="free"?"Free":d.tier;
     var tierBadge=d.tier?"<span class=\"badge badge-"+tierClass+"\">"+escapeHtml(tierLabel)+"</span>":"\u2014";
@@ -250,104 +467,77 @@ function renderTable(){
     var dateStr=d.date?new Date(d.date).toLocaleDateString("en-US",{year:"numeric",month:"short",day:"numeric"}):"\u2014";
     var expStr="\u2014";
     if(d.expires){
-      var expDate=new Date(d.expires);
-      var now=Date.now();
-      if(expDate.getTime()<now){
-        expStr="<span style=\"color:var(--accent)\">Expired "+expDate.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})+"</span>";
-      }else{
-        var daysLeft=Math.ceil((expDate.getTime()-now)/86400000);
-        expStr=expDate.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})+" <span style=\"color:var(--text-muted);font-size:.75rem\">("+daysLeft+"d)</span>";
-      }
-    }else if(d.tier==="master"||d.tier){
-      expStr="<span style=\"color:var(--text-muted)\">\u221E</span>";
-    }
+      var expDate=new Date(d.expires),now=Date.now();
+      if(expDate.getTime()<now){expStr="<span style=\"color:var(--accent)\">Expired "+expDate.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})+"</span>";}
+      else{var daysLeft=Math.ceil((expDate.getTime()-now)/86400000);expStr=expDate.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})+" <span style=\"color:var(--text-muted);font-size:.75rem\">("+daysLeft+"d)</span>";}
+    }else if(d.tier){expStr="<span style=\"color:var(--text-muted)\">\u221E</span>";}
     var keyDisp=d.key.charAt(0)==="("?"<span style=\"color:var(--text-muted)\">"+escapeHtml(d.key)+"</span>":escapeHtml(d.key);
     var hasKey=d.key&&d.key.charAt(0)!=="(";
-    return "<tr data-idx=\""+d._ledgerIdx+"\">"+
+    return"<tr data-idx=\""+d._ledgerIdx+"\">"+
       "<td class=\"editable-cell\" data-field=\"name\" data-idx=\""+d._ledgerIdx+"\">"+(escapeHtml(d.name)||"<span style=\"color:var(--text-muted)\">\u2014</span>")+"</td>"+
       "<td class=\"editable-cell\" data-field=\"email\" data-idx=\""+d._ledgerIdx+"\">"+escapeHtml(d.email)+"</td>"+
       "<td>"+tierBadge+"</td><td>"+donStr+"</td>"+
       "<td class=\"key-cell\" title=\"Click to copy\" data-key=\""+escapeAttr(d.key)+"\">"+keyDisp+"</td>"+
-      "<td>"+expStr+"</td>"+
-      "<td>"+dateStr+"</td>"+
+      "<td>"+expStr+"</td><td>"+dateStr+"</td>"+
       "<td><div class=\"row-actions\">"+
         "<button class=\"btn-icon copy-btn\" data-key=\""+escapeAttr(d.key)+"\" title=\"Copy key\""+(hasKey?"":' disabled')+">&#x2398;</button>"+
         "<button class=\"btn-icon send send-btn\" data-email=\""+escapeAttr(d.email)+"\" data-name=\""+escapeAttr(d.name)+"\" data-key=\""+escapeAttr(d.key)+"\" title=\"Send key via email\""+(hasKey&&hasGmailCreds?"":' disabled')+">&#x2709;</button>"+
       "</div></td></tr>";
   }).join("");
   tbody.querySelectorAll(".key-cell,.copy-btn").forEach(function(el){
-    el.addEventListener("click", function(){
-      var key=el.dataset.key;
-      if(key&&key.charAt(0)!=="("){navigator.clipboard.writeText(key).then(function(){showToast("Key copied to clipboard");});}
-    });
+    el.addEventListener("click",function(){var key=el.dataset.key;if(key&&key.charAt(0)!=="(")navigator.clipboard.writeText(key).then(function(){showToast("Key copied");});});
   });
-  // Inline editing for name/email cells
   tbody.querySelectorAll(".editable-cell").forEach(function(cell){
-    cell.addEventListener("dblclick", function(){
-      if(cell.querySelector("input")) return;
-      var field=cell.dataset.field;
-      var idx=parseInt(cell.dataset.idx,10);
+    cell.addEventListener("dblclick",function(){
+      if(cell.querySelector("input"))return;
+      var field=cell.dataset.field,idx=parseInt(cell.dataset.idx,10);
       var current=mergedData.find(function(d){return d._ledgerIdx===idx;});
-      if(!current) return;
+      if(!current)return;
       var oldVal=current[field]||"";
       var inp=document.createElement("input");
-      inp.type=field==="email"?"email":"text";
-      inp.value=oldVal;
-      cell.textContent="";
-      cell.appendChild(inp);
-      inp.focus();
-      inp.select();
+      inp.type=field==="email"?"email":"text";inp.value=oldVal;
+      cell.textContent="";cell.appendChild(inp);inp.focus();inp.select();
       function commit(){
         var newVal=inp.value.trim();
-        if(field==="email") newVal=newVal.toLowerCase();
+        if(field==="email")newVal=newVal.toLowerCase();
         if(newVal===oldVal){cell.textContent=oldVal||"\u2014";return;}
-        var body={index:idx};
-        body[field]=newVal;
+        var body={index:idx};body[field]=newVal;
         fetch("/api/update-entry",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})
           .then(function(r){return r.json();})
           .then(function(data){
-            if(data.error){showToast("Error: "+data.error);cell.textContent=oldVal||"\u2014";return;}
-            current[field]=newVal;
-            if(data.newKey) current.key=data.newKey;
+            if(data.error){showToast("Error: "+data.error,true);cell.textContent=oldVal||"\u2014";return;}
+            current[field]=newVal;if(data.newKey)current.key=data.newKey;
             showToast(field.charAt(0).toUpperCase()+field.slice(1)+" updated"+(data.newKey?" — key regenerated":""));
             renderTable();
-          })
-          .catch(function(){showToast("Failed to update");cell.textContent=oldVal||"\u2014";});
+          }).catch(function(){showToast("Failed to update",true);cell.textContent=oldVal||"\u2014";});
       }
-      inp.addEventListener("blur", commit);
-      inp.addEventListener("keydown", function(e){if(e.key==="Enter"){e.preventDefault();inp.blur();}if(e.key==="Escape"){cell.textContent=oldVal||"\u2014";}});
+      inp.addEventListener("blur",commit);
+      inp.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();inp.blur();}if(e.key==="Escape")cell.textContent=oldVal||"\u2014";});
     });
   });
-  // Send email per row
   tbody.querySelectorAll(".send-btn").forEach(function(btn){
-    btn.addEventListener("click", function(){
-      sendKeyEmail(btn.dataset.email, btn.dataset.name, btn.dataset.key, btn);
-    });
+    btn.addEventListener("click",function(){sendKeyEmail(btn.dataset.email,btn.dataset.name,btn.dataset.key,btn);});
   });
 }
 
-document.getElementById("searchInput").addEventListener("input", renderTable);
+document.getElementById("searchInput").addEventListener("input",renderTable);
 
-var modal=document.getElementById("newKeyModal");
-
-document.getElementById("btnNewKey").addEventListener("click", function(){
-  if(!hasPrivateKey){showToast("No private.pem found \u2014 cannot issue keys");return;}
+var licModal=document.getElementById("newKeyModal");
+document.getElementById("btnNewKey").addEventListener("click",function(){
+  if(!hasPrivateKey){showToast("No private.pem found — cannot issue keys",true);return;}
   document.getElementById("modalFormArea").style.display="block";
   document.getElementById("modalResultArea").style.display="none";
   document.getElementById("btnModalGenerate").style.display="";
   document.getElementById("btnModalCopy").style.display="none";
   document.getElementById("btnModalSendEmail").style.display="none";
   document.getElementById("genError").style.display="none";
-  document.getElementById("newName").value="";
-  document.getElementById("newEmail").value="";
-  document.getElementById("newTier").value="master";
-  modal.classList.add("open");
+  document.getElementById("newName").value="";document.getElementById("newEmail").value="";
+  document.getElementById("newTier").value="master";licModal.classList.add("open");
 });
+document.getElementById("btnModalClose").addEventListener("click",function(){licModal.classList.remove("open");});
+licModal.addEventListener("click",function(e){if(e.target===licModal)licModal.classList.remove("open");});
 
-document.getElementById("btnModalClose").addEventListener("click", function(){modal.classList.remove("open");});
-modal.addEventListener("click", function(e){if(e.target===modal)modal.classList.remove("open");});
-
-document.getElementById("btnModalGenerate").addEventListener("click", async function(){
+document.getElementById("btnModalGenerate").addEventListener("click",async function(){
   var name=document.getElementById("newName").value.trim();
   var email=document.getElementById("newEmail").value.trim().toLowerCase();
   var tier=document.getElementById("newTier").value;
@@ -355,86 +545,423 @@ document.getElementById("btnModalGenerate").addEventListener("click", async func
   if(!email||email.indexOf("@")===-1){ge.textContent="Please enter a valid email address.";ge.style.display="block";return;}
   var btn=document.getElementById("btnModalGenerate");
   try{
-    btn.disabled=true; btn.textContent="Generating\u2026";
-    var res=await fetch("/api/generate-key",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({name:name,email:email,tier:tier})
-    });
+    btn.disabled=true;btn.textContent="Generating\u2026";
+    var res=await fetch("/api/generate-key",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,email,tier})});
     var data=await res.json();
-    if(!res.ok) throw new Error(data.error||"Server error");
+    if(!res.ok)throw new Error(data.error||"Server error");
     var plugins=tier==="master"?["*"]:[tier];
-    mergedData.push({
-      _ledgerIdx: mergedData.filter(function(d){return d._ledgerIdx>=0;}).length,
-      name:name, email:email, tier:tier, plugins:plugins.join(", "),
-      key:data.key, donation:"", date:data.entry.generatedAt,
-      expires:data.entry.expiresAt||"", source:"manual"
-    });
+    mergedData.push({_ledgerIdx:mergedData.filter(function(d){return d._ledgerIdx>=0;}).length,
+      name,email,tier,plugins:plugins.join(", "),key:data.key,donation:"",date:data.entry.generatedAt,expires:data.entry.expiresAt||"",source:"manual"});
     document.getElementById("modalFormArea").style.display="none";
     document.getElementById("modalResultArea").style.display="block";
     btn.style.display="none";
     document.getElementById("btnModalCopy").style.display="";
     var sendBtn=document.getElementById("btnModalSendEmail");
     if(hasGmailCreds&&email){sendBtn.style.display="";sendBtn.dataset.email=email;sendBtn.dataset.name=name;sendBtn.dataset.key=data.key;}
-    else{sendBtn.style.display="none";}
     document.getElementById("generatedKeyOutput").textContent=data.key;
-    renderStats(); renderTable();
-    showToast("Key issued for "+email+" \u2014 saved to ledger.json");
-  }catch(err){
-    ge.textContent="Error: "+err.message; ge.style.display="block";
-  }finally{
-    btn.disabled=false; btn.textContent="Generate Key";
-  }
+    renderStats();renderTable();showToast("Key issued for "+email);
+  }catch(err){ge.textContent="Error: "+err.message;ge.style.display="block";}
+  finally{btn.disabled=false;btn.textContent="Generate Key";}
 });
-
-document.getElementById("btnModalCopy").addEventListener("click", function(){
-  navigator.clipboard.writeText(document.getElementById("generatedKeyOutput").textContent)
-    .then(function(){showToast("Key copied to clipboard");});
+document.getElementById("btnModalCopy").addEventListener("click",function(){
+  navigator.clipboard.writeText(document.getElementById("generatedKeyOutput").textContent).then(function(){showToast("Key copied");});
 });
-
-document.getElementById("btnModalSendEmail").addEventListener("click", function(){
+document.getElementById("btnModalSendEmail").addEventListener("click",function(){
   var btn=document.getElementById("btnModalSendEmail");
-  sendKeyEmail(btn.dataset.email, btn.dataset.name, btn.dataset.key, btn);
+  sendKeyEmail(btn.dataset.email,btn.dataset.name,btn.dataset.key,btn);
 });
-
-document.getElementById("btnExportCSV").addEventListener("click", function(){
+document.getElementById("btnExportCSV").addEventListener("click",function(){
   var hdr=["Name","Email","Tier","Donation","License Key","Expires","Issued"];
-  var rows=mergedData.map(function(d){
-    return [d.name,d.email,d.tier,d.donation,d.key,d.expires?new Date(d.expires).toISOString():"never",d.date?new Date(d.date).toISOString():""];
-  });
-  var csv=[hdr].concat(rows).map(function(r){
-    return r.map(function(c){return "\""+String(c).replace(/"/g,"\"\"")+"\"";}).join(",");
-  }).join("\n");
-  var blob=new Blob([csv],{type:"text/csv"});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement("a");
-  a.href=url; a.download="licenses-"+new Date().toISOString().slice(0,10)+".csv";
-  a.click(); URL.revokeObjectURL(url);
+  var rows=mergedData.map(function(d){return[d.name,d.email,d.tier,d.donation,d.key,d.expires?new Date(d.expires).toISOString():"never",d.date?new Date(d.date).toISOString():""];});
+  var csv=[hdr].concat(rows).map(function(r){return r.map(function(c){return'"'+String(c).replace(/"/g,'""')+'"';}).join(",");}).join("\n");
+  var blob=new Blob([csv],{type:"text/csv"});var url=URL.createObjectURL(blob);
+  var a=document.createElement("a");a.href=url;a.download="licenses-"+new Date().toISOString().slice(0,10)+".csv";a.click();URL.revokeObjectURL(url);
   showToast("CSV exported");
 });
 
-function escapeHtml(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML;}
-function escapeAttr(s){return s.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
-function showToast(msg){var t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(function(){t.classList.remove("show");},2000);}
-
-async function sendKeyEmail(email, name, key, btn){
-  if(!email||!key||key.charAt(0)==="("){showToast("No valid key to send");return;}
-  var origText=btn.textContent||btn.innerHTML;
-  btn.disabled=true;btn.textContent="Sending\u2026";
+async function sendKeyEmail(email,name,key,btn){
+  if(!email||!key||key.charAt(0)==="("){showToast("No valid key to send",true);return;}
+  var origHTML=btn.innerHTML;btn.disabled=true;btn.textContent="Sending\u2026";
   try{
-    var res=await fetch("/api/send-key-email",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:email,name:name,key:key})});
+    var res=await fetch("/api/send-key-email",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email,name,key})});
     var data=await res.json();
-    if(!res.ok) throw new Error(data.error||"Server error");
-    showToast("Email sent to "+email);
-    btn.textContent="\u2713 Sent";
-    setTimeout(function(){btn.innerHTML=origText;btn.disabled=false;},3000);
+    if(!res.ok)throw new Error(data.error||"Server error");
+    showToast("Email sent to "+email);btn.textContent="\u2713 Sent";
+    setTimeout(function(){btn.innerHTML=origHTML;btn.disabled=false;},3000);
+  }catch(err){showToast("Email failed: "+err.message,true);btn.innerHTML=origHTML;btn.disabled=false;}
+}
+
+// ═══════════════════════════════════════════════════
+// PLUGINS TAB
+// ═══════════════════════════════════════════════════
+var pluginsData=[], pluginsLoaded=false, plugSortCol="displayName", plugSortAsc=true;
+
+async function loadPlugins(){
+  if(pluginsLoaded)return;
+  try{
+    var res=await fetch("/api/plugins");
+    if(!res.ok)throw new Error("Server returned "+res.status);
+    var data=await res.json();
+    pluginsData=data.plugins||[];
+    pluginsLoaded=true;
+    document.getElementById("plugLoadingScreen").style.display="none";
+    document.getElementById("plugMainApp").style.display="block";
+    renderPluginStats();renderPluginTable();
   }catch(err){
-    showToast("Email failed: "+err.message);
-    btn.innerHTML=origText;btn.disabled=false;
+    document.getElementById("plugLoadingScreen").style.display="none";
+    var es=document.getElementById("plugErrorScreen");
+    es.style.display="block";
+    es.innerHTML="<div class=\"error-banner\">Failed to load plugin catalog.<code>"+escapeHtml(err.message)+"</code></div>";
   }
 }
 
-boot();
+function renderPluginStats(){
+  var total=pluginsData.length;
+  var sub=pluginsData.filter(function(p){return p.licenseTier==="subscription";}).length;
+  var free=pluginsData.filter(function(p){return p.licenseTier==="free";}).length;
+  var released=pluginsData.filter(function(p){return p.hasRelease;}).length;
+  var pending=total-released;
+  document.getElementById("plugStatsRow").innerHTML=
+    card("Total Plugins",total)+card("Subscription",sub)+card("Free",free)+
+    card("Published",released)+card("Pending Release",pending);
+}
+
+function renderPluginTable(){
+  var query=document.getElementById("plugSearchInput").value.toLowerCase().trim();
+  var filtered=pluginsData.filter(function(p){
+    if(!query)return true;
+    return (p.displayName||"").toLowerCase().indexOf(query)!==-1||
+           (p.category||"").toLowerCase().indexOf(query)!==-1||
+           (p.pluginId||"").toLowerCase().indexOf(query)!==-1||
+           (p.type||"").toLowerCase().indexOf(query)!==-1;
+  });
+  filtered=filtered.slice().sort(function(a,b){
+    var va=a[plugSortCol]||"",vb=b[plugSortCol]||"";
+    if(plugSortCol==="releaseDate"){va=new Date(va||0).getTime();vb=new Date(vb||0).getTime();}
+    else{va=String(va).toLowerCase();vb=String(vb).toLowerCase();}
+    if(va<vb)return plugSortAsc?-1:1;if(va>vb)return plugSortAsc?1:-1;return 0;
+  });
+
+  // Update sort arrows in header
+  document.querySelectorAll("[data-pcol]").forEach(function(th){
+    var arrow=th.querySelector(".sort-arrow");
+    if(arrow)arrow.innerHTML=plugSortCol===th.dataset.pcol?(plugSortAsc?"&#9650;":"&#9660;"):"";
+    th.onclick=function(){
+      if(plugSortCol===th.dataset.pcol)plugSortAsc=!plugSortAsc;
+      else{plugSortCol=th.dataset.pcol;plugSortAsc=true;}
+      renderPluginTable();
+    };
+  });
+
+  var tbody=document.getElementById("plugTableBody");
+  if(!filtered.length){tbody.innerHTML="<tr><td colspan=\"8\" class=\"empty-state\">No plugins found</td></tr>";return;}
+
+  var CATEGORIES=["Color Grading","Film Emulation","Workflow","Diagnostics","DRT","Keying","Uncategorized"];
+
+  tbody.innerHTML=filtered.map(function(p){
+    var typeClass=(p.type||"").toLowerCase();
+    var typeBadge=p.type?"<span class=\"badge badge-"+typeClass+"\">"+escapeHtml(p.type)+"</span>":"\u2014";
+
+    var tierLabel=p.licenseTier==="subscription"?"Subscription":p.licenseTier==="free"?"Free":(p.licenseTier||"\u2014");
+    var tierClass=p.licenseTier==="subscription"?"is-subscription":"is-free";
+    var tierBtn="<button class=\"tier-toggle "+tierClass+"\" data-pid=\""+escapeAttr(p.pluginId)+"\" data-tier=\""+escapeAttr(p.licenseTier||"")+"\" title=\"Click to toggle\">"+
+      (p.licenseTier==="subscription"?"&#9733; ":"")+ escapeHtml(tierLabel)+"</button>";
+
+    var catCell="<span class=\"editable-plugin-cat\" data-pid=\""+escapeAttr(p.pluginId)+"\">"+escapeHtml(p.category||"\u2014")+"</span>";
+
+    var versionStr=p.version?escapeHtml(p.version):"<span style=\"color:var(--text-muted)\">\u2014</span>";
+    var dateStr=p.releaseDate?new Date(p.releaseDate).toLocaleDateString("en-US",{year:"numeric",month:"short",day:"numeric"}):"<span style=\"color:var(--text-muted)\">\u2014</span>";
+
+    var statusBadge=p.unlisted
+      ?"<span class=\"badge badge-unlisted\">Unlisted</span>"
+      :p.hasRelease
+        ?"<span class=\"badge badge-ok\">Published</span>"
+        :"<span class=\"badge badge-pending\">No Release</span>";
+
+    var ghLink=p.releaseRepo
+      ?"<a href=\"https://github.com/"+escapeAttr(p.releaseRepo)+"\" target=\"_blank\" style=\"color:var(--blue);text-decoration:none;\" title=\"Open repo\">&#x2197;</a>"
+      :"";
+
+    return"<tr>"+
+      "<td><strong>"+escapeHtml(p.displayName||p.pluginId)+"</strong><br><span style=\"color:var(--text-muted);font-size:.72rem;\">"+escapeHtml(p.pluginId)+"</span></td>"+
+      "<td>"+typeBadge+"</td>"+
+      "<td class=\"editable-cell\" style=\"min-width:120px;\">"+catCell+"</td>"+
+      "<td>"+tierBtn+"</td>"+
+      "<td>"+versionStr+"</td>"+
+      "<td>"+dateStr+"</td>"+
+      "<td>"+statusBadge+"</td>"+
+      "<td><div class=\"row-actions\">"+ghLink+"</div></td>"+
+      "</tr>";
+  }).join("");
+
+  // Tier toggle handler
+  tbody.querySelectorAll(".tier-toggle").forEach(function(btn){
+    btn.addEventListener("click",async function(){
+      var pid=btn.dataset.pid;
+      var currentTier=btn.dataset.tier;
+      var newTier=currentTier==="subscription"?"free":"subscription";
+      btn.disabled=true;
+      try{
+        var res=await fetch("/api/plugins/update-meta",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pluginId:pid,licenseTier:newTier})});
+        var data=await res.json();
+        if(!res.ok)throw new Error(data.error||"Server error");
+        var plugin=pluginsData.find(function(p){return p.pluginId===pid;});
+        if(plugin)plugin.licenseTier=newTier;
+        renderPluginStats();renderPluginTable();
+        showToast(pid+" → "+newTier);
+      }catch(err){showToast("Failed: "+err.message,true);btn.disabled=false;}
+    });
+  });
+
+  // Category inline edit
+  tbody.querySelectorAll(".editable-plugin-cat").forEach(function(span){
+    span.parentElement.addEventListener("dblclick",function(){
+      if(span.parentElement.querySelector("select"))return;
+      var pid=span.dataset.pid;
+      var plugin=pluginsData.find(function(p){return p.pluginId===pid;});
+      if(!plugin)return;
+      var oldVal=plugin.category||"";
+      var sel=document.createElement("select");
+      var cats=["Color Grading","Film Emulation","Workflow","Diagnostics","DRT","Keying","Uncategorized"];
+      cats.forEach(function(c){var o=document.createElement("option");o.value=c;o.textContent=c;if(c===oldVal)o.selected=true;sel.appendChild(o);});
+      span.parentElement.textContent="";span.parentElement.appendChild(sel);sel.focus();
+      async function commitCat(){
+        var newCat=sel.value;
+        if(newCat===oldVal){span.parentElement.textContent=oldVal||"\u2014";span.parentElement.appendChild(span);return;}
+        try{
+          var res=await fetch("/api/plugins/update-meta",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pluginId:pid,category:newCat})});
+          var data=await res.json();
+          if(!res.ok)throw new Error(data.error||"Server error");
+          plugin.category=newCat;showToast("Category updated");renderPluginTable();
+        }catch(err){showToast("Failed: "+err.message,true);span.parentElement.textContent=oldVal||"\u2014";}
+      }
+      sel.addEventListener("change",commitCat);
+      sel.addEventListener("blur",commitCat);
+      sel.addEventListener("keydown",function(e){if(e.key==="Escape"){span.parentElement.textContent=oldVal||"\u2014";}});
+    });
+  });
+}
+
+document.getElementById("plugSearchInput").addEventListener("input",renderPluginTable);
+
+// Rebuild catalog button
+document.getElementById("btnRebuild").addEventListener("click",async function(){
+  var btn=document.getElementById("btnRebuild");
+  btn.disabled=true;btn.textContent="Triggering\u2026";
+  try{
+    var res=await fetch("/api/plugins/rebuild",{method:"POST"});
+    var data=await res.json();
+    if(!res.ok)throw new Error(data.error||"Server error");
+    showToast("Catalog rebuild triggered — check GitHub Actions");
+  }catch(err){showToast("Failed: "+err.message,true);}
+  finally{btn.disabled=false;btn.innerHTML="&#x21BB; Rebuild Catalog";}
+});
+
+// ── Add Plugin modal ──
+var addModal=document.getElementById("addPluginModal");
+
+// Auto-generate pluginId and repoName from displayName + type
+function autoFillPluginIds(){
+  var name=document.getElementById("apDisplayName").value.trim();
+  var type=document.getElementById("apType").value;
+  var suffix=type==="DCTL"?"-dctl":type==="OFX"?"-ofx":"-app";
+  var id=name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+suffix;
+  var repo=name.replace(/[^a-zA-Z0-9]+/g,"-").replace(/^-|-$/g,"")+"-"+(type==="DCTL"?"DCTL":type==="OFX"?"OFX":"App");
+  // Asset pattern matches {RepoName}-v{ver}.zip
+  var assetPat=repo.replace(/-/g,"\\.")+"-?.*\\.zip$";
+  if(document.getElementById("apPluginId").dataset.manual!=="1")document.getElementById("apPluginId").value=id;
+  if(document.getElementById("apRepoName").dataset.manual!=="1")document.getElementById("apRepoName").value=repo;
+  if(document.getElementById("apAssetPattern").dataset.manual!=="1")document.getElementById("apAssetPattern").value=assetPat;
+  // Show/hide type-specific sections
+  document.getElementById("apDctlSection").style.display=type==="DCTL"?"":"none";
+  document.getElementById("apOfxSection").style.display=type==="OFX"?"":"none";
+  document.getElementById("apAppSection").style.display=type==="App"?"":"none";
+  document.getElementById("apDctlReleaseSection").style.display=type==="DCTL"?"":"none";
+}
+document.getElementById("apDisplayName").addEventListener("input",autoFillPluginIds);
+document.getElementById("apType").addEventListener("change",autoFillPluginIds);
+
+// Mark fields as manually edited so auto-fill won't overwrite
+["apPluginId","apRepoName","apAssetPattern","apBundleName","apBundleName2"].forEach(function(id){
+  document.getElementById(id).addEventListener("input",function(){this.dataset.manual="1";});
+});
+
+// File picker — DCTL: read .dctle, pre-fill bundle name
+document.getElementById("apDctleFile").addEventListener("change",function(){
+  var file=this.files[0];
+  if(!file)return;
+  if(document.getElementById("apBundleName").dataset.manual!=="1"){
+    document.getElementById("apBundleName").value=file.name;
+  }
+});
+
+
+// Show/hide release fields when checkbox toggled
+document.getElementById("apUploadRelease").addEventListener("change",function(){
+  document.getElementById("apReleaseFields").style.display=this.checked?"":"none";
+});
+
+document.getElementById("btnAddPlugin").addEventListener("click",function(){
+  document.getElementById("addPluginForm").style.display="";
+  document.getElementById("addPluginResult").style.display="none";
+  document.getElementById("apReleaseStatus").style.display="none";
+  document.getElementById("btnAddPluginSubmit").style.display="";
+  document.getElementById("apError").style.display="none";
+  document.getElementById("apDisplayName").value="";
+  ["apPluginId","apRepoName","apAssetPattern","apBundleName","apBundleName2"].forEach(function(id){
+    document.getElementById(id).value="";document.getElementById(id).dataset.manual="";
+  });
+  document.getElementById("apDescription").value="";
+  document.getElementById("apType").value="DCTL";
+  document.getElementById("apCategory").value="Color Grading";
+  document.getElementById("apTier").value="subscription";
+  document.getElementById("apCreateRepo").checked=true;
+  document.getElementById("apUploadRelease").checked=false;
+  document.getElementById("apReleaseFields").style.display="none";
+  document.getElementById("apVersion").value="";
+  document.getElementById("apDctleFile").value="";
+  document.getElementById("apInjectOFXWorkflow").checked=true;
+  document.getElementById("apInjectTauriWorkflow").checked=true;
+  document.getElementById("apDctlSection").style.display="";
+  document.getElementById("apOfxSection").style.display="none";
+  document.getElementById("apAppSection").style.display="none";
+  document.getElementById("apDctlReleaseSection").style.display="";
+  addModal.classList.add("open");
+});
+document.getElementById("btnAddPluginClose").addEventListener("click",function(){addModal.classList.remove("open");pluginsLoaded=false;loadPlugins();});
+addModal.addEventListener("click",function(e){if(e.target===addModal){addModal.classList.remove("open");pluginsLoaded=false;loadPlugins();}});
+
+// Read a File object and return base64 string
+function readFileAsBase64(file){
+  return new Promise(function(resolve,reject){
+    var reader=new FileReader();
+    reader.onload=function(){
+      // result is "data:...;base64,XXXX" — strip the prefix
+      resolve(reader.result.split(",")[1]);
+    };
+    reader.onerror=reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+document.getElementById("btnAddPluginSubmit").addEventListener("click",async function(){
+  var btn=document.getElementById("btnAddPluginSubmit");
+  var errEl=document.getElementById("apError");
+  errEl.style.display="none";
+
+  var displayName=document.getElementById("apDisplayName").value.trim();
+  var pluginId=document.getElementById("apPluginId").value.trim();
+  var type=document.getElementById("apType").value;
+  var category=document.getElementById("apCategory").value;
+  var description=document.getElementById("apDescription").value.trim();
+  var licenseTier=document.getElementById("apTier").value;
+  var repoName=document.getElementById("apRepoName").value.trim();
+  var assetPattern=document.getElementById("apAssetPattern").value.trim();
+  var bundleName=(type==="DCTL"
+    ?document.getElementById("apBundleName")
+    :document.getElementById("apBundleName2")).value.trim();
+  var createRepo=document.getElementById("apCreateRepo").checked;
+  var doRelease=type==="DCTL"&&document.getElementById("apUploadRelease").checked;
+  var version=document.getElementById("apVersion").value.trim();
+  var injectWorkflow=(type==="OFX"&&document.getElementById("apInjectOFXWorkflow").checked)||
+                     (type==="App"&&document.getElementById("apInjectTauriWorkflow").checked);
+
+  // Gather file if DCTL release upload is requested
+  var releaseFile=null;
+  if(doRelease){
+    releaseFile=document.getElementById("apDctleFile").files[0]||null;
+    if(!releaseFile){errEl.textContent="Please select a .dctle file to upload for the release.";errEl.style.display="block";return;}
+    if(!version){errEl.textContent="Please enter a version number (e.g. 1.0.0).";errEl.style.display="block";return;}
+    if(releaseFile.size>200*1024*1024){errEl.textContent="File is over 200 MB — upload manually via gh CLI.";errEl.style.display="block";return;}
+  }
+
+  if(!displayName||!pluginId){errEl.textContent="Display name and plugin ID are required.";errEl.style.display="block";return;}
+
+  btn.disabled=true;btn.textContent="Creating\u2026";
+  try{
+    // Step 1: Create plugin (local files + workflow YAML + GitHub repo)
+    var res=await fetch("/api/plugins/add",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({displayName,pluginId,type,category,description,licenseTier,repoName,assetPattern,bundleName,createRepo})});
+    var data=await res.json();
+    if(!res.ok)throw new Error(data.error||"Server error");
+
+    var lines=[];
+    lines.push("<span class=\"ok\">&#10003; Config written:</span> docs/plugins/"+escapeHtml(pluginId)+"/manager-release-config.json");
+    if(!data.alreadyInIndex)lines.push("<span class=\"ok\">&#10003; Added to:</span> docs/plugins/index.json");
+    else lines.push("<span class=\"warn\">&#9888; Already in index.json — skipped</span>");
+    if(data.workflowPatched)lines.push("<span class=\"ok\">&#10003; Patched:</span> .github/workflows/deploy-plugin-manager-pages.yml");
+    else lines.push("<span class=\"warn\">&#9888; Workflow YAML already contained this plugin — skipped</span>");
+    if(createRepo){
+      if(data.repoCreated)lines.push("<span class=\"ok\">&#10003; GitHub repo created:</span> Dec18studios/"+escapeHtml(repoName));
+      else lines.push("<span class=\"warn\">&#9888; GitHub repo: "+(data.repoError?escapeHtml(data.repoError):"skipped (may already exist)")+"</span>");
+    }
+
+    document.getElementById("addPluginForm").style.display="none";
+    document.getElementById("addPluginResult").style.display="";
+    document.getElementById("addPluginResultBox").innerHTML=lines.join("<br>");
+    btn.style.display="none";
+    showToast(pluginId+" created");
+
+    // Step 2 (optional): Inject build workflow for OFX / App
+    if(injectWorkflow&&(type==="OFX"||type==="App")){
+      var wfStatusEl=document.getElementById("apReleaseStatus");
+      var wfResultEl=document.getElementById("apReleaseResultBox");
+      wfStatusEl.style.display="";
+      wfResultEl.innerHTML="<div class=\"loading\" style=\"padding:12px 0;\"><div class=\"spinner\" style=\"width:18px;height:18px;border-width:2px;margin-bottom:6px;\"></div><p style=\"font-size:.8rem;\">Injecting build workflow&hellip;</p></div>";
+      document.getElementById("apReleaseStatus").querySelector(".section-label").textContent=
+        type==="App"?"Tauri Build Workflow":"CMake OFX Build Workflow";
+      try{
+        var wfRes=await fetch("/api/plugins/inject-workflow",{
+          method:"POST",headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({repoName,pluginType:type,displayName,bundleName})
+        });
+        var wfData=await wfRes.json();
+        if(!wfRes.ok)throw new Error(wfData.error||"Server error");
+        var wfType=wfData.workflowType==="tauri"?"Tauri":"CMake OFX";
+        wfResultEl.innerHTML=
+          "<span class=\"ok\">&#10003; "+wfType+" workflow pushed:</span> .github/workflows/build.yml<br>"+
+          (type==="App"
+            ?"<span style=\"color:var(--text-muted)\">Next: add <code>TAURI_SIGNING_PRIVATE_KEY</code> secret to the repo, then push your source.</span>"
+            :"<span style=\"color:var(--text-muted)\">Next: push your C++ source code. The CMake paths in the workflow may need adjustment for your build structure.</span>");
+        showToast("Build workflow injected");
+      }catch(wfErr){
+        wfResultEl.innerHTML="<span class=\"err\">&#10007; Workflow inject failed:</span> "+escapeHtml(wfErr.message)+
+          "<br><span style=\"color:var(--text-muted)\">You can push the workflow manually from the Plugin Catalog tab.</span>";
+      }
+    }
+
+    // Step 3 (optional): Upload the DCTL release
+    if(doRelease&&releaseFile){
+      var releaseStatusEl=document.getElementById("apReleaseStatus");
+      var releaseResultEl=document.getElementById("apReleaseResultBox");
+      releaseStatusEl.style.display="";
+
+      try{
+        btn.disabled=true;
+        var fileBase64=await readFileAsBase64(releaseFile);
+        var relRes=await fetch("/api/plugins/create-release",{
+          method:"POST",headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({pluginId,repoName,version,fileName:releaseFile.name,fileBase64})
+        });
+        var relData=await relRes.json();
+        if(!relRes.ok)throw new Error(relData.error||"Server error");
+        releaseResultEl.innerHTML=
+          "<span class=\"ok\">&#10003; Release created:</span> "+escapeHtml(relData.tag)+"<br>"+
+          "<span class=\"ok\">&#10003; Asset uploaded:</span> "+escapeHtml(relData.assetName)+"<br>"+
+          "<span style=\"color:var(--text-muted)\">Hit <strong>Rebuild Catalog</strong> to publish to the catalog.</span>";
+        showToast("Release "+relData.tag+" uploaded");
+      }catch(relErr){
+        releaseResultEl.innerHTML="<span class=\"err\">&#10007; Release failed:</span> "+escapeHtml(relErr.message);
+      }
+    }
+  }catch(err){errEl.textContent="Error: "+err.message;errEl.style.display="block";}
+  finally{btn.disabled=false;if(btn.style.display!=="none")btn.textContent="Create Plugin";}
+});
+
+// ═══════════════════════════════════════════════════
+// Boot
+// ═══════════════════════════════════════════════════
+bootLicenses();
 </script>
 </body>
 </html>

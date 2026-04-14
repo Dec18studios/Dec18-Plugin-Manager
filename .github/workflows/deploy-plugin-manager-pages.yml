@@ -67,6 +67,7 @@ jobs:
             "X-Grade-OFX|x-grade-ofx"
             "Resolve-Node-Toggler|resolve-node-toggler"
             "SplitToneX-OFX|split-tone-x-ofx"
+            "Trim-Top-Bottom-DCTL|trim-top-bottom-dctl"
           )
 
           PROCESSED=0

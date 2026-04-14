@@ -1,0 +1,51 @@
+{
+  "pluginId": "trim-top-bottom-dctl",
+  "displayName": "Trim Top Bottom",
+  "releaseRepo": "dec18studios/Trim-Top-Bottom-DCTL",
+  "minManagerVersion": "0.1.0",
+  "hostProcesses": [
+    "Resolve",
+    "DaVinci Resolve"
+  ],
+  "requiredFamilies": [
+    "universal"
+  ],
+  "category": "Color Grading",
+  "description": "This tool carefully rolls off highlights or gives a little boost to the low end.. A simple trimmer tool before sending off to your DRT",
+  "tags": [],
+  "assetRules": [
+    {
+      "family": "universal",
+      "platform": "macos",
+      "arch": "universal",
+      "assetPattern": "Trim\\.Top\\.Bottom\\.DCTL-?.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "GE Trim Top Bottom.dctle",
+      "bundleIdentifier": "com.dec18studios.trim-top-bottom-dctl",
+      "installPath": "/Library/Application Support/Blackmagic Design/DaVinci Resolve/LUT/DCTL",
+      "installMode": "file-browse"
+    },
+    {
+      "family": "universal",
+      "platform": "windows",
+      "arch": "universal",
+      "assetPattern": "Trim\\.Top\\.Bottom\\.DCTL-?.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "GE Trim Top Bottom.dctle",
+      "bundleIdentifier": "com.dec18studios.trim-top-bottom-dctl",
+      "installPath": "C:\\ProgramData\\Blackmagic Design\\DaVinci Resolve\\Support\\LUT\\DCTL",
+      "installMode": "file-browse"
+    },
+    {
+      "family": "universal",
+      "platform": "linux",
+      "arch": "universal",
+      "assetPattern": "Trim\\.Top\\.Bottom\\.DCTL-?.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "GE Trim Top Bottom.dctle",
+      "bundleIdentifier": "com.dec18studios.trim-top-bottom-dctl",
+      "installPath": "/opt/resolve/LUT/DCTL",
+      "installMode": "file-browse"
+    }
+  ]
+}

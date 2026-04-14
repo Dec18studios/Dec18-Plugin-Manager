@@ -392,7 +392,7 @@ function mergeData(ledger,subscribers){
     var email=(entry.email||"").toLowerCase();
     var sub=subMap[email];
     return{_ledgerIdx:idx,name:entry.name||(sub?sub.name:"")||"",email:email,tier:entry.tier||"",
-      plugins:(entry.plugins||[]).join(", "),key:entry.key||"",donation:(sub?sub.donationAmount:"")||"",
+      plugins:(entry.plugins||[]).join(", "),key:entry.key||"",donation:(sub?sub.donationAmount||sub.amount:"")||"",
       date:entry.generatedAt||entry.issuedAt||"",expires:entry.expiresAt||"",source:sub?"squarespace":"manual"};
   });
   var ledgerEmails={};
@@ -413,18 +413,73 @@ function mergeData(ledger,subscribers){
 }
 
 function renderStats(){
+  var now=Date.now();
   var t=mergedData.length;
   var m=mergedData.filter(function(d){return d.tier==="master";}).length;
-  var a=mergedData.filter(function(d){return d.tier==="annual";}).length;
+  var annualAll=mergedData.filter(function(d){return d.tier==="annual";});
+  var a=annualAll.length;
   var f=mergedData.filter(function(d){return d.tier==="free";}).length;
-  var don=mergedData.reduce(function(s,d){return s+(parseFloat(d.donation)||0);},0);
   var k=mergedData.filter(function(d){return d.key&&d.key.charAt(0)!=="(";}).length;
+
+  // Revenue
+  var totalRev=mergedData.reduce(function(s,d){return s+(parseFloat(d.donation)||0);},0);
+
+  // Active = master (permanent) + annual not yet expired
+  var activeSubs=mergedData.filter(function(d){
+    if(d.tier==="master")return true;
+    if(d.tier==="annual"){
+      if(!d.expires)return true;
+      return new Date(d.expires).getTime()>now;
+    }
+    return false;
+  }).length;
+  var expiredAnnual=annualAll.filter(function(d){
+    return d.expires&&new Date(d.expires).getTime()<=now;
+  }).length;
+
+  // MRR / ARR — based on active annual subs × $47.34/yr
+  var ANNUAL_PRICE=47.34;
+  var activeAnnual=annualAll.filter(function(d){return!d.expires||new Date(d.expires).getTime()>now;}).length;
+  var arr=activeAnnual*ANNUAL_PRICE;
+  var mrr=arr/12;
+
+  // Revenue this month
+  var startOfMonth=new Date();startOfMonth.setDate(1);startOfMonth.setHours(0,0,0,0);
+  var revThisMonth=mergedData.reduce(function(s,d){
+    var amt=parseFloat(d.donation)||0;
+    if(!amt)return s;
+    var dt=new Date(d.date||0);
+    return dt>=startOfMonth?s+amt:s;
+  },0);
+
+  // New subscribers this month
+  var newThisMonth=mergedData.filter(function(d){
+    return d.date&&new Date(d.date)>=startOfMonth&&(d.tier==="annual"||d.tier==="master");
+  }).length;
+
+  // Last 30 days revenue
+  var thirtyDaysAgo=new Date(now-30*86400000);
+  var rev30=mergedData.reduce(function(s,d){
+    var amt=parseFloat(d.donation)||0;
+    return(amt&&new Date(d.date||0)>=thirtyDaysAgo)?s+amt:s;
+  },0);
+
   document.getElementById("statsRow").innerHTML=
-    card("Total Licensees",t)+card("Master",m)+card("Annual",a)+card("Free",f)+
-    card("Keys Issued",k)+card("Total Revenue","$"+don.toFixed(2))+
-    "<div class=\"stat-card\"><div class=\"label\">Signing Key</div><div class=\"value\" style=\"font-size:1rem;color:"+(hasPrivateKey?"var(--green)":"var(--text-muted)")+"\">"+(hasPrivateKey?"&#10003; Ready":"&#10007; Missing")+"</div></div>";
+    // Row 1 — subscribers
+    cardSub("Active Subs",activeSubs,m+" master · "+activeAnnual+" annual")+
+    cardSub("Annual",a,expiredAnnual?" <span style='color:var(--accent)'>"+expiredAnnual+" expired</span>":"All active")+
+    card("Free / Trial",f)+
+    cardSub("Keys Issued",k,"of "+t+" licensees")+
+    "<div class=\"stat-card\"><div class=\"label\">Signing Key</div><div class=\"value\" style=\"font-size:1rem;color:"+(hasPrivateKey?"var(--green)":"var(--text-muted)")+"\">"+(hasPrivateKey?"&#10003; Ready":"&#10007; Missing")+"</div></div>"+
+    // Row 2 — revenue
+    cardSub("Total Revenue","$"+totalRev.toFixed(2),"all time")+
+    cardSub("This Month","$"+revThisMonth.toFixed(2),newThisMonth+" new sub"+(newThisMonth!==1?"s":""))+
+    cardSub("Last 30 Days","$"+rev30.toFixed(2),"")+
+    cardSub("ARR","$"+arr.toFixed(2),"projected annual")+
+    cardSub("MRR","$"+mrr.toFixed(2),"projected monthly");
 }
 function card(label,value){return"<div class=\"stat-card\"><div class=\"label\">"+label+"</div><div class=\"value\">"+value+"</div></div>";}
+function cardSub(label,value,sub){return"<div class=\"stat-card\"><div class=\"label\">"+label+"</div><div class=\"value\">"+value+"</div>"+(sub?"<div style='font-size:.72rem;color:var(--text-muted);margin-top:2px;'>"+sub+"</div>":"")+"</div>";}
 
 function renderTableHead(){
   var tr=document.getElementById("tableHead");

@@ -38,4 +38,5 @@ jobs:
           git config user.email "noreply@dec18studios.com"
           git add tools/license-keys/processed-subscribers.json
           git diff --cached --quiet || git commit -m "chore: update processed subscribers [skip ci]"
+          git pull --rebase origin main
           git push

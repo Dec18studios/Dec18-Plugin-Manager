@@ -117,6 +117,14 @@
       "licenseTier": "free",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/volume-curve-dctl/stable.json",
       "category": "Color Grading"
+    },
+    {
+      "pluginId": "trim-top-bottom-dctl",
+      "displayName": "Trim Top Bottom",
+      "type": "DCTL",
+      "licenseTier": "subscription",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/trim-top-bottom-dctl/stable.json",
+      "category": "Color Grading"
     }
   ]
 }

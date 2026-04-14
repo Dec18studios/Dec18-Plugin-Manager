@@ -1,0 +1,62 @@
+{
+  "pluginId": "trim-top-bottom-dctl",
+  "displayName": "Trim Top Bottom",
+  "description": "This tool carefully rolls off highlights or gives a little boost to the low end.. A simple trimmer tool before sending off to your DRT",
+  "category": "Color Grading",
+  "tags": [],
+  "infoUrl": null,
+  "version": "1.0.0",
+  "releaseDate": "2026-04-14T19:03:38Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/Trim-Top-Bottom-DCTL/releases/tag/v1.0.0",
+  "platforms": [
+    {
+      "platform": "macos",
+      "arch": "universal",
+      "downloadUrl": "https://github.com/Dec18studios/Trim-Top-Bottom-DCTL/releases/download/v1.0.0/Trim-Top-Bottom-DCTL-v1.0.0.zip",
+      "sha256": "148185829e40fc1d559f1e02b9ff12b3a672b23dd51c4e6035b02197b4418c58",
+      "packageType": "zip",
+      "bundleName": "GE Trim Top Bottom.dctle",
+      "bundleIdentifier": "com.dec18studios.trim-top-bottom-dctl",
+      "installPath": "/Library/Application Support/Blackmagic Design/DaVinci Resolve/LUT/DCTL",
+      "installMode": "file-browse",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve"
+      ]
+    },
+    {
+      "platform": "windows",
+      "arch": "x86_64",
+      "downloadUrl": "https://github.com/Dec18studios/Trim-Top-Bottom-DCTL/releases/download/v1.0.0/Trim-Top-Bottom-DCTL-v1.0.0.zip",
+      "sha256": "148185829e40fc1d559f1e02b9ff12b3a672b23dd51c4e6035b02197b4418c58",
+      "packageType": "zip",
+      "bundleName": "GE Trim Top Bottom.dctle",
+      "bundleIdentifier": "com.dec18studios.trim-top-bottom-dctl",
+      "installPath": "C:\\ProgramData\\Blackmagic Design\\DaVinci Resolve\\Support\\LUT\\DCTL",
+      "installMode": "file-browse",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve"
+      ]
+    },
+    {
+      "platform": "linux",
+      "arch": "x86_64",
+      "downloadUrl": "https://github.com/Dec18studios/Trim-Top-Bottom-DCTL/releases/download/v1.0.0/Trim-Top-Bottom-DCTL-v1.0.0.zip",
+      "sha256": "148185829e40fc1d559f1e02b9ff12b3a672b23dd51c4e6035b02197b4418c58",
+      "packageType": "zip",
+      "bundleName": "GE Trim Top Bottom.dctle",
+      "bundleIdentifier": "com.dec18studios.trim-top-bottom-dctl",
+      "installPath": "/opt/resolve/LUT/DCTL",
+      "installMode": "file-browse",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve"
+      ]
+    }
+  ],
+  "availableVersions": []
+}

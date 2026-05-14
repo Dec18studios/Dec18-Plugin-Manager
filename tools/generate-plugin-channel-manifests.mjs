@@ -302,6 +302,7 @@ async function generateForConfig(configPath, releasesPath, managerRoot) {
     displayName: config.displayName,
     description: config.description || null,
     category: config.category || null,
+    licenseTier: config.licenseTier || null,
     tags: config.tags || [],
     infoUrl: config.infoUrl || null,
     version: currentStableRelease.version,

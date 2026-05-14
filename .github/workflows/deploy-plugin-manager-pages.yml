@@ -126,11 +126,15 @@ jobs:
         env:
           PROXY_BASE: ${{ vars.DOWNLOAD_PROXY_URL || 'https://dec18-download-proxy.dec18studios.workers.dev' }}
         run: |
-          # Rewrite browser_download_url in manifests to route through the proxy
-          # e.g. https://github.com/dec18studios/Repo/releases/download/v1.0/Asset.zip
-          #   → https://proxy/v1/dec18studios/Repo/releases/download/v1.0/Asset.zip
+          # Rewrite browser_download_url in manifests to route through the proxy.
+          # Free-tier plugins skip the proxy so users can download without a license token.
           for manifest in docs/plugins/*/stable.json docs/plugins/*/beta.json; do
             [ -f "$manifest" ] || continue
+            tier=$(node -e "try{const d=require('fs').readFileSync('$manifest','utf8'); console.log(JSON.parse(d).licenseTier||'')}catch{console.log('')}")
+            if [ "$tier" = "free" ]; then
+              echo "::notice::Skipping proxy rewrite for free plugin: $(basename $(dirname $manifest))/$(basename $manifest)"
+              continue
+            fi
             sed -i "s|https://github.com/\([^/]*/[^/]*/releases/download/[^\"]*\)|${PROXY_BASE}/v1/\1|g" "$manifest"
             echo "::notice::Rewrote download URLs in $(basename $(dirname $manifest))/$(basename $manifest)"
           done

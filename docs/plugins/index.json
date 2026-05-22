@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-08T22:40:34.718Z",
+  "generatedAt": "2026-05-22T19:25:00.000Z",
   "plugins": [
     {
       "pluginId": "dolby-vision-spoofer-dctl",
@@ -16,6 +16,14 @@
       "licenseTier": "free",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/film-negative-space-cst-dctl/stable.json",
       "category": "Film Emulation"
+    },
+    {
+      "pluginId": "grade-match",
+      "displayName": "GradeMatch",
+      "type": "OFX",
+      "licenseTier": "subscription",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/grade-match/stable.json",
+      "category": "Color Grading"
     },
     {
       "pluginId": "grain-by-greg-dctl",

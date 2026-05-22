@@ -68,6 +68,7 @@ jobs:
             "Resolve-Node-Toggler|resolve-node-toggler"
             "SplitToneX-OFX|split-tone-x-ofx"
             "Trim-Top-Bottom-DCTL|trim-top-bottom-dctl"
+            "GradeMatch-OFX|grade-match"
           )
 
           PROCESSED=0

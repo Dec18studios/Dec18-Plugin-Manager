@@ -4,6 +4,7 @@
   "releaseRepo": "Dec18studios/GradeMatch-OFX",
   "minManagerVersion": "0.1.0",
   "hostProcesses": ["Resolve", "DaVinci Resolve", "Fusion", "Fusion Studio", "Nuke", "NukeX", "NukeStudio", "Hiero"],
+  "requiredFamilies": ["macos", "windows", "linux"],
   "category": "Color Grading",
   "description": "Side-by-side grade-matching diagnostic: per-channel histograms with inverse-CDF contrast curves, vectorscope, patch sampler (manual 8-point and hue-cluster modes), and XYZ perceptual diff heatmap. Watermark rejection and percentile trim for handling demo footage.",
   "licenseTier": "subscription",

@@ -43,7 +43,7 @@
     },
     {
       "pluginId": "hue-contrast-compressor-ofx",
-      "displayName": "Hue Contrast Compressor OFX",
+      "displayName": "Contrast Sat Volume",
       "type": "OFX",
       "licenseTier": "subscription",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/hue-contrast-compressor-ofx/stable.json",

@@ -26,7 +26,7 @@
       "assetPattern": "IBKeymaster\\.ofx\\.(?:metal|Metal).*\\.zip$",
       "packageType": "zip",
       "bundleName": "IBKeymaster.ofx.bundle",
-      "bundleIdentifier": "com.dec18studios.IBKeymaster",
+      "bundleIdentifier": "com.gaffertools.IBKeymaster",
       "installPath": "/Library/OFX/Plugins"
     },
     {
@@ -36,7 +36,7 @@
       "assetPattern": "IBKeyer-Win64.*\\.zip$",
       "packageType": "zip",
       "bundleName": "IBKeymaster.ofx.bundle",
-      "bundleIdentifier": "com.dec18studios.IBKeymaster",
+      "bundleIdentifier": "com.gaffertools.IBKeymaster",
       "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins"
     },
     {
@@ -46,7 +46,7 @@
       "assetPattern": "IBKeyer-linux-x86_64.*\\.zip$",
       "packageType": "zip",
       "bundleName": "IBKeymaster.ofx.bundle",
-      "bundleIdentifier": "com.dec18studios.IBKeymaster",
+      "bundleIdentifier": "com.gaffertools.IBKeymaster",
       "installPath": "/usr/OFX/Plugins"
     }
   ]

@@ -973,23 +973,24 @@ button.primary.plugin-install-action:hover:not(:disabled) {
 }
 
 .version-picker-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  display: flex;
+  flex-direction: column;
   gap: 0.6rem;
-  align-items: end;
+  align-items: stretch;
 }
 
 .version-picker-actions {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  align-self: end;
+  flex-wrap: wrap;
 }
 
 .version-picker {
   display: grid;
   gap: 0.35rem;
-  min-width: min(440px, 100%);
+  min-width: 0;
+  width: 100%;
 }
 
 .version-picker select {
@@ -1005,6 +1006,11 @@ button.primary.plugin-install-action:hover:not(:disabled) {
 
 .rollback-info-button {
   flex-shrink: 0;
+}
+
+.version-picker-actions > button[data-action="install-selected"] {
+  flex: 1;
+  min-width: 0;
 }
 
 .version-picker span {
@@ -1410,14 +1416,6 @@ button.primary.plugin-install-action:hover:not(:disabled) {
   .version-drawer-preview-wrap {
     width: 100%;
     justify-content: space-between;
-  }
-
-  .version-picker {
-    min-width: 100%;
-  }
-
-  .version-picker-row {
-    grid-template-columns: 1fr;
   }
 
   .version-picker-actions {

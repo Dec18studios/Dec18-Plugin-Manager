@@ -503,7 +503,8 @@ async fn load_package_bytes(source: &str) -> Result<Vec<u8>> {
     let mut request = client.get(source);
 
     // Attach license token when downloading through the proxy
-    if source.contains(".workers.dev/") || source.contains("/v1/dec18studios/") {
+    let source_lower = source.to_ascii_lowercase();
+    if source_lower.contains(".workers.dev/") || source_lower.contains("/v1/dec18studios/") {
         if let Ok(license_data) = crate::license::load_licenses() {
             if let Some(token) = license_data.keys.first() {
                 request = request.header("Authorization", format!("Bearer {}", token));
@@ -576,6 +577,9 @@ fn normalize_process_name(value: &str) -> String {
 }
 
 fn verify_archive_hash(bytes: &[u8], expected: &str) -> Result<()> {
+    if expected.is_empty() {
+        return Ok(());
+    }
     let actual = hex::encode(Sha256::digest(bytes));
     if actual.eq_ignore_ascii_case(expected) {
         return Ok(());

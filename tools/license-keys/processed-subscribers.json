@@ -338,5 +338,14 @@
     "amount": "47.34",
     "tier": "annual",
     "key": "D18.eyJ0IjoiYW5udWFsIiwiZSI6InN0eXBhbGRvc0BnbWFpbC5jb20iLCJwIjpbIioiXSwiZXhwIjoxODExMzM4NzU2fQ.3OdWnDJ7aeoqhkxUJLPuxrBTU8yPeXEC-jLDXyLJbhAtAr21t6MnoD9OzW-48zYae4FzYMWBI4jGQyvwp9PJDg"
+  },
+  "adriano_oliveira@virtual.ufc.br": {
+    "processedAt": "2026-05-30T01:13:32.290Z",
+    "orderId": "6a1a3418d324aa314392c0e0",
+    "orderNumber": "51",
+    "name": "Adriano Oliveira",
+    "amount": "47.34",
+    "tier": "annual",
+    "key": "D18.eyJ0IjoiYW5udWFsIiwiZSI6ImFkcmlhbm9fb2xpdmVpcmFAdmlydHVhbC51ZmMuYnIiLCJwIjpbIioiXSwiZXhwIjoxODExNjM5NjExfQ.09la5XF95jCZmSpMYbtwH7qEZtvA9RiTnOBkyCnGsoo6jVM_3oPhw_vj2KxXIZ0j1KZstgPz3s44btGRHUTCBA"
   }
 }

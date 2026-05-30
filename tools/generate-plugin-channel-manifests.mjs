@@ -318,6 +318,14 @@ async function generateForConfig(configPath, releasesPath, managerRoot) {
     const currentBetaRelease = await buildReleaseFromGitHubRelease(config, betaGitHubReleases[0], {
       requireFamilies: true
     });
+    const availableBetaVersions = [];
+    for (const release of betaGitHubReleases.slice(1)) {
+      try {
+        availableBetaVersions.push(await buildReleaseFromGitHubRelease(config, release, { requireFamilies: false }));
+      } catch {
+        // skip releases with no matching assets
+      }
+    }
     betaManifest = {
       pluginId: config.pluginId,
       displayName: config.displayName,
@@ -330,7 +338,7 @@ async function generateForConfig(configPath, releasesPath, managerRoot) {
       releaseNotesUrl: currentBetaRelease.releaseNotesUrl,
       releaseHighlights: currentBetaRelease.releaseHighlights,
       platforms: currentBetaRelease.platforms,
-      availableVersions: []
+      availableVersions: availableBetaVersions
     };
   }
 

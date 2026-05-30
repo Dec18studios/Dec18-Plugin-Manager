@@ -288,13 +288,13 @@ async function generateForConfig(configPath, releasesPath, managerRoot) {
     requireFamilies: true
   });
 
-  const availableStableMarker = config.availableStableMarker || "manager-available-stable";
   const availableVersions = [];
   for (const release of stableGitHubReleases.slice(1)) {
-    if (!parseBooleanMarker(release.body || "", availableStableMarker)) {
-      continue;
+    try {
+      availableVersions.push(await buildReleaseFromGitHubRelease(config, release, { requireFamilies: false }));
+    } catch {
+      // skip releases with no matching assets (e.g. placeholder releases)
     }
-    availableVersions.push(await buildReleaseFromGitHubRelease(config, release, { requireFamilies: false }));
   }
 
   const stableManifest = {

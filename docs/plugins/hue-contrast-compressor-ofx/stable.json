@@ -1,24 +1,26 @@
 {
   "pluginId": "hue-contrast-compressor-ofx",
-  "displayName": "Hue Contrast Compressor OFX",
-  "description": "GPU-accelerated hue shift compression OFX plugin for DaVinci Resolve.",
-  "category": "Color",
+  "displayName": "Contrast Sat Volume",
+  "description": "OFX plugin that compresses hue shifts caused by contrast adjustments with full GPU acceleration.",
+  "category": "Color Grading",
+  "licenseTier": null,
   "tags": [
     "hue",
     "contrast",
-    "color",
-    "compression"
+    "OFX",
+    "color grading",
+    "GPU"
   ],
   "infoUrl": null,
-  "version": "1.0.0",
-  "releaseDate": "2026-04-08T22:07:11Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/Hue-Contrast-Compressor-OFX/releases/tag/v1.0.0",
+  "version": "1.0.1",
+  "releaseDate": "2026-05-26T23:19:38Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/Hue-Contrast-Compressor-OFX/releases/tag/v1.0.1",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://github.com/Dec18studios/Hue-Contrast-Compressor-OFX/releases/download/v1.0.0/Hue-Contrast-Compressor-OFX-v1.0.0-macOS-universal.zip",
-      "sha256": "f61502dcd3c78d7b3cbf8cd0d5d89c0f1db35be91284367f82ea2251b75a3288",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Hue-Contrast-Compressor-OFX/releases/download/v1.0.1/Hue-Contrast-Compressor-OFX-v1.0.1-macOS-universal.zip",
+      "sha256": "c28998982d474c7173eb15c63bc34ef9bb820e322d599489f63d8065cb89c4a8",
       "packageType": "zip",
       "bundleName": "ContrastSatVolume.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.ContrastSatVolume",
@@ -37,5 +39,35 @@
       ]
     }
   ],
-  "availableVersions": []
+  "availableVersions": [
+    {
+      "version": "1.0.0",
+      "releaseDate": "2026-04-08T22:07:11Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/Hue-Contrast-Compressor-OFX/releases/tag/v1.0.0",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Hue-Contrast-Compressor-OFX/releases/download/v1.0.0/Hue-Contrast-Compressor-OFX-v1.0.0-macOS-universal.zip",
+          "sha256": "f61502dcd3c78d7b3cbf8cd0d5d89c0f1db35be91284367f82ea2251b75a3288",
+          "packageType": "zip",
+          "bundleName": "ContrastSatVolume.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.ContrastSatVolume",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    }
+  ]
 }

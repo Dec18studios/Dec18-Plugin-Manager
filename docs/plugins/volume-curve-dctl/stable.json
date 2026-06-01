@@ -3,6 +3,7 @@
   "displayName": "Volume Curve",
   "description": "Color volume curve control for advanced color grading in DaVinci Resolve.",
   "category": "Color Grading",
+  "licenseTier": "free",
   "tags": [
     "volume",
     "curve",

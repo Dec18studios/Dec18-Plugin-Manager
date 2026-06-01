@@ -3,6 +3,7 @@
   "displayName": "Linear Ramp Diagnostic",
   "description": "Diagnostic DCTL that generates a linear ramp for testing and calibrating color pipelines.",
   "category": "Diagnostics",
+  "licenseTier": "free",
   "tags": [
     "diagnostic",
     "ramp",

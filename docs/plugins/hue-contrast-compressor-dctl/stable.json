@@ -3,6 +3,7 @@
   "displayName": "Hue Contrast Compressor",
   "description": "Compresses hue shifts caused by contrast adjustments, keeping colors clean through the tonal range.",
   "category": "Color Grading",
+  "licenseTier": null,
   "tags": [
     "hue",
     "contrast",
@@ -17,7 +18,7 @@
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://github.com/Dec18studios/Hue-Contrast-Compressor-DCTL/releases/download/v1.0.0/Hue-Contrast-Compressor-v1.0.0.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Hue-Contrast-Compressor-DCTL/releases/download/v1.0.0/Hue-Contrast-Compressor-v1.0.0.zip",
       "sha256": "f576868b5ac01716ceee8e3f287b2200a0e9e0ee91e3ab97c8de95950c83cc1e",
       "packageType": "zip",
       "bundleName": "GE Contrast Hue Compressor.dctle",
@@ -33,7 +34,7 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Hue-Contrast-Compressor-DCTL/releases/download/v1.0.0/Hue-Contrast-Compressor-v1.0.0.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Hue-Contrast-Compressor-DCTL/releases/download/v1.0.0/Hue-Contrast-Compressor-v1.0.0.zip",
       "sha256": "f576868b5ac01716ceee8e3f287b2200a0e9e0ee91e3ab97c8de95950c83cc1e",
       "packageType": "zip",
       "bundleName": "GE Contrast Hue Compressor.dctle",
@@ -49,7 +50,7 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Hue-Contrast-Compressor-DCTL/releases/download/v1.0.0/Hue-Contrast-Compressor-v1.0.0.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Hue-Contrast-Compressor-DCTL/releases/download/v1.0.0/Hue-Contrast-Compressor-v1.0.0.zip",
       "sha256": "f576868b5ac01716ceee8e3f287b2200a0e9e0ee91e3ab97c8de95950c83cc1e",
       "packageType": "zip",
       "bundleName": "GE Contrast Hue Compressor.dctle",

@@ -3,6 +3,7 @@
   "displayName": "Grain By Greg",
   "description": "Realistic film grain emulation DCTL with per-channel control and density response curves.",
   "category": "Film Emulation",
+  "licenseTier": null,
   "tags": [
     "grain",
     "film",
@@ -18,7 +19,7 @@
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://github.com/Dec18studios/Grain-By-Greg-DCTL/releases/download/v1.0.0/Grain-By-Greg-v1.0.0.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Grain-By-Greg-DCTL/releases/download/v1.0.0/Grain-By-Greg-v1.0.0.zip",
       "sha256": "7ab2a7eba71257260b97a488a4435e0e6a638bb615003226754105e0a601d395",
       "packageType": "zip",
       "bundleName": "GE Grain By Greg V5.dctle",
@@ -34,7 +35,7 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Grain-By-Greg-DCTL/releases/download/v1.0.0/Grain-By-Greg-v1.0.0.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Grain-By-Greg-DCTL/releases/download/v1.0.0/Grain-By-Greg-v1.0.0.zip",
       "sha256": "7ab2a7eba71257260b97a488a4435e0e6a638bb615003226754105e0a601d395",
       "packageType": "zip",
       "bundleName": "GE Grain By Greg V5.dctle",
@@ -50,7 +51,7 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Grain-By-Greg-DCTL/releases/download/v1.0.0/Grain-By-Greg-v1.0.0.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Grain-By-Greg-DCTL/releases/download/v1.0.0/Grain-By-Greg-v1.0.0.zip",
       "sha256": "7ab2a7eba71257260b97a488a4435e0e6a638bb615003226754105e0a601d395",
       "packageType": "zip",
       "bundleName": "GE Grain By Greg V5.dctle",

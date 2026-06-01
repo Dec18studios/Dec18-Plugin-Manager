@@ -3,6 +3,7 @@
   "displayName": "Trim Top Bottom",
   "description": "This tool carefully rolls off highlights or gives a little boost to the low end.. A simple trimmer tool before sending off to your DRT",
   "category": "Color Grading",
+  "licenseTier": null,
   "tags": [],
   "infoUrl": null,
   "version": "1.0.0",
@@ -12,7 +13,7 @@
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://github.com/Dec18studios/Trim-Top-Bottom-DCTL/releases/download/v1.0.0/Trim-Top-Bottom-DCTL-v1.0.0.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Trim-Top-Bottom-DCTL/releases/download/v1.0.0/Trim-Top-Bottom-DCTL-v1.0.0.zip",
       "sha256": "148185829e40fc1d559f1e02b9ff12b3a672b23dd51c4e6035b02197b4418c58",
       "packageType": "zip",
       "bundleName": "GE Trim Top Bottom.dctle",
@@ -28,7 +29,7 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Trim-Top-Bottom-DCTL/releases/download/v1.0.0/Trim-Top-Bottom-DCTL-v1.0.0.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Trim-Top-Bottom-DCTL/releases/download/v1.0.0/Trim-Top-Bottom-DCTL-v1.0.0.zip",
       "sha256": "148185829e40fc1d559f1e02b9ff12b3a672b23dd51c4e6035b02197b4418c58",
       "packageType": "zip",
       "bundleName": "GE Trim Top Bottom.dctle",
@@ -44,7 +45,7 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Trim-Top-Bottom-DCTL/releases/download/v1.0.0/Trim-Top-Bottom-DCTL-v1.0.0.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Trim-Top-Bottom-DCTL/releases/download/v1.0.0/Trim-Top-Bottom-DCTL-v1.0.0.zip",
       "sha256": "148185829e40fc1d559f1e02b9ff12b3a672b23dd51c4e6035b02197b4418c58",
       "packageType": "zip",
       "bundleName": "GE Trim Top Bottom.dctle",

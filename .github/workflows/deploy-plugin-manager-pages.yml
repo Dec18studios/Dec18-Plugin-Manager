@@ -70,6 +70,7 @@ jobs:
             "Trim-Top-Bottom-DCTL|trim-top-bottom-dctl"
             "GradeMatch-OFX|grade-match"
             "Hue-Inspector-DCTL|GE_hue_inspector_dctl"
+            "Color-Slicer-DCTL|GE_Color_Slicer"
           )
 
           PROCESSED=0

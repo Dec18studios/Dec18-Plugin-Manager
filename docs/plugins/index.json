@@ -141,6 +141,14 @@
       "licenseTier": "free",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/GE_hue_inspector_dctl/stable.json",
       "category": "Color Grading"
+    },
+    {
+      "pluginId": "GE_Color_Slicer",
+      "displayName": "Color Slicer",
+      "type": "DCTL",
+      "licenseTier": "free",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/GE_Color_Slicer/stable.json",
+      "category": "Color Grading"
     }
   ]
 }

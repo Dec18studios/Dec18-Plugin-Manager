@@ -1,0 +1,51 @@
+{
+  "pluginId": "GE_Color_Slicer",
+  "displayName": "Color Slicer",
+  "releaseRepo": "dec18studios/Color-Slicer-DCTL",
+  "minManagerVersion": "0.1.0",
+  "hostProcesses": [
+    "Resolve",
+    "DaVinci Resolve"
+  ],
+  "requiredFamilies": [
+    "universal"
+  ],
+  "category": "Color Grading",
+  "description": "6 vector control system to target your Saturation, Density, and Hue Rotations.",
+  "tags": [],
+  "assetRules": [
+    {
+      "family": "universal",
+      "platform": "macos",
+      "arch": "universal",
+      "assetPattern": "Color\\.Slicer\\.DCTL-?.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "GE Color Slicer.dctle",
+      "bundleIdentifier": "com.dec18studios.GE_Color_Slicer",
+      "installPath": "/Library/Application Support/Blackmagic Design/DaVinci Resolve/LUT/DCTL",
+      "installMode": "file-browse"
+    },
+    {
+      "family": "universal",
+      "platform": "windows",
+      "arch": "universal",
+      "assetPattern": "Color\\.Slicer\\.DCTL-?.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "GE Color Slicer.dctle",
+      "bundleIdentifier": "com.dec18studios.GE_Color_Slicer",
+      "installPath": "C:\\ProgramData\\Blackmagic Design\\DaVinci Resolve\\Support\\LUT\\DCTL",
+      "installMode": "file-browse"
+    },
+    {
+      "family": "universal",
+      "platform": "linux",
+      "arch": "universal",
+      "assetPattern": "Color\\.Slicer\\.DCTL-?.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "GE Color Slicer.dctle",
+      "bundleIdentifier": "com.dec18studios.GE_Color_Slicer",
+      "installPath": "/opt/resolve/LUT/DCTL",
+      "installMode": "file-browse"
+    }
+  ]
+}

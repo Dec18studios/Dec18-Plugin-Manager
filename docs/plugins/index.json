@@ -1,6 +1,14 @@
 {
-  "generatedAt": "2026-05-22T19:25:00.000Z",
+  "generatedAt": "2026-05-30T23:27:38.399Z",
   "plugins": [
+    {
+      "pluginId": "hue-contrast-compressor-ofx",
+      "displayName": "Contrast Sat Volume",
+      "type": "OFX",
+      "licenseTier": "subscription",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/hue-contrast-compressor-ofx/stable.json",
+      "category": "Color"
+    },
     {
       "pluginId": "dolby-vision-spoofer-dctl",
       "displayName": "Dolby Vision Spoofer",
@@ -40,14 +48,6 @@
       "licenseTier": "subscription",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/hue-contrast-compressor-dctl/stable.json",
       "category": "Color Grading"
-    },
-    {
-      "pluginId": "hue-contrast-compressor-ofx",
-      "displayName": "Contrast Sat Volume",
-      "type": "OFX",
-      "licenseTier": "subscription",
-      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/hue-contrast-compressor-ofx/stable.json",
-      "category": "Color"
     },
     {
       "pluginId": "ibkeymaster-ofx",
@@ -112,11 +112,19 @@
     },
     {
       "pluginId": "technicolor-drt-ofx",
-      "displayName": "Technicolor DRT OFX",
+      "displayName": "Technically Technicolor DRT",
       "type": "OFX",
       "licenseTier": "subscription",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/technicolor-drt-ofx/stable.json",
       "category": "Film Emulation"
+    },
+    {
+      "pluginId": "trim-top-bottom-dctl",
+      "displayName": "Trim Top Bottom",
+      "type": "DCTL",
+      "licenseTier": "subscription",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/trim-top-bottom-dctl/stable.json",
+      "category": "Color Grading"
     },
     {
       "pluginId": "volume-curve-dctl",
@@ -127,11 +135,11 @@
       "category": "Color Grading"
     },
     {
-      "pluginId": "trim-top-bottom-dctl",
-      "displayName": "Trim Top Bottom",
+      "pluginId": "GE_hue_inspector_dctl",
+      "displayName": "Hue Inspector",
       "type": "DCTL",
-      "licenseTier": "subscription",
-      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/trim-top-bottom-dctl/stable.json",
+      "licenseTier": "free",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/GE_hue_inspector_dctl/stable.json",
       "category": "Color Grading"
     }
   ]

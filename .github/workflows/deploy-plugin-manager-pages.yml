@@ -69,6 +69,7 @@ jobs:
             "SplitToneX-OFX|split-tone-x-ofx"
             "Trim-Top-Bottom-DCTL|trim-top-bottom-dctl"
             "GradeMatch-OFX|grade-match"
+            "Hue-Inspector-DCTL|GE_hue_inspector_dctl"
           )
 
           PROCESSED=0

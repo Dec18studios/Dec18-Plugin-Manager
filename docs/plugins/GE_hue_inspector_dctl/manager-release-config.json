@@ -1,0 +1,51 @@
+{
+  "pluginId": "GE_hue_inspector_dctl",
+  "displayName": "Hue Inspector",
+  "releaseRepo": "dec18studios/Hue-Inspector-DCTL",
+  "minManagerVersion": "0.1.0",
+  "hostProcesses": [
+    "Resolve",
+    "DaVinci Resolve"
+  ],
+  "requiredFamilies": [
+    "universal"
+  ],
+  "category": "Color Grading",
+  "description": "This tool highlights hue vector for easy diagnosing.  Primarely used for checking skin tones.",
+  "tags": [],
+  "assetRules": [
+    {
+      "family": "universal",
+      "platform": "macos",
+      "arch": "universal",
+      "assetPattern": "Hue-Inspector-DCTL.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "GE Hue Inspector.dctle",
+      "bundleIdentifier": "com.dec18studios.GE_hue_inspector_dctl",
+      "installPath": "/Library/Application Support/Blackmagic Design/DaVinci Resolve/LUT/DCTL",
+      "installMode": "file-browse"
+    },
+    {
+      "family": "universal",
+      "platform": "windows",
+      "arch": "universal",
+      "assetPattern": "Hue-Inspector-DCTL.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "GE Hue Inspector.dctle",
+      "bundleIdentifier": "com.dec18studios.GE_hue_inspector_dctl",
+      "installPath": "C:\\ProgramData\\Blackmagic Design\\DaVinci Resolve\\Support\\LUT\\DCTL",
+      "installMode": "file-browse"
+    },
+    {
+      "family": "universal",
+      "platform": "linux",
+      "arch": "universal",
+      "assetPattern": "Hue-Inspector-DCTL.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "GE Hue Inspector.dctle",
+      "bundleIdentifier": "com.dec18studios.GE_hue_inspector_dctl",
+      "installPath": "/opt/resolve/LUT/DCTL",
+      "installMode": "file-browse"
+    }
+  ]
+}

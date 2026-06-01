@@ -1,22 +1,31 @@
 {
   "pluginId": "photochemist",
-  "displayName": "PhotoChemist",
-  "type": "ofx",
-  "version": "1.0.0",
-  "releaseDate": "2026-04-03T00:00:00Z",
-  "releaseNotesUrl": "https://github.com/dec18studios/PhotoChemist-OFX/releases/tag/v1.0.0",
-  "releaseHighlights": "- 43-band spectral film emulation engine\n- Multiple film stock presets\n- Full GPU acceleration (CUDA, Metal, OpenCL)\n- Status M densitometry",
-  "infoUrl": "https://dec18studios.com/photochemist",
+  "displayName": "PhotoChemist DRT",
+  "description": "43-band spectral film emulation engine with multiple film stock presets and full GPU acceleration.",
+  "category": "Film Emulation",
+  "licenseTier": null,
+  "tags": [
+    "film",
+    "spectral",
+    "DRT",
+    "emulation",
+    "OFX"
+  ],
+  "infoUrl": null,
+  "version": "2.0.1",
+  "releaseDate": "2026-05-31T15:16:36Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v2.0.1",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://github.com/dec18studios/PhotoChemist-OFX/releases/download/v1.0.0/PhotoChemist_v1.0.0_macOS_universal.zip",
-      "sha256": "REPLACE_WITH_ACTUAL_SHA256",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v2.0.1/PhotoChemist_v2.0.1_macOS_universal_portable.zip",
+      "sha256": "fe60b84d8783fe0de363c5caffb9da1d4ad3b890bf75230262fa0e0fa3c0166e",
       "packageType": "zip",
       "bundleName": "PhotoChemist.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.PhotoChemist",
       "installPath": "/Library/OFX/Plugins",
+      "installMode": "bundle",
       "minManagerVersion": "0.1.0",
       "hostProcesses": [
         "Resolve",
@@ -32,12 +41,13 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/dec18studios/PhotoChemist-OFX/releases/download/v1.0.0/PhotoChemist_v1.0.0_windows_x86_64.zip",
-      "sha256": "REPLACE_WITH_ACTUAL_SHA256",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v2.0.1/PhotoChemist_v2.0.1_windows_cuda_portable.zip",
+      "sha256": "2bad3dd01c7b865a4f5bbbe4d3c41bab71431d9b5a1e2b9e416087b8823a5924",
       "packageType": "zip",
       "bundleName": "PhotoChemist.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.PhotoChemist",
       "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+      "installMode": "bundle",
       "minManagerVersion": "0.1.0",
       "hostProcesses": [
         "Resolve",
@@ -53,12 +63,13 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/dec18studios/PhotoChemist-OFX/releases/download/v1.0.0/PhotoChemist_v1.0.0_linux_x86_64.tar.gz",
-      "sha256": "REPLACE_WITH_ACTUAL_SHA256",
-      "packageType": "tar.gz",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v2.0.1/PhotoChemist_v2.0.1_linux_cuda_portable.zip",
+      "sha256": "59ab160b8b826557526a8b95da8a34c31415620325ac4d08a189317dd2a119c3",
+      "packageType": "zip",
       "bundleName": "PhotoChemist.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.PhotoChemist",
       "installPath": "/usr/OFX/Plugins",
+      "installMode": "bundle",
       "minManagerVersion": "0.1.0",
       "hostProcesses": [
         "Resolve",
@@ -72,5 +83,79 @@
       ]
     }
   ],
-  "availableVersions": []
+  "availableVersions": [
+    {
+      "version": "2.0.0",
+      "releaseDate": "2026-04-08T14:25:45Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v2.0.0",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v2.0.0/PhotoChemist_v2.0.0_macOS_universal_portable.zip",
+          "sha256": "fe60b84d8783fe0de363c5caffb9da1d4ad3b890bf75230262fa0e0fa3c0166e",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v2.0.0/PhotoChemist_v2.0.0_windows_cuda_portable.zip",
+          "sha256": "b6077869cf27938083784952ba1eb8a43470c5e9e670a160cea4409be0fee820",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v2.0.0/PhotoChemist_v2.0.0_linux_cuda_portable.zip",
+          "sha256": "406d229f0aa91dd7d634826a8aa81e7f43df7d19acf7687a2a052b7375ff3c51",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    }
+  ]
 }

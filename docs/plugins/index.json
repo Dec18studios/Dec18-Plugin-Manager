@@ -1,13 +1,21 @@
 {
-  "generatedAt": "2026-05-30T23:27:38.399Z",
+  "generatedAt": "2026-06-01T20:49:35.510Z",
   "plugins": [
+    {
+      "pluginId": "GE_Color_Slicer",
+      "displayName": "Color Slicer",
+      "type": "DCTL",
+      "licenseTier": "free",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/GE_Color_Slicer/stable.json",
+      "category": "Color Grading"
+    },
     {
       "pluginId": "hue-contrast-compressor-ofx",
       "displayName": "Contrast Sat Volume",
       "type": "OFX",
       "licenseTier": "subscription",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/hue-contrast-compressor-ofx/stable.json",
-      "category": "Color"
+      "category": "Color Grading"
     },
     {
       "pluginId": "dolby-vision-spoofer-dctl",
@@ -50,6 +58,14 @@
       "category": "Color Grading"
     },
     {
+      "pluginId": "GE_hue_inspector_dctl",
+      "displayName": "Hue Inspector",
+      "type": "DCTL",
+      "licenseTier": "free",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/GE_hue_inspector_dctl/stable.json",
+      "category": "Color Grading"
+    },
+    {
       "pluginId": "ibkeymaster-ofx",
       "displayName": "IBKeymaster",
       "type": "OFX",
@@ -75,17 +91,19 @@
     },
     {
       "pluginId": "photochemist",
-      "displayName": "PhotoChemist",
+      "displayName": "PhotoChemist DRT",
       "type": "OFX",
       "licenseTier": "subscription",
-      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/photochemist/stable.json"
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/photochemist/stable.json",
+      "category": "Film Emulation"
     },
     {
       "pluginId": "resolve-node-toggler",
       "displayName": "Resolve Node Toggler",
       "type": "App",
       "licenseTier": "free",
-      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/resolve-node-toggler/stable.json"
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/resolve-node-toggler/stable.json",
+      "category": "Workflow"
     },
     {
       "pluginId": "rgb-chips-dctl",
@@ -132,22 +150,6 @@
       "type": "DCTL",
       "licenseTier": "free",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/volume-curve-dctl/stable.json",
-      "category": "Color Grading"
-    },
-    {
-      "pluginId": "GE_hue_inspector_dctl",
-      "displayName": "Hue Inspector",
-      "type": "DCTL",
-      "licenseTier": "free",
-      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/GE_hue_inspector_dctl/stable.json",
-      "category": "Color Grading"
-    },
-    {
-      "pluginId": "GE_Color_Slicer",
-      "displayName": "Color Slicer",
-      "type": "DCTL",
-      "licenseTier": "free",
-      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/GE_Color_Slicer/stable.json",
       "category": "Color Grading"
     }
   ]

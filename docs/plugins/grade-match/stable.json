@@ -1,0 +1,234 @@
+{
+  "pluginId": "grade-match",
+  "displayName": "GradeMatch",
+  "description": "Side-by-side grade-matching diagnostic: per-channel histograms with inverse-CDF contrast curves, vectorscope, patch sampler (manual 8-point and hue-cluster modes), and XYZ perceptual diff heatmap. Watermark rejection and percentile trim for handling demo footage.",
+  "category": "Color Grading",
+  "licenseTier": "subscription",
+  "tags": [
+    "grade match",
+    "histogram",
+    "vectorscope",
+    "diagnostic",
+    "OFX"
+  ],
+  "infoUrl": null,
+  "version": "0.2.1",
+  "releaseDate": "2026-05-28T12:50:50Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/GradeMatch-OFX/releases/tag/v0.2.1",
+  "platforms": [
+    {
+      "platform": "macos",
+      "arch": "universal",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/GradeMatch-OFX/releases/download/v0.2.1/GradeMatch_v0.2.1_macOS_universal_portable.zip",
+      "sha256": "8a0cb383bc47fafbff33051daa1e4ae33e40256ad739d35f8613bcbbb0a43a6b",
+      "packageType": "zip",
+      "bundleName": "GradeMatch.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.GradeMatch",
+      "installPath": "/Library/OFX/Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    },
+    {
+      "platform": "windows",
+      "arch": "x86_64",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/GradeMatch-OFX/releases/download/v0.2.1/GradeMatch_v0.2.1_windows_portable.zip",
+      "sha256": "f9e20771f35f061284a64060ef4d8166c82462d3e0e4d56a81ef3048c69f098a",
+      "packageType": "zip",
+      "bundleName": "GradeMatch.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.GradeMatch",
+      "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    },
+    {
+      "platform": "linux",
+      "arch": "x86_64",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/GradeMatch-OFX/releases/download/v0.2.1/GradeMatch_v0.2.1_linux_portable.zip",
+      "sha256": "52bbc49c0212c9b7b3865e0cdf22d0729e5c36352ed052a72e40a79d200de006",
+      "packageType": "zip",
+      "bundleName": "GradeMatch.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.GradeMatch",
+      "installPath": "/usr/OFX/Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    }
+  ],
+  "availableVersions": [
+    {
+      "version": "0.2.0",
+      "releaseDate": "2026-05-27T23:38:50Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/GradeMatch-OFX/releases/tag/v0.2.0",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/GradeMatch-OFX/releases/download/v0.2.0/GradeMatch_v0.2.0_macOS_universal_portable.zip",
+          "sha256": "6967b045cabb9aee92cb2381bc0dba8c7a6b638f94fbd40c42a06a000dd81b55",
+          "packageType": "zip",
+          "bundleName": "GradeMatch.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.GradeMatch",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/GradeMatch-OFX/releases/download/v0.2.0/GradeMatch_v0.2.0_windows_portable.zip",
+          "sha256": "df3e9870dd7cc3bee0313212e54f112f4f234296bf8c9667daf07329c13711c5",
+          "packageType": "zip",
+          "bundleName": "GradeMatch.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.GradeMatch",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/GradeMatch-OFX/releases/download/v0.2.0/GradeMatch_v0.2.0_linux_portable.zip",
+          "sha256": "e826e3f61b294c226b06e3a335e5b23eef1fd14dafff207fa02a3309682fe6bc",
+          "packageType": "zip",
+          "bundleName": "GradeMatch.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.GradeMatch",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.1.2",
+      "releaseDate": "2026-05-22T19:19:33Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/GradeMatch-OFX/releases/tag/v0.1.2",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/GradeMatch-OFX/releases/download/v0.1.2/GradeMatch_v0.1.2_macOS_universal_portable.zip",
+          "sha256": "fc5c27012022ce537c0cc76dc90bc3194f345dd38834ccda22174b9737bb3692",
+          "packageType": "zip",
+          "bundleName": "GradeMatch.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.GradeMatch",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/GradeMatch-OFX/releases/download/v0.1.2/GradeMatch_v0.1.2_windows_portable.zip",
+          "sha256": "37217954a21e80ba1a529c51d49a031091b9830012a4d3e7c21220c01faae7c9",
+          "packageType": "zip",
+          "bundleName": "GradeMatch.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.GradeMatch",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/GradeMatch-OFX/releases/download/v0.1.2/GradeMatch_v0.1.2_linux_portable.zip",
+          "sha256": "dfa2599a480bec24c6fce86a079082d09ca380af6f2c5d9f467f70d00023c236",
+          "packageType": "zip",
+          "bundleName": "GradeMatch.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.GradeMatch",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    }
+  ]
+}

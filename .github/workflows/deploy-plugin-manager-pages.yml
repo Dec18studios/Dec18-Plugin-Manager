@@ -18,7 +18,7 @@ on:
       - ".github/workflows/deploy-plugin-manager-pages.yml"
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -141,6 +141,17 @@ jobs:
             sed -i "s|https://github.com/\([^/]*/[^/]*/releases/download/[^\"]*\)|${PROXY_BASE}/v1/\1|g" "$manifest"
             echo "::notice::Rewrote download URLs in $(basename $(dirname $manifest))/$(basename $manifest)"
           done
+
+      - name: Commit generated manifests back to repo
+        run: |
+          git config user.name "catalog-bot"
+          git config user.email "noreply@dec18studios.com"
+          git add docs/plugins/*/stable.json docs/plugins/*/beta.json docs/plugins/index.json 2>/dev/null || true
+          git diff --cached --quiet || git commit -m "chore: update plugin manifests [skip ci]"
+          git pull --rebase origin main
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Prepare Pages content
         run: |

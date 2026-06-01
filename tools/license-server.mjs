@@ -873,8 +873,24 @@ jobs:
   res.end("Not found");
 });
 
+function gitSync() {
+  try {
+    execSync("git stash", { cwd: REPO_ROOT, stdio: "pipe" });
+    try {
+      execSync("git pull --rebase origin main", { cwd: REPO_ROOT, stdio: "pipe" });
+      console.log("[sync] Pulled latest from GitHub");
+    } finally {
+      try { execSync("git stash pop", { cwd: REPO_ROOT, stdio: "pipe" }); } catch {}
+    }
+  } catch (err) {
+    console.warn(`[sync] git pull failed: ${err.stderr?.toString().trim() || err.message}`);
+  }
+}
+
 server.listen(PORT, "127.0.0.1", () => {
   const url = `http://localhost:${PORT}`;
+  gitSync();
+  setInterval(gitSync, 60_000);
   console.log(`License Manager running at ${url}`);
   try { execSync(`open "${url}"`); } catch {}
 });

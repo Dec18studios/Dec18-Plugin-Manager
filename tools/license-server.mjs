@@ -490,8 +490,13 @@ const server = createServer(async (req, res) => {
           `git -c user.name="Greg Enright" -c user.email="g.enright47@gmail.com" commit -m "feat: add ${displayName} plugin"`,
           { cwd: REPO_ROOT, stdio: "pipe" }
         );
-        execSync("git pull --rebase origin main", { cwd: REPO_ROOT, stdio: "pipe" });
-        execSync("git push", { cwd: REPO_ROOT, stdio: "pipe" });
+        execSync("git stash", { cwd: REPO_ROOT, stdio: "pipe" });
+        try {
+          execSync("git pull --rebase origin main", { cwd: REPO_ROOT, stdio: "pipe" });
+          execSync("git push", { cwd: REPO_ROOT, stdio: "pipe" });
+        } finally {
+          try { execSync("git stash pop", { cwd: REPO_ROOT, stdio: "pipe" }); } catch {}
+        }
       }
     } catch (err) {
       pushError = err.stderr?.toString().trim() || err.message;

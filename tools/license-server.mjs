@@ -381,7 +381,7 @@ const server = createServer(async (req, res) => {
 
     const safeRepo    = repoName  || pluginId;
     const safeTier    = licenseTier || "subscription";
-    const safePattern = assetPattern || `${displayName.replace(/\s+/g, ".")}.*\\.zip$`;
+    const safePattern = assetPattern || `${safeRepo}.*\\.zip$`;
     const safeBundle  = bundleName  || (type === "DCTL" ? `${displayName}.dctle` : `${displayName}.ofx.bundle`);
     const bundleId    = `com.dec18studios.${pluginId}`;
 
@@ -401,9 +401,9 @@ const server = createServer(async (req, res) => {
     } else {
       const ext = type === "App" ? ".tar.gz" : ".ofx.bundle";
       assetRules = [
-        { family:"macos",   platform:"macos",   arch:"universal", assetPattern:`${displayName.replace(/\s/g,"")}.*macOS.*universal.*\\.zip$`,        packageType:"zip",    bundleName:safeBundle, bundleIdentifier:bundleId, installPath:"/Library/OFX/Plugins" },
-        { family:"windows", platform:"windows", arch:"x86_64",    assetPattern:`${displayName.replace(/\s/g,"")}.*[Ww]indows.*x86_64.*\\.zip$`,      packageType:"zip",    bundleName:safeBundle, bundleIdentifier:bundleId, installPath:"C:\\Program Files\\Common Files\\OFX\\Plugins" },
-        { family:"linux",   platform:"linux",   arch:"x86_64",    assetPattern:`${displayName.replace(/\s/g,"")}.*linux.*x86_64.*\\.tar\\.gz$`,      packageType:"tar.gz", bundleName:safeBundle, bundleIdentifier:bundleId, installPath:"/usr/OFX/Plugins" },
+        { family:"macos",   platform:"macos",   arch:"universal", assetPattern:`${safeRepo}.*macOS.*universal.*\\.zip$`,   packageType:"zip",    bundleName:safeBundle, bundleIdentifier:bundleId, installPath:"/Library/OFX/Plugins" },
+        { family:"windows", platform:"windows", arch:"x86_64",    assetPattern:`${safeRepo}.*[Ww]indows.*\\.zip$`,         packageType:"zip",    bundleName:safeBundle, bundleIdentifier:bundleId, installPath:"C:\\Program Files\\Common Files\\OFX\\Plugins" },
+        { family:"linux",   platform:"linux",   arch:"x86_64",    assetPattern:`${safeRepo}.*linux.*\\.zip$`,              packageType:"zip",    bundleName:safeBundle, bundleIdentifier:bundleId, installPath:"/usr/OFX/Plugins" },
       ];
     }
 
@@ -477,7 +477,28 @@ const server = createServer(async (req, res) => {
       }
     }
 
-    json(res, 200, { ok: true, pluginId, config, alreadyInIndex, workflowPatched, repoCreated, repoError });
+    // Commit and push all changes to GitHub
+    let pushError = null;
+    try {
+      execSync(
+        `git add docs/plugins/${pluginId}/ docs/plugins/index.json .github/workflows/deploy-plugin-manager-pages.yml`,
+        { cwd: REPO_ROOT, stdio: "pipe" }
+      );
+      const staged = execSync("git diff --cached --name-only", { cwd: REPO_ROOT, stdio: "pipe" }).toString().trim();
+      if (staged) {
+        execSync(
+          `git -c user.name="Greg Enright" -c user.email="g.enright47@gmail.com" commit -m "feat: add ${displayName} plugin"`,
+          { cwd: REPO_ROOT, stdio: "pipe" }
+        );
+        execSync("git pull --rebase origin main", { cwd: REPO_ROOT, stdio: "pipe" });
+        execSync("git push", { cwd: REPO_ROOT, stdio: "pipe" });
+      }
+    } catch (err) {
+      pushError = err.stderr?.toString().trim() || err.message;
+      console.error("Auto-push failed:", pushError);
+    }
+
+    json(res, 200, { ok: true, pluginId, config, alreadyInIndex, workflowPatched, repoCreated, repoError, pushError });
     return;
   }
 

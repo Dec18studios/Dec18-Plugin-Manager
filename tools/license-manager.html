@@ -108,6 +108,16 @@ td{padding:10px 14px;font-size:.85rem;vertical-align:middle}
 .error-banner code{display:block;margin-top:8px;font-size:.85rem;color:var(--text)}
 .result-box{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:12px;font-size:.8rem;color:var(--text-muted);margin-bottom:14px;line-height:1.7}
 .result-box .ok{color:var(--green)}.result-box .warn{color:var(--yellow)}.result-box .err{color:var(--accent)}
+/* ── Website tab ── */
+.site-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.site-card-header{display:flex;align-items:center;gap:8px}
+.site-color-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.site-plugin-id{font-size:.7rem;font-family:"SF Mono","Fira Code",monospace;color:var(--text-muted)}
+.site-field{display:flex;flex-direction:column;gap:3px}
+.site-field label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted)}
+.site-field input,.site-field textarea{background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:.84rem;padding:5px 8px;width:100%;box-sizing:border-box;font-family:inherit;resize:vertical;outline:none}
+.site-field textarea{min-height:56px}
+.site-field input:focus,.site-field textarea:focus{border-color:var(--accent)}
 </style>
 </head>
 <body>
@@ -117,6 +127,7 @@ td{padding:10px 14px;font-size:.85rem;vertical-align:middle}
 <div class="tabs">
   <button class="tab active" data-tab="licenses">Licenses</button>
   <button class="tab" data-tab="plugins">Plugin Catalog</button>
+  <button class="tab" data-tab="website">Website Tools</button>
 </div>
 
 <!-- ═══════════════════════════════════════ LICENSES PANEL ═══ -->
@@ -158,6 +169,22 @@ td{padding:10px 14px;font-size:.85rem;vertical-align:middle}
       </tr></thead>
       <tbody id="plugTableBody"></tbody>
     </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ WEBSITE PANEL ═══ -->
+<div id="panel-website" class="panel">
+  <div id="siteLoadingScreen" class="loading"><div class="spinner"></div><p>Loading website tools&hellip;</p></div>
+  <div id="siteErrorScreen" style="display:none;"></div>
+  <div id="siteMainApp" style="display:none;">
+    <div class="toolbar" style="margin-bottom:20px;">
+      <span style="color:var(--text-muted);font-size:.85rem;flex:1;" id="siteToolbarLabel">Edit tool cards shown on the public website</span>
+      <span id="siteResultMsg" style="font-size:.82rem;"></span>
+      <button class="btn-secondary" id="btnSiteReload">&#x21BB; Reload</button>
+      <button class="btn-secondary" id="btnSiteSave">Save</button>
+      <button class="btn-green" id="btnSitePublish">&#x2197; Publish to Website</button>
+    </div>
+    <div id="siteGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px;"></div>
   </div>
 </div>
 
@@ -1011,6 +1038,105 @@ document.getElementById("btnAddPluginSubmit").addEventListener("click",async fun
     }
   }catch(err){errEl.textContent="Error: "+err.message;errEl.style.display="block";}
   finally{btn.disabled=false;if(btn.style.display!=="none")btn.textContent="Create Plugin";}
+});
+
+// ═══════════════════════════════════════════════════
+// WEBSITE TAB
+// ═══════════════════════════════════════════════════
+var siteTools = [], siteLoaded = false;
+
+async function loadWebsiteTools(force) {
+  if (siteLoaded && !force) return;
+  document.getElementById("siteLoadingScreen").style.display = "";
+  document.getElementById("siteMainApp").style.display = "none";
+  document.getElementById("siteErrorScreen").style.display = "none";
+  try {
+    var res = await fetch("/api/website-tools");
+    if (!res.ok) throw new Error("Server error " + res.status);
+    siteTools = await res.json();
+    siteLoaded = true;
+    renderSiteTools();
+  } catch(err) {
+    document.getElementById("siteLoadingScreen").style.display = "none";
+    var errEl = document.getElementById("siteErrorScreen");
+    errEl.style.display = "";
+    errEl.innerHTML = "<div class='error-banner'>Failed to load website tools<code>" + escapeHtml(err.message) + "</code></div>";
+  }
+}
+
+function renderSiteTools() {
+  document.getElementById("siteLoadingScreen").style.display = "none";
+  document.getElementById("siteMainApp").style.display = "";
+  var grid = document.getElementById("siteGrid");
+  grid.innerHTML = "";
+  siteTools.forEach(function(tool, i) {
+    var card = document.createElement("div");
+    card.className = "site-card";
+    card.innerHTML =
+      "<div class='site-card-header'>" +
+        "<div class='site-color-dot' style='background:" + escapeAttr(tool.color) + "'></div>" +
+        "<span class='site-plugin-id'>" + escapeHtml(tool.pluginId) + "</span>" +
+      "</div>" +
+      "<div class='site-field'><label>Name</label><input type='text' data-i='" + i + "' data-f='name' value='" + escapeAttr(tool.name) + "'></div>" +
+      "<div class='site-field'><label>Description</label><textarea data-i='" + i + "' data-f='desc'>" + escapeHtml(tool.desc) + "</textarea></div>" +
+      "<div class='site-field'><label>Link URL (optional)</label><input type='url' data-i='" + i + "' data-f='url' value='" + escapeAttr(tool.url || "") + "' placeholder='https://…'></div>";
+    card.querySelectorAll("[data-f]").forEach(function(el) {
+      el.addEventListener("input", function() {
+        var idx = parseInt(el.dataset.i);
+        var field = el.dataset.f;
+        var val = el.value.trim();
+        if (field === "url") { if (val) siteTools[idx].url = val; else delete siteTools[idx].url; }
+        else { siteTools[idx][field] = val; }
+      });
+    });
+    grid.appendChild(card);
+  });
+}
+
+function setSiteResult(msg, isError) {
+  var el = document.getElementById("siteResultMsg");
+  el.textContent = msg;
+  el.style.color = isError ? "var(--accent)" : "var(--green)";
+}
+
+document.getElementById("btnSiteReload").addEventListener("click", function() { loadWebsiteTools(true); });
+
+document.getElementById("btnSiteSave").addEventListener("click", async function() {
+  try {
+    var res = await fetch("/api/website-tools", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(siteTools) });
+    var data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Server error");
+    setSiteResult("Saved.", false);
+    showToast("Website tools saved");
+  } catch(err) {
+    setSiteResult(err.message, true);
+    showToast(err.message, true);
+  }
+});
+
+document.getElementById("btnSitePublish").addEventListener("click", async function() {
+  var btn = this;
+  btn.disabled = true;
+  setSiteResult("Publishing…", false);
+  try {
+    var res = await fetch("/api/website-tools/publish", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(siteTools) });
+    var data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Server error");
+    setSiteResult(data.message, false);
+    showToast(data.message);
+  } catch(err) {
+    setSiteResult(err.message, true);
+    showToast(err.message, true);
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+// Wire up website tab load on first click
+document.querySelectorAll(".tab").forEach(function(tab) {
+  tab.addEventListener("click", function() {
+    if (tab.dataset.tab === "website" && !siteLoaded) loadWebsiteTools(false);
+  });
 });
 
 // ═══════════════════════════════════════════════════

@@ -868,6 +868,74 @@ jobs:
     return;
   }
 
+  // ── GET /api/website-tools — load docs/website-tools.json ──
+  if (url.pathname === "/api/website-tools" && req.method === "GET") {
+    const p = join(REPO_ROOT, "docs", "website-tools.json");
+    json(res, 200, loadJSON(p, []));
+    return;
+  }
+
+  // ── POST /api/website-tools — save docs/website-tools.json ──
+  if (url.pathname === "/api/website-tools" && req.method === "POST") {
+    let body;
+    try { body = JSON.parse(await readBody(req)); }
+    catch { json(res, 400, { error: "Invalid JSON" }); return; }
+    if (!Array.isArray(body)) { json(res, 400, { error: "Expected array" }); return; }
+    const p = join(REPO_ROOT, "docs", "website-tools.json");
+    saveJSON(p, body);
+    json(res, 200, { ok: true });
+    return;
+  }
+
+  // ── POST /api/website-tools/publish — save + generate tools.json + git push pages repo ──
+  if (url.pathname === "/api/website-tools/publish" && req.method === "POST") {
+    let body;
+    try { body = JSON.parse(await readBody(req)); }
+    catch { json(res, 400, { error: "Invalid JSON" }); return; }
+    if (!Array.isArray(body)) { json(res, 400, { error: "Expected array" }); return; }
+
+    // Save website-tools.json
+    const webToolsPath = join(REPO_ROOT, "docs", "website-tools.json");
+    saveJSON(webToolsPath, body);
+
+    // Resolve pages repo
+    const pagesRoot = join(REPO_ROOT, "..", "..", "dec18studios.github.io");
+    if (!existsSync(pagesRoot)) {
+      json(res, 400, { error: `Pages repo not found at ${pagesRoot}. Clone dec18studios.github.io alongside Other Scripts first.` });
+      return;
+    }
+
+    const outputPath = join(pagesRoot, "color-grading-tools", "tools.json");
+
+    try {
+      // Run generate script
+      const genResult = execSync(
+        `node tools/generate-tools-json.mjs --manager-root . --output ${JSON.stringify(outputPath)}`,
+        { cwd: REPO_ROOT, stdio: "pipe" }
+      );
+      console.log("[website] generate:", genResult.toString().trim());
+
+      // Git add + commit + push in pages repo
+      execSync("git add color-grading-tools/tools.json", { cwd: pagesRoot, stdio: "pipe" });
+      let pushed = false;
+      try {
+        execSync(
+          `git -c user.name="Greg Enright" -c user.email="create@dec18studios.com" commit -m "Update tools listing from plugin manager"`,
+          { cwd: pagesRoot, stdio: "pipe" }
+        );
+        execSync("git push", { cwd: pagesRoot, stdio: "pipe" });
+        pushed = true;
+      } catch (commitErr) {
+        const msg = commitErr.stdout?.toString() + commitErr.stderr?.toString();
+        if (!msg.includes("nothing to commit")) throw commitErr;
+      }
+      json(res, 200, { ok: true, message: pushed ? "Website updated and pushed to GitHub." : "No changes — tools.json is already up to date." });
+    } catch (err) {
+      json(res, 500, { error: err.stderr?.toString().trim() || err.stdout?.toString().trim() || err.message });
+    }
+    return;
+  }
+
   // ── 404 ──
   res.writeHead(404, { "Content-Type": "text/plain" });
   res.end("Not found");

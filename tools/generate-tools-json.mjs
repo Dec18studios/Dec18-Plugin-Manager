@@ -39,7 +39,7 @@ const WEB_MAP = [
   {
     pluginId: "GE_Color_Slicer",
     slug: "colorslice", color: "blue",
-    name: "Color Slice O'matic",
+    name: "Color Slicer",
     desc: "Slice the image into color regions for precise, targeted grading.",
   },
   {

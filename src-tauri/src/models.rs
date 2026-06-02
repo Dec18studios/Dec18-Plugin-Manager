@@ -340,6 +340,18 @@ fn classify_error<'a>(operation: &'a str, message: &'a str, details: &'a str) ->
     ("operation_failed", "The plugin operation could not be completed.")
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct WebsiteTool {
+    pub plugin_id: String,
+    pub slug: String,
+    pub color: String,
+    pub name: String,
+    pub desc: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+}
+
 fn escape_json_string(raw: &str) -> String {
     raw.replace('\\', "\\\\")
         .replace('"', "\\\"")

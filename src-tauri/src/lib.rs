@@ -3,6 +3,7 @@ mod installer;
 mod license;
 mod models;
 mod settings;
+mod website;
 
 use tauri::Manager;
 use tauri_plugin_dialog::DialogExt;
@@ -106,6 +107,24 @@ async fn pick_folder(app: tauri::AppHandle, start_path: Option<String>) -> Resul
     Ok(selected.map(|p| p.to_string()))
 }
 
+#[tauri::command]
+async fn get_website_tools() -> Result<Vec<models::WebsiteTool>, String> {
+    website::load_website_tools()
+        .map_err(|error| models::UiError::from_error("website", &error).to_json_string())
+}
+
+#[tauri::command]
+async fn save_website_tools(tools: Vec<models::WebsiteTool>) -> Result<(), String> {
+    website::save_website_tools(&tools)
+        .map_err(|error| models::UiError::from_error("website", &error).to_json_string())
+}
+
+#[tauri::command]
+async fn publish_website_tools(tools: Vec<models::WebsiteTool>) -> Result<String, String> {
+    website::publish_website_tools(&tools)
+        .map_err(|error| models::UiError::from_error("website_publish", &error).to_json_string())
+}
+
 pub fn run() {
     let builder = tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
@@ -131,7 +150,10 @@ pub fn run() {
             set_dctl_install_path,
             get_plugin_install_path,
             set_plugin_install_path,
-            pick_folder
+            pick_folder,
+            get_website_tools,
+            save_website_tools,
+            publish_website_tools
         ])
         .setup(|app| {
             if let Some(window) = app.get_webview_window("main") {

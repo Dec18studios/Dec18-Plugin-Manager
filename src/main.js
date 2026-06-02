@@ -68,7 +68,12 @@ const state = {
     parsed: [],      // verified payloads: [{ t, e, p }]  (t=tier, e=email, p=plugins)
     tier: null,      // "master" | <pluginId> | null
     plugins: [],     // ["*"] or ["photochemist", ...]
-  }
+  },
+  website: {
+    tools: [],
+    loaded: false,
+    dirty: false,
+  },
 };
 
 const elements = {
@@ -631,6 +636,11 @@ function renderVersionDrawer(plugin) {
 }
 
 function renderPlugins() {
+  if (state.activeTab === "website") {
+    renderWebsiteTab();
+    return;
+  }
+
   const allPlugins = state.dashboard?.plugins ?? [];
 
   if (!allPlugins.length) {
@@ -1219,12 +1229,151 @@ elements.sortOrder.addEventListener("change", (event) => {
   renderPlugins();
 });
 
+// ── Website tab ────────────────────────────────────────────────
+
+async function loadWebsiteTools() {
+  if (state.website.loaded) return;
+  try {
+    const tools = await invoke("get_website_tools");
+    state.website.tools = tools;
+    state.website.loaded = true;
+    state.website.dirty = false;
+  } catch (err) {
+    const parsed = parseUiError(err, "Failed to load website tools.");
+    logActivity(`Website tab: ${parsed.summary}`);
+  }
+}
+
+function renderWebsiteTab() {
+  const list = elements.pluginList;
+
+  if (!state.website.loaded) {
+    list.innerHTML = `<div class="empty-state">Loading website tools…</div>`;
+    loadWebsiteTools().then(() => {
+      if (state.activeTab === "website") renderWebsiteTab();
+    });
+    return;
+  }
+
+  if (!state.website.tools.length) {
+    list.innerHTML = `<div class="empty-state">No website tools found in docs/website-tools.json.</div>`;
+    return;
+  }
+
+  list.innerHTML = "";
+
+  const container = document.createElement("div");
+  container.className = "website-tab-container";
+
+  // Toolbar row
+  const toolbar = document.createElement("div");
+  toolbar.className = "website-toolbar";
+  toolbar.innerHTML = `
+    <span class="website-toolbar-title">Editing ${state.website.tools.length} tools — changes save to docs/website-tools.json</span>
+    <span id="website-publish-result" class="website-publish-result"></span>
+    <button id="website-save-btn" class="secondary">Save</button>
+    <button id="website-publish-btn" class="primary">Publish to Website</button>
+  `;
+  container.appendChild(toolbar);
+
+  // Tool card grid
+  const grid = document.createElement("div");
+  grid.className = "website-tool-grid";
+
+  for (let i = 0; i < state.website.tools.length; i++) {
+    const tool = state.website.tools[i];
+    const card = document.createElement("div");
+    card.className = "website-tool-card";
+    card.dataset.index = i;
+
+    card.innerHTML = `
+      <div class="website-tool-card-header">
+        <div class="website-tool-color-dot" style="background:${escapeHtml(tool.color)}"></div>
+        <span class="website-tool-plugin-id">${escapeHtml(tool.pluginId)}</span>
+      </div>
+      <div class="website-tool-field">
+        <label>Name</label>
+        <input type="text" data-field="name" value="${escapeHtml(tool.name)}" />
+      </div>
+      <div class="website-tool-field">
+        <label>Description</label>
+        <textarea data-field="desc">${escapeHtml(tool.desc)}</textarea>
+      </div>
+      <div class="website-tool-field">
+        <label>Link URL (optional)</label>
+        <input type="url" data-field="url" value="${escapeHtml(tool.url ?? "")}" placeholder="https://…" />
+      </div>
+    `;
+
+    // Track edits back into state
+    card.querySelectorAll("[data-field]").forEach((input) => {
+      input.addEventListener("input", () => {
+        const field = input.dataset.field;
+        const val = input.value.trim();
+        if (field === "url") {
+          state.website.tools[i].url = val || undefined;
+        } else {
+          state.website.tools[i][field] = val;
+        }
+        state.website.dirty = true;
+      });
+    });
+
+    grid.appendChild(card);
+  }
+
+  container.appendChild(grid);
+  list.appendChild(container);
+
+  // Save button
+  document.getElementById("website-save-btn")?.addEventListener("click", async () => {
+    try {
+      await invoke("save_website_tools", { tools: state.website.tools });
+      state.website.dirty = false;
+      logActivity("Website tool listings saved.");
+      showWebsiteResult("Saved.", false);
+    } catch (err) {
+      const parsed = parseUiError(err, "Save failed.");
+      showWebsiteResult(parsed.summary, true);
+      logActivity(`Website save failed: ${parsed.summary}`);
+    }
+  });
+
+  // Publish button
+  document.getElementById("website-publish-btn")?.addEventListener("click", async () => {
+    const btn = document.getElementById("website-publish-btn");
+    if (btn) btn.disabled = true;
+    showWebsiteResult("Publishing…", false);
+    try {
+      const msg = await invoke("publish_website_tools", { tools: state.website.tools });
+      state.website.dirty = false;
+      logActivity(`Website published: ${msg}`);
+      showWebsiteResult(msg, false);
+    } catch (err) {
+      const parsed = parseUiError(err, "Publish failed.");
+      showWebsiteResult(parsed.summary, true);
+      logActivity(`Website publish failed: ${parsed.summary}`);
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  });
+}
+
+function showWebsiteResult(message, isError) {
+  const el = document.getElementById("website-publish-result");
+  if (!el) return;
+  el.textContent = message;
+  el.className = isError ? "website-publish-result error" : "website-publish-result";
+}
+
 // Tab bar controls
 document.querySelectorAll(".tab-button").forEach((btn) => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".tab-button").forEach((b) => b.classList.remove("active"));
     btn.classList.add("active");
     state.activeTab = btn.dataset.tab;
+    const toolbar = document.querySelector(".plugin-toolbar");
+    if (toolbar) toolbar.style.display = state.activeTab === "website" ? "none" : "";
     renderPlugins();
   });
 });

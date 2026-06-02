@@ -43,6 +43,30 @@ const WEB_MAP = [
     desc: "Slice the image into color regions for precise, targeted grading.",
   },
   {
+    pluginId: "hue-contrast-compressor-ofx",
+    slug: "contrast-sat-volume", color: "red",
+    name: "Contrast Sat Volume",
+    desc: "GPU-accelerated OFX — compress hue shifts caused by contrast and saturation moves.",
+  },
+  {
+    pluginId: "grade-match",
+    slug: "grade-match", color: "cyan",
+    name: "GradeMatch",
+    desc: "Per-channel histogram matching with vectorscope, patch sampler, and perceptual diff heatmap.",
+  },
+  {
+    pluginId: "split-tone-x-ofx",
+    slug: "split-tone-x", color: "magenta",
+    name: "SplitToneX",
+    desc: "Dual-engine split toning with Film Density curves, SatSelect gating, and diagnostic overlays.",
+  },
+  {
+    pluginId: "trim-top-bottom-dctl",
+    slug: "trim-top-bottom", color: "yellow",
+    name: "Trim Top Bottom",
+    desc: "Gently roll off highlights or lift shadows before your DRT.",
+  },
+  {
     pluginId: "perfect-exposure-dctl",
     slug: "perfect-exposure", color: "green",
     name: "Perfect Exposure Every Time",
@@ -65,6 +89,18 @@ const WEB_MAP = [
     slug: "linear-ramp", color: "blue",
     name: "Linear Ramp Diagnostic",
     desc: "A diagnostic ramp for checking transforms and response.",
+  },
+  {
+    pluginId: "GE_hue_inspector_dctl",
+    slug: "hue-inspector", color: "yellow",
+    name: "Hue Inspector",
+    desc: "Highlights hue vectors to diagnose skin tones and color balance at a glance.",
+  },
+  {
+    pluginId: "rgb-chips-dctl",
+    slug: "rgb-chips", color: "green",
+    name: "RGB Chips",
+    desc: "RGB parade-style chips overlay for exposure and white balance evaluation.",
   },
   {
     pluginId: "dolby-vision-spoofer-dctl",

@@ -4,7 +4,7 @@
     "profileId": "69cd2ce46a416c39d387b4b4",
     "name": "Julian Buechner",
     "donationAmount": "10.00",
-    "note": "pre-populated — donated before fulfillment pipeline went live",
+    "note": "pre-populated \u2014 donated before fulfillment pipeline went live",
     "key": "D18.eyJ0IjoibWFzdGVyIiwiZSI6Imp1bGlhbkBwaXhsYmF5LnR2IiwicCI6WyIqIl19.X9NRRJW-aQ1oVhzLfKM7OkcNqVeEaWFSkay5LIpNN4U8nZ8UzNUeYzuFnbRFiCWiLZq9-tDquxHk76GfQ0-pBQ"
   },
   "nmoldenhauer@media-division.de": {
@@ -136,7 +136,7 @@
     "processedAt": "2026-04-08T23:23:45.728Z",
     "orderId": "695a74b05dac2a49e2af76d5",
     "orderNumber": "29",
-    "name": "Jonas Bech Vestergård",
+    "name": "Jonas Bech Vesterg\u00e5rd",
     "amount": "47.34",
     "tier": "annual",
     "key": "D18.eyJ0IjoiYW5udWFsIiwiZSI6InBvc3RAam9uYXNiZWNoLmRrIiwicCI6WyIqIl0sImV4cCI6MTgwNzIyNjYyNX0.VtOU1Ex-hO49K3vU9iGv7pAMHaa2SV6x_S4AQsINlmo47C_4C8dpHlzbe5XKx0g_ZOPTZqKyS0BAJAKPOb39Dg"
@@ -402,22 +402,14 @@
     "tier": "annual",
     "key": "D18.eyJ0IjoiYW5udWFsIiwiZSI6ImpmLnRyYWNrc2lkZXBob3RvQGdtYWlsLmNvbSIsInAiOlsiKiJdLCJleHAiOjE4MTE5MDMxOTd9.7hMRV4Ap0ZrF-De7aacuA6z3Iafu3jU1AnqPTs6jepY0mwJjkTBIdVuzO33zjt5lMNHqAEGaz9Qp1yQQHhhCBw"
   },
-  "davidoregan03@gmail.com": {
-    "processedAt": "2026-06-03T20:41:26.416Z",
-    "orderId": "6a208cb864d3e04354a1d822",
-    "orderNumber": "59",
-    "name": "David O'Regan",
-    "amount": "47.34",
-    "tier": "annual",
-    "key": "D18.eyJ0IjoiYW5udWFsIiwiZSI6ImRhdmlkb3JlZ2FuMDNAZ21haWwuY29tIiwicCI6WyIqIl0sImV4cCI6MTgxMjA1NTI4Nn0.qFgzrqN8lb_A-2kDhLBHNByImOYKGSr-FixIkOq4CIzqGbaeeXToSaL105_qlL32hl5higvDPyRCEJ9gdzimCQ"
-  },
   "mappl.vfx@gmail.com": {
-    "processedAt": "2026-06-03T20:41:26.676Z",
-    "orderId": "6a207a380f199c0355d2141a",
-    "orderNumber": "58",
-    "name": "VALERII VLASOV",
+    "processedAt": "2026-06-03T19:27:47.413Z",
+    "orderId": null,
+    "orderNumber": "00058",
+    "name": "Valerii Vlasov",
     "amount": "47.34",
     "tier": "annual",
-    "key": "D18.eyJ0IjoiYW5udWFsIiwiZSI6Im1hcHBsLnZmeEBnbWFpbC5jb20iLCJwIjpbIioiXSwiZXhwIjoxODEyMDU1Mjg2fQ.gJmvXo7MrUOtUbz3X-UOsws9n9fmM6cTVu5qcuD4AnA4Pc1Ow4GwNMjXc6Ai-IAzhvsJQdtU34K_bCgB1h8gCw"
+    "key": "D18.eyJ0IjoiYW5udWFsIiwiZSI6Im1hcHBsLnZmeEBnbWFpbC5jb20iLCJwIjpbIioiXSwiZXhwIjoxODEyMDUwODY3fQ.WN610Fxbc77Vh300NVojA1bMuX5mkdmDG60m7uxGkjWj3L9oGnTyPAxge4XDCACt8K3VZFGpEdYZoOcLOpF5Dw",
+    "manuallyIssued": true
   }
 }

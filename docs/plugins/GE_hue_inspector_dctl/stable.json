@@ -1,6 +1,6 @@
 {
   "pluginId": "GE_hue_inspector_dctl",
-  "displayName": "Hue Inspector",
+  "displayName": "Skin Tone Mastery",
   "description": "This tool highlights hue vector for easy diagnosing.  Primarely used for checking skin tones.",
   "category": "Color Grading",
   "licenseTier": null,

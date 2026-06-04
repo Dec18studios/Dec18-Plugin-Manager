@@ -1,20 +1,20 @@
 {
   "pluginId": "GE_hue_inspector_dctl",
-  "displayName": "Skin Tone Mastery",
+  "displayName": "Hue Inspector",
   "description": "This tool highlights hue vector for easy diagnosing.  Primarely used for checking skin tones.",
   "category": "Color Grading",
   "licenseTier": null,
   "tags": [],
   "infoUrl": null,
-  "version": "1.0.0",
-  "releaseDate": "2026-06-01T20:03:21Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/Hue-Inspector-DCTL/releases/tag/v1.0.0",
+  "version": "1.1.0",
+  "releaseDate": "2026-06-04T19:38:58Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/Hue-Inspector-DCTL/releases/tag/v1.1.0",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Hue-Inspector-DCTL/releases/download/v1.0.0/Hue-Inspector-DCTL-v1.0.0.zip",
-      "sha256": "5366b72c06a6371a3cd273440222e43debfbfdd714cc45605429a977cd9f709c",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Hue-Inspector-DCTL/releases/download/v1.1.0/Hue-Inspector-DCTL-v1.1.0.zip",
+      "sha256": "58593d65a5b2a8b4304ea3ae078bbddc1ed36e5dfef37ed67537245a9488aa4c",
       "packageType": "zip",
       "bundleName": "GE Hue Inspector.dctle",
       "bundleIdentifier": "com.dec18studios.GE_hue_inspector_dctl",
@@ -29,8 +29,8 @@
     {
       "platform": "windows",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Hue-Inspector-DCTL/releases/download/v1.0.0/Hue-Inspector-DCTL-v1.0.0.zip",
-      "sha256": "5366b72c06a6371a3cd273440222e43debfbfdd714cc45605429a977cd9f709c",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Hue-Inspector-DCTL/releases/download/v1.1.0/Hue-Inspector-DCTL-v1.1.0.zip",
+      "sha256": "58593d65a5b2a8b4304ea3ae078bbddc1ed36e5dfef37ed67537245a9488aa4c",
       "packageType": "zip",
       "bundleName": "GE Hue Inspector.dctle",
       "bundleIdentifier": "com.dec18studios.GE_hue_inspector_dctl",
@@ -45,8 +45,8 @@
     {
       "platform": "linux",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Hue-Inspector-DCTL/releases/download/v1.0.0/Hue-Inspector-DCTL-v1.0.0.zip",
-      "sha256": "5366b72c06a6371a3cd273440222e43debfbfdd714cc45605429a977cd9f709c",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Hue-Inspector-DCTL/releases/download/v1.1.0/Hue-Inspector-DCTL-v1.1.0.zip",
+      "sha256": "58593d65a5b2a8b4304ea3ae078bbddc1ed36e5dfef37ed67537245a9488aa4c",
       "packageType": "zip",
       "bundleName": "GE Hue Inspector.dctle",
       "bundleIdentifier": "com.dec18studios.GE_hue_inspector_dctl",
@@ -59,5 +59,61 @@
       ]
     }
   ],
-  "availableVersions": []
+  "availableVersions": [
+    {
+      "version": "1.0.0",
+      "releaseDate": "2026-06-01T20:03:21Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/Hue-Inspector-DCTL/releases/tag/v1.0.0",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Hue-Inspector-DCTL/releases/download/v1.0.0/Hue-Inspector-DCTL-v1.0.0.zip",
+          "sha256": "5366b72c06a6371a3cd273440222e43debfbfdd714cc45605429a977cd9f709c",
+          "packageType": "zip",
+          "bundleName": "GE Hue Inspector.dctle",
+          "bundleIdentifier": "com.dec18studios.GE_hue_inspector_dctl",
+          "installPath": "/Library/Application Support/Blackmagic Design/DaVinci Resolve/LUT/DCTL",
+          "installMode": "file-browse",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Hue-Inspector-DCTL/releases/download/v1.0.0/Hue-Inspector-DCTL-v1.0.0.zip",
+          "sha256": "5366b72c06a6371a3cd273440222e43debfbfdd714cc45605429a977cd9f709c",
+          "packageType": "zip",
+          "bundleName": "GE Hue Inspector.dctle",
+          "bundleIdentifier": "com.dec18studios.GE_hue_inspector_dctl",
+          "installPath": "C:\\ProgramData\\Blackmagic Design\\DaVinci Resolve\\Support\\LUT\\DCTL",
+          "installMode": "file-browse",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Hue-Inspector-DCTL/releases/download/v1.0.0/Hue-Inspector-DCTL-v1.0.0.zip",
+          "sha256": "5366b72c06a6371a3cd273440222e43debfbfdd714cc45605429a977cd9f709c",
+          "packageType": "zip",
+          "bundleName": "GE Hue Inspector.dctle",
+          "bundleIdentifier": "com.dec18studios.GE_hue_inspector_dctl",
+          "installPath": "/opt/resolve/LUT/DCTL",
+          "installMode": "file-browse",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve"
+          ]
+        }
+      ]
+    }
+  ]
 }

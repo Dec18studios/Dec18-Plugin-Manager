@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-03T12:46:41.957Z",
+  "generatedAt": "2026-06-04T19:39:55.307Z",
   "plugins": [
     {
       "pluginId": "GE_Color_Slicer",
@@ -59,7 +59,7 @@
     },
     {
       "pluginId": "GE_hue_inspector_dctl",
-      "displayName": "Skin Tone Mastery",
+      "displayName": "Hue Inspector",
       "type": "DCTL",
       "licenseTier": "subscription",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/GE_hue_inspector_dctl/stable.json",

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-04T20:16:35.207Z",
+  "generatedAt": "2026-06-04T21:27:45.058Z",
   "plugins": [
     {
       "pluginId": "GE_Color_Slicer",
@@ -58,14 +58,6 @@
       "category": "Color Grading"
     },
     {
-      "pluginId": "GE_hue_inspector_dctl",
-      "displayName": "Hue Inspector",
-      "type": "DCTL",
-      "licenseTier": "subscription",
-      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/GE_hue_inspector_dctl/stable.json",
-      "category": "Color Grading"
-    },
-    {
       "pluginId": "ibkeymaster-ofx",
       "displayName": "IBKeymaster",
       "type": "OFX",
@@ -118,6 +110,14 @@
       "type": "DCTL",
       "licenseTier": "subscription",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/saturation-separator-dctl/stable.json",
+      "category": "Color Grading"
+    },
+    {
+      "pluginId": "GE_hue_inspector_dctl",
+      "displayName": "Skin Tone Mastery",
+      "type": "DCTL",
+      "licenseTier": "subscription",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/GE_hue_inspector_dctl/stable.json",
       "category": "Color Grading"
     },
     {

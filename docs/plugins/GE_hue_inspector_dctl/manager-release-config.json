@@ -1,6 +1,6 @@
 {
   "pluginId": "GE_hue_inspector_dctl",
-  "displayName": "Hue Inspector",
+  "displayName": "Skin Tone Mastery",
   "releaseRepo": "dec18studios/Hue-Inspector-DCTL",
   "minManagerVersion": "0.1.0",
   "hostProcesses": [

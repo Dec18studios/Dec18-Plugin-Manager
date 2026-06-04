@@ -59,9 +59,9 @@
     },
     {
       "pluginId": "GE_hue_inspector_dctl",
-      "displayName": "Hue Inspector",
+      "displayName": "Skin Tone Mastery",
       "type": "DCTL",
-      "licenseTier": "free",
+      "licenseTier": "subscription",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/GE_hue_inspector_dctl/stable.json",
       "category": "Color Grading"
     },

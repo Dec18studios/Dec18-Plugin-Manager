@@ -21,7 +21,7 @@
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://github.com/Dec18studios/Technically-Technicolor-DRT/releases/download/v10.0.1/TechnicolorDRT_macOS_universal_portable.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v10.0.1/TechnicolorDRT_macOS_universal_portable.zip",
       "sha256": "c119bab5ca97a4140d7c48b22c6a27cb2b040c30a79efc3ee0b40a49b30df79e",
       "packageType": "zip",
       "bundleName": "TechnicolorDRT.ofx.bundle",
@@ -43,7 +43,7 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Technically-Technicolor-DRT/releases/download/v10.0.1/TechnicolorDRT_windows_x64_portable.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v10.0.1/TechnicolorDRT_windows_x64_portable.zip",
       "sha256": "d91bdb207a681590ac9ab0e9fa70e446dc03dbeaa035f2bc824a8263523bff7d",
       "packageType": "zip",
       "bundleName": "TechnicolorDRT.ofx.bundle",
@@ -65,7 +65,7 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Technically-Technicolor-DRT/releases/download/v10.0.1/TechnicolorDRT_linux_x86_64_portable.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v10.0.1/TechnicolorDRT_linux_x86_64_portable.zip",
       "sha256": "7b4e207e4c90fe58d5555d080ad3a64b8339640bc47371a199e545e466f575f3",
       "packageType": "zip",
       "bundleName": "TechnicolorDRT.ofx.bundle",
@@ -94,7 +94,7 @@
         {
           "platform": "macos",
           "arch": "universal",
-          "downloadUrl": "https://github.com/Dec18studios/Technically-Technicolor-DRT/releases/download/v10.0.0/TechnicolorDRT_macOS_universal_portable.zip",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v10.0.0/TechnicolorDRT_macOS_universal_portable.zip",
           "sha256": "89252b5c7d27b51edf1a2a0452959cfd78d41cb394ebc65b79bfac39f5b845fd",
           "packageType": "zip",
           "bundleName": "TechnicolorDRT.ofx.bundle",
@@ -116,7 +116,7 @@
         {
           "platform": "windows",
           "arch": "x86_64",
-          "downloadUrl": "https://github.com/Dec18studios/Technically-Technicolor-DRT/releases/download/v10.0.0/TechnicolorDRT_windows_x64_portable.zip",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v10.0.0/TechnicolorDRT_windows_x64_portable.zip",
           "sha256": "95406152b9e0388acc77e4913e655717ad78bab1ee76b64b6b6b784815d24789",
           "packageType": "zip",
           "bundleName": "TechnicolorDRT.ofx.bundle",
@@ -138,7 +138,7 @@
         {
           "platform": "linux",
           "arch": "x86_64",
-          "downloadUrl": "https://github.com/Dec18studios/Technically-Technicolor-DRT/releases/download/v10.0.0/TechnicolorDRT_linux_x86_64_portable.zip",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v10.0.0/TechnicolorDRT_linux_x86_64_portable.zip",
           "sha256": "df4f0c61bc7f84c3fa18f257d989b17e2de7f67e7b367b23b0ddee2863b4b8b8",
           "packageType": "zip",
           "bundleName": "TechnicolorDRT.ofx.bundle",
@@ -167,7 +167,7 @@
         {
           "platform": "macos",
           "arch": "universal",
-          "downloadUrl": "https://github.com/Dec18studios/Technically-Technicolor-DRT/releases/download/v9.3.2/TechnicolorDRT_v9.3.2_macOS_universal_portable.zip",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v9.3.2/TechnicolorDRT_v9.3.2_macOS_universal_portable.zip",
           "sha256": "5a9b3671661a4b3a64f2b7a859783a8698b03e2393ea0723d24dd2835eb6cdae",
           "packageType": "zip",
           "bundleName": "TechnicolorDRT.ofx.bundle",
@@ -189,7 +189,7 @@
         {
           "platform": "windows",
           "arch": "x86_64",
-          "downloadUrl": "https://github.com/Dec18studios/Technically-Technicolor-DRT/releases/download/v9.3.2/TechnicolorDRT_v9.3.2_windows_cuda_portable.zip",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v9.3.2/TechnicolorDRT_v9.3.2_windows_cuda_portable.zip",
           "sha256": "a3723884c58322e7ad69760dedd27965ce0c2a85a36139afab5dda4b2aa0fd5f",
           "packageType": "zip",
           "bundleName": "TechnicolorDRT.ofx.bundle",
@@ -211,7 +211,7 @@
         {
           "platform": "linux",
           "arch": "x86_64",
-          "downloadUrl": "https://github.com/Dec18studios/Technically-Technicolor-DRT/releases/download/v9.3.2/TechnicolorDRT_v9.3.2_linux_cuda_portable.zip",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v9.3.2/TechnicolorDRT_v9.3.2_linux_cuda_portable.zip",
           "sha256": "f0b241fb03513d4baa680a2cc1805b9ccaa95ae5484eeced770e457bb5f09bb8",
           "packageType": "zip",
           "bundleName": "TechnicolorDRT.ofx.bundle",

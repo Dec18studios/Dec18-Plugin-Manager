@@ -4,7 +4,20 @@ on:
   schedule:
     # Every 10 minutes
     - cron: "*/10 * * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      order_id:
+        description: 'Squarespace order ID (passed by webhook Worker)'
+        required: false
+        default: ''
+      notification_id:
+        description: 'Squarespace notification UUID'
+        required: false
+        default: ''
+      trigger_source:
+        description: 'What triggered this run'
+        required: false
+        default: 'manual'
 
 permissions:
   contents: write

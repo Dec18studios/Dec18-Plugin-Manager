@@ -42,7 +42,7 @@ function main() {
 
   // Default output: sibling dec18studios.github.io clone
   const defaultOutput = path.resolve(
-    managerRoot, "..", "..", "dec18studios.github.io", "color-grading-tools", "tools.json"
+    managerRoot, "..", "dec18studios.github.io", "color-grading-tools", "tools.json"
   );
   const outputPath = args.output ? path.resolve(args.output) : defaultOutput;
 
@@ -85,7 +85,8 @@ function main() {
       config = readJson(configPath);
     }
 
-    // tier and url come from the plugin manager; name/desc/color/slug are curated in website-tools.json
+    // tier comes from the plugin manager; name/desc/color/slug and the download
+    // wiring (url/repo/dlAsset/dlUrl) are curated in website-tools.json
     const url = entry.url ?? stable?.infoUrl ?? config?.infoUrl ?? null;
     const tool = {
       name: entry.name,
@@ -94,6 +95,9 @@ function main() {
       color: entry.color,
       desc: entry.desc,
       ...(url ? { url } : {}),
+      ...(entry.repo ? { repo: entry.repo } : {}),
+      ...(entry.dlAsset ? { dlAsset: entry.dlAsset } : {}),
+      ...(entry.dlUrl ? { dlUrl: entry.dlUrl } : {}),
     };
 
     tools.push(tool);

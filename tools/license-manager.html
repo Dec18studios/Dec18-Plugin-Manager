@@ -70,6 +70,10 @@ td{padding:10px 14px;font-size:.85rem;vertical-align:middle}
 .donation{color:var(--green);font-weight:600}
 .empty-state{text-align:center;padding:48px 20px;color:var(--text-muted)}
 .row-actions{display:flex;gap:4px;align-items:center}
+.row-btn{padding:2px 7px;font-size:.8rem;line-height:1;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--text-muted);cursor:pointer;transition:all .15s}
+.row-btn:hover{color:var(--text);border-color:var(--blue);background:rgba(255,255,255,.04)}
+.row-btn:disabled{opacity:.5;cursor:default}
+.badge-beta{display:inline-block;margin-top:3px;padding:1px 6px;border-radius:4px;font-size:.68rem;font-weight:600;color:#f0a020;background:rgba(240,160,32,.12);border:1px solid rgba(240,160,32,.35)}
 .btn-icon{padding:4px 8px;font-size:.75rem;line-height:1;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--text-muted);cursor:pointer;transition:all .15s}
 .btn-icon:hover{border-color:var(--accent);color:var(--accent)}
 .btn-icon.send{color:var(--green);border-color:var(--green);opacity:.7}.btn-icon.send:hover{opacity:1}
@@ -752,6 +756,7 @@ function renderPluginTable(){
     var catCell="<span class=\"editable-plugin-cat\" data-pid=\""+escapeAttr(p.pluginId)+"\">"+escapeHtml(p.category||"\u2014")+"</span>";
 
     var versionStr=p.version?escapeHtml(p.version):"<span style=\"color:var(--text-muted)\">\u2014</span>";
+    if(p.betaVersion){versionStr+="<br><span class=\"badge-beta\" title=\"Beta channel\">\u03b2 "+escapeHtml(p.betaVersion)+"</span>";}
     var dateStr=p.releaseDate?new Date(p.releaseDate).toLocaleDateString("en-US",{year:"numeric",month:"short",day:"numeric"}):"<span style=\"color:var(--text-muted)\">\u2014</span>";
 
     var statusBadge=p.unlisted
@@ -764,6 +769,10 @@ function renderPluginTable(){
       ?"<a href=\"https://github.com/"+escapeAttr(p.releaseRepo)+"\" target=\"_blank\" style=\"color:var(--blue);text-decoration:none;\" title=\"Open repo\">&#x2197;</a>"
       :"";
 
+    var repoShort=p.releaseRepo?String(p.releaseRepo).replace(/^dec18studios\//,""):"";
+    var renameBtn="<button class=\"row-btn js-rename\" data-pid=\""+escapeAttr(p.pluginId)+"\" data-name=\""+escapeAttr(p.displayName||"")+"\" title=\"Rename plugin\">&#9998;</button>";
+    var uploadBtn="<button class=\"row-btn js-upload\" data-pid=\""+escapeAttr(p.pluginId)+"\" data-repo=\""+escapeAttr(repoShort)+"\" data-name=\""+escapeAttr(p.displayName||p.pluginId)+"\" title=\"Upload new version\">&#11014;</button>";
+
     return"<tr>"+
       "<td><strong>"+escapeHtml(p.displayName||p.pluginId)+"</strong><br><span style=\"color:var(--text-muted);font-size:.72rem;\">"+escapeHtml(p.pluginId)+"</span></td>"+
       "<td>"+typeBadge+"</td>"+
@@ -772,7 +781,7 @@ function renderPluginTable(){
       "<td>"+versionStr+"</td>"+
       "<td>"+dateStr+"</td>"+
       "<td>"+statusBadge+"</td>"+
-      "<td><div class=\"row-actions\">"+ghLink+"</div></td>"+
+      "<td><div class=\"row-actions\">"+renameBtn+uploadBtn+ghLink+"</div></td>"+
       "</tr>";
   }).join("");
 
@@ -820,6 +829,62 @@ function renderPluginTable(){
       sel.addEventListener("change",commitCat);
       sel.addEventListener("blur",commitCat);
       sel.addEventListener("keydown",function(e){if(e.key==="Escape"){span.parentElement.textContent=oldVal||"\u2014";}});
+    });
+  });
+
+  // Rename (displayName) \u2014 also pushes the plugin repo's config so the rebuild keeps it
+  tbody.querySelectorAll(".js-rename").forEach(function(btn){
+    btn.addEventListener("click",async function(){
+      var pid=btn.dataset.pid, cur=btn.dataset.name||"";
+      var name=prompt("Rename plugin (display name):",cur);
+      if(name===null)return;
+      name=name.trim();
+      if(!name||name===cur)return;
+      btn.disabled=true;
+      try{
+        var res=await fetch("/api/plugins/update-meta",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pluginId:pid,displayName:name})});
+        var data=await res.json();
+        if(!res.ok)throw new Error(data.error||"Server error");
+        var plugin=pluginsData.find(function(p){return p.pluginId===pid;});
+        if(plugin)plugin.displayName=name;
+        renderPluginTable();
+        if(data.pushedConfig)showToast("Renamed to \u201c"+name+"\u201d \u2014 pushed to plugin repo");
+        else if(data.pushWarning)showToast("Renamed locally; push failed: "+data.pushWarning,true);
+        else showToast("Renamed locally (no plugin repo to push to)");
+      }catch(err){showToast("Rename failed: "+err.message,true);btn.disabled=false;}
+    });
+  });
+
+  // Upload new version \u2014 reads the file as base64 and creates a GitHub release via the server
+  tbody.querySelectorAll(".js-upload").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      var pid=btn.dataset.pid, repo=btn.dataset.repo||"", nm=btn.dataset.name||pid;
+      var version=prompt("New version for \u201c"+nm+"\u201d (e.g. 1.0.1):","");
+      if(version===null)return;
+      version=version.trim().replace(/^v/i,"");
+      if(!version){showToast("Version required",true);return;}
+      var picker=document.createElement("input");
+      picker.type="file";
+      picker.accept=".zip,.dctle,.dctl,.tar.gz,.tgz,.bundle";
+      picker.addEventListener("change",function(){
+        var file=picker.files&&picker.files[0];
+        if(!file)return;
+        var reader=new FileReader();
+        reader.onload=async function(){
+          var base64=String(reader.result).split(",")[1]||"";
+          btn.disabled=true; var origTitle=btn.title; btn.title="Uploading\u2026";
+          showToast("Uploading "+file.name+" \u2192 v"+version+"\u2026");
+          try{
+            var res=await fetch("/api/plugins/create-release",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pluginId:pid,repoName:repo||undefined,version:version,fileName:file.name,fileBase64:base64})});
+            var data=await res.json();
+            if(!res.ok)throw new Error(data.error||"Server error");
+            showToast("Released "+data.tag+" ("+data.assetName+") \u2014 run Rebuild Catalog to publish",false);
+          }catch(err){showToast("Upload failed: "+err.message,true);}
+          finally{btn.disabled=false; btn.title=origTitle;}
+        };
+        reader.readAsDataURL(file);
+      });
+      picker.click();
     });
   });
 }

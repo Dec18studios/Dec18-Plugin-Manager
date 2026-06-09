@@ -21,7 +21,7 @@
       "pluginId": "dolby-vision-spoofer-dctl",
       "displayName": "Dolby Vision Spoofer",
       "type": "DCTL",
-      "licenseTier": "subscription",
+      "licenseTier": "free",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/dolby-vision-spoofer-dctl/stable.json",
       "category": "Workflow"
     },
@@ -61,7 +61,7 @@
       "pluginId": "ibkeymaster-ofx",
       "displayName": "IBKeymaster",
       "type": "OFX",
-      "licenseTier": "subscription",
+      "licenseTier": "free",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/ibkeymaster-ofx/stable.json",
       "category": "Keying"
     },

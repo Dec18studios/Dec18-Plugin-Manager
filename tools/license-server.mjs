@@ -293,8 +293,10 @@ const server = createServer(async (req, res) => {
     const index = loadJSON(INDEX_PATH, { plugins: [] });
     const plugins = (index.plugins ?? []).map((p) => {
       const stablePath = join(PLUGINS_DIR, p.pluginId, "stable.json");
+      const betaPath   = join(PLUGINS_DIR, p.pluginId, "beta.json");
       const configPath = join(PLUGINS_DIR, p.pluginId, "manager-release-config.json");
       const stable = loadJSON(stablePath, null);
+      const beta   = loadJSON(betaPath, null);
       const config = loadJSON(configPath, null);
       return {
         ...p,
@@ -302,6 +304,9 @@ const server = createServer(async (req, res) => {
         releaseRepo:  config?.releaseRepo  ?? null,
         version:      stable?.version      ?? null,
         releaseDate:  stable?.releaseDate  ?? null,
+        betaVersion:     beta?.version     ?? null,
+        betaReleaseDate: beta?.releaseDate ?? null,
+        hasBeta:      !!beta,
         hasRelease:   !!stable,
         hasConfig:    !!config,
       };
@@ -338,13 +343,14 @@ const server = createServer(async (req, res) => {
     return;
   }
 
-  // ── POST /api/plugins/update-meta — edit tier or category ──
+  // ── POST /api/plugins/update-meta — edit tier, category, or displayName (rename) ──
   if (url.pathname === "/api/plugins/update-meta" && req.method === "POST") {
     let body;
     try { body = JSON.parse(await readBody(req)); }
     catch { json(res, 400, { error: "Invalid JSON" }); return; }
 
     const { pluginId, licenseTier, category } = body;
+    const displayName = typeof body.displayName === "string" ? body.displayName.trim() : undefined;
     if (!pluginId) { json(res, 400, { error: "pluginId required" }); return; }
 
     // Update index.json
@@ -353,17 +359,55 @@ const server = createServer(async (req, res) => {
     if (!plugin) { json(res, 404, { error: "Plugin not found in index" }); return; }
     if (typeof licenseTier === "string") plugin.licenseTier = licenseTier;
     if (typeof category   === "string") plugin.category    = category;
+    if (displayName)                    plugin.displayName = displayName;
     saveJSON(INDEX_PATH, index);
 
-    // Mirror to local manager-release-config.json if present
+    // Mirror category/displayName to the local manager-release-config.json, then push it upstream.
+    // The catalog rebuild reads displayName + category from each plugin repo's REMOTE
+    // manager-release-config.json (generate-plugin-channel-manifests.mjs → updateIndex), so a
+    // local-only edit is reverted on the next rebuild unless we PUT it to the plugin repo.
+    // (licenseTier is preserved by updateIndex's `...existing` spread, so it needs no push.)
     const configPath = join(PLUGINS_DIR, pluginId, "manager-release-config.json");
+    let pushedConfig = false, pushWarning = null;
     if (existsSync(configPath)) {
       const config = loadJSON(configPath, {});
       if (typeof category === "string") config.category = category;
+      if (displayName)                  config.displayName = displayName;
       saveJSON(configPath, config);
+
+      const needsPush = displayName !== undefined || typeof category === "string";
+      const repo = config.releaseRepo; // e.g. "dec18studios/Color-Slicer-DCTL"
+      if (needsPush && repo) {
+        const tmpPayload = join(tmpdir(), `d18-cfg-${Date.now()}.json`);
+        try {
+          // Current file SHA on the default branch — required to update an existing file.
+          let sha = "";
+          try {
+            sha = execSync(
+              `gh api repos/${repo}/contents/manager-release-config.json --jq .sha`,
+              { cwd: REPO_ROOT, stdio: "pipe" }
+            ).toString().trim();
+          } catch {}
+          const content = readFileSync(configPath).toString("base64");
+          writeFileSync(tmpPayload, JSON.stringify({
+            message: `chore: update plugin metadata (${displayName ? "rename" : "category"})`,
+            content,
+            ...(sha ? { sha } : {}),
+          }));
+          execSync(
+            `gh api repos/${repo}/contents/manager-release-config.json --method PUT --input "${tmpPayload}"`,
+            { cwd: REPO_ROOT, stdio: "pipe" }
+          );
+          pushedConfig = true;
+        } catch (err) {
+          pushWarning = err.stderr?.toString().trim() || err.message;
+        } finally {
+          try { rmSync(tmpPayload, { force: true }); } catch {}
+        }
+      }
     }
 
-    json(res, 200, { ok: true, plugin });
+    json(res, 200, { ok: true, plugin, pushedConfig, pushWarning });
     return;
   }
 
@@ -794,7 +838,14 @@ jobs:
     try { body = JSON.parse(await readBody(req)); }
     catch { json(res, 400, { error: "Invalid JSON" }); return; }
 
-    const { pluginId, repoName, version, fileName, fileBase64 } = body;
+    let { pluginId, repoName, version, fileName, fileBase64 } = body;
+    // Fall back to the plugin's own config for the repo (strip the dec18studios/ owner prefix)
+    // so existing plugins can publish a new version with just pluginId + version + file.
+    if (!repoName && pluginId) {
+      const cfgPath = join(PLUGINS_DIR, pluginId, "manager-release-config.json");
+      const cfg = existsSync(cfgPath) ? loadJSON(cfgPath, {}) : {};
+      if (cfg.releaseRepo) repoName = String(cfg.releaseRepo).replace(/^dec18studios\//, "");
+    }
     if (!repoName || !version || !fileName || !fileBase64) {
       json(res, 400, { error: "repoName, version, fileName, and fileBase64 are required" }); return;
     }
@@ -898,8 +949,8 @@ jobs:
     const webToolsPath = join(REPO_ROOT, "docs", "website-tools.json");
     saveJSON(webToolsPath, body);
 
-    // Resolve pages repo
-    const pagesRoot = join(REPO_ROOT, "..", "..", "dec18studios.github.io");
+    // Resolve pages repo (sibling clone of the manager repo)
+    const pagesRoot = join(REPO_ROOT, "..", "dec18studios.github.io");
     if (!existsSync(pagesRoot)) {
       json(res, 400, { error: `Pages repo not found at ${pagesRoot}. Clone dec18studios.github.io alongside Other Scripts first.` });
       return;

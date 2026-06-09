@@ -838,7 +838,7 @@ jobs:
     try { body = JSON.parse(await readBody(req)); }
     catch { json(res, 400, { error: "Invalid JSON" }); return; }
 
-    let { pluginId, repoName, version, fileName, fileBase64 } = body;
+    let { pluginId, repoName, version, fileName, fileBase64, title, notes } = body;
     // Fall back to the plugin's own config for the repo (strip the dec18studios/ owner prefix)
     // so existing plugins can publish a new version with just pluginId + version + file.
     if (!repoName && pluginId) {
@@ -893,13 +893,18 @@ jobs:
         }
       }
 
-      // Create the GitHub release and attach the asset
+      // Create the GitHub release and attach the asset.
+      // Release label (title) defaults to the tag; notes go through a temp file so multi-line
+      // text and shell metacharacters can't break the command.
+      const relTitle  = (typeof title === "string" && title.trim()) ? title.trim() : tag;
+      const notesPath = join(tmpDir, "release-notes.md");
+      writeFileSync(notesPath, typeof notes === "string" ? notes : "");
       execSync(
-        `gh release create "${tag}" "${assetPath}" --repo "dec18studios/${repoName}" --title "${tag}" --notes ""`,
+        `gh release create "${tag}" "${assetPath}" --repo "dec18studios/${repoName}" --title ${JSON.stringify(relTitle)} --notes-file "${notesPath}"`,
         { cwd: REPO_ROOT, stdio: "pipe" }
       );
 
-      json(res, 200, { ok: true, tag, assetName: isAlreadyArchive ? fileName : zipName });
+      json(res, 200, { ok: true, tag, title: relTitle, assetName: isAlreadyArchive ? fileName : zipName });
     } catch (err) {
       json(res, 500, { error: err.stderr?.toString().trim() || err.message });
     } finally {

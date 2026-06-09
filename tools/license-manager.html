@@ -353,6 +353,60 @@ td{padding:10px 14px;font-size:.85rem;vertical-align:middle}
   </div>
 </div>
 
+<div class="modal-backdrop" id="uploadVersionModal">
+  <div class="modal">
+    <h2>Upload New Version</h2>
+
+    <div id="uvForm">
+      <div class="section-label">Plugin</div>
+      <div class="form-row" style="margin-bottom:14px;">
+        <div>
+          <label for="uvPluginName">Plugin</label>
+          <input type="text" id="uvPluginName" readonly style="opacity:.8;cursor:default;">
+        </div>
+        <div>
+          <label for="uvRepo">Repo <span style="color:var(--text-muted);font-weight:400;">(dec18studios/…)</span></label>
+          <input type="text" id="uvRepo" placeholder="Repo-Name">
+        </div>
+      </div>
+
+      <div class="section-label">Release</div>
+      <div class="form-row" style="margin-bottom:14px;">
+        <div>
+          <label for="uvVersion">Version number</label>
+          <input type="text" id="uvVersion" placeholder="1.0.1">
+        </div>
+        <div>
+          <label for="uvTitle">Release label <span style="color:var(--text-muted);font-weight:400;">(optional)</span></label>
+          <input type="text" id="uvTitle" placeholder="defaults to v1.0.1">
+        </div>
+      </div>
+      <p class="hint">Creates tag <code style="color:var(--text)">v{version}</code> on <code style="color:var(--text)">dec18studios/{repo}</code> and uploads the file as the release asset.</p>
+      <label for="uvNotes">Release notes <span style="color:var(--text-muted);font-weight:400;">(optional)</span></label>
+      <textarea id="uvNotes" placeholder="What changed in this version…"></textarea>
+
+      <div class="section-label">File</div>
+      <label for="uvFile">Select the file to release</label>
+      <input type="file" id="uvFile" accept=".zip,.dctle,.dctl,.tar.gz,.tgz,.bundle" style="color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:6px 10px;margin-bottom:6px;">
+      <p class="hint">A <code style="color:var(--text)">.zip</code>/<code style="color:var(--text)">.tar.gz</code> is uploaded as-is; any other file is zipped automatically.</p>
+
+      <div id="uvError" style="color:var(--accent);font-size:.8rem;margin-bottom:8px;display:none;"></div>
+    </div>
+
+    <div id="uvResult" style="display:none;">
+      <div class="result-box" id="uvResultBox"></div>
+      <p style="font-size:.78rem;color:var(--text-muted);margin-top:12px;margin-bottom:0;">
+        The release is live on GitHub. Hit <strong>Rebuild Catalog</strong> to publish it to the manager + website.
+      </p>
+    </div>
+
+    <div class="actions">
+      <button class="btn-secondary" id="btnUvClose">Close</button>
+      <button class="btn-primary" id="btnUvSubmit">Create Release</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -855,36 +909,10 @@ function renderPluginTable(){
     });
   });
 
-  // Upload new version \u2014 reads the file as base64 and creates a GitHub release via the server
+  // Upload new version \u2014 opens the Upload Version modal (tag / label / notes / file)
   tbody.querySelectorAll(".js-upload").forEach(function(btn){
     btn.addEventListener("click",function(){
-      var pid=btn.dataset.pid, repo=btn.dataset.repo||"", nm=btn.dataset.name||pid;
-      var version=prompt("New version for \u201c"+nm+"\u201d (e.g. 1.0.1):","");
-      if(version===null)return;
-      version=version.trim().replace(/^v/i,"");
-      if(!version){showToast("Version required",true);return;}
-      var picker=document.createElement("input");
-      picker.type="file";
-      picker.accept=".zip,.dctle,.dctl,.tar.gz,.tgz,.bundle";
-      picker.addEventListener("change",function(){
-        var file=picker.files&&picker.files[0];
-        if(!file)return;
-        var reader=new FileReader();
-        reader.onload=async function(){
-          var base64=String(reader.result).split(",")[1]||"";
-          btn.disabled=true; var origTitle=btn.title; btn.title="Uploading\u2026";
-          showToast("Uploading "+file.name+" \u2192 v"+version+"\u2026");
-          try{
-            var res=await fetch("/api/plugins/create-release",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pluginId:pid,repoName:repo||undefined,version:version,fileName:file.name,fileBase64:base64})});
-            var data=await res.json();
-            if(!res.ok)throw new Error(data.error||"Server error");
-            showToast("Released "+data.tag+" ("+data.assetName+") \u2014 run Rebuild Catalog to publish",false);
-          }catch(err){showToast("Upload failed: "+err.message,true);}
-          finally{btn.disabled=false; btn.title=origTitle;}
-        };
-        reader.readAsDataURL(file);
-      });
-      picker.click();
+      openUploadModal(btn.dataset.pid, btn.dataset.repo||"", btn.dataset.name||btn.dataset.pid);
     });
   });
 }
@@ -902,6 +930,74 @@ document.getElementById("btnRebuild").addEventListener("click",async function(){
     showToast("Catalog rebuild triggered — check GitHub Actions");
   }catch(err){showToast("Failed: "+err.message,true);}
   finally{btn.disabled=false;btn.innerHTML="&#x21BB; Rebuild Catalog";}
+});
+
+// ── Upload New Version modal ──
+var uvModal=document.getElementById("uploadVersionModal");
+var uvCurrentPid=null;
+
+function openUploadModal(pid,repo,name){
+  uvCurrentPid=pid;
+  document.getElementById("uvPluginName").value=name||pid;
+  document.getElementById("uvRepo").value=repo||"";
+  document.getElementById("uvVersion").value="";
+  document.getElementById("uvTitle").value="";
+  document.getElementById("uvNotes").value="";
+  document.getElementById("uvFile").value="";
+  var err=document.getElementById("uvError");err.style.display="none";err.textContent="";
+  document.getElementById("uvForm").style.display="block";
+  document.getElementById("uvResult").style.display="none";
+  var submit=document.getElementById("btnUvSubmit");submit.style.display="";submit.disabled=false;submit.textContent="Create Release";
+  uvModal.classList.add("open");
+  document.getElementById("uvVersion").focus();
+}
+function closeUploadModal(){uvModal.classList.remove("open");}
+document.getElementById("btnUvClose").addEventListener("click",closeUploadModal);
+uvModal.addEventListener("click",function(e){if(e.target===uvModal)closeUploadModal();});
+
+document.getElementById("btnUvSubmit").addEventListener("click",function(){
+  var err=document.getElementById("uvError");err.style.display="none";err.textContent="";
+  var repo=document.getElementById("uvRepo").value.trim();
+  var version=document.getElementById("uvVersion").value.trim().replace(/^v/i,"");
+  var title=document.getElementById("uvTitle").value.trim();
+  var notes=document.getElementById("uvNotes").value;
+  var fileEl=document.getElementById("uvFile");
+  var file=fileEl.files&&fileEl.files[0];
+  function fail(msg){err.textContent=msg;err.style.display="block";}
+  if(!version){fail("Version number is required.");return;}
+  if(!file){fail("Choose a file to release.");return;}
+
+  var submit=document.getElementById("btnUvSubmit");
+  submit.disabled=true;submit.textContent="Uploading…";
+  var reader=new FileReader();
+  reader.onload=async function(){
+    var base64=String(reader.result).split(",")[1]||"";
+    try{
+      var res=await fetch("/api/plugins/create-release",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+        pluginId:uvCurrentPid,
+        repoName:repo||undefined,
+        version:version,
+        title:title||undefined,
+        notes:notes||undefined,
+        fileName:file.name,
+        fileBase64:base64
+      })});
+      var data=await res.json();
+      if(!res.ok)throw new Error(data.error||"Server error");
+      document.getElementById("uvForm").style.display="none";
+      submit.style.display="none";
+      var box=document.getElementById("uvResultBox");
+      box.innerHTML="<strong style=\"color:var(--green)\">✓ Released "+escapeHtml(data.tag)+"</strong><br>"+
+        "<span style=\"color:var(--text-muted);font-size:.8rem;\">Asset: "+escapeHtml(data.assetName)+"</span>";
+      document.getElementById("uvResult").style.display="block";
+      showToast("Released "+data.tag+" ("+data.assetName+")");
+    }catch(e2){
+      err.textContent="Upload failed: "+e2.message;err.style.display="block";
+      submit.disabled=false;submit.textContent="Create Release";
+    }
+  };
+  reader.onerror=function(){fail("Could not read the file.");submit.disabled=false;submit.textContent="Create Release";};
+  reader.readAsDataURL(file);
 });
 
 // ── Add Plugin modal ──

@@ -1,135 +1,156 @@
 [
   {
     "pluginId": "photochemist",
+    "name": "Photo Chemist",
     "slug": "photochemist",
     "color": "red",
-    "name": "Photo Chemist",
-    "desc": "Spectral film-stock emulation — design and develop your own stocks."
+    "desc": "Spectral film-stock emulation — design and develop your own stocks.",
+    "url": "photochemist/"
   },
   {
     "pluginId": "technicolor-drt-ofx",
+    "name": "Technically Technicolor DRT",
     "slug": "technicolordrt",
     "color": "magenta",
-    "name": "Technically Technicolor DRT",
     "desc": "A three-strip Technicolor look as a display rendering transform."
   },
   {
     "pluginId": "hue-contrast-compressor-dctl",
+    "name": "Hue Contrast Compressor",
     "slug": "hue-contrast-compressor",
     "color": "yellow",
-    "name": "Hue Contrast Compressor",
     "desc": "Tame hue-driven contrast for smoother, more controlled color."
   },
   {
     "pluginId": "volume-curve-dctl",
+    "name": "Volume Curve",
     "slug": "volume-curve",
     "color": "cyan",
-    "name": "Volume Curve",
-    "desc": "Shape tonal volume and contrast with a custom response curve."
+    "desc": "Shape tonal volume and contrast with a custom response curve.",
+    "repo": "Volume-Curve-DCTL",
+    "dlAsset": "Volume-Curve-v1.0.0.zip"
   },
   {
     "pluginId": "grain-by-greg-dctl",
+    "name": "Grain By Greg",
     "slug": "grain",
     "color": "green",
-    "name": "Grain By Greg",
     "desc": "Natural, filmic grain that lives in the texture of the image."
   },
   {
     "pluginId": "GE_Color_Slicer",
+    "name": "Color Slicer",
     "slug": "colorslice",
     "color": "blue",
-    "name": "Color Slicer",
-    "desc": "Slice the image into color regions for precise, targeted grading."
+    "desc": "Slice the image into color regions for precise, targeted grading.",
+    "url": "color-slicer/",
+    "repo": "Color-Slicer-DCTL",
+    "dlAsset": "Color-Slicer-DCTL-v1.0.0.zip"
   },
   {
     "pluginId": "hue-contrast-compressor-ofx",
+    "name": "Contrast Sat Volume",
     "slug": "contrast-sat-volume",
     "color": "red",
-    "name": "Contrast Sat Volume",
     "desc": "GPU-accelerated OFX — compress hue shifts caused by contrast and saturation moves."
   },
   {
     "pluginId": "grade-match",
+    "name": "GradeMatch",
     "slug": "grade-match",
     "color": "cyan",
-    "name": "GradeMatch",
     "desc": "Per-channel histogram matching with vectorscope, patch sampler, and perceptual diff heatmap."
   },
   {
     "pluginId": "split-tone-x-ofx",
+    "name": "SplitToneX",
     "slug": "split-tone-x",
     "color": "magenta",
-    "name": "SplitToneX",
     "desc": "Dual-engine split toning with Film Density curves, SatSelect gating, and diagnostic overlays."
   },
   {
     "pluginId": "trim-top-bottom-dctl",
+    "name": "Trim Top Bottom",
     "slug": "trim-top-bottom",
     "color": "yellow",
-    "name": "Trim Top Bottom",
     "desc": "Gently roll off highlights or lift shadows before your DRT."
   },
   {
     "pluginId": "perfect-exposure-dctl",
+    "name": "Perfect Exposure Every Time",
     "slug": "perfect-exposure",
     "color": "green",
-    "name": "Perfect Exposure Every Time",
-    "desc": "Nail consistent exposure on every shot."
+    "desc": "Nail consistent exposure on every shot.",
+    "repo": "Perfect-Exposure-DCTL",
+    "dlAsset": "Perfect-Exposure-v1.0.0.zip"
   },
   {
     "pluginId": "film-negative-space-cst-dctl",
+    "name": "Film Negative Space CST",
     "slug": "film-negative-space-cst",
     "color": "cyan",
-    "name": "Film Negative Space CST",
-    "desc": "A color-space transform into a film-negative working space."
+    "desc": "A color-space transform into a film-negative working space.",
+    "url": "film-negative-space-cst/",
+    "repo": "Film-Negative-Space-CST-DCTL",
+    "dlAsset": "GE.Film.Negative.Space.CST.v2.1.0.zip"
   },
   {
     "pluginId": "saturation-separator-dctl",
+    "name": "Saturation Separator",
     "slug": "saturation-seperator",
     "color": "yellow",
-    "name": "Saturation Separator",
     "desc": "Split saturation from luma for cleaner, more controlled grades."
   },
   {
     "pluginId": "linear-ramp-diagnostic-dctl",
+    "name": "Linear Ramp Diagnostic",
     "slug": "linear-ramp",
     "color": "blue",
-    "name": "Linear Ramp Diagnostic",
-    "desc": "A diagnostic ramp for checking transforms and response."
+    "desc": "A diagnostic ramp for checking transforms and response.",
+    "repo": "Linear-Ramp-Diagnostic-DCTL",
+    "dlAsset": "Linear-Ramp-Diagnostic-v1.0.0.zip"
   },
   {
     "pluginId": "GE_hue_inspector_dctl",
-    "slug": "hue-inspector",
+    "name": "Skin Tone Mastery",
+    "slug": "skin-tone-mastery",
     "color": "yellow",
-    "name": "Hue Inspector",
-    "desc": "Highlights hue vectors to diagnose skin tones and color balance at a glance."
+    "desc": "Highlights hue vectors to diagnose skin tones and color balance at a glance.",
+    "url": "skin-tone-mastery/"
   },
   {
     "pluginId": "rgb-chips-dctl",
+    "name": "RGB Chips",
     "slug": "rgb-chips",
     "color": "green",
-    "name": "RGB Chips",
-    "desc": "RGB parade-style chips overlay for exposure and white balance evaluation."
+    "desc": "RGB parade-style chips overlay for exposure and white balance evaluation.",
+    "url": "https://github.com/thatcherfreeman/utility-dctls",
+    "dlUrl": "https://raw.githubusercontent.com/thatcherfreeman/utility-dctls/main/Utilities/RGB%20Chips.dctl"
   },
   {
     "pluginId": "dolby-vision-spoofer-dctl",
+    "name": "Dolby Vision Spoofer",
     "slug": "dolby-vision",
     "color": "magenta",
-    "name": "Dolby Vision Spoofer",
-    "desc": "Preview a Dolby Vision-style trim without the full pipeline."
+    "desc": "Preview a Dolby Vision-style trim without the full pipeline.",
+    "repo": "Dolby-Vision-Spoofer-DCTL",
+    "dlAsset": "Dolby-Vision-Spoofer-v1.0.0.zip"
   },
   {
     "pluginId": "ibkeymaster-ofx",
+    "name": "IBKeymaster",
     "slug": "ibkeymaster",
     "color": "red",
-    "name": "IBKeymaster",
-    "desc": "A focused keying utility for cleaner selections."
+    "desc": "A focused keying utility for cleaner selections.",
+    "url": "https://dec18studios.com/ibkeymaster",
+    "repo": "IBKeymaster"
   },
   {
     "pluginId": "resolve-node-toggler",
+    "name": "Resolve Node Toggler",
     "slug": "node-toggle",
     "color": "green",
-    "name": "Resolve Node Toggler",
-    "desc": "Toggle nodes on and off fast while you work."
+    "desc": "Toggle nodes on and off fast while you work.",
+    "repo": "Resolve-Node-Toggler"
   }
 ]

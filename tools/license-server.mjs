@@ -24,6 +24,8 @@ const PEM_PATH = join(KEYS_DIR, "private.pem");
 const HTML_PATH = join(__dirname, "license-manager.html");
 const GMAIL_CREDS_PATH = join(KEYS_DIR, "gmail-credentials.json");
 const GMAIL_TOKEN_PATH = join(KEYS_DIR, "gmail-token.json");
+const DL_SECRET_PATH   = join(KEYS_DIR, "download-logger-secret.txt");
+const DL_WORKER_URL    = "https://dec18-download-logger.dec18studios.workers.dev";
 
 const PORT = parseInt(process.env.PORT || "9218", 10);
 
@@ -42,6 +44,27 @@ function loadJSON(path, fallback) {
 
 function saveJSON(path, data) {
   writeFileSync(path, JSON.stringify(data, null, 2) + "\n");
+}
+
+/** Minimal RFC-4180 CSV parser: handles quoted fields, "" escapes, CRLF. */
+function parseCsv(text) {
+  const rows = [];
+  let row = [], field = "", inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { field += '"'; i++; }
+        else inQuotes = false;
+      } else field += c;
+    } else if (c === '"') inQuotes = true;
+    else if (c === ",") { row.push(field); field = ""; }
+    else if (c === "\n") { row.push(field); rows.push(row); row = []; field = ""; }
+    else if (c === "\r") { /* skip */ }
+    else field += c;
+  }
+  if (field.length || row.length) { row.push(field); rows.push(row); }
+  return rows;
 }
 
 function base64urlEncode(buffer) {
@@ -639,6 +662,77 @@ const server = createServer(async (req, res) => {
       out.run = runs[0] ?? null;
     } catch {}
     json(res, 200, out);
+    return;
+  }
+
+  // ── POST /api/downloads/secret — store the download-logger ADMIN_SECRET locally ──
+  if (url.pathname === "/api/downloads/secret" && req.method === "POST") {
+    let body;
+    try { body = JSON.parse(await readBody(req)); }
+    catch { json(res, 400, { error: "Invalid JSON" }); return; }
+    const secret = (body.secret || "").trim();
+    if (!secret) { json(res, 400, { error: "secret required" }); return; }
+    try {
+      // Validate against the worker before saving.
+      const test = await fetch(`${DL_WORKER_URL}/export?secret=${encodeURIComponent(secret)}`);
+      if (test.status === 403) { json(res, 400, { error: "That secret was rejected by the worker (403)." }); return; }
+      if (!test.ok) { json(res, 502, { error: `Worker returned ${test.status}` }); return; }
+      writeFileSync(DL_SECRET_PATH, secret, "utf8");
+      json(res, 200, { ok: true });
+    } catch (err) {
+      json(res, 500, { error: err.message });
+    }
+    return;
+  }
+
+  // ── GET /api/downloads — leaderboard + per-person rows from the download logger ──
+  if (url.pathname === "/api/downloads" && req.method === "GET") {
+    if (!existsSync(DL_SECRET_PATH)) { json(res, 200, { needsSecret: true }); return; }
+    const secret = readFileSync(DL_SECRET_PATH, "utf8").trim();
+    try {
+      const r = await fetch(`${DL_WORKER_URL}/export?secret=${encodeURIComponent(secret)}`);
+      if (r.status === 403) { json(res, 200, { needsSecret: true, error: "Stored secret was rejected — re-enter it." }); return; }
+      if (!r.ok) { json(res, 502, { error: `Worker returned ${r.status}` }); return; }
+      const csv = await r.text();
+
+      // Parse CSV (quoted fields, "" escaping). Header row first.
+      const allRows = parseCsv(csv);
+      const header = allRows.shift() || [];
+      const col = (name) => header.indexOf(name);
+      const iEmail = col("email"), iSlug = col("tool_slug"), iName = col("tool_name"),
+            iLast = col("last_downloaded"), iCount = col("download_count"), iUnsub = col("unsubscribed");
+
+      const tools = {};   // slug -> { slug, name, people, downloads, unsubscribed }
+      const people = {};  // email -> { email, tools:[], downloads, lastDownloaded }
+      let totalDownloads = 0;
+
+      for (const row of allRows) {
+        if (!row.length || !row[iEmail]) continue;
+        const email = row[iEmail], slug = row[iSlug], name = row[iName] || slug;
+        const count = parseInt(row[iCount] || "1", 10) || 1;
+        const last = row[iLast] || "", unsub = (row[iUnsub] === "1");
+        totalDownloads += count;
+
+        const t = tools[slug] ?? (tools[slug] = { slug, name, people: 0, downloads: 0, unsubscribed: 0 });
+        t.name = name; t.people += 1; t.downloads += count; if (unsub) t.unsubscribed += 1;
+
+        const p = people[email] ?? (people[email] = { email, tools: [], downloads: 0, lastDownloaded: "" });
+        p.tools.push(name); p.downloads += count;
+        if (last > p.lastDownloaded) p.lastDownloaded = last;
+      }
+
+      const toolList = Object.values(tools).sort((a, b) => b.people - a.people || b.downloads - a.downloads);
+      const peopleList = Object.values(people).sort((a, b) => (a.lastDownloaded < b.lastDownloaded ? 1 : -1));
+
+      json(res, 200, {
+        ok: true,
+        totals: { people: peopleList.length, tools: toolList.length, downloads: totalDownloads },
+        tools: toolList,
+        people: peopleList,
+      });
+    } catch (err) {
+      json(res, 500, { error: err.message });
+    }
     return;
   }
 

@@ -39,6 +39,13 @@ button{padding:8px 16px;border:none;border-radius:6px;font-size:.85rem;font-weig
 .publish-status.live .dot{background:var(--green)}
 .publish-status.failed .dot{background:var(--accent)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.dl-bar-row{display:flex;align-items:center;gap:12px;padding:7px 0;border-bottom:1px solid var(--border)}
+.dl-bar-row:last-child{border-bottom:none}
+.dl-rank{width:22px;text-align:right;color:var(--text-muted);font-size:.8rem;flex:0 0 auto}
+.dl-bar-name{width:200px;flex:0 0 auto;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dl-bar-track{flex:1;height:18px;background:var(--bg);border-radius:4px;overflow:hidden}
+.dl-bar-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:4px;min-width:2px}
+.dl-bar-stat{flex:0 0 auto;font-size:.82rem;color:var(--text-muted);width:150px;text-align:right;white-space:nowrap}
 .btn-sm{padding:4px 10px;font-size:.78rem}
 button:disabled{opacity:.4;cursor:not-allowed}
 /* ── Table ── */
@@ -140,6 +147,7 @@ td{padding:10px 14px;font-size:.85rem;vertical-align:middle}
   <button class="tab active" data-tab="licenses">Licenses</button>
   <button class="tab" data-tab="plugins">Plugin Catalog</button>
   <button class="tab" data-tab="website">Website Tools</button>
+  <button class="tab" data-tab="downloads">Downloads</button>
 </div>
 
 <!-- ═══════════════════════════════════════ LICENSES PANEL ═══ -->
@@ -199,6 +207,48 @@ td{padding:10px 14px;font-size:.85rem;vertical-align:middle}
       <button class="btn-green" id="btnSitePublish">&#x2197; Publish to Website</button>
     </div>
     <div id="siteGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px;"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ DOWNLOADS PANEL ═══ -->
+<div id="panel-downloads" class="panel">
+  <!-- Secret entry (shown when no stored ADMIN_SECRET) -->
+  <div id="dlSecretScreen" style="display:none;max-width:520px;margin:40px auto;text-align:center;">
+    <h2 style="margin:0 0 8px;">Connect the download logger</h2>
+    <p style="color:var(--text-muted);font-size:.9rem;line-height:1.6;">
+      Free-tool downloads are captured in a Cloudflare database. Paste the
+      <strong>ADMIN_SECRET</strong> you set up for <code>dec18-download-logger</code> to view them here.
+      It's stored locally and never committed.
+    </p>
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <input type="password" id="dlSecretInput" placeholder="ADMIN_SECRET" style="flex:1;padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:6px;color:var(--text);outline:none;">
+      <button class="btn-green" id="btnDlSaveSecret">Connect</button>
+    </div>
+    <div id="dlSecretErr" style="color:var(--accent);font-size:.82rem;margin-top:8px;display:none;"></div>
+  </div>
+
+  <div id="dlLoadingScreen" class="loading"><div class="spinner"></div><p>Loading downloads&hellip;</p></div>
+  <div id="dlErrorScreen" style="display:none;"></div>
+
+  <div id="dlMainApp" style="display:none;">
+    <div class="stats" id="dlStatsRow"></div>
+    <div class="toolbar">
+      <span style="color:var(--text-muted);font-size:.85rem;flex:1;">Most popular free tools by unique downloaders</span>
+      <button class="btn-secondary" id="btnDlReload">&#x21BB; Reload</button>
+      <a class="btn-secondary" id="dlExportLink" href="#" style="text-decoration:none;">Export CSV</a>
+    </div>
+    <h3 style="margin:18px 0 10px;font-size:.95rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;">Popularity</h3>
+    <div id="dlLeaderboard"></div>
+    <h3 style="margin:26px 0 10px;font-size:.95rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;">Downloaders <span id="dlPeopleCount" style="color:var(--text-muted);font-weight:400;"></span></h3>
+    <div class="toolbar" style="margin-bottom:10px;">
+      <input type="text" id="dlSearchInput" placeholder="Search by email or tool…">
+    </div>
+    <table>
+      <thead><tr>
+        <th>Email</th><th>Tools</th><th style="text-align:right;">Downloads</th><th>Last download</th>
+      </tr></thead>
+      <tbody id="dlPeopleBody"></tbody>
+    </table>
   </div>
 </div>
 
@@ -442,6 +492,7 @@ document.querySelectorAll(".tab").forEach(function(tab){
     tab.classList.add("active");
     document.getElementById("panel-"+tab.dataset.tab).classList.add("active");
     if(tab.dataset.tab==="plugins" && !pluginsLoaded) loadPlugins();
+    if(tab.dataset.tab==="downloads" && !downloadsLoaded) loadDownloads();
   });
 });
 
@@ -1005,6 +1056,110 @@ document.getElementById("btnPublish").addEventListener("click",async function(){
 // Surface pending-change state on load and every 20s while idle.
 refreshPublishStatus();
 setInterval(function(){if(!_publishPoll)refreshPublishStatus();},20000);
+
+// ═══════════════════════════════════════════════════
+// DOWNLOADS TAB
+// ═══════════════════════════════════════════════════
+var downloadsLoaded=false, dlData=null;
+function dlShow(id){["dlSecretScreen","dlLoadingScreen","dlErrorScreen","dlMainApp"].forEach(function(x){var el=document.getElementById(x);if(el)el.style.display=(x===id?(x==="dlMainApp"||x==="dlSecretScreen"?"block":"flex"):"none");});}
+async function loadDownloads(){
+  dlShow("dlLoadingScreen");
+  try{
+    var res=await fetch("/api/downloads");
+    var data=await res.json();
+    if(data.needsSecret){
+      downloadsLoaded=false;
+      var e=document.getElementById("dlSecretErr");
+      if(data.error){e.textContent=data.error;e.style.display="block";}else{e.style.display="none";}
+      dlShow("dlSecretScreen");
+      return;
+    }
+    if(!res.ok||!data.ok)throw new Error(data.error||"Server error");
+    dlData=data;downloadsLoaded=true;
+    renderDownloads(data);
+    dlShow("dlMainApp");
+  }catch(err){
+    document.getElementById("dlErrorScreen").innerHTML="<div style='background:rgba(233,69,96,.12);border:1px solid rgba(233,69,96,.3);color:var(--accent);padding:14px 18px;border-radius:8px;'>Failed to load downloads: "+escapeHtml(err.message)+"</div>";
+    dlShow("dlErrorScreen");
+  }
+}
+function renderDownloads(d){
+  // Stat cards
+  document.getElementById("dlStatsRow").innerHTML=
+    card("Downloaders",d.totals.people)+
+    card("Total downloads",d.totals.downloads)+
+    card("Tools",d.totals.tools)+
+    (d.tools[0]?cardSub("Most popular",escapeHtml(d.tools[0].name),d.tools[0].people+" people"):"");
+  // Leaderboard
+  var max=d.tools.reduce(function(m,t){return Math.max(m,t.people);},1);
+  var lb=document.getElementById("dlLeaderboard");
+  if(!d.tools.length){lb.innerHTML="<p style='color:var(--text-muted);'>No downloads logged yet.</p>";}
+  else{
+    lb.innerHTML=d.tools.map(function(t,i){
+      var pct=Math.round((t.people/max)*100);
+      var subbed=t.people-t.unsubscribed;
+      return "<div class=\"dl-bar-row\">"+
+        "<span class=\"dl-rank\">"+(i+1)+"</span>"+
+        "<span class=\"dl-bar-name\" title=\""+escapeHtml(t.name)+"\">"+escapeHtml(t.name)+"</span>"+
+        "<span class=\"dl-bar-track\"><span class=\"dl-bar-fill\" style=\"width:"+pct+"%\"></span></span>"+
+        "<span class=\"dl-bar-stat\">"+t.people+" ppl &middot; "+t.downloads+" dls"+
+          (t.unsubscribed?" &middot; "+subbed+" subbed":"")+"</span>"+
+      "</div>";
+    }).join("");
+  }
+  renderDlPeople(d.people);
+  document.getElementById("dlPeopleCount").textContent="("+d.people.length+")";
+}
+function renderDlPeople(people){
+  var body=document.getElementById("dlPeopleBody");
+  if(!people.length){body.innerHTML="<tr><td colspan='4' style='color:var(--text-muted);'>No downloaders.</td></tr>";return;}
+  body.innerHTML=people.map(function(p){
+    var when=p.lastDownloaded?String(p.lastDownloaded).slice(0,10):"";
+    return "<tr>"+
+      "<td>"+escapeHtml(p.email)+"</td>"+
+      "<td style='font-size:.82rem;color:var(--text-muted);'>"+p.tools.map(escapeHtml).join(", ")+"</td>"+
+      "<td style='text-align:right;'>"+p.downloads+"</td>"+
+      "<td style='font-size:.82rem;color:var(--text-muted);'>"+when+"</td>"+
+    "</tr>";
+  }).join("");
+}
+// Secret connect
+document.getElementById("btnDlSaveSecret").addEventListener("click",async function(){
+  var inp=document.getElementById("dlSecretInput"),err=document.getElementById("dlSecretErr");
+  var secret=inp.value.trim();
+  if(!secret){err.textContent="Enter the secret.";err.style.display="block";return;}
+  var btn=this;btn.disabled=true;btn.textContent="Connecting…";err.style.display="none";
+  try{
+    var res=await fetch("/api/downloads/secret",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({secret:secret})});
+    var data=await res.json();
+    if(!res.ok)throw new Error(data.error||"Server error");
+    inp.value="";downloadsLoaded=false;loadDownloads();
+  }catch(e){err.textContent=e.message;err.style.display="block";}
+  finally{btn.disabled=false;btn.textContent="Connect";}
+});
+document.getElementById("dlSecretInput").addEventListener("keydown",function(e){if(e.key==="Enter")document.getElementById("btnDlSaveSecret").click();});
+// Reload + search
+document.getElementById("btnDlReload").addEventListener("click",function(){downloadsLoaded=false;loadDownloads();});
+// Export CSV (built client-side from the loaded data — secret stays server-side)
+document.getElementById("dlExportLink").addEventListener("click",function(e){
+  e.preventDefault();
+  if(!dlData||!dlData.people.length){showToast("Nothing to export",true);return;}
+  var rows=[["email","tools","downloads","last_downloaded"]];
+  dlData.people.forEach(function(p){rows.push([p.email,p.tools.join("; "),p.downloads,p.lastDownloaded]);});
+  var csv=rows.map(function(r){return r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(",");}).join("\n");
+  var blob=new Blob([csv],{type:"text/csv"});
+  var a=document.createElement("a");a.href=URL.createObjectURL(blob);
+  a.download="dec18-downloaders.csv";document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},100);
+});
+document.getElementById("dlSearchInput").addEventListener("input",function(){
+  var q=this.value.trim().toLowerCase();
+  if(!dlData)return;
+  if(!q){renderDlPeople(dlData.people);return;}
+  renderDlPeople(dlData.people.filter(function(p){
+    return p.email.toLowerCase().indexOf(q)>=0 || p.tools.join(" ").toLowerCase().indexOf(q)>=0;
+  }));
+});
 
 // ── Upload New Version modal ──
 var uvModal=document.getElementById("uploadVersionModal");

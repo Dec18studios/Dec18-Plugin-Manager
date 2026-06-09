@@ -9,3 +9,4 @@ tools/license-keys/private.pem
 tools/license-keys/ledger.json
 tools/license-keys/gmail-credentials.json
 tools/license-keys/gmail-token.json
+tools/license-keys/download-logger-secret.txt

@@ -562,6 +562,86 @@ const server = createServer(async (req, res) => {
     return;
   }
 
+  // ── POST /api/publish — the one button: commit + push pending admin changes,
+  //    then ensure the catalog rebuild runs (uploads make a GH release directly and
+  //    leave no manager-repo commit, so a push alone won't always cover them). ──
+  if (url.pathname === "/api/publish" && req.method === "POST") {
+    try {
+      // 1. Stage admin-managed paths only (gitignore protects secrets in license-keys/).
+      execSync("git add docs tools .github", { cwd: REPO_ROOT, stdio: "pipe" });
+      const staged = execSync("git diff --cached --name-only", { cwd: REPO_ROOT, stdio: "pipe" })
+        .toString().trim();
+      if (staged) {
+        execSync(
+          `git -c user.name="Greg Enright" -c user.email="create@dec18studios.com" commit -m "Publish catalog changes from plugin manager"`,
+          { cwd: REPO_ROOT, stdio: "pipe" }
+        );
+      }
+
+      // 2. Sync with remote (catalog-bot commits land here too) before pushing.
+      execSync("git pull --rebase origin main", { cwd: REPO_ROOT, stdio: "pipe" });
+
+      // 3. Push anything ahead of origin — pushing main triggers the deploy workflow.
+      const ahead = parseInt(
+        execSync("git rev-list --count origin/main..main", { cwd: REPO_ROOT, stdio: "pipe" })
+          .toString().trim() || "0", 10
+      );
+      let pushed = false;
+      if (ahead > 0) {
+        execSync("git push", { cwd: REPO_ROOT, stdio: "pipe" });
+        pushed = true;
+      }
+
+      // 4. If nothing was pushed (e.g. only uploads happened), trigger the rebuild
+      //    explicitly so newly-released versions get pulled into the catalog.
+      let triggered = false;
+      if (!pushed) {
+        execSync("git push", { cwd: REPO_ROOT, stdio: "pipe" }); // no-op if up to date
+        execSync("gh workflow run deploy-plugin-manager-pages.yml", { cwd: REPO_ROOT, stdio: "pipe" });
+        triggered = true;
+      }
+
+      const head = execSync("git rev-parse HEAD", { cwd: REPO_ROOT, stdio: "pipe" }).toString().trim();
+      json(res, 200, {
+        ok: true,
+        committed: !!staged,
+        pushedCommits: ahead,
+        deployVia: pushed ? "push" : "workflow_dispatch",
+        head,
+        message: pushed
+          ? `Pushed ${ahead} commit${ahead === 1 ? "" : "s"} — deploy started.`
+          : "No pending commits — triggered a catalog rebuild for uploaded versions.",
+      });
+    } catch (err) {
+      json(res, 500, { error: err.stderr?.toString().trim() || err.stdout?.toString().trim() || err.message });
+    }
+    return;
+  }
+
+  // ── GET /api/publish/status — pending-change count + latest deploy run state ──
+  if (url.pathname === "/api/publish/status" && req.method === "GET") {
+    const out = { ahead: 0, dirty: false, run: null };
+    try {
+      out.ahead = parseInt(
+        execSync("git rev-list --count origin/main..main", { cwd: REPO_ROOT, stdio: "pipe" })
+          .toString().trim() || "0", 10
+      );
+      out.dirty = execSync("git status --porcelain -- docs tools .github", { cwd: REPO_ROOT, stdio: "pipe" })
+        .toString().trim().length > 0;
+    } catch {}
+    try {
+      const runs = JSON.parse(
+        execSync(
+          "gh run list --workflow deploy-plugin-manager-pages.yml --limit 1 --json status,conclusion,databaseId,createdAt,headBranch",
+          { cwd: REPO_ROOT, stdio: "pipe" }
+        ).toString()
+      );
+      out.run = runs[0] ?? null;
+    } catch {}
+    json(res, 200, out);
+    return;
+  }
+
   // ── POST /api/plugins/inject-workflow — push a build workflow template to a plugin repo ──
   if (url.pathname === "/api/plugins/inject-workflow" && req.method === "POST") {
     let body;

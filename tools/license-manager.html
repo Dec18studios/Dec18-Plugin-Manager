@@ -31,6 +31,14 @@ button{padding:8px 16px;border:none;border-radius:6px;font-size:.85rem;font-weig
 .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-hover)}
 .btn-secondary{background:var(--surface);color:var(--text);border:1px solid var(--border)}.btn-secondary:hover{background:var(--surface-hover)}
 .btn-green{background:rgba(74,222,128,.15);color:var(--green);border:1px solid rgba(74,222,128,.3)}.btn-green:hover{background:rgba(74,222,128,.25)}
+.btn-ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border);font-size:.82rem;padding:6px 10px}.btn-ghost:hover{background:var(--surface-hover);color:var(--text)}
+.publish-status{font-size:.8rem;color:var(--text-muted);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.publish-status .dot{width:8px;height:8px;border-radius:50%;background:var(--text-muted);flex:0 0 auto}
+.publish-status.pending .dot{background:var(--yellow)}
+.publish-status.deploying .dot{background:var(--blue);animation:pulse 1s infinite}
+.publish-status.live .dot{background:var(--green)}
+.publish-status.failed .dot{background:var(--accent)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .btn-sm{padding:4px 10px;font-size:.78rem}
 button:disabled{opacity:.4;cursor:not-allowed}
 /* ── Table ── */
@@ -158,7 +166,9 @@ td{padding:10px 14px;font-size:.85rem;vertical-align:middle}
     <div class="toolbar">
       <input type="text" id="plugSearchInput" placeholder="Search plugins…">
       <button class="btn-primary" id="btnAddPlugin">+ Add Plugin</button>
-      <button class="btn-green" id="btnRebuild">&#x21BB; Rebuild Catalog</button>
+      <button class="btn-green" id="btnPublish">&#x2191; Publish Now</button>
+      <span id="publishStatus" class="publish-status"></span>
+      <button class="btn-ghost" id="btnRebuild" title="Force a catalog rebuild without pushing">&#x21BB; Rebuild only</button>
     </div>
     <table>
       <thead><tr>
@@ -929,8 +939,72 @@ document.getElementById("btnRebuild").addEventListener("click",async function(){
     if(!res.ok)throw new Error(data.error||"Server error");
     showToast("Catalog rebuild triggered — check GitHub Actions");
   }catch(err){showToast("Failed: "+err.message,true);}
-  finally{btn.disabled=false;btn.innerHTML="&#x21BB; Rebuild Catalog";}
+  finally{btn.disabled=false;btn.innerHTML="&#x21BB; Rebuild only";}
 });
+
+// ── Publish Now: commit + push pending changes, then track the deploy ──
+var _publishPoll=null;
+function setPublishStatus(cls,label){
+  var el=document.getElementById("publishStatus");
+  if(!el)return;
+  el.className="publish-status"+(cls?" "+cls:"");
+  el.innerHTML=label?'<span class="dot"></span>'+escapeHtml(label):"";
+}
+async function refreshPublishStatus(){
+  try{
+    var res=await fetch("/api/publish/status");
+    var s=await res.json();
+    if(_publishPoll)return; // a deploy poll owns the indicator right now
+    if(s.ahead>0||s.dirty){
+      setPublishStatus("pending",s.ahead>0?(s.ahead+" change"+(s.ahead===1?"":"s")+" to publish"):"unsaved changes");
+    }else if(s.run&&s.run.status&&s.run.status!=="completed"){
+      setPublishStatus("deploying","deploying…");
+    }else if(s.run&&s.run.conclusion==="success"){
+      setPublishStatus("live","live");
+    }else{
+      setPublishStatus("","");
+    }
+  }catch(e){}
+}
+async function pollDeployUntilDone(){
+  for(var i=0;i<120;i++){ // up to ~10 min at 5s
+    await new Promise(function(r){setTimeout(r,5000);});
+    try{
+      var res=await fetch("/api/publish/status");
+      var s=await res.json();
+      if(s.run&&s.run.status==="completed"){
+        if(s.run.conclusion==="success"){setPublishStatus("live","live ✓");showToast("Published — site is live.");}
+        else{setPublishStatus("failed","deploy "+(s.run.conclusion||"failed"));showToast("Deploy "+(s.run.conclusion||"failed")+" — check GitHub Actions",true);}
+        return;
+      }
+      setPublishStatus("deploying","deploying…");
+    }catch(e){}
+  }
+  setPublishStatus("deploying","still deploying — check Actions");
+}
+document.getElementById("btnPublish").addEventListener("click",async function(){
+  var btn=document.getElementById("btnPublish");
+  btn.disabled=true;btn.textContent="Publishing…";
+  setPublishStatus("deploying","pushing…");
+  try{
+    var res=await fetch("/api/publish",{method:"POST"});
+    var data=await res.json();
+    if(!res.ok)throw new Error(data.error||"Server error");
+    showToast(data.message||"Publish started.");
+    setPublishStatus("deploying","deploying…");
+    if(_publishPoll)clearTimeout(_publishPoll);
+    _publishPoll=true;
+    await pollDeployUntilDone();
+    _publishPoll=null;
+  }catch(err){
+    _publishPoll=null;
+    setPublishStatus("failed","publish failed");
+    showToast("Failed: "+err.message,true);
+  }finally{btn.disabled=false;btn.innerHTML="&#x2191; Publish Now";}
+});
+// Surface pending-change state on load and every 20s while idle.
+refreshPublishStatus();
+setInterval(function(){if(!_publishPoll)refreshPublishStatus();},20000);
 
 // ── Upload New Version modal ──
 var uvModal=document.getElementById("uploadVersionModal");
@@ -988,9 +1062,11 @@ document.getElementById("btnUvSubmit").addEventListener("click",function(){
       submit.style.display="none";
       var box=document.getElementById("uvResultBox");
       box.innerHTML="<strong style=\"color:var(--green)\">✓ Released "+escapeHtml(data.tag)+"</strong><br>"+
-        "<span style=\"color:var(--text-muted);font-size:.8rem;\">Asset: "+escapeHtml(data.assetName)+"</span>";
+        "<span style=\"color:var(--text-muted);font-size:.8rem;\">Asset: "+escapeHtml(data.assetName)+"</span><br>"+
+        "<span style=\"color:var(--yellow);font-size:.8rem;\">Hit <strong>Publish Now</strong> to push this version live.</span>";
       document.getElementById("uvResult").style.display="block";
-      showToast("Released "+data.tag+" ("+data.assetName+")");
+      setPublishStatus("pending","upload ready — Publish Now");
+      showToast("Released "+data.tag+" — hit Publish Now to go live");
     }catch(e2){
       err.textContent="Upload failed: "+e2.message;err.style.display="block";
       submit.disabled=false;submit.textContent="Create Release";

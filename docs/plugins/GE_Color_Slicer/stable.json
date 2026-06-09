@@ -6,15 +6,15 @@
   "licenseTier": null,
   "tags": [],
   "infoUrl": null,
-  "version": "1.0.0",
-  "releaseDate": "2026-06-01T20:40:19Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/Color-Slicer-DCTL/releases/tag/v1.0.0",
+  "version": "2.0",
+  "releaseDate": "2026-06-09T16:59:58Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/Color-Slicer-DCTL/releases/tag/v2.0",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Color-Slicer-DCTL/releases/download/v1.0.0/Color-Slicer-DCTL-v1.0.0.zip",
-      "sha256": "0477a0f3feeb63e4d8a26620f478196e898d56bde0efbe51e90fae64f84c6f36",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Color-Slicer-DCTL/releases/download/v2.0/Color-Slicer-DCTL-v2.0.zip",
+      "sha256": "8df419db01951632d50640d8044f98bd515c62d63e0906a6fb9dad9b609cee9d",
       "packageType": "zip",
       "bundleName": "GE Color Slicer.dctle",
       "bundleIdentifier": "com.dec18studios.GE_Color_Slicer",
@@ -29,8 +29,8 @@
     {
       "platform": "windows",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Color-Slicer-DCTL/releases/download/v1.0.0/Color-Slicer-DCTL-v1.0.0.zip",
-      "sha256": "0477a0f3feeb63e4d8a26620f478196e898d56bde0efbe51e90fae64f84c6f36",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Color-Slicer-DCTL/releases/download/v2.0/Color-Slicer-DCTL-v2.0.zip",
+      "sha256": "8df419db01951632d50640d8044f98bd515c62d63e0906a6fb9dad9b609cee9d",
       "packageType": "zip",
       "bundleName": "GE Color Slicer.dctle",
       "bundleIdentifier": "com.dec18studios.GE_Color_Slicer",
@@ -45,8 +45,8 @@
     {
       "platform": "linux",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Color-Slicer-DCTL/releases/download/v1.0.0/Color-Slicer-DCTL-v1.0.0.zip",
-      "sha256": "0477a0f3feeb63e4d8a26620f478196e898d56bde0efbe51e90fae64f84c6f36",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Color-Slicer-DCTL/releases/download/v2.0/Color-Slicer-DCTL-v2.0.zip",
+      "sha256": "8df419db01951632d50640d8044f98bd515c62d63e0906a6fb9dad9b609cee9d",
       "packageType": "zip",
       "bundleName": "GE Color Slicer.dctle",
       "bundleIdentifier": "com.dec18studios.GE_Color_Slicer",
@@ -59,5 +59,61 @@
       ]
     }
   ],
-  "availableVersions": []
+  "availableVersions": [
+    {
+      "version": "1.0.0",
+      "releaseDate": "2026-06-01T20:40:19Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/Color-Slicer-DCTL/releases/tag/v1.0.0",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Color-Slicer-DCTL/releases/download/v1.0.0/Color-Slicer-DCTL-v1.0.0.zip",
+          "sha256": "0477a0f3feeb63e4d8a26620f478196e898d56bde0efbe51e90fae64f84c6f36",
+          "packageType": "zip",
+          "bundleName": "GE Color Slicer.dctle",
+          "bundleIdentifier": "com.dec18studios.GE_Color_Slicer",
+          "installPath": "/Library/Application Support/Blackmagic Design/DaVinci Resolve/LUT/DCTL",
+          "installMode": "file-browse",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Color-Slicer-DCTL/releases/download/v1.0.0/Color-Slicer-DCTL-v1.0.0.zip",
+          "sha256": "0477a0f3feeb63e4d8a26620f478196e898d56bde0efbe51e90fae64f84c6f36",
+          "packageType": "zip",
+          "bundleName": "GE Color Slicer.dctle",
+          "bundleIdentifier": "com.dec18studios.GE_Color_Slicer",
+          "installPath": "C:\\ProgramData\\Blackmagic Design\\DaVinci Resolve\\Support\\LUT\\DCTL",
+          "installMode": "file-browse",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Color-Slicer-DCTL/releases/download/v1.0.0/Color-Slicer-DCTL-v1.0.0.zip",
+          "sha256": "0477a0f3feeb63e4d8a26620f478196e898d56bde0efbe51e90fae64f84c6f36",
+          "packageType": "zip",
+          "bundleName": "GE Color Slicer.dctle",
+          "bundleIdentifier": "com.dec18studios.GE_Color_Slicer",
+          "installPath": "/opt/resolve/LUT/DCTL",
+          "installMode": "file-browse",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve"
+          ]
+        }
+      ]
+    }
+  ]
 }

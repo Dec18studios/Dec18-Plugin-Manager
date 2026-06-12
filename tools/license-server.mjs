@@ -10,7 +10,7 @@
 
 import { createServer } from "node:http";
 import { createPrivateKey, sign } from "node:crypto";
-import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, rmSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, rmSync, copyFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -1025,8 +1025,14 @@ jobs:
     }
 
     const tag     = `v${version.replace(/^v/, "")}`;
-    const zipName = `${repoName}-${tag}.zip`;
-    const tmpDir  = join(tmpdir(), `d18-release-${Date.now()}`);
+    // STABLE asset name — never bake the version into the filename. The website links to
+    // /releases/latest/download/<repo>.<ext>, which only follows "latest" if the filename is
+    // identical across releases. Versioned names (e.g. Repo-v1.0.0.zip) silently 404 on every
+    // bump. The version still lives in the git tag + release title, just not the asset name.
+    const archiveMatch = fileName.match(/\.(zip|tar\.gz|tgz)$/i);
+    const stableExt    = archiveMatch ? archiveMatch[1].toLowerCase() : "zip";
+    const assetName    = `${repoName}.${stableExt}`;
+    const tmpDir       = join(tmpdir(), `d18-release-${Date.now()}`);
 
     try {
       mkdirSync(tmpDir, { recursive: true });
@@ -1035,16 +1041,14 @@ jobs:
       const rawPath = join(tmpDir, fileName);
       writeFileSync(rawPath, Buffer.from(fileBase64, "base64"));
 
-      // Determine the asset to upload
-      // If the user uploaded a zip/tar directly, use it as-is; otherwise zip the raw file.
-      let assetPath;
-      const isAlreadyArchive = /\.(zip|tar\.gz|tgz)$/i.test(fileName);
-      if (isAlreadyArchive) {
-        assetPath = rawPath;
+      // Produce the asset under the STABLE name.
+      // If the user uploaded an archive, copy/rename it to <repo>.<ext>; otherwise zip the raw
+      // file into <repo>.zip. Either way the released asset filename is version-free.
+      const assetPath = join(tmpDir, assetName);
+      if (archiveMatch) {
+        if (rawPath !== assetPath) copyFileSync(rawPath, assetPath);
       } else {
-        const zipPath = join(tmpDir, zipName);
-        execSync(`zip "${zipPath}" "${fileName}"`, { cwd: tmpDir, stdio: "pipe" });
-        assetPath = zipPath;
+        execSync(`zip "${assetPath}" "${fileName}"`, { cwd: tmpDir, stdio: "pipe" });
       }
 
       // Ensure the GitHub repo has at least one commit by pushing manager-release-config.json
@@ -1078,7 +1082,7 @@ jobs:
         { cwd: REPO_ROOT, stdio: "pipe" }
       );
 
-      json(res, 200, { ok: true, tag, title: relTitle, assetName: isAlreadyArchive ? fileName : zipName });
+      json(res, 200, { ok: true, tag, title: relTitle, assetName });
     } catch (err) {
       json(res, 500, { error: err.stderr?.toString().trim() || err.message });
     } finally {

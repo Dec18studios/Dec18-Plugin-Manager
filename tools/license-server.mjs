@@ -1082,7 +1082,11 @@ jobs:
         { cwd: REPO_ROOT, stdio: "pipe" }
       );
 
-      json(res, 200, { ok: true, tag, title: relTitle, assetName });
+      // Auto-sync the website so the just-published GitHub release feeds the download links.
+      // Best-effort — the release already succeeded regardless of the website outcome.
+      const website = syncWebsiteForRelease(pluginId, repoName, assetName);
+
+      json(res, 200, { ok: true, tag, title: relTitle, assetName, website });
     } catch (err) {
       json(res, 500, { error: err.stderr?.toString().trim() || err.message });
     } finally {
@@ -1174,6 +1178,78 @@ jobs:
   res.writeHead(404, { "Content-Type": "text/plain" });
   res.end("Not found");
 });
+
+// After a successful release, repoint the website's download wiring for this tool at the new
+// STABLE asset name and publish the pages repo. Best-effort: never throws — a failure here must
+// not fail the release itself (the response carries the outcome so the UI can warn).
+function syncWebsiteForRelease(pluginId, repoName, assetName) {
+  const result = { updated: false, pushed: false, note: "" };
+  const note = (m) => { result.note = result.note ? `${result.note}; ${m}` : m; };
+
+  const pagesRoot = join(REPO_ROOT, "..", "dec18studios.github.io");
+  const cgtDir = join(pagesRoot, "color-grading-tools");
+  if (!existsSync(cgtDir)) { note(`pages repo not found at ${pagesRoot}`); return result; }
+
+  // 1. Update the source of truth (docs/website-tools.json). Only touch download-driven tools
+  //    (those with a repo) so we never accidentally add a download link to a pro/purchase tool.
+  let entryUrl = null;
+  try {
+    const webToolsPath = join(REPO_ROOT, "docs", "website-tools.json");
+    const web = loadJSON(webToolsPath, []);
+    if (Array.isArray(web)) {
+      const entry = web.find(e => pluginId && e.pluginId === pluginId && e.repo)
+                 || web.find(e => e.repo === repoName);
+      if (entry) {
+        entry.dlAsset = assetName;
+        entryUrl = entry.url || null;
+        saveJSON(webToolsPath, web);
+        result.updated = true;
+      } else {
+        note(`no website-tools entry for ${repoName}`);
+      }
+    }
+  } catch (e) { note(`website-tools update failed: ${e.message}`); }
+
+  // 2. Regenerate the pages tools.json (what the main listing + members page fetch live).
+  try {
+    const out = join(cgtDir, "tools.json");
+    execSync(`node tools/generate-tools-json.mjs --manager-root . --output ${JSON.stringify(out)}`,
+      { cwd: REPO_ROOT, stdio: "pipe" });
+  } catch (e) { note(`tools.json generate failed: ${e.message}`); }
+
+  // 3. Repoint hardcoded references for this repo across the tool pages:
+  //    - full download URLs (dedicated tool-page buttons): .../download/<old> → .../download/<asset>
+  //    - inline TOOLS-array fallbacks: repo:"<repo>" ... dlAsset:"<old>" → <asset>
+  try {
+    const urlRe   = new RegExp(`(github\\.com/Dec18studios/${repoName}/releases/latest/download/)[^"'\\s]+`, "g");
+    const inlineRe = new RegExp(`(repo:\\s*["']${repoName}["'][^}]*?dlAsset:\\s*["'])[^"']+(["'])`, "g");
+    const files = [join(cgtDir, "index.html"), join(cgtDir, "members", "index.html")];
+    if (entryUrl) files.push(join(cgtDir, entryUrl.replace(/\/+$/, ""), "index.html"));
+    for (const f of files) {
+      if (!existsSync(f)) continue;
+      const txt = readFileSync(f, "utf8");
+      const patched = txt.replace(urlRe, `$1${assetName}`).replace(inlineRe, `$1${assetName}$2`);
+      if (patched !== txt) writeFileSync(f, patched);
+    }
+  } catch (e) { note(`page repoint failed: ${e.message}`); }
+
+  // 4. Commit + push the pages repo (this is the live deploy).
+  try {
+    execSync("git add color-grading-tools", { cwd: pagesRoot, stdio: "pipe" });
+    try {
+      execSync(`git -c user.name="Greg Enright" -c user.email="create@dec18studios.com" commit -m ${JSON.stringify(`Sync ${repoName} download to stable asset ${assetName}`)}`,
+        { cwd: pagesRoot, stdio: "pipe" });
+      execSync("git push", { cwd: pagesRoot, stdio: "pipe" });
+      result.pushed = true;
+    } catch (commitErr) {
+      const msg = (commitErr.stdout?.toString() || "") + (commitErr.stderr?.toString() || "");
+      if (!msg.includes("nothing to commit")) throw commitErr;
+      note("no website changes to push");
+    }
+  } catch (e) { note(`pages push failed: ${e.message}`); }
+
+  return result;
+}
 
 function gitSync() {
   try {

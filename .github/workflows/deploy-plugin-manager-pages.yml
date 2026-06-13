@@ -71,6 +71,7 @@ jobs:
             "GradeMatch-OFX|grade-match"
             "Hue-Inspector-DCTL|GE_hue_inspector_dctl"
             "Color-Slicer-DCTL|GE_Color_Slicer"
+            "IDT-Lut-Loaders-DCTL|idt-lut-loaders-dctl"
           )
 
           PROCESSED=0

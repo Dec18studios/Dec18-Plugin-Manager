@@ -151,6 +151,14 @@
       "licenseTier": "free",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/volume-curve-dctl/stable.json",
       "category": "Color Grading"
+    },
+    {
+      "pluginId": "idt-lut-loaders-dctl",
+      "displayName": "IDT Lut Loaders",
+      "type": "DCTL",
+      "licenseTier": "free",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/idt-lut-loaders-dctl/stable.json",
+      "category": "Workflow"
     }
   ]
 }

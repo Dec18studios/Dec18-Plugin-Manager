@@ -534,8 +534,11 @@ const server = createServer(async (req, res) => {
     let repoError   = null;
     if (createRepo) {
       try {
+        // Free tools get a public repo so the release zip downloads without auth;
+        // premium tools stay private (gated behind the license/manager token).
+        const visibility = safeTier === "free" ? "--public" : "--private";
         execSync(
-          `gh repo create Dec18studios/${safeRepo} --private --description ${JSON.stringify(description || displayName)}`,
+          `gh repo create Dec18studios/${safeRepo} ${visibility} --description ${JSON.stringify(description || displayName)}`,
           { cwd: REPO_ROOT, stdio: "pipe" }
         );
         repoCreated = true;

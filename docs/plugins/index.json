@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-13T15:35:58.096Z",
+  "generatedAt": "2026-06-13T23:21:45.918Z",
   "plugins": [
     {
       "pluginId": "GE_Color_Slicer",
@@ -64,6 +64,14 @@
       "licenseTier": "free",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/ibkeymaster-ofx/stable.json",
       "category": "Keying"
+    },
+    {
+      "pluginId": "idt-lut-loaders-dctl",
+      "displayName": "IDT Lut Loaders",
+      "type": "DCTL",
+      "licenseTier": "free",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/idt-lut-loaders-dctl/stable.json",
+      "category": "Workflow"
     },
     {
       "pluginId": "linear-ramp-diagnostic-dctl",
@@ -151,14 +159,6 @@
       "licenseTier": "free",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/volume-curve-dctl/stable.json",
       "category": "Color Grading"
-    },
-    {
-      "pluginId": "idt-lut-loaders-dctl",
-      "displayName": "IDT Lut Loaders",
-      "type": "DCTL",
-      "licenseTier": "free",
-      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/idt-lut-loaders-dctl/stable.json",
-      "category": "Workflow"
     }
   ]
 }

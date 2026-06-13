@@ -1241,8 +1241,9 @@ function autoFillPluginIds(){
   var suffix=type==="DCTL"?"-dctl":type==="OFX"?"-ofx":"-app";
   var id=name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+suffix;
   var repo=name.replace(/[^a-zA-Z0-9]+/g,"-").replace(/^-|-$/g,"")+"-"+(type==="DCTL"?"DCTL":type==="OFX"?"OFX":"App");
-  // Asset pattern matches {RepoName}-v{ver}.zip
-  var assetPat=repo.replace(/-/g,"\\.")+"-?.*\\.zip$";
+  // Asset pattern matches {RepoName}.zip and {RepoName}-v{ver}.zip — create-release
+  // names the asset after the repo (hyphens), so match the repo name literally.
+  var assetPat=repo+".*\\.zip$";
   if(document.getElementById("apPluginId").dataset.manual!=="1")document.getElementById("apPluginId").value=id;
   if(document.getElementById("apRepoName").dataset.manual!=="1")document.getElementById("apRepoName").value=repo;
   if(document.getElementById("apAssetPattern").dataset.manual!=="1")document.getElementById("apAssetPattern").value=assetPat;

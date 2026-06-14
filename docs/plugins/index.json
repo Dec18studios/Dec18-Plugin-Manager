@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-14T00:23:12.862Z",
+  "generatedAt": "2026-06-14T01:21:10.655Z",
   "plugins": [
     {
       "pluginId": "GE_Color_Slicer",
@@ -80,6 +80,14 @@
       "licenseTier": "free",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/linear-ramp-diagnostic-dctl/stable.json",
       "category": "Diagnostics"
+    },
+    {
+      "pluginId": "lookdevtools",
+      "displayName": "Look Dev Tools",
+      "type": "OFX",
+      "licenseTier": "subscription",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/lookdevtools/stable.json",
+      "category": "Color Grading"
     },
     {
       "pluginId": "perfect-exposure-dctl",

@@ -19,7 +19,8 @@
     "name": "Look Dev Tools",
     "slug": "lookdevtools",
     "color": "blue",
-    "desc": "A grouped six-in-one look-dev suite — five node-ordered color tools plus a monolith that chains them in a single grade."
+    "desc": "A grouped six-in-one look-dev suite — five node-ordered color tools plus a monolith that chains them in a single grade.",
+    "url": "lookdevtools/"
   },
   {
     "pluginId": "hue-contrast-compressor-dctl",

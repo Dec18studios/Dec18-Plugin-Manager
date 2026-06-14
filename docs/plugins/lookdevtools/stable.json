@@ -20,7 +20,7 @@
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/download/v1.0.0/LookDevTools_v1.0.0_macOS_universal_portable.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.0.0/LookDevTools_v1.0.0_macOS_universal_portable.zip",
       "sha256": "24585f00bb99c0cff11eacd73299c8e052d3f631445ced3204675f78879cd469",
       "packageType": "zip",
       "bundleName": "LookDevTools.ofx.bundle",
@@ -42,7 +42,7 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/download/v1.0.0/LookDevTools_v1.0.0_windows_cuda_portable.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.0.0/LookDevTools_v1.0.0_windows_cuda_portable.zip",
       "sha256": "be7e8a670d531d8b30bd834f83b86d220fbec77f0887c8d208d12e596cd73ccf",
       "packageType": "zip",
       "bundleName": "LookDevTools.ofx.bundle",
@@ -64,7 +64,7 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/download/v1.0.0/LookDevTools_v1.0.0_linux_cuda_portable.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.0.0/LookDevTools_v1.0.0_linux_cuda_portable.zip",
       "sha256": "30409add0b1149a7fffd2338b63296b6989584a8c9ba897eb0cf1f531a57fde5",
       "packageType": "zip",
       "bundleName": "LookDevTools.ofx.bundle",

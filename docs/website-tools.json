@@ -15,6 +15,13 @@
     "desc": "A three-strip Technicolor look as a display rendering transform."
   },
   {
+    "pluginId": "lookdevtools",
+    "name": "Look Dev Tools",
+    "slug": "lookdevtools",
+    "color": "blue",
+    "desc": "A grouped six-in-one look-dev suite — five node-ordered color tools plus a monolith that chains them in a single grade."
+  },
+  {
     "pluginId": "hue-contrast-compressor-dctl",
     "name": "Hue Contrast Compressor",
     "slug": "hue-contrast-compressor",

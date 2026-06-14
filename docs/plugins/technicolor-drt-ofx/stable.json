@@ -14,15 +14,15 @@
     "CMY"
   ],
   "infoUrl": null,
-  "version": "12.0.0",
-  "releaseDate": "2026-06-12T00:14:39Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/Technically-Technicolor-DRT/releases/tag/v12.0.0",
+  "version": "12.1.0",
+  "releaseDate": "2026-06-14T00:22:49Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/Technically-Technicolor-DRT/releases/tag/v12.1.0",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v12.0.0/TechnicolorDRT_macOS_universal_portable.zip",
-      "sha256": "ebdcf3ad17bb9b97b0c9cc1e2c6b0deda0f9101fbbe6d9a53f8a97eb820153ef",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v12.1.0/TechnicolorDRT_macOS_universal_portable.zip",
+      "sha256": "b51323c10021c2fd7deb8408167ce78838ac691ddd03112512e3e23fdd064104",
       "packageType": "zip",
       "bundleName": "TechnicolorDRT.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.TechnicolorDRT",
@@ -43,8 +43,8 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v12.0.0/TechnicolorDRT_windows_x64_portable.zip",
-      "sha256": "9d6f20da7af36fa5f97c4f03b9d973660577bfbc8094051a489d07b291c8f7b8",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v12.1.0/TechnicolorDRT_windows_x64_portable.zip",
+      "sha256": "4b3659cf1d6ad6c6205b6c3389c2942a6f33d0db13f062704b2175d8c365ff03",
       "packageType": "zip",
       "bundleName": "TechnicolorDRT.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.TechnicolorDRT",
@@ -65,8 +65,8 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v12.0.0/TechnicolorDRT_linux_x86_64_portable.zip",
-      "sha256": "87e3aa1ec52cf904f0dbb2e058fd47f2799910de3cc29b7f7e0ff4ee273e68bc",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v12.1.0/TechnicolorDRT_linux_x86_64_portable.zip",
+      "sha256": "0e8271ef8b00c97ccf7cdd30f81de029de46ce09fd86fbefdd9868baba241182",
       "packageType": "zip",
       "bundleName": "TechnicolorDRT.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.TechnicolorDRT",
@@ -86,6 +86,79 @@
     }
   ],
   "availableVersions": [
+    {
+      "version": "12.0.0",
+      "releaseDate": "2026-06-12T00:14:39Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/Technically-Technicolor-DRT/releases/tag/v12.0.0",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v12.0.0/TechnicolorDRT_macOS_universal_portable.zip",
+          "sha256": "ebdcf3ad17bb9b97b0c9cc1e2c6b0deda0f9101fbbe6d9a53f8a97eb820153ef",
+          "packageType": "zip",
+          "bundleName": "TechnicolorDRT.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.TechnicolorDRT",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v12.0.0/TechnicolorDRT_windows_x64_portable.zip",
+          "sha256": "9d6f20da7af36fa5f97c4f03b9d973660577bfbc8094051a489d07b291c8f7b8",
+          "packageType": "zip",
+          "bundleName": "TechnicolorDRT.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.TechnicolorDRT",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v12.0.0/TechnicolorDRT_linux_x86_64_portable.zip",
+          "sha256": "87e3aa1ec52cf904f0dbb2e058fd47f2799910de3cc29b7f7e0ff4ee273e68bc",
+          "packageType": "zip",
+          "bundleName": "TechnicolorDRT.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.TechnicolorDRT",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
     {
       "version": "10.0.1",
       "releaseDate": "2026-05-23T01:50:04Z",

@@ -1,0 +1,44 @@
+{
+  "pluginId": "lookdevtools",
+  "displayName": "Look Dev Tools",
+  "releaseRepo": "Dec18studios/LookDevTools-OFX",
+  "minManagerVersion": "0.1.0",
+  "hostProcesses": ["Resolve", "DaVinci Resolve", "Fusion", "Fusion Studio", "Nuke", "NukeX", "NukeStudio", "Hiero"],
+  "requiredFamilies": ["macos"],
+  "category": "Color Grading",
+  "description": "A grouped six-in-one look-dev suite: five node-ordered color tools (Hue Remix Pro, Hue Saturation Pro, and more) plus a monolith node that chains all five in a single grade. One GPU-accelerated bundle — Metal on macOS, CUDA on Windows/Linux, CPU fallback.",
+  "licenseTier": "subscription",
+  "tags": ["look dev", "color grading", "hue", "saturation", "OFX", "GPU"],
+  "assetRules": [
+    {
+      "family": "macos",
+      "platform": "macos",
+      "arch": "universal",
+      "assetPattern": "LookDevTools.*macOS.*universal.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "LookDevTools.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.LookDevTools",
+      "installPath": "/Library/OFX/Plugins"
+    },
+    {
+      "family": "windows",
+      "platform": "windows",
+      "arch": "x86_64",
+      "assetPattern": "LookDevTools.*windows.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "LookDevTools.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.LookDevTools",
+      "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins"
+    },
+    {
+      "family": "linux",
+      "platform": "linux",
+      "arch": "x86_64",
+      "assetPattern": "LookDevTools.*linux.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "LookDevTools.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.LookDevTools",
+      "installPath": "/usr/OFX/Plugins"
+    }
+  ]
+}

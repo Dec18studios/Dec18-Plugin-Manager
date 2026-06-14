@@ -1,0 +1,88 @@
+{
+  "pluginId": "lookdevtools",
+  "displayName": "Look Dev Tools",
+  "description": "A grouped six-in-one look-dev suite: five node-ordered color tools (Hue Remix Pro, Hue Saturation Pro, and more) plus a monolith node that chains all five in a single grade. One GPU-accelerated bundle — Metal on macOS, CUDA on Windows/Linux, CPU fallback.",
+  "category": "Color Grading",
+  "licenseTier": "subscription",
+  "tags": [
+    "look dev",
+    "color grading",
+    "hue",
+    "saturation",
+    "OFX",
+    "GPU"
+  ],
+  "infoUrl": null,
+  "version": "1.0.0",
+  "releaseDate": "2026-06-14T01:20:51Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/tag/v1.0.0",
+  "platforms": [
+    {
+      "platform": "macos",
+      "arch": "universal",
+      "downloadUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/download/v1.0.0/LookDevTools_v1.0.0_macOS_universal_portable.zip",
+      "sha256": "24585f00bb99c0cff11eacd73299c8e052d3f631445ced3204675f78879cd469",
+      "packageType": "zip",
+      "bundleName": "LookDevTools.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.LookDevTools",
+      "installPath": "/Library/OFX/Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    },
+    {
+      "platform": "windows",
+      "arch": "x86_64",
+      "downloadUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/download/v1.0.0/LookDevTools_v1.0.0_windows_cuda_portable.zip",
+      "sha256": "be7e8a670d531d8b30bd834f83b86d220fbec77f0887c8d208d12e596cd73ccf",
+      "packageType": "zip",
+      "bundleName": "LookDevTools.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.LookDevTools",
+      "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    },
+    {
+      "platform": "linux",
+      "arch": "x86_64",
+      "downloadUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/download/v1.0.0/LookDevTools_v1.0.0_linux_cuda_portable.zip",
+      "sha256": "30409add0b1149a7fffd2338b63296b6989584a8c9ba897eb0cf1f531a57fde5",
+      "packageType": "zip",
+      "bundleName": "LookDevTools.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.LookDevTools",
+      "installPath": "/usr/OFX/Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    }
+  ],
+  "availableVersions": []
+}

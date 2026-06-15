@@ -13,15 +13,15 @@
     "GPU"
   ],
   "infoUrl": null,
-  "version": "1.1.0",
-  "releaseDate": "2026-06-14T03:48:24Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/tag/v1.1.0",
+  "version": "1.4.0",
+  "releaseDate": "2026-06-15T01:01:53Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/tag/v1.4.0",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.1.0/LookDevTools_v1.1.0_macOS_universal_portable.zip",
-      "sha256": "fffff3bd6d00fe26f37876ad595432a6f309952567ca79d3c903360f11c3b004",
+      "downloadUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/download/v1.4.0/LookDevTools_v1.4.0_macOS_universal_portable.zip",
+      "sha256": "cb2794fdba55a51058ff8de1a496657760807761ce403c71a9d321c13f87cff0",
       "packageType": "zip",
       "bundleName": "LookDevTools.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookDevTools",
@@ -42,8 +42,8 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.1.0/LookDevTools_v1.1.0_windows_cuda_portable.zip",
-      "sha256": "f9a6dbcb063d4f917f2beac58abe3ab7d1cc15c3a4d5225804fbdb580ea8690f",
+      "downloadUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/download/v1.4.0/LookDevTools_v1.4.0_windows_cuda_portable.zip",
+      "sha256": "f066efe947eb80fe253ad0830275eb92185ce482e0c8eb5e8a93ae40220863d6",
       "packageType": "zip",
       "bundleName": "LookDevTools.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookDevTools",
@@ -64,8 +64,8 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.1.0/LookDevTools_v1.1.0_linux_cuda_portable.zip",
-      "sha256": "f864fe79cbb758919cc5b1ca22ab6ec7f7c63f88c3e22a20b5cf258b27593179",
+      "downloadUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/download/v1.4.0/LookDevTools_v1.4.0_linux_cuda_portable.zip",
+      "sha256": "1b3e9761b06a9d0188dcf4cbe38c912fd6f90abc9fa982f3c39ebd7f546ef9f5",
       "packageType": "zip",
       "bundleName": "LookDevTools.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookDevTools",
@@ -86,6 +86,152 @@
   ],
   "availableVersions": [
     {
+      "version": "1.3.0",
+      "releaseDate": "2026-06-14T21:09:18Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/tag/v1.3.0",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/download/v1.3.0/LookDevTools_v1.3.0_macOS_universal_portable.zip",
+          "sha256": "a09888953c3ef61d84a1a7d35567bba57f47c1dbf41ae0a3049efa6fe89a2dd2",
+          "packageType": "zip",
+          "bundleName": "LookDevTools.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookDevTools",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/download/v1.3.0/LookDevTools_v1.3.0_windows_cuda_portable.zip",
+          "sha256": "66ba44f6771ed85ae2e2795a996e4954ef38e29d8a26409bd2a91df910ecd692",
+          "packageType": "zip",
+          "bundleName": "LookDevTools.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookDevTools",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/download/v1.3.0/LookDevTools_v1.3.0_linux_cuda_portable.zip",
+          "sha256": "a5fb06c4598ef39709ec39c300bc2497343912c29643e3540b44d7a2a851fd80",
+          "packageType": "zip",
+          "bundleName": "LookDevTools.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookDevTools",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
+    {
+      "version": "1.1.0",
+      "releaseDate": "2026-06-14T03:48:24Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/tag/v1.1.0",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/download/v1.1.0/LookDevTools_v1.1.0_macOS_universal_portable.zip",
+          "sha256": "fffff3bd6d00fe26f37876ad595432a6f309952567ca79d3c903360f11c3b004",
+          "packageType": "zip",
+          "bundleName": "LookDevTools.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookDevTools",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/download/v1.1.0/LookDevTools_v1.1.0_windows_cuda_portable.zip",
+          "sha256": "f9a6dbcb063d4f917f2beac58abe3ab7d1cc15c3a4d5225804fbdb580ea8690f",
+          "packageType": "zip",
+          "bundleName": "LookDevTools.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookDevTools",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/download/v1.1.0/LookDevTools_v1.1.0_linux_cuda_portable.zip",
+          "sha256": "f864fe79cbb758919cc5b1ca22ab6ec7f7c63f88c3e22a20b5cf258b27593179",
+          "packageType": "zip",
+          "bundleName": "LookDevTools.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookDevTools",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
+    {
       "version": "1.0.0",
       "releaseDate": "2026-06-14T02:09:09Z",
       "releaseNotesUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/tag/v1.0.0",
@@ -93,7 +239,7 @@
         {
           "platform": "macos",
           "arch": "universal",
-          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.0.0/LookDevTools_v1.0.0_macOS_universal_portable.zip",
+          "downloadUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/download/v1.0.0/LookDevTools_v1.0.0_macOS_universal_portable.zip",
           "sha256": "2476b4a51ea2497345a733bf0311c642147a24e7edc533ccbd45b0e66daeef9a",
           "packageType": "zip",
           "bundleName": "LookDevTools.ofx.bundle",
@@ -115,7 +261,7 @@
         {
           "platform": "windows",
           "arch": "x86_64",
-          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.0.0/LookDevTools_v1.0.0_windows_cuda_portable.zip",
+          "downloadUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/download/v1.0.0/LookDevTools_v1.0.0_windows_cuda_portable.zip",
           "sha256": "05d56b693bededc96b3f1a897786e49888f02930a3bd42b4a4953dc170e7d0c7",
           "packageType": "zip",
           "bundleName": "LookDevTools.ofx.bundle",
@@ -137,7 +283,7 @@
         {
           "platform": "linux",
           "arch": "x86_64",
-          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.0.0/LookDevTools_v1.0.0_linux_cuda_portable.zip",
+          "downloadUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/download/v1.0.0/LookDevTools_v1.0.0_linux_cuda_portable.zip",
           "sha256": "9a723a5c1f92d0ab6163489af26cec2f8fba6787d6f338fea1abd65006301d7b",
           "packageType": "zip",
           "bundleName": "LookDevTools.ofx.bundle",

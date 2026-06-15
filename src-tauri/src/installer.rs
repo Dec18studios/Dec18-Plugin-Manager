@@ -84,7 +84,7 @@ pub fn read_bundle_install_stamp(bundle_root: &Path) -> Result<Option<BundleInst
     Ok(Some(stamp))
 }
 
-fn save_install_state(state: &ManagedInstallState) -> Result<()> {
+pub fn save_install_state(state: &ManagedInstallState) -> Result<()> {
     let state_path = install_state_path()?;
     if let Some(parent) = state_path.parent() {
         fs::create_dir_all(parent)

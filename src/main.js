@@ -148,14 +148,19 @@ function startOperation(kind, pluginId = null, label = "Working") {
     stepIndex: 0
   };
 
-  state.activeOperation.timer = window.setInterval(() => {
-    if (!state.activeOperation || state.activeOperation.kind !== kind || state.activeOperation.pluginId !== pluginId) {
-      return;
-    }
-    const lastStep = state.activeOperation.steps.length - 1;
-    state.activeOperation.stepIndex = Math.min(state.activeOperation.stepIndex + 1, lastStep);
-    renderPlugins();
-  }, 1400);
+  // Only per-plugin operations animate stepwise inside a card. Global operations
+  // (catalog refresh, manager update — pluginId === null) have no per-card progress
+  // to advance, so running the interval just thrashes the whole list every 1.4s.
+  if (pluginId) {
+    state.activeOperation.timer = window.setInterval(() => {
+      if (!state.activeOperation || state.activeOperation.kind !== kind || state.activeOperation.pluginId !== pluginId) {
+        return;
+      }
+      const lastStep = state.activeOperation.steps.length - 1;
+      state.activeOperation.stepIndex = Math.min(state.activeOperation.stepIndex + 1, lastStep);
+      renderPlugins();
+    }, 1400);
+  }
 
   renderPlugins();
 }
@@ -707,11 +712,24 @@ function renderPlugins() {
     return;
   }
 
+  // Preserve UI state across the full re-render below: which expandable drawers
+  // are open and the list's scroll position. Without this, every refresh (incl.
+  // the periodic one during an operation) collapsed drawers and jumped to top.
+  const prevScrollTop = elements.pluginList.scrollTop;
+  const openDrawers = new Set();
+  for (const card of elements.pluginList.querySelectorAll(".plugin-card")) {
+    const id = card.dataset.pluginId;
+    if (!id) continue;
+    if (card.querySelector(".version-drawer[open]")) openDrawers.add(`${id}::version`);
+    if (card.querySelector(".maintenance-drawer[open]")) openDrawers.add(`${id}::maintenance`);
+  }
+
   elements.pluginList.innerHTML = "";
 
   for (const plugin of plugins) {
     const card = document.createElement("article");
     card.className = `plugin-card ${cardToneClass(plugin)}`;
+    card.dataset.pluginId = plugin.pluginId;
     const installedVersion = plugin.installedVersion ?? (plugin.installed ? "Unknown" : "—");
     const primaryLabel = actionLabel(plugin);
     const primaryRequest = actionRequest(plugin);
@@ -795,17 +813,14 @@ function renderPlugins() {
       });
     }
 
-    // Add folder picker row for DCTL / file-browse plugins
+    // Add folder picker row for DCTL / file-browse plugins. Render it synchronously
+    // (before the drawers below) so the card's height is stable, then fill in the
+    // actual path async — the old deferred insert caused a visible layout shift.
     if (plugin.installMode === "file-browse" && (isLicensed() || plugin.licenseTier === "free")) {
+      const folderRow = renderFolderRow(plugin, null);
+      card.appendChild(folderRow);
       invoke("get_plugin_install_path", { pluginId: plugin.pluginId }).then((perPath) => {
-        const folderRow = renderFolderRow(plugin, perPath || null);
-        // Insert before any drawers or at end of card
-        const firstDrawer = card.querySelector(".version-drawer, .maintenance-drawer");
-        if (firstDrawer) {
-          card.insertBefore(folderRow, firstDrawer);
-        } else {
-          card.appendChild(folderRow);
-        }
+        if (perPath) updateFolderRow(card, perPath);
       });
     }
 
@@ -818,8 +833,21 @@ function renderPlugins() {
       card.appendChild(maintenanceDrawer);
     }
 
+    // Re-open any drawers the user had expanded before this re-render.
+    if (openDrawers.has(`${plugin.pluginId}::version`)) {
+      const drawer = card.querySelector(".version-drawer");
+      if (drawer) drawer.open = true;
+    }
+    if (openDrawers.has(`${plugin.pluginId}::maintenance`)) {
+      const drawer = card.querySelector(".maintenance-drawer");
+      if (drawer) drawer.open = true;
+    }
+
     elements.pluginList.appendChild(card);
   }
+
+  // Restore scroll position after the list has been rebuilt.
+  elements.pluginList.scrollTop = prevScrollTop;
 }
 
 // --- License state management ---

@@ -43,7 +43,11 @@ pub struct CatalogBundle {
 pub async fn build_dashboard_state() -> Result<DashboardState> {
     let app_settings = settings::load_settings()?;
     let bundle = load_catalog_bundle(app_settings.beta_releases_enabled).await?;
-    let install_state = installer::load_install_state()?;
+    // Self-heal: a bundle that exists on disk with no stamp/record is a direct
+    // download (not installed through this app). Adopt it at the manifest's latest
+    // version so it reads "Up to date" instead of a phantom "Update available".
+    let mut install_state = installer::load_install_state()?;
+    adopt_unmanaged_installs(&bundle, &mut install_state);
     let manager = ManagerSummary {
         app_version: env!("CARGO_PKG_VERSION").to_string(),
         platform: installer::current_platform().to_string(),
@@ -147,14 +151,17 @@ fn build_plugin_status(
     let channel_switch_available = channel_switch_mode.is_some();
     let catalog_behind_installed = installed_newer_than_manifest && !installed_is_prerelease;
     let needs_update = installed
+        && managed_install
         && installed_version
             .as_ref()
             .map(|current| version_cmp(current, &manifest.version) == Ordering::Less)
-            .unwrap_or(true);
+            .unwrap_or(false);
     let available_versions = version_options(manifest, installed_version.as_deref());
 
     let status = if !installed {
         "Ready to install".to_string()
+    } else if !managed_install {
+        "Unmanaged install".to_string()
     } else if channel_switch_mode.as_deref() == Some("stable_update_available") {
         "Stable update available".to_string()
     } else if channel_switch_mode.as_deref() == Some("return_to_stable") {
@@ -163,10 +170,8 @@ fn build_plugin_status(
         "Catalog behind".to_string()
     } else if needs_update {
         "Update available".to_string()
-    } else if managed_install {
-        "Up to date".to_string()
     } else {
-        "Unmanaged install".to_string()
+        "Up to date".to_string()
     };
 
     PluginStatus {
@@ -196,6 +201,59 @@ fn build_plugin_status(
             .unwrap_or_else(|| "subscription".to_string()),
         install_mode: package.install_mode.clone(),
     }
+}
+
+fn adopt_unmanaged_installs(
+    bundle: &CatalogBundle,
+    install_state: &mut crate::models::ManagedInstallState,
+) {
+    let mut changed = false;
+    for entry in &bundle.entries {
+        let Some(manifest) = bundle.manifests.get(&entry.plugin_id) else {
+            continue;
+        };
+        let Ok(package) = select_package(&manifest.platforms) else {
+            continue;
+        };
+        // Only adopt fixed-path bundle installs. File-browse (DCTL) targets vary by
+        // user setting and can't be reliably matched here.
+        if package.install_mode == "file-browse" {
+            continue;
+        }
+        let target_bundle = PathBuf::from(&package.install_path).join(&package.bundle_name);
+        if !target_bundle.exists() {
+            continue;
+        }
+        let key = installer::install_key(&entry.plugin_id, &target_bundle);
+        if install_state.installs.contains_key(&key) {
+            continue;
+        }
+        let has_stamp = installer::read_bundle_install_stamp(&target_bundle)
+            .ok()
+            .flatten()
+            .is_some();
+        if has_stamp {
+            continue;
+        }
+        install_state.installs.insert(
+            key,
+            crate::models::InstallRecord {
+                plugin_id: entry.plugin_id.clone(),
+                bundle_path: target_bundle.display().to_string(),
+                installed_version: manifest.version.clone(),
+                bundle_identifier: package.bundle_identifier.clone(),
+                installed_at: now_rfc3339(),
+            },
+        );
+        changed = true;
+    }
+    if changed {
+        let _ = installer::save_install_state(install_state);
+    }
+}
+
+fn now_rfc3339() -> String {
+    chrono::Utc::now().to_rfc3339()
 }
 
 fn version_cmp(left: &str, right: &str) -> Ordering {
@@ -371,6 +429,13 @@ fn parse_loose_version(raw: &str) -> Option<LooseVersion> {
         return None;
     }
 
+    // Accept a leading `v`/`V` (e.g. "v1.2.3") only when a digit follows, so labels
+    // like "preview" aren't mistaken for versioned tags.
+    let trimmed = match trimmed.strip_prefix(['v', 'V']) {
+        Some(rest) if rest.starts_with(|c: char| c.is_ascii_digit()) => rest,
+        _ => trimmed,
+    };
+
     let mut numeric_parts = Vec::new();
     let mut current = String::new();
     let mut prerelease_start = None;
@@ -542,10 +607,19 @@ async fn load_catalog_bundle(prefer_beta: bool) -> Result<CatalogBundle> {
         ),
     };
 
+    // Fetch all per-plugin manifests concurrently rather than one-at-a-time, so a
+    // catalog refresh is bounded by the slowest single request, not their sum.
+    let manifest_futures = index.plugins.iter().map(|entry| {
+        let client = &client;
+        async move {
+            let manifest = load_manifest_for_entry(client, entry, prefer_beta).await?;
+            Ok::<_, anyhow::Error>((entry.plugin_id.clone(), manifest))
+        }
+    });
     let mut manifests = HashMap::new();
-    for entry in &index.plugins {
-        let manifest = load_manifest_for_entry(&client, entry, prefer_beta).await?;
-        manifests.insert(entry.plugin_id.clone(), manifest);
+    for result in futures::future::join_all(manifest_futures).await {
+        let (plugin_id, manifest) = result?;
+        manifests.insert(plugin_id, manifest);
     }
 
     Ok(CatalogBundle {
@@ -663,8 +737,14 @@ where
             .with_context(|| format!("Failed to parse JSON from {}", local_path.display()));
     }
 
+    // GitHub Pages is fronted by a CDN whose per-edge caches can serve stale catalog
+    // copies, which makes plugin versions appear to "jump" between refreshes. Bust the
+    // cache with a unique query param and explicit no-cache headers.
+    let busted_url = append_cache_buster(url);
     let response = client
-        .get(url)
+        .get(&busted_url)
+        .header("Cache-Control", "no-cache")
+        .header("Pragma", "no-cache")
         .send()
         .await
         .with_context(|| format!("Failed to fetch {url}"))?
@@ -675,6 +755,15 @@ where
         .json::<T>()
         .await
         .with_context(|| format!("Failed to parse JSON from {url}"))
+}
+
+fn append_cache_buster(url: &str) -> String {
+    let millis = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_millis())
+        .unwrap_or(0);
+    let separator = if url.contains('?') { '&' } else { '?' };
+    format!("{url}{separator}cb={millis}")
 }
 
 fn embedded_manifest(plugin_id: &str) -> Result<PluginManifest> {
@@ -797,6 +886,7 @@ mod tests {
             install_path: "C:\\Test\\Plugins".to_string(),
             min_manager_version: "0.1.0".to_string(),
             host_processes: Vec::new(),
+            install_mode: "bundle".to_string(),
         }
     }
 
@@ -818,6 +908,12 @@ mod tests {
             release_date: "2026-03-30T00:00:00Z".to_string(),
             release_notes_url: format!("https://example.com/releases/{version}"),
             release_highlights: None,
+            description: None,
+            category: None,
+            plugin_type: None,
+            tags: Vec::new(),
+            info_url: None,
+            license_tier: None,
             platforms: vec![test_package()],
             available_versions: available_versions
                 .iter()

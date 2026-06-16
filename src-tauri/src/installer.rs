@@ -53,6 +53,22 @@ pub fn install_key(plugin_id: &str, bundle_path: &Path) -> String {
     format!("{}::{}", plugin_id, bundle_path.display())
 }
 
+/// Resolve the install directory for a file-browse (DCTL) plugin.
+/// Single source of truth shared by install, status detection, and folder-open so
+/// they can never disagree about where a DCTL lives: per-plugin override → global
+/// DCTL path → manifest default.
+pub fn resolve_file_browse_dir(plugin_id: &str, manifest_default: &str) -> String {
+    crate::settings::load_settings()
+        .ok()
+        .and_then(|s| {
+            s.plugin_install_paths
+                .get(plugin_id)
+                .cloned()
+                .or(s.dctl_install_path)
+        })
+        .unwrap_or_else(|| manifest_default.to_string())
+}
+
 pub fn load_install_state() -> Result<ManagedInstallState> {
     let state_path = install_state_path()?;
     if !state_path.exists() {
@@ -226,6 +242,7 @@ pub async fn apply_plugin_action(
             installed_version: resolved.version.clone(),
             bundle_identifier: resolved.package.bundle_identifier.clone(),
             installed_at: installed_at.clone(),
+            installed_paths: vec![target_bundle.display().to_string()],
         },
     );
     save_install_state(&state)?;
@@ -314,16 +331,9 @@ async fn install_file_browse(
     resolved: &crate::models::ResolvedPlugin,
     host_was_running: bool,
 ) -> Result<PluginOperationResult> {
-    use crate::settings;
-
-    // Determine install directory: per-plugin path → global DCTL path → manifest default
-    let install_dir = settings::load_settings()
-        .ok()
-        .and_then(|s| {
-            s.plugin_install_paths.get(plugin_id).cloned()
-                .or(s.dctl_install_path)
-        })
-        .unwrap_or_else(|| resolved.package.install_path.clone());
+    // Determine install directory via the shared resolver so status detection and
+    // folder-open agree on the same path.
+    let install_dir = resolve_file_browse_dir(plugin_id, &resolved.package.install_path);
     let install_root = PathBuf::from(&install_dir);
 
     if !install_root.exists() {
@@ -336,12 +346,17 @@ async fn install_file_browse(
     verify_archive_hash(&bytes, &resolved.package.sha256)?;
 
     let copied_count;
+    // Real top-level paths created on disk. These are the install's existence marker:
+    // a DCTL package may be a single file, or a whole folder tree whose names don't
+    // match bundle_name, so we can't rely on install_root/bundle_name existing.
+    let mut installed_paths: Vec<String> = Vec::new();
 
     if resolved.package.package_type == "raw" {
         // Single-file download — write directly to install directory
         let dest = install_root.join(&resolved.package.bundle_name);
         fs::write(&dest, &bytes)
             .with_context(|| format!("Failed to write {} to {}", resolved.package.bundle_name, dest.display()))?;
+        installed_paths.push(dest.display().to_string());
         copied_count = 1;
     } else {
         let staging_root = tempdir().context("Failed to create staging directory")?;
@@ -352,7 +367,9 @@ async fn install_file_browse(
             extract_zip(&bytes, &extracted_root)?;
         }
 
-        // Copy all extracted files into the install directory (flat copy, no sudo)
+        // Copy all extracted files into the install directory (flat copy, no sudo),
+        // recording each distinct top-level entry created so status detection and
+        // uninstall can find the install regardless of the archive's internal naming.
         let mut count = 0usize;
         for entry in WalkDir::new(&extracted_root).min_depth(1) {
             let entry = entry.context("Failed to walk extracted archive")?;
@@ -364,6 +381,14 @@ async fn install_file_browse(
                 name == "__MACOSX" || name.starts_with("._")
             }) {
                 continue;
+            }
+
+            // Track the first path component as a top-level install artifact.
+            if let Some(first) = relative.components().next() {
+                let top = install_root.join(first.as_os_str()).display().to_string();
+                if !installed_paths.contains(&top) {
+                    installed_paths.push(top);
+                }
             }
 
             let dest = install_root.join(relative);
@@ -382,10 +407,14 @@ async fn install_file_browse(
         copied_count = count;
     }
 
-    // Track the install in the manager state
+    // Track the install in the manager state. The key stays keyed on bundle_name so it
+    // round-trips with status detection; installed_paths carries the real on-disk paths.
     let installed_at = Utc::now().to_rfc3339();
     let target_file = install_root.join(&resolved.package.bundle_name);
     let key = install_key(plugin_id, &target_file);
+    if installed_paths.is_empty() {
+        installed_paths.push(target_file.display().to_string());
+    }
     let mut state = load_install_state().unwrap_or_default();
     state.installs.insert(
         key,
@@ -395,6 +424,7 @@ async fn install_file_browse(
             installed_version: resolved.version.clone(),
             bundle_identifier: resolved.package.bundle_identifier.clone(),
             installed_at,
+            installed_paths,
         },
     );
     save_install_state(&state)?;

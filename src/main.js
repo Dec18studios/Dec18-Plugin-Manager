@@ -495,6 +495,7 @@ function renderFolderRow(plugin, currentPath) {
       <span class="dctl-folder-label">Install folder</span>
       <span class="dctl-folder-path" title="${escapeHtml(displayPath)}">${escapeHtml(displayPath)}</span>
     </div>
+    <button type="button" class="dctl-folder-open" title="Open install folder">Open</button>
     <button type="button" class="dctl-folder-change" title="Change install folder">Change</button>
   `;
   row.querySelector(".dctl-folder-change").addEventListener("click", async () => {
@@ -504,6 +505,18 @@ function renderFolderRow(plugin, currentPath) {
     await invoke("set_plugin_install_path", { pluginId: plugin.pluginId, path: chosen });
     logActivity(`Install folder for ${plugin.displayName} set to ${chosen}`);
     updateFolderRow(row.closest(".plugin-card"), chosen);
+  });
+  row.querySelector(".dctl-folder-open").addEventListener("click", async () => {
+    const folder = currentPath || plugin.installPath;
+    if (!folder) {
+      logActivity(`No install folder set yet for ${plugin.displayName}`);
+      return;
+    }
+    try {
+      await invoke("open_folder", { path: folder });
+    } catch (error) {
+      logActivity(`Could not open folder for ${plugin.displayName}: ${error}`);
+    }
   });
   return row;
 }
@@ -1101,6 +1114,10 @@ function shouldAutoCheckManagerUpdateForPluginAction(action) {
   return ["install", "update", "reinstall", "install-selected"].includes(action);
 }
 
+function isInstallAction(action) {
+  return ["install", "update", "reinstall", "install-selected"].includes(action);
+}
+
 function managerUpdateCheckOptions() {
   return state.dashboard?.manager?.platform === "macos"
     ? { target: "darwin-universal" }
@@ -1171,6 +1188,18 @@ async function applyPluginAction(pluginId, action, targetVersion = null) {
     const result = await invoke("apply_plugin_action", { pluginId, action, targetVersion });
     logActivity(`${result.pluginId}: ${result.message}`);
     await refreshDashboard();
+    // DCTL/file-browse completion feedback: reveal the install folder so the user
+    // can see the freshly downloaded file (these don't land in a system plugin dir).
+    if (isInstallAction(action)) {
+      const refreshed = (state.dashboard?.plugins ?? []).find((p) => p.pluginId === pluginId);
+      if (refreshed && refreshed.installMode === "file-browse" && refreshed.installPath) {
+        try {
+          await invoke("open_folder", { path: refreshed.installPath });
+        } catch (error) {
+          logActivity(`Installed, but couldn't open the folder: ${error}`);
+        }
+      }
+    }
     if (deferredManagerUpdateError) {
       showAlert(deferredManagerUpdateError);
     }

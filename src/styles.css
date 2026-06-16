@@ -1063,7 +1063,8 @@ button.primary.plugin-install-action:hover:not(:disabled) {
   text-overflow: ellipsis;
 }
 
-.dctl-folder-change {
+.dctl-folder-change,
+.dctl-folder-open {
   flex-shrink: 0;
   padding: 0.28rem 0.62rem;
   font-size: 0.74rem;
@@ -1076,7 +1077,12 @@ button.primary.plugin-install-action:hover:not(:disabled) {
   transition: background 120ms ease;
 }
 
-.dctl-folder-change:hover {
+.dctl-folder-open {
+  margin-left: auto;
+}
+
+.dctl-folder-change:hover,
+.dctl-folder-open:hover {
   background: rgba(255, 255, 255, 0.14);
 }
 

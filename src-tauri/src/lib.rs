@@ -125,6 +125,25 @@ async fn publish_website_tools(tools: Vec<models::WebsiteTool>) -> Result<String
         .map_err(|error| models::UiError::from_error("website_publish", &error).to_json_string())
 }
 
+/// Reveal a folder (or file's containing folder) in the OS file manager.
+/// Used as completion feedback after a DCTL/file-browse install so the user can see
+/// the installed file. If the exact path is missing, fall back to its parent.
+#[tauri::command]
+async fn open_folder(app: tauri::AppHandle, path: String) -> Result<(), String> {
+    use tauri_plugin_opener::OpenerExt;
+    let target = std::path::PathBuf::from(&path);
+    let to_open = if target.exists() {
+        target
+    } else if let Some(parent) = target.parent() {
+        parent.to_path_buf()
+    } else {
+        target
+    };
+    app.opener()
+        .open_path(to_open.to_string_lossy().to_string(), None::<&str>)
+        .map_err(|error| error.to_string())
+}
+
 pub fn run() {
     let builder = tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
@@ -151,6 +170,7 @@ pub fn run() {
             get_plugin_install_path,
             set_plugin_install_path,
             pick_folder,
+            open_folder,
             get_website_tools,
             save_website_tools,
             publish_website_tools

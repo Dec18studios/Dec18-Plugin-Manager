@@ -165,6 +165,14 @@ pub struct InstallRecord {
     pub installed_version: String,
     pub bundle_identifier: String,
     pub installed_at: String,
+    /// Real top-level artifacts written to disk for this install. For bundle (OFX)
+    /// plugins this is just `bundle_path`; for file-browse (DCTL) plugins — which can
+    /// ship a single file, a renamed file, or a whole folder tree whose names don't
+    /// match `bundle_name` — these are the actual paths created, so status detection
+    /// can verify the install without guessing at `bundle_name`. Defaults to empty for
+    /// records written by older versions (those fall back to `bundle_path`).
+    #[serde(default)]
+    pub installed_paths: Vec<String>,
 }
 
 #[derive(Debug, Clone)]

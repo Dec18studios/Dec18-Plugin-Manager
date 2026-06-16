@@ -112,18 +112,31 @@ fn build_plugin_status(
     // For file-browse plugins, check the user's chosen path from settings, falling
     // back to the manifest default. For bundle plugins, always use the manifest path.
     let effective_install_path = if is_file_browse {
-        crate::settings::load_settings()
-            .ok()
-            .and_then(|s| s.dctl_install_path)
-            .unwrap_or_else(|| package.install_path.clone())
+        // Use the SAME resolver the installer uses (per-plugin override → global DCTL
+        // path → manifest default) so status detection can't disagree with where the
+        // file was actually written.
+        installer::resolve_file_browse_dir(&entry.plugin_id, &package.install_path)
     } else {
         package.install_path.clone()
     };
 
     let target_bundle = PathBuf::from(&effective_install_path).join(&package.bundle_name);
-    let installed = target_bundle.exists();
     let install_key = installer::install_key(&entry.plugin_id, &target_bundle);
     let record = install_state.installs.get(&install_key);
+    // Bundle (OFX) plugins live at a single known path. File-browse (DCTL) plugins can
+    // ship folder trees or files whose names don't match bundle_name, so when we have a
+    // managed record we trust its recorded artifact paths instead of guessing at a name.
+    let installed = if is_file_browse {
+        match record {
+            Some(rec) if !rec.installed_paths.is_empty() => rec
+                .installed_paths
+                .iter()
+                .any(|p| std::path::Path::new(p).exists()),
+            _ => target_bundle.exists(),
+        }
+    } else {
+        target_bundle.exists()
+    };
     let stamp = installer::read_bundle_install_stamp(&target_bundle)
         .ok()
         .flatten();
@@ -243,6 +256,7 @@ fn adopt_unmanaged_installs(
                 installed_version: manifest.version.clone(),
                 bundle_identifier: package.bundle_identifier.clone(),
                 installed_at: now_rfc3339(),
+                installed_paths: vec![target_bundle.display().to_string()],
             },
         );
         changed = true;

@@ -1,0 +1,90 @@
+{
+  "pluginId": "lookdevtools-intermediate",
+  "displayName": "Look Dev Tools (Intermediate)",
+  "description": "Look Dev Tools, built from the same source with the Working Space default set to DaVinci Intermediate (log timelines) instead of scene-linear. Identical plugin and bundle in every other respect — same plugin id, so it installs over and replaces the standard edition. Pick whichever default matches your timeline. Saved nodes/presets store an explicit working space, so existing grades render identically across editions.",
+  "category": "Color Grading",
+  "licenseTier": "subscription",
+  "tags": [
+    "look dev",
+    "color grading",
+    "hue",
+    "saturation",
+    "OFX",
+    "GPU",
+    "intermediate",
+    "log"
+  ],
+  "infoUrl": null,
+  "version": "1.4.2",
+  "releaseDate": "2026-06-17T19:44:07Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/tag/v1.4.2",
+  "platforms": [
+    {
+      "platform": "macos",
+      "arch": "universal",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.4.2/LookDevTools_v1.4.2_macOS_universal_portable_intermediate.zip",
+      "sha256": "437e6eee3810ca304946197fa57fe9642cb8af71d4a4e37aacefad9c0a1ddab7",
+      "packageType": "zip",
+      "bundleName": "LookDevTools.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.LookDevTools",
+      "installPath": "/Library/OFX/Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    },
+    {
+      "platform": "windows",
+      "arch": "x86_64",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.4.2/LookDevTools_v1.4.2_windows_cuda_portable_intermediate.zip",
+      "sha256": "7c3a522f94d0688f7cc5381e64a2a5a31089380f670f4971194441e9119a7808",
+      "packageType": "zip",
+      "bundleName": "LookDevTools.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.LookDevTools",
+      "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    },
+    {
+      "platform": "linux",
+      "arch": "x86_64",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.4.2/LookDevTools_v1.4.2_linux_cuda_portable_intermediate.zip",
+      "sha256": "28afe08c67a86de45fed99723a64d4efd09dc4d392c68a8ad3819f29b70a9729",
+      "packageType": "zip",
+      "bundleName": "LookDevTools.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.LookDevTools",
+      "installPath": "/usr/OFX/Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    }
+  ],
+  "availableVersions": []
+}

@@ -72,6 +72,8 @@ jobs:
             "Hue-Inspector-DCTL|GE_hue_inspector_dctl"
             "Color-Slicer-DCTL|GE_Color_Slicer"
             "IDT-Lut-Loaders-DCTL|idt-lut-loaders-dctl"
+            "LookDevTools-OFX|lookdevtools"
+            "LookDevTools-OFX|lookdevtools-intermediate"
           )
 
           PROCESSED=0

@@ -1,6 +1,7 @@
 {
   "pluginId": "lookdevtools-intermediate",
   "displayName": "Look Dev Tools (Intermediate)",
+  "type": "OFX",
   "releaseRepo": "Dec18studios/LookDevTools-OFX",
   "minManagerVersion": "0.1.0",
   "hostProcesses": ["Resolve", "DaVinci Resolve", "Fusion", "Fusion Studio", "Nuke", "NukeX", "NukeStudio", "Hiero"],

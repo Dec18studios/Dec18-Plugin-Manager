@@ -245,7 +245,7 @@ async function buildReleaseFromGitHubRelease(config, release, options = {}) {
   };
 }
 
-function updateIndex(indexPath, pluginId, displayName, category) {
+function updateIndex(indexPath, pluginId, displayName, category, type, licenseTier) {
   const index = readJson(indexPath);
   index.generatedAt = new Date().toISOString();
   const manifestUrl = `https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/${pluginId}/stable.json`;
@@ -258,6 +258,10 @@ function updateIndex(indexPath, pluginId, displayName, category) {
     displayName,
     manifestUrl,
     category: category || existing.category || null,
+    // type / licenseTier drive the manager's tab filters; new entries must
+    // carry them from the config or a fresh plugin gets filtered out of view.
+    type: type || existing.type || null,
+    licenseTier: licenseTier || existing.licenseTier || null,
   };
 
   if (existingIndex >= 0) {
@@ -354,7 +358,7 @@ async function generateForConfig(configPath, releasesPath, managerRoot) {
     removeIfExists(betaPath);
   }
 
-  updateIndex(indexPath, config.pluginId, config.displayName, config.category);
+  updateIndex(indexPath, config.pluginId, config.displayName, config.category, config.type, config.licenseTier);
   console.log(`Generated manifests for ${config.pluginId} from ${config.releaseRepo}`);
 }
 

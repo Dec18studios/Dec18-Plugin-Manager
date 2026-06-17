@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-17T20:03:43.584Z",
+  "generatedAt": "2026-06-17T21:00:21.593Z",
   "plugins": [
     {
       "pluginId": "GE_Color_Slicer",
@@ -82,20 +82,20 @@
       "category": "Diagnostics"
     },
     {
-      "pluginId": "lookdevtools",
-      "displayName": "Look Dev Tools",
-      "type": "OFX",
-      "licenseTier": "subscription",
-      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/lookdevtools/stable.json",
-      "category": "Color Grading"
-    },
-    {
       "pluginId": "lookdevtools-intermediate",
       "displayName": "Look Dev Tools (Intermediate)",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/lookdevtools-intermediate/stable.json",
       "category": "Color Grading",
       "type": "OFX",
       "licenseTier": "subscription"
+    },
+    {
+      "pluginId": "lookdevtools",
+      "displayName": "Look Dev Tools (Linear)",
+      "type": "OFX",
+      "licenseTier": "subscription",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/lookdevtools/stable.json",
+      "category": "Color Grading"
     },
     {
       "pluginId": "perfect-exposure-dctl",

@@ -1,7 +1,7 @@
 {
   "pluginId": "lookdevtools",
-  "displayName": "Look Dev Tools",
-  "description": "A grouped six-in-one look-dev suite: five node-ordered color tools (Hue Remix Pro, Hue Saturation Pro, and more) plus a monolith node that chains all five in a single grade. One GPU-accelerated bundle — Metal on macOS, CUDA on Windows/Linux, CPU fallback.",
+  "displayName": "Look Dev Tools (Linear)",
+  "description": "A grouped six-in-one look-dev suite: five node-ordered color tools (Hue Remix Pro, Hue Saturation Pro, and more) plus a monolith node that chains all five in a single grade. One GPU-accelerated bundle — Metal on macOS, CUDA on Windows/Linux, CPU fallback. This edition defaults the Working Space to scene-linear; the (Intermediate) edition is the same plugin with the default set to DaVinci Intermediate. Same plugin id, so the two editions install over each other — pick the default that matches your timeline.",
   "category": "Color Grading",
   "licenseTier": "subscription",
   "tags": [

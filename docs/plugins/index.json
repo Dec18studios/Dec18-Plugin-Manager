@@ -90,12 +90,6 @@
       "category": "Color Grading"
     },
     {
-      "pluginId": "look-dev-tools-ofx",
-      "displayName": "Look Dev Tools",
-      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/look-dev-tools-ofx/stable.json",
-      "category": "Color Grading"
-    },
-    {
       "pluginId": "perfect-exposure-dctl",
       "displayName": "Perfect Exposure",
       "type": "DCTL",

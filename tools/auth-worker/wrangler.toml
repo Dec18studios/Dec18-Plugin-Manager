@@ -1,0 +1,26 @@
+name = "dec18-auth"
+main = "worker.js"
+compatibility_date = "2024-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Same Ed25519 verify key as the download-proxy and the app. NOT a secret.
+[vars]
+PUBLIC_KEY_SPKI_B64 = "MCowBQYDK2VwAyEAAZ7aAuceZRk6w/OQ3LUoYr7/rIZLlE1xHxMh8/Dhjzs="
+FROM_EMAIL = "create@dec18studios.com"
+FROM_NAME = "Dec 18 Studios"
+# DEV ONLY — return the OTP in the JSON response so the flow is testable without
+# Gmail. Leave UNSET (or "0") in production.
+# DEV_EXPOSE_CODE = "1"
+
+# D1 database binding. Create it once, then paste the printed database_id here:
+#   wrangler d1 create dec18-auth
+[[d1_databases]]
+binding = "DB"
+database_name = "dec18-auth"
+database_id = "92af9aa8-0072-492b-8c5e-69fc413a4394"
+
+# Secrets (set via `wrangler secret put <NAME>`):
+#   OTP_PEPPER         — random string mixed into the OTP hash
+#   IP_HASH_SALT       — salt for hashing client IPs in the events log
+#   GMAIL_CREDENTIALS  — Google OAuth client JSON (same as fulfillment)
+#   GMAIL_TOKEN        — Google OAuth token JSON (refresh_token)

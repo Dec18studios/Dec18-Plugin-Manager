@@ -1,0 +1,6 @@
+# Local wrangler/miniflare state (local D1, account cache) — never commit.
+.wrangler/
+node_modules/
+
+# Generated locally from the subscriber ledger; not source.
+seed.sql

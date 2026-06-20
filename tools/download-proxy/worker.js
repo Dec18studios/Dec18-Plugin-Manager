@@ -123,6 +123,13 @@ export default {
       return errorResponse(401, "Invalid or expired license token");
     }
 
+    // Enforce expiry: a license with exp (unix seconds) in the past can no longer
+    // pull paid assets. Perpetual keys omit exp. The app surfaces this as
+    // "Expired — renew" and greys out paid downloads; this is the hard gate.
+    if (typeof payload.exp === "number" && payload.exp < Math.floor(Date.now() / 1000)) {
+      return errorResponse(403, "License expired. Renew to download paid plugins.");
+    }
+
     // Parse the requested asset path:
     //   /v1/<owner>/<repo>/releases/download/<tag>/<asset>
     const url = new URL(request.url);

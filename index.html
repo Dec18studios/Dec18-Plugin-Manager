@@ -209,6 +209,16 @@
           <p class="license-dialog-switch">Have a license key? <button id="switch-to-key-entry" class="link-button" type="button">Paste it instead</button></p>
         </div>
 
+        <!-- Manage account (shown when already signed in) -->
+        <div id="license-manage-view" class="license-dialog-body hidden">
+          <p id="manage-account-summary" class="license-dialog-hint">You're signed in. Your license is installed on this machine.</p>
+          <div class="license-dialog-footer">
+            <button id="manage-sign-out" class="ghost-button" type="button">Sign out of this machine</button>
+          </div>
+          <p class="license-dialog-switch">Need to add a key by hand? <button id="manage-show-key-entry" class="link-button" type="button">Enter a license key</button></p>
+          <p class="license-dialog-switch">Signing in to a different account? <button id="manage-show-signin" class="link-button" type="button">Use email sign-in</button></p>
+        </div>
+
         <!-- Manual key entry -->
         <div id="license-key-view" class="license-dialog-body hidden">
           <p class="license-dialog-hint">Paste the license key you received via email.</p>

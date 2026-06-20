@@ -119,6 +119,11 @@ const elements = {
   licenseKeyError: document.querySelector("#license-key-error"),
   licenseActivateButton: document.querySelector("#license-activate-button"),
   switchToRegister: document.querySelector("#switch-to-register"),
+  manageView: document.querySelector("#license-manage-view"),
+  manageAccountSummary: document.querySelector("#manage-account-summary"),
+  manageSignOut: document.querySelector("#manage-sign-out"),
+  manageShowKeyEntry: document.querySelector("#manage-show-key-entry"),
+  manageShowSignin: document.querySelector("#manage-show-signin"),
   licenseActiveKeys: document.querySelector("#license-active-keys")
 };
 
@@ -988,8 +993,7 @@ function openLicenseDialog() {
   // account/key-management view.
   resetSigninView();
   if (isLicensed()) {
-    showKeyEntryView();
-    elements.licenseDialogTitle.textContent = "Manage Account";
+    showManageView();
   } else {
     showRegisterView();
   }
@@ -1003,7 +1007,25 @@ function openLicenseDialog() {
 function showRegisterView() {
   elements.registerView.classList.remove("hidden");
   elements.keyEntryView.classList.add("hidden");
+  elements.manageView.classList.add("hidden");
   elements.licenseDialogTitle.textContent = "Sign in to Dec 18 Studios";
+}
+
+// Account view for users who are already signed in: a short account summary plus
+// their installed keys (rendered below). Manual paste is demoted to a link so it
+// no longer fronts the dialog once an account is active.
+function showManageView() {
+  elements.registerView.classList.add("hidden");
+  elements.keyEntryView.classList.add("hidden");
+  elements.manageView.classList.remove("hidden");
+  elements.licenseDialogTitle.textContent = "Manage Account";
+
+  const email = state.license.parsed[0]?.e ?? "";
+  const tier = state.license.tier;
+  const tierLabel = tier === "master" ? "Master" : tier === "annual" ? "Annual" : tier === "free" ? "Free" : tier;
+  elements.manageAccountSummary.innerHTML = email
+    ? `Signed in as <strong>${escapeHtml(email)}</strong> · ${escapeHtml(tierLabel ?? "")} license. Your keys are installed on this machine.`
+    : "You're signed in. Your license is installed on this machine.";
 }
 
 // --- Email-OTP sign-in flow ---
@@ -1101,7 +1123,31 @@ async function attestInstalledLicenseSilently() {
 function showKeyEntryView() {
   elements.registerView.classList.add("hidden");
   elements.keyEntryView.classList.remove("hidden");
+  elements.manageView.classList.add("hidden");
   elements.licenseDialogTitle.textContent = "Enter License Key";
+}
+
+// Sign out = remove every installed key from this machine. There is no server
+// session to end; the keys themselves are the credential, so clearing them
+// returns the machine to the unlicensed state. (Re-signing in re-installs them.)
+async function signOutAccount() {
+  const keys = [...state.license.keys];
+  if (!keys.length) return;
+  elements.manageSignOut.disabled = true;
+  try {
+    for (const token of keys) {
+      await invoke("remove_license_key", { key: token });
+    }
+    await loadLicenseState();
+    renderActiveLicenseKeys();
+    logActivity("Signed out — license keys removed from this machine.");
+    resetSigninView();
+    showRegisterView();
+  } catch (error) {
+    showAlert(error, "Couldn't sign out.");
+  } finally {
+    elements.manageSignOut.disabled = false;
+  }
 }
 
 function closeLicenseDialog() {
@@ -1396,6 +1442,12 @@ elements.licenseDialogClose.addEventListener("click", closeLicenseDialog);
 elements.licenseActivateButton.addEventListener("click", activateLicenseKey);
 elements.switchToKeyEntry.addEventListener("click", showKeyEntryView);
 elements.switchToRegister.addEventListener("click", showRegisterView);
+elements.manageShowKeyEntry.addEventListener("click", showKeyEntryView);
+elements.manageShowSignin.addEventListener("click", () => {
+  resetSigninView();
+  showRegisterView();
+});
+elements.manageSignOut.addEventListener("click", signOutAccount);
 elements.signinSendCode.addEventListener("click", sendSigninCode);
 elements.signinVerifyCode.addEventListener("click", verifySigninCode);
 elements.signinChangeEmail.addEventListener("click", resetSigninView);
@@ -1449,7 +1501,12 @@ async function autoUpdatePluginsIfEnabled() {
   await refreshDashboard();
 }
 
-refreshDashboard().then(() => {
+refreshDashboard().then(async () => {
+  // Silent self-update on launch. From this version forward every launch pulls
+  // a newer signed manager build before doing anything else; if one installs,
+  // runManagerUpdateCheck() relaunches into it and the rest never runs. On the
+  // common "already current" path check() returns null fast and we continue.
+  await runManagerUpdateCheck({ silent: true });
   autoUpdatePluginsIfEnabled();
   attestInstalledLicenseSilently();
 });

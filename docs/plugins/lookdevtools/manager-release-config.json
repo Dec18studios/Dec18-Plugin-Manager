@@ -1,6 +1,6 @@
 {
   "pluginId": "lookdevtools",
-  "displayName": "Look Dev Tools (Linear)",
+  "displayName": "Look Dev Tools (Linear - Defaults)",
   "type": "OFX",
   "releaseRepo": "Dec18studios/LookDevTools-OFX",
   "minManagerVersion": "0.1.0",

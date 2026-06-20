@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-20T15:38:07.951Z",
+  "generatedAt": "2026-06-20T15:55:10.659Z",
   "plugins": [
     {
       "pluginId": "GE_Color_Slicer",
@@ -83,7 +83,7 @@
     },
     {
       "pluginId": "lookdevtools-intermediate",
-      "displayName": "Look Dev Tools (Intermediate - Defaults)",
+      "displayName": "Look Dev Tools (Intermediate-Defaults)",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/lookdevtools-intermediate/stable.json",
       "category": "Color Grading",
       "type": "OFX",
@@ -91,7 +91,7 @@
     },
     {
       "pluginId": "lookdevtools",
-      "displayName": "Look Dev Tools (Linear - Defaults)",
+      "displayName": "Look Dev Tools (Linear-Defaults)",
       "type": "OFX",
       "licenseTier": "subscription",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/lookdevtools/stable.json",

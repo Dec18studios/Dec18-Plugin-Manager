@@ -1,6 +1,6 @@
 {
   "pluginId": "lookdevtools-intermediate",
-  "displayName": "Look Dev Tools (Intermediate)",
+  "displayName": "Look Dev Tools (Intermediate - Defaults)",
   "description": "Look Dev Tools, built from the same source with the Working Space default set to DaVinci Intermediate (log timelines) instead of scene-linear. Identical plugin and bundle in every other respect — same plugin id, so it installs over and replaces the standard edition. Pick whichever default matches your timeline. Saved nodes/presets store an explicit working space, so existing grades render identically across editions.",
   "category": "Color Grading",
   "licenseTier": "subscription",

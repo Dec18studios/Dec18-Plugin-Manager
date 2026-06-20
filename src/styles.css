@@ -433,6 +433,13 @@ h4 {
   display: none;
 }
 
+/* Generic visibility utility. The license dialog (and its email-OTP sign-in
+   steps) toggle `.hidden` in JS to swap views; without this rule the hidden
+   views render anyway. */
+.hidden {
+  display: none !important;
+}
+
 .alert-label {
   color: var(--bad);
 }

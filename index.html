@@ -179,13 +179,34 @@
           <button id="license-dialog-close" class="ghost-button" type="button">Close</button>
         </div>
 
-        <!-- Register via website (default view) -->
-        <div id="license-register-view" class="license-dialog-body">
-          <p class="license-dialog-hint">Register on the Dec 18 Studios website to get your license key. You'll receive it by email along with the latest download link.</p>
-          <div class="license-dialog-footer register-website-actions">
-            <a id="register-website-link" class="primary register-website-button" href="https://dec18studios.com/#tools" target="_blank" rel="noreferrer">Register on Website</a>
+        <!-- Email sign-in (default view) -->
+        <div id="license-signin-view" class="license-dialog-body">
+          <p class="license-dialog-hint">Sign in with the email you used at purchase. We'll email you a 6-digit code and install your license automatically — no copy-paste.</p>
+
+          <!-- Step 1: email -->
+          <div id="signin-email-step">
+            <input id="signin-email-input" class="license-key-input" type="email" placeholder="you@example.com" spellcheck="false" autocomplete="email" />
+            <div class="license-dialog-footer">
+              <button id="signin-send-code" class="primary" type="button">Email me a code</button>
+            </div>
           </div>
-          <p class="license-dialog-switch">Already have a key? <button id="switch-to-key-entry" class="link-button" type="button">Enter license key</button></p>
+
+          <!-- Step 2: code -->
+          <div id="signin-code-step" class="hidden">
+            <p class="license-dialog-hint">Enter the 6-digit code we sent to <strong id="signin-email-echo"></strong>.</p>
+            <input id="signin-code-input" class="license-key-input" inputmode="numeric" maxlength="6" placeholder="123456" spellcheck="false" autocomplete="one-time-code" />
+            <div class="license-dialog-footer">
+              <button id="signin-verify-code" class="primary" type="button">Verify &amp; install</button>
+              <button id="signin-change-email" class="ghost-button" type="button">Use a different email</button>
+            </div>
+            <p class="license-dialog-switch"><button id="signin-resend-code" class="link-button" type="button">Resend code</button></p>
+          </div>
+
+          <div id="signin-error" class="license-key-error hidden"></div>
+          <div id="signin-status" class="license-dialog-hint hidden"></div>
+
+          <p class="license-dialog-switch">No account yet? <a href="https://dec18studios.com/#tools" target="_blank" rel="noreferrer" class="link-button">Register on website</a></p>
+          <p class="license-dialog-switch">Have a license key? <button id="switch-to-key-entry" class="link-button" type="button">Paste it instead</button></p>
         </div>
 
         <!-- Manual key entry -->

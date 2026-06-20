@@ -1,3 +1,4 @@
+mod auth;
 mod catalog;
 mod installer;
 mod license;
@@ -63,6 +64,29 @@ async fn remove_license_key(key: String) -> Result<Vec<String>, String> {
     let data = license::remove_license_key(&key)
         .map_err(|error| models::UiError::from_error("license", &error).to_json_string())?;
     Ok(data.keys)
+}
+
+#[tauri::command]
+async fn start_email_verification(email: String) -> Result<(), String> {
+    auth::start(&email)
+        .await
+        .map_err(|error| models::UiError::from_error("auth_start", &error).to_json_string())
+}
+
+#[tauri::command]
+async fn verify_email_code(email: String, code: String) -> Result<auth::AuthOutcome, String> {
+    auth::verify(&email, &code)
+        .await
+        .map_err(|error| models::UiError::from_error("auth_verify", &error).to_json_string())
+}
+
+/// Silent entitlement check for an already-installed key. Returns null when there
+/// is no local key to attest. Fired on launch for existing users.
+#[tauri::command]
+async fn attest_installed_license() -> Result<Option<auth::AuthOutcome>, String> {
+    auth::attest_installed()
+        .await
+        .map_err(|error| models::UiError::from_error("auth_attest", &error).to_json_string())
 }
 
 #[tauri::command]
@@ -165,6 +189,9 @@ pub fn run() {
             get_stored_license_keys,
             save_license_key,
             remove_license_key,
+            start_email_verification,
+            verify_email_code,
+            attest_installed_license,
             get_dctl_install_path,
             set_dctl_install_path,
             get_plugin_install_path,

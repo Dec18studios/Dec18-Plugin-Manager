@@ -101,8 +101,19 @@ const elements = {
   licenseDialog: document.querySelector("#license-key-dialog"),
   licenseDialogTitle: document.querySelector("#license-dialog-title"),
   licenseDialogClose: document.querySelector("#license-dialog-close"),
-  registerView: document.querySelector("#license-register-view"),
+  registerView: document.querySelector("#license-signin-view"),
   switchToKeyEntry: document.querySelector("#switch-to-key-entry"),
+  signinEmailStep: document.querySelector("#signin-email-step"),
+  signinEmailInput: document.querySelector("#signin-email-input"),
+  signinSendCode: document.querySelector("#signin-send-code"),
+  signinCodeStep: document.querySelector("#signin-code-step"),
+  signinEmailEcho: document.querySelector("#signin-email-echo"),
+  signinCodeInput: document.querySelector("#signin-code-input"),
+  signinVerifyCode: document.querySelector("#signin-verify-code"),
+  signinChangeEmail: document.querySelector("#signin-change-email"),
+  signinResendCode: document.querySelector("#signin-resend-code"),
+  signinError: document.querySelector("#signin-error"),
+  signinStatus: document.querySelector("#signin-status"),
   keyEntryView: document.querySelector("#license-key-view"),
   licenseKeyInput: document.querySelector("#license-key-input"),
   licenseKeyError: document.querySelector("#license-key-error"),
@@ -973,13 +984,14 @@ function renderActiveLicenseKeys() {
 }
 
 function openLicenseDialog() {
-  // Show register view by default, key entry view if already licensed
+  // Sign-in (email OTP) is the default for new users; licensed users land on the
+  // account/key-management view.
+  resetSigninView();
   if (isLicensed()) {
     showKeyEntryView();
     elements.licenseDialogTitle.textContent = "Manage Account";
   } else {
     showRegisterView();
-    elements.licenseDialogTitle.textContent = "Register for Dec 18 Studios";
   }
   elements.licenseKeyInput.value = "";
   elements.licenseKeyError.textContent = "";
@@ -991,7 +1003,99 @@ function openLicenseDialog() {
 function showRegisterView() {
   elements.registerView.classList.remove("hidden");
   elements.keyEntryView.classList.add("hidden");
-  elements.licenseDialogTitle.textContent = "Register for Dec 18 Studios";
+  elements.licenseDialogTitle.textContent = "Sign in to Dec 18 Studios";
+}
+
+// --- Email-OTP sign-in flow ---
+
+function resetSigninView() {
+  elements.signinEmailStep.classList.remove("hidden");
+  elements.signinCodeStep.classList.add("hidden");
+  elements.signinError.classList.add("hidden");
+  elements.signinError.textContent = "";
+  elements.signinStatus.classList.add("hidden");
+  elements.signinStatus.textContent = "";
+  elements.signinCodeInput.value = "";
+}
+
+function showSigninError(message) {
+  elements.signinError.textContent = message;
+  elements.signinError.classList.remove("hidden");
+  elements.signinStatus.classList.add("hidden");
+}
+
+function showSigninStatus(message) {
+  elements.signinStatus.textContent = message;
+  elements.signinStatus.classList.remove("hidden");
+  elements.signinError.classList.add("hidden");
+}
+
+async function sendSigninCode() {
+  const email = elements.signinEmailInput.value.trim();
+  if (!email || !email.includes("@")) {
+    showSigninError("Please enter a valid email address.");
+    return;
+  }
+  elements.signinSendCode.disabled = true;
+  elements.signinResendCode.disabled = true;
+  showSigninStatus("Sending code…");
+  try {
+    await invoke("start_email_verification", { email });
+    elements.signinEmailEcho.textContent = email;
+    elements.signinEmailStep.classList.add("hidden");
+    elements.signinCodeStep.classList.remove("hidden");
+    // The worker never reveals whether the email is a known customer, so the
+    // copy stays deliberately conditional ("if that email has a purchase").
+    showSigninStatus("If that email has a purchase, a 6-digit code is on its way. Check your inbox.");
+    elements.signinCodeInput.focus();
+  } catch (error) {
+    showSigninError(parseUiError(error, "Couldn't send the code. Please try again.").summary);
+  } finally {
+    elements.signinSendCode.disabled = false;
+    elements.signinResendCode.disabled = false;
+  }
+}
+
+async function verifySigninCode() {
+  const email = elements.signinEmailInput.value.trim();
+  const code = elements.signinCodeInput.value.trim();
+  if (!/^\d{6}$/.test(code)) {
+    showSigninError("Enter the 6-digit code from your email.");
+    return;
+  }
+  elements.signinVerifyCode.disabled = true;
+  showSigninStatus("Verifying…");
+  try {
+    const outcome = await invoke("verify_email_code", { email, code });
+    await loadLicenseState();
+    renderActiveLicenseKeys();
+    const installed = outcome.installedKeys?.length ?? 0;
+    logActivity(
+      installed > 0
+        ? `Signed in as ${outcome.email ?? email} — installed ${installed} license key${installed > 1 ? "s" : ""}.`
+        : `Signed in as ${outcome.email ?? email}.`
+    );
+    closeLicenseDialog();
+  } catch (error) {
+    showSigninError(parseUiError(error, "That code didn't work. Please try again.").summary);
+  } finally {
+    elements.signinVerifyCode.disabled = false;
+  }
+}
+
+// Existing key-holders prove entitlement silently on launch. Never disrupts
+// startup — any failure is logged to the console only.
+async function attestInstalledLicenseSilently() {
+  try {
+    const outcome = await invoke("attest_installed_license");
+    if (outcome && (outcome.installedKeys?.length ?? 0) > 0) {
+      await loadLicenseState();
+      const n = outcome.installedKeys.length;
+      logActivity(`Account verified — installed ${n} license key${n > 1 ? "s" : ""}.`);
+    }
+  } catch (error) {
+    console.warn("Silent license attest failed:", parseUiError(error).summary);
+  }
 }
 
 function showKeyEntryView() {
@@ -1292,6 +1396,22 @@ elements.licenseDialogClose.addEventListener("click", closeLicenseDialog);
 elements.licenseActivateButton.addEventListener("click", activateLicenseKey);
 elements.switchToKeyEntry.addEventListener("click", showKeyEntryView);
 elements.switchToRegister.addEventListener("click", showRegisterView);
+elements.signinSendCode.addEventListener("click", sendSigninCode);
+elements.signinVerifyCode.addEventListener("click", verifySigninCode);
+elements.signinChangeEmail.addEventListener("click", resetSigninView);
+elements.signinResendCode.addEventListener("click", sendSigninCode);
+elements.signinEmailInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    sendSigninCode();
+  }
+});
+elements.signinCodeInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    verifySigninCode();
+  }
+});
 elements.licenseDialog.addEventListener("cancel", (event) => {
   event.preventDefault();
   closeLicenseDialog();
@@ -1331,4 +1451,5 @@ async function autoUpdatePluginsIfEnabled() {
 
 refreshDashboard().then(() => {
   autoUpdatePluginsIfEnabled();
+  attestInstalledLicenseSilently();
 });

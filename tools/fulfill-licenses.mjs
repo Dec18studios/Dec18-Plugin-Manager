@@ -126,10 +126,11 @@ async function refreshAccessToken(credentials, token) {
   return data.access_token;
 }
 
-function buildLicenseEmail(toEmail, toName, licenseKey) {
+const LICENSE_EMAIL_SUBJECT = "Your Dec 18 Studios License Key";
+
+function licenseEmailBody(toName, licenseKey) {
   const name = toName ?? "there";
-  const subject = "Your Dec 18 Studios License Key";
-  const body = [
+  return [
     `Hi ${name},`,
     "",
     "Thanks for your purchase! Here's your Dec 18 Studios license key:",
@@ -144,6 +145,11 @@ function buildLicenseEmail(toEmail, toName, licenseKey) {
     "Cheers,",
     "Greg — Dec 18 Studios",
   ].join("\n");
+}
+
+function buildLicenseEmail(toEmail, toName, licenseKey) {
+  const subject = LICENSE_EMAIL_SUBJECT;
+  const body = licenseEmailBody(toName, licenseKey);
 
   const fromName = process.env.FROM_NAME ?? "Dec 18 Studios";
   const fromEmail = process.env.FROM_EMAIL ?? "create@dec18studios.com";
@@ -170,6 +176,32 @@ async function sendEmail(accessToken, rawBase64) {
     body: JSON.stringify({ raw: rawBase64 }),
   });
   if (!res.ok) throw new Error(`Gmail send failed: ${await res.text()}`);
+  return res.json();
+}
+
+// ── Brevo transactional API ────────────────────────────────────────
+// Preferred mail transport when BREVO_API_KEY is set (keeps these clerical
+// sends off the personal Gmail's sending reputation). Falls back to Gmail.
+
+async function sendViaBrevo(apiKey, toEmail, toName, subject, body) {
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": apiKey,
+      "content-type": "application/json",
+      accept: "application/json",
+    },
+    body: JSON.stringify({
+      sender: {
+        name: process.env.FROM_NAME ?? "Dec 18 Studios",
+        email: process.env.FROM_EMAIL ?? "create@dec18studios.com",
+      },
+      to: [toName ? { email: toEmail, name: toName } : { email: toEmail }],
+      subject,
+      textContent: body,
+    }),
+  });
+  if (!res.ok) throw new Error(`Brevo send failed: ${res.status} ${await res.text()}`);
   return res.json();
 }
 
@@ -200,12 +232,17 @@ async function main() {
   const privateKeyPem = process.env.LICENSE_SIGNING_PRIVATE_KEY;
   const credentialsJson = process.env.GMAIL_CREDENTIALS;
   const tokenJson = process.env.GMAIL_TOKEN;
+  const brevoKey = process.env.BREVO_API_KEY;
 
-  if (!apiKey || !privateKeyPem || !credentialsJson || !tokenJson) {
+  // Mail transport: Brevo when BREVO_API_KEY is set, else Gmail. Need exactly
+  // one of them plus the Squarespace + signing secrets to do anything.
+  const haveGmail = !!(credentialsJson && tokenJson);
+  if (!apiKey || !privateKeyPem || (!brevoKey && !haveGmail)) {
     console.log("Missing required env vars — skipping. Set all secrets to enable fulfillment.");
     console.log({
       SQUARESPACE_API_KEY: !!apiKey,
       LICENSE_SIGNING_PRIVATE_KEY: !!privateKeyPem,
+      BREVO_API_KEY: !!brevoKey,
       GMAIL_CREDENTIALS: !!credentialsJson,
       GMAIL_TOKEN: !!tokenJson,
     });
@@ -213,8 +250,8 @@ async function main() {
   }
 
   const privateKey = createPrivateKey(privateKeyPem);
-  const credentials = JSON.parse(credentialsJson);
-  const token = JSON.parse(tokenJson);
+  const credentials = haveGmail ? JSON.parse(credentialsJson) : null;
+  const token = haveGmail ? JSON.parse(tokenJson) : null;
 
   // 1. Fetch all Squarespace orders containing the target product
   console.log(`Polling Squarespace orders for "${TARGET_PRODUCT}" purchases...`);
@@ -243,17 +280,27 @@ async function main() {
     return;
   }
 
-  console.log(`Processing ${newPurchasers.length} new purchaser(s)...`);
+  console.log(`Processing ${newPurchasers.length} new purchaser(s) via ${brevoKey ? "Brevo" : "Gmail"}...`);
 
-  // 3. Get Gmail access token
-  const accessToken = await refreshAccessToken(credentials, token);
+  // 3. Get Gmail access token (only when falling back to Gmail)
+  const accessToken = brevoKey ? null : await refreshAccessToken(credentials, token);
 
   // 4. Generate key + send email for each new purchaser
   for (const purchaser of newPurchasers) {
     try {
       const licenseKey = generateLicenseKeyFromTier(privateKey, purchaser.email, purchaser.tier);
-      const rawEmail = buildLicenseEmail(purchaser.email, purchaser.name, licenseKey);
-      await sendEmail(accessToken, rawEmail);
+      if (brevoKey) {
+        await sendViaBrevo(
+          brevoKey,
+          purchaser.email,
+          purchaser.name,
+          LICENSE_EMAIL_SUBJECT,
+          licenseEmailBody(purchaser.name, licenseKey),
+        );
+      } else {
+        const rawEmail = buildLicenseEmail(purchaser.email, purchaser.name, licenseKey);
+        await sendEmail(accessToken, rawEmail);
+      }
 
       processed[purchaser.email] = {
         processedAt: new Date().toISOString(),

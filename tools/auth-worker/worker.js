@@ -31,12 +31,15 @@
  *
  * Secrets (wrangler secret put ...):
  *   OTP_PEPPER         — random string mixed into the code hash
- *   GMAIL_CREDENTIALS  — Google OAuth client JSON (same as fulfillment)
- *   GMAIL_TOKEN        — Google OAuth token JSON (refresh_token)
+ *   BREVO_API_KEY      — Brevo transactional API key (preferred mail transport)
+ *   GMAIL_CREDENTIALS  — Google OAuth client JSON (fallback when no Brevo key)
+ *   GMAIL_TOKEN        — Google OAuth token JSON (refresh_token; Gmail fallback)
  *   IP_HASH_SALT       — salt for hashing client IPs in the events log
  *
+ * Mail transport: Brevo when BREVO_API_KEY is set, else Gmail, else dev-log.
+ *
  * Dev:
- *   If GMAIL_* are unset the code is logged to the console instead of emailed.
+ *   If no mail transport is configured the code is logged to the console.
  *   If DEV_EXPOSE_CODE = "1" the code is also returned in the JSON response so
  *   the flow is fully testable with `wrangler dev` + curl. NEVER set in prod.
  */
@@ -234,8 +237,38 @@ function buildRawEmail(env, toEmail, subject, body) {
     .replace(/=+$/, "");
 }
 
-/** Sends an email via Gmail, or logs to console in dev when creds are absent. */
+/** Sends an email via Brevo's transactional API (api.brevo.com/v3/smtp/email). */
+async function brevoSend(env, toEmail, subject, body) {
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": env.BREVO_API_KEY,
+      "content-type": "application/json",
+      accept: "application/json",
+    },
+    body: JSON.stringify({
+      sender: {
+        name: env.FROM_NAME ?? "Dec 18 Studios",
+        email: env.FROM_EMAIL ?? "create@dec18studios.com",
+      },
+      to: [{ email: toEmail }],
+      subject,
+      textContent: body,
+    }),
+  });
+  if (!res.ok) throw new Error(`Brevo send failed: ${res.status} ${await res.text()}`);
+}
+
+/**
+ * Sends an email. Prefers Brevo (transactional) when BREVO_API_KEY is set,
+ * falls back to Gmail when only the GMAIL_* creds are present, and logs to the
+ * console in dev when neither transport is configured. Flipping BREVO_API_KEY
+ * on/off is the whole cutover/revert switch.
+ */
 async function sendMail(env, toEmail, subject, body) {
+  if (env.BREVO_API_KEY) {
+    return brevoSend(env, toEmail, subject, body);
+  }
   if (!env.GMAIL_CREDENTIALS || !env.GMAIL_TOKEN) {
     console.log(`[dev mail] to=${toEmail} subject="${subject}"\n${body}`);
     return;

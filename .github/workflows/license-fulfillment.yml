@@ -41,6 +41,8 @@ jobs:
         env:
           SQUARESPACE_API_KEY: ${{ secrets.SQUARESPACE_API_KEY }}
           LICENSE_SIGNING_PRIVATE_KEY: ${{ secrets.LICENSE_SIGNING_PRIVATE_KEY }}
+          # Mail transport: Brevo when BREVO_API_KEY is set, else Gmail fallback.
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
           GMAIL_CREDENTIALS: ${{ secrets.GMAIL_CREDENTIALS }}
           GMAIL_TOKEN: ${{ secrets.GMAIL_TOKEN }}
         run: node tools/fulfill-licenses.mjs

@@ -26,5 +26,6 @@ database_id = "92af9aa8-0072-492b-8c5e-69fc413a4394"
 # Secrets (set via `wrangler secret put <NAME>`):
 #   OTP_PEPPER         — random string mixed into the OTP hash
 #   IP_HASH_SALT       — salt for hashing client IPs in the events log
-#   GMAIL_CREDENTIALS  — Google OAuth client JSON (same as fulfillment)
-#   GMAIL_TOKEN        — Google OAuth token JSON (refresh_token)
+#   BREVO_API_KEY      — Brevo transactional API key (preferred mail transport)
+#   GMAIL_CREDENTIALS  — Google OAuth client JSON (fallback when no Brevo key)
+#   GMAIL_TOKEN        — Google OAuth token JSON (refresh_token; Gmail fallback)

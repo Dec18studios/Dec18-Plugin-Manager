@@ -63,10 +63,12 @@ jobs:
       # Keep the email-OTP auth Worker's D1 `accounts` table in sync with the
       # license-code fulfillment ledger. Without this, a freshly purchased email
       # gets its key mailed but is unknown to email sign-in ("no purchase found")
-      # until someone re-runs the import by hand. Idempotent UPSERTs; only runs
-      # when this fulfillment run actually changed the ledger.
+      # until someone re-runs the import by hand. Idempotent UPSERTs.
+      # Scheduled runs only sync when the ledger actually changed (cheap no-op
+      # otherwise); a manual `workflow_dispatch` always syncs, giving an
+      # on-demand "force re-sync" escape hatch and a way to validate the token.
       - name: Sync subscribers into auth Worker D1
-        if: steps.commit.outputs.ledger_changed == 'true'
+        if: steps.commit.outputs.ledger_changed == 'true' || github.event_name == 'workflow_dispatch'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |

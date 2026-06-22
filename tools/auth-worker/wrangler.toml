@@ -2,6 +2,10 @@ name = "dec18-auth"
 main = "worker.js"
 compatibility_date = "2024-09-01"
 compatibility_flags = ["nodejs_compat"]
+# Cloudflare account that owns this Worker + D1. Not a secret (it appears in
+# dashboard URLs and every API call); pinning it here lets CI `wrangler d1
+# execute --remote` run with only a CLOUDFLARE_API_TOKEN secret.
+account_id = "f9cd64771a2e00ceabf42fa0b660eeb7"
 
 # Same Ed25519 verify key as the download-proxy and the app. NOT a secret.
 [vars]

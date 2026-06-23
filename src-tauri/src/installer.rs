@@ -25,6 +25,31 @@ use std::os::windows::process::CommandExt;
 #[cfg(target_os = "windows")]
 const CREATE_NO_WINDOW: u32 = 0x08000000;
 
+/// Resolve an absolute path to Windows PowerShell.
+///
+/// Launching via the bare name `powershell.exe` relies on it being on the
+/// process `PATH`, which is NOT guaranteed inside a Tauri app's environment —
+/// some Windows installs/launchers don't expose
+/// `System32\WindowsPowerShell\v1.0` on the inherited PATH, and the spawn then
+/// fails with `NotFound` ("program not found"). Resolve it from `%SystemRoot%`
+/// (the same way the inner elevation script already does), falling back to the
+/// bare name if the env var is missing or the file isn't where we expect.
+fn powershell_executable() -> std::ffi::OsString {
+    if let Some(system_root) =
+        std::env::var_os("SystemRoot").or_else(|| std::env::var_os("windir"))
+    {
+        let candidate = Path::new(&system_root)
+            .join("System32")
+            .join("WindowsPowerShell")
+            .join("v1.0")
+            .join("powershell.exe");
+        if candidate.exists() {
+            return candidate.into_os_string();
+        }
+    }
+    std::ffi::OsString::from("powershell.exe")
+}
+
 pub fn updater_configured() -> bool {
     true
 }
@@ -892,7 +917,7 @@ catch {{
         escape_ps(&log_path.display().to_string())
     );
 
-    let mut command = Command::new("powershell.exe");
+    let mut command = Command::new(powershell_executable());
     command.args(["-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", &outer_command]);
     #[cfg(target_os = "windows")]
     command.creation_flags(CREATE_NO_WINDOW);
@@ -989,7 +1014,7 @@ Write-UninstallLog "Uninstall completed successfully"
         escape_ps(&log_path.display().to_string())
     );
 
-    let mut command = Command::new("powershell.exe");
+    let mut command = Command::new(powershell_executable());
     command.args(["-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", &outer_command]);
     #[cfg(target_os = "windows")]
     command.creation_flags(CREATE_NO_WINDOW);

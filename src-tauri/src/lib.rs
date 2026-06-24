@@ -21,8 +21,9 @@ async fn apply_plugin_action(
     plugin_id: String,
     action: String,
     target_version: Option<String>,
+    demo: bool,
 ) -> Result<models::PluginOperationResult, String> {
-    installer::apply_plugin_action(&plugin_id, &action, target_version.as_deref())
+    installer::apply_plugin_action(&plugin_id, &action, target_version.as_deref(), demo)
         .await
         .map_err(|error| models::UiError::from_error("plugin_action", &error).to_json_string())
 }

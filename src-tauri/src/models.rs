@@ -49,6 +49,11 @@ pub struct PluginStatus {
     pub info_url: Option<String>,
     pub license_tier: String,
     pub install_mode: String,
+    /// The current platform package ships a public demo build, so an unlicensed user
+    /// can install it (the frontend relabels the button "Install Demo").
+    pub demo_available: bool,
+    /// The currently installed artifact is the demo build (vs. the full licensed build).
+    pub demo_installed: bool,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -102,6 +107,10 @@ pub struct PluginManifest {
     pub info_url: Option<String>,
     #[serde(default)]
     pub license_tier: Option<String>,
+    /// Version label recorded when the demo build is installed (e.g. "2.7.0-beta.7").
+    /// Lets the dashboard tell a demo install apart from the full build's `version`.
+    #[serde(default)]
+    pub demo_version: Option<String>,
     pub platforms: Vec<PlatformPackage>,
     #[serde(default)]
     pub available_versions: Vec<PluginRelease>,
@@ -137,6 +146,14 @@ pub struct PlatformPackage {
     pub arch: String,
     pub download_url: String,
     pub sha256: String,
+    /// When set, the public (unlicensed) demo build's download URL. Selected by the
+    /// installer in place of `download_url` when the user has no active license.
+    #[serde(default)]
+    pub demo_download_url: Option<String>,
+    /// Checksum for `demo_download_url` (demo bytes differ from the full build, so the
+    /// install-time hash verification needs its own value).
+    #[serde(default)]
+    pub demo_sha256: Option<String>,
     pub package_type: String,
     pub bundle_name: String,
     pub bundle_identifier: String,
@@ -173,6 +190,10 @@ pub struct InstallRecord {
     /// records written by older versions (those fall back to `bundle_path`).
     #[serde(default)]
     pub installed_paths: Vec<String>,
+    /// True when the installed artifact is the public demo build rather than the
+    /// licensed full build. Drives the "Demo installed" status and the upgrade prompt.
+    #[serde(default)]
+    pub is_demo: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -190,6 +211,10 @@ pub struct BundleInstallStamp {
     pub installed_version: String,
     pub bundle_identifier: String,
     pub installed_at: String,
+    /// Mirrors `InstallRecord::is_demo` inside the bundle's on-disk stamp so a demo
+    /// install is still recognized after the manager's state file is lost.
+    #[serde(default)]
+    pub is_demo: bool,
 }
 
 #[derive(Debug, Clone, Serialize)]

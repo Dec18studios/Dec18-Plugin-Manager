@@ -163,22 +163,51 @@ fn install_state_path() -> Result<PathBuf> {
     Ok(new_path)
 }
 
+/// Repoint a resolved package at its public demo build. Used when the caller is
+/// unlicensed: the demo download URL, checksum, and version label replace the licensed
+/// build's. Errors (rather than silently falling back to the paid build) when the
+/// platform package carries no demo asset.
+fn apply_demo_override(resolved: &mut crate::models::ResolvedPlugin) -> Result<()> {
+    let demo_url = resolved
+        .package
+        .demo_download_url
+        .clone()
+        .ok_or_else(|| anyhow!("A demo build is not available for this plugin."))?;
+    let demo_sha = resolved
+        .package
+        .demo_sha256
+        .clone()
+        .ok_or_else(|| anyhow!("The demo build for this plugin is missing its checksum."))?;
+    resolved.package.download_url = demo_url;
+    resolved.package.sha256 = demo_sha;
+    if let Some(demo_version) = resolved.manifest.demo_version.clone() {
+        resolved.version = demo_version;
+    }
+    Ok(())
+}
+
 pub async fn apply_plugin_action(
     plugin_id: &str,
     action: &str,
     target_version: Option<&str>,
+    demo: bool,
 ) -> Result<PluginOperationResult> {
     if action == "uninstall" || action == "force-uninstall" {
         return uninstall_plugin(plugin_id, action).await;
     }
 
-    let resolved = catalog::resolve_plugin(plugin_id, target_version).await?;
+    let mut resolved = catalog::resolve_plugin(plugin_id, target_version).await?;
+    // Unlicensed users install the public demo build: swap the package's download URL,
+    // checksum, and version label before any download or staging happens.
+    if demo {
+        apply_demo_override(&mut resolved)?;
+    }
     ensure_supported_package(&resolved.package)?;
     let host_was_running = any_host_running(&resolved.package.host_processes);
 
     // File-browse mode: simple file copy to a user-chosen directory (no elevated privileges)
     if resolved.package.install_mode == "file-browse" {
-        return install_file_browse(plugin_id, action, &resolved, host_was_running).await;
+        return install_file_browse(plugin_id, action, &resolved, host_was_running, demo).await;
     }
 
     let source_spec = parse_package_source_spec(&resolved.package.download_url);
@@ -196,6 +225,7 @@ pub async fn apply_plugin_action(
             &resolved.version,
             &resolved.package.bundle_identifier,
             &installed_at,
+            demo,
         )?;
         stage_bundle_root.clone()
     } else {
@@ -225,6 +255,7 @@ pub async fn apply_plugin_action(
             &resolved.version,
             &resolved.package.bundle_identifier,
             &installed_at,
+            demo,
         )?;
         stage_bundle_root.clone()
     };
@@ -268,6 +299,7 @@ pub async fn apply_plugin_action(
             bundle_identifier: resolved.package.bundle_identifier.clone(),
             installed_at: installed_at.clone(),
             installed_paths: vec![target_bundle.display().to_string()],
+            is_demo: demo,
         },
     );
     save_install_state(&state)?;
@@ -355,6 +387,7 @@ async fn install_file_browse(
     action: &str,
     resolved: &crate::models::ResolvedPlugin,
     host_was_running: bool,
+    demo: bool,
 ) -> Result<PluginOperationResult> {
     // Determine install directory via the shared resolver so status detection and
     // folder-open agree on the same path.
@@ -450,6 +483,7 @@ async fn install_file_browse(
             bundle_identifier: resolved.package.bundle_identifier.clone(),
             installed_at,
             installed_paths,
+            is_demo: demo,
         },
     );
     save_install_state(&state)?;
@@ -529,6 +563,7 @@ fn write_bundle_install_stamp(
     installed_version: &str,
     bundle_identifier: &str,
     installed_at: &str,
+    is_demo: bool,
 ) -> Result<()> {
     let resources_dir = bundle_root.join("Contents").join("Resources");
     fs::create_dir_all(&resources_dir)
@@ -538,6 +573,7 @@ fn write_bundle_install_stamp(
         installed_version: installed_version.to_string(),
         bundle_identifier: bundle_identifier.to_string(),
         installed_at: installed_at.to_string(),
+        is_demo,
     };
     let raw = serde_json::to_string_pretty(&stamp)?;
     let stamp_path = bundle_stamp_path(bundle_root);

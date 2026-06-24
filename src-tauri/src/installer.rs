@@ -454,6 +454,13 @@ async fn install_file_browse(
     if resolved.package.package_type == "raw" {
         // Single-file download — write directly to install directory
         let dest = install_root.join(&resolved.package.bundle_name);
+        // Replace the file outright instead of truncating in place: a freshly
+        // created file gets a current macOS "Date Added", so the reinstalled DCTL
+        // surfaces as newly-added in Finder (Downloads sorts by Date Added by
+        // default) while keeping the same filename Resolve references. Best-effort,
+        // single attempt — a missing file returns NotFound instantly and is fine;
+        // if removal somehow fails the write below still overwrites in place.
+        let _ = fs::remove_file(&dest);
         fs_retry(|| fs::write(&dest, &bytes))
             .with_context(|| format!("Failed to write {} to {}", resolved.package.bundle_name, dest.display()))?;
         installed_paths.push(dest.display().to_string());
@@ -499,6 +506,10 @@ async fn install_file_browse(
                 if let Some(parent) = dest.parent() {
                     fs_retry(|| fs::create_dir_all(parent)).ok();
                 }
+                // Remove any existing file first so the replacement gets a fresh
+                // macOS "Date Added" (shows as newly-added in Finder). Best-effort,
+                // single attempt; the copy below overwrites regardless.
+                let _ = fs::remove_file(&dest);
                 fs_retry(|| fs::copy(entry.path(), &dest))
                     .with_context(|| format!("Failed to copy {} to {}", entry.path().display(), dest.display()))?;
                 count += 1;

@@ -37,6 +37,25 @@ function base64Decode(str) {
   return bytes;
 }
 
+// Match a release asset against a requested pattern.
+//   - Exact name (no "*")  -> case-insensitive exact match (app manifest path)
+//   - Glob with "*"        -> "*" becomes ".*", anchored, case-insensitive
+//                             (website path, e.g. "*macOS*")
+// "*" alone matches any asset and resolves to the first one (single-zip DCTLs).
+function matchAsset(assets, pattern) {
+  if (!pattern) return null;
+  if (pattern === "*") return assets[0] || null;
+
+  const esc = pattern.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*");
+  const re = new RegExp(`^${esc}$`, "i");
+  // Prefer an exact (case-insensitive) hit before falling back to the glob.
+  return (
+    assets.find((a) => a.name.toLowerCase() === pattern.toLowerCase()) ||
+    assets.find((a) => re.test(a.name)) ||
+    null
+  );
+}
+
 function errorResponse(status, message) {
   return new Response(JSON.stringify({ error: message }), {
     status,
@@ -97,11 +116,17 @@ export default {
       return errorResponse(405, "Method not allowed");
     }
 
-    // Extract license token from header
+    // Extract license token. Header is preferred (app path: reqwest sets the
+    // Authorization header), but a browser top-level navigation cannot set
+    // headers, so the website passes the token as a ?token= query param.
+    const reqUrl = new URL(request.url);
     const authHeader = request.headers.get("Authorization") || "";
     const tokenMatch = authHeader.match(/^Bearer\s+(.+)$/i);
     const licenseToken =
-      tokenMatch?.[1] || request.headers.get("X-License-Token") || "";
+      tokenMatch?.[1] ||
+      request.headers.get("X-License-Token") ||
+      reqUrl.searchParams.get("token") ||
+      "";
 
     if (!licenseToken) {
       return errorResponse(401, "Missing license token");
@@ -130,9 +155,53 @@ export default {
       return errorResponse(403, "License expired. Renew to download paid plugins.");
     }
 
-    // Parse the requested asset path:
-    //   /v1/<owner>/<repo>/releases/download/<tag>/<asset>
-    const url = new URL(request.url);
+    // Parse the request path. Two shapes are accepted:
+    //   list:     /v1/<owner>/<repo>/releases
+    //   download: /v1/<owner>/<repo>/releases/download/<tag>/<asset>
+    const url = reqUrl;
+
+    const GITHUB_PAT = env.GITHUB_PAT;
+    if (!GITHUB_PAT) {
+      return errorResponse(500, "Server misconfigured: missing GitHub PAT");
+    }
+    const ghHeaders = {
+      Accept: "application/vnd.github+json",
+      Authorization: `Bearer ${GITHUB_PAT}`,
+      "User-Agent": "Dec18-Download-Proxy/1.0",
+    };
+
+    // --- Release listing: powers the website version dropdown -------------
+    const listMatch = url.pathname.match(
+      /^\/v1\/([a-zA-Z0-9_.-]+)\/([a-zA-Z0-9_.-]+)\/releases$/
+    );
+    if (listMatch) {
+      const [, owner, repo] = listMatch;
+      if (owner.toLowerCase() !== "dec18studios") {
+        return errorResponse(403, "Downloads restricted to Dec 18 Studios repos");
+      }
+      const listResp = await fetch(
+        `https://api.github.com/repos/${owner}/${repo}/releases?per_page=20`,
+        { headers: ghHeaders }
+      );
+      if (!listResp.ok) {
+        return errorResponse(listResp.status, `Could not list releases for ${repo}`);
+      }
+      const releases = await listResp.json();
+      const trimmed = (Array.isArray(releases) ? releases : [])
+        .filter((r) => !r.draft)
+        .map((r) => ({
+          tag: r.tag_name,
+          name: r.name,
+          prerelease: !!r.prerelease,
+          published_at: r.published_at,
+        }));
+      return new Response(JSON.stringify(trimmed), {
+        status: 200,
+        headers: { "Content-Type": "application/json", ...CORS_HEADERS },
+      });
+    }
+
+    // --- Asset download ---------------------------------------------------
     const pathMatch = url.pathname.match(
       /^\/v1\/([a-zA-Z0-9_.-]+)\/([a-zA-Z0-9_.-]+)\/releases\/download\/([^/]+)\/(.+)$/
     );
@@ -141,38 +210,29 @@ export default {
     }
 
     const [, owner, repo, tag, asset] = pathMatch;
+    const assetPattern = decodeURIComponent(asset);
 
     // Only allow downloads from dec18studios org
     if (owner.toLowerCase() !== "dec18studios") {
       return errorResponse(403, "Downloads restricted to Dec 18 Studios repos");
     }
 
-    // Fetch the asset from GitHub using the PAT
-    const GITHUB_PAT = env.GITHUB_PAT;
-    if (!GITHUB_PAT) {
-      return errorResponse(500, "Server misconfigured: missing GitHub PAT");
-    }
-
-    // First, get the release to find the asset ID (required for private repo downloads)
-    const releaseUrl = `https://api.github.com/repos/${owner}/${repo}/releases/tags/${encodeURIComponent(tag)}`;
-    const releaseResp = await fetch(releaseUrl, {
-      headers: {
-        Accept: "application/vnd.github+json",
-        Authorization: `Bearer ${GITHUB_PAT}`,
-        "User-Agent": "Dec18-Download-Proxy/1.0",
-      },
-    });
+    // Resolve the release. "latest" maps to GitHub's latest-release endpoint;
+    // any other value is treated as an exact tag (e.g. v12.1.2).
+    const releaseUrl =
+      tag === "latest"
+        ? `https://api.github.com/repos/${owner}/${repo}/releases/latest`
+        : `https://api.github.com/repos/${owner}/${repo}/releases/tags/${encodeURIComponent(tag)}`;
+    const releaseResp = await fetch(releaseUrl, { headers: ghHeaders });
 
     if (!releaseResp.ok) {
       return errorResponse(releaseResp.status, `Release not found: ${tag}`);
     }
 
     const release = await releaseResp.json();
-    const matchedAsset = (release.assets || []).find(
-      (a) => a.name === decodeURIComponent(asset)
-    );
+    const matchedAsset = matchAsset(release.assets || [], assetPattern);
     if (!matchedAsset) {
-      return errorResponse(404, `Asset not found: ${decodeURIComponent(asset)}`);
+      return errorResponse(404, `Asset not found: ${assetPattern}`);
     }
 
     // Download the asset via the API (works for private repos)

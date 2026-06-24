@@ -19,7 +19,7 @@
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Dolby-Vision-Spoofer-DCTL/releases/download/v1.0.0/Dolby-Vision-Spoofer-v1.0.0.zip",
+      "downloadUrl": "https://github.com/Dec18studios/Dolby-Vision-Spoofer-DCTL/releases/download/v1.0.0/Dolby-Vision-Spoofer-v1.0.0.zip",
       "sha256": "461494181e5947ec9f08ac74ad83ed528aeccc10379ad0e7e1063b8e2d5e7df4",
       "packageType": "zip",
       "bundleName": "Dolby_Entropy_Spoof.dctl",
@@ -35,7 +35,7 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Dolby-Vision-Spoofer-DCTL/releases/download/v1.0.0/Dolby-Vision-Spoofer-v1.0.0.zip",
+      "downloadUrl": "https://github.com/Dec18studios/Dolby-Vision-Spoofer-DCTL/releases/download/v1.0.0/Dolby-Vision-Spoofer-v1.0.0.zip",
       "sha256": "461494181e5947ec9f08ac74ad83ed528aeccc10379ad0e7e1063b8e2d5e7df4",
       "packageType": "zip",
       "bundleName": "Dolby_Entropy_Spoof.dctl",
@@ -51,7 +51,7 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Dolby-Vision-Spoofer-DCTL/releases/download/v1.0.0/Dolby-Vision-Spoofer-v1.0.0.zip",
+      "downloadUrl": "https://github.com/Dec18studios/Dolby-Vision-Spoofer-DCTL/releases/download/v1.0.0/Dolby-Vision-Spoofer-v1.0.0.zip",
       "sha256": "461494181e5947ec9f08ac74ad83ed528aeccc10379ad0e7e1063b8e2d5e7df4",
       "packageType": "zip",
       "bundleName": "Dolby_Entropy_Spoof.dctl",

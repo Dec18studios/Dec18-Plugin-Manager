@@ -98,6 +98,24 @@ jobs:
               continue
             fi
 
+            # Merge the local "demo" block (if any) onto the resolved config.
+            # Demo-download definitions live in the Plugin-Manager repo
+            # (docs/plugins/<id>/manager-release-config.json), so they apply even
+            # when the remote plugin-repo config wins above and lacks a demo block.
+            if [ -f "$LOCAL_CONFIG" ]; then
+              node -e '
+                const fs = require("fs");
+                const [cfgPath, localPath] = process.argv.slice(1);
+                const cfg = JSON.parse(fs.readFileSync(cfgPath, "utf8"));
+                const local = JSON.parse(fs.readFileSync(localPath, "utf8"));
+                if (local && local.demo) {
+                  cfg.demo = local.demo;
+                  fs.writeFileSync(cfgPath, JSON.stringify(cfg, null, 2) + "\n");
+                  console.log("::notice::Merged local demo block into config for "+cfgPath);
+                }
+              ' "$CONFIG_FILE" "$LOCAL_CONFIG" || echo "::warning::${REPO}: demo merge failed"
+            fi
+
             # Fetch releases
             if ! curl -fsSL \
               -H "Accept: application/vnd.github+json" \
@@ -132,8 +150,11 @@ jobs:
         env:
           PROXY_BASE: ${{ vars.DOWNLOAD_PROXY_URL || 'https://dec18-download-proxy.dec18studios.workers.dev' }}
         run: |
-          # Rewrite browser_download_url in manifests to route through the proxy.
+          # Rewrite the licensed "downloadUrl" in manifests to route through the proxy.
           # Free-tier plugins skip the proxy so users can download without a license token.
+          # IMPORTANT: only the "downloadUrl" key is rewritten — the public
+          # "demoDownloadUrl" must stay a direct github.com URL so unlicensed users
+          # can download the watermarked demo without a token (the proxy would 401 them).
           for manifest in docs/plugins/*/stable.json docs/plugins/*/beta.json; do
             [ -f "$manifest" ] || continue
             tier=$(node -e "try{const d=require('fs').readFileSync('$manifest','utf8'); console.log(JSON.parse(d).licenseTier||'')}catch{console.log('')}")
@@ -141,8 +162,9 @@ jobs:
               echo "::notice::Skipping proxy rewrite for free plugin: $(basename $(dirname $manifest))/$(basename $manifest)"
               continue
             fi
-            sed -i "s|https://github.com/\([^/]*/[^/]*/releases/download/[^\"]*\)|${PROXY_BASE}/v1/\1|g" "$manifest"
-            echo "::notice::Rewrote download URLs in $(basename $(dirname $manifest))/$(basename $manifest)"
+            # Anchor on the "downloadUrl": key so "demoDownloadUrl" is left untouched.
+            sed -i "s|\"downloadUrl\": \"https://github.com/\([^/]*/[^/]*/releases/download/[^\"]*\)|\"downloadUrl\": \"${PROXY_BASE}/v1/\1|g" "$manifest"
+            echo "::notice::Rewrote licensed downloadUrl in $(basename $(dirname $manifest))/$(basename $manifest)"
           done
 
       - name: Commit generated manifests back to repo

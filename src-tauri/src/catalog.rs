@@ -145,6 +145,14 @@ fn build_plugin_status(
         .map(|item| item.installed_version.clone())
         .or_else(|| record.map(|item| item.installed_version.clone()));
     let managed_install = stamp.is_some() || record.is_some();
+    // This platform package ships a public demo build (unlicensed users can install it).
+    let demo_available = package.demo_download_url.is_some();
+    // The artifact currently on disk is the demo build. The version-comparison machinery
+    // below would otherwise read the demo's higher version line as "Beta installed" or
+    // "Catalog behind"; demo installs short-circuit those into a clean "Demo installed".
+    let demo_installed = installed
+        && (stamp.as_ref().map(|item| item.is_demo).unwrap_or(false)
+            || record.map(|item| item.is_demo).unwrap_or(false));
     let installed_is_prerelease = installed_version
         .as_ref()
         .map(|current| is_prerelease_like(current))
@@ -155,15 +163,17 @@ fn build_plugin_status(
             .as_ref()
             .map(|current| version_cmp(current, &manifest.version) == Ordering::Greater)
             .unwrap_or(false);
-    let channel_switch_mode = if installed && managed_install {
+    let channel_switch_mode = if installed && managed_install && !demo_installed {
         determine_channel_switch_mode(installed_version.as_deref(), &manifest.version)
             .map(str::to_string)
     } else {
         None
     };
     let channel_switch_available = channel_switch_mode.is_some();
-    let catalog_behind_installed = installed_newer_than_manifest && !installed_is_prerelease;
-    let needs_update = installed
+    let catalog_behind_installed =
+        !demo_installed && installed_newer_than_manifest && !installed_is_prerelease;
+    let needs_update = !demo_installed
+        && installed
         && managed_install
         && installed_version
             .as_ref()
@@ -173,6 +183,8 @@ fn build_plugin_status(
 
     let status = if !installed {
         "Ready to install".to_string()
+    } else if demo_installed {
+        "Demo installed".to_string()
     } else if !managed_install {
         "Unmanaged install".to_string()
     } else if channel_switch_mode.as_deref() == Some("stable_update_available") {
@@ -213,6 +225,8 @@ fn build_plugin_status(
             .or_else(|| manifest.license_tier.clone())
             .unwrap_or_else(|| "subscription".to_string()),
         install_mode: package.install_mode.clone(),
+        demo_available,
+        demo_installed,
     }
 }
 
@@ -257,6 +271,9 @@ fn adopt_unmanaged_installs(
                 bundle_identifier: package.bundle_identifier.clone(),
                 installed_at: now_rfc3339(),
                 installed_paths: vec![target_bundle.display().to_string()],
+                // A self-adopted bundle has no stamp/record, so we can't know it's a demo;
+                // treat unmanaged adoptions as full installs.
+                is_demo: false,
             },
         );
         changed = true;

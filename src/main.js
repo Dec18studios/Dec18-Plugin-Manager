@@ -335,7 +335,7 @@ function closeReleaseHighlightsDialog() {
 }
 
 function statusClass(status) {
-  if (status === "Installed" || status === "Up to date") return "ok";
+  if (status === "Installed" || status === "Up to date" || status === "Demo installed") return "ok";
   if (
     status === "Update available" ||
     status === "Stable available" ||
@@ -349,8 +349,16 @@ function statusClass(status) {
   return "bad";
 }
 
+// True when an unlicensed user may install this plugin's public demo build.
+function canInstallDemo(plugin) {
+  return !!plugin.demoAvailable && plugin.licenseTier !== "free" && !isLicensed();
+}
+
 function actionLabel(plugin) {
-  if (!plugin.installed) return "Install";
+  // A demo is on disk and the user is now licensed → offer the full build.
+  if (plugin.demoInstalled && isLicensed()) return "Upgrade to Full";
+  if (!plugin.installed) return canInstallDemo(plugin) ? "Install Demo" : "Install";
+  if (plugin.demoInstalled) return "Reinstall Demo";
   if (plugin.channelSwitchMode === "stable_update_available") return "Update to stable";
   if (plugin.channelSwitchMode === "return_to_stable") return "Install stable";
   if (plugin.catalogBehindInstalled) return "Reinstall";
@@ -771,7 +779,11 @@ function renderPlugins() {
           <h3>${plugin.displayName}</h3>
           ${plugin.type ? `<span class="plugin-type-badge type-${escapeHtml(plugin.type)}">${escapeHtml(plugin.type)}</span>` : ""}
           ${plugin.category ? `<span class="plugin-category-badge">${escapeHtml(plugin.category)}</span>` : ""}
-          ${plugin.licenseTier === "free" ? `<span class="license-tier-pill free">Free</span>` : `<span class="license-tier-pill subscription">License</span>`}
+          ${plugin.licenseTier === "free"
+            ? `<span class="license-tier-pill free">Free</span>`
+            : canInstallDemo(plugin)
+              ? `<span class="license-tier-pill subscription" title="Install a watermarked demo now; sign in to unlock the full build">Demo</span>`
+              : `<span class="license-tier-pill subscription">License</span>`}
           </div>
         </div>
         <span class="status-pill ${statusClass(plugin.status)} ${plugin.status === "Ready to install" ? "ready" : ""}">${plugin.status}</span>
@@ -799,8 +811,9 @@ function renderPlugins() {
     const button = card.querySelector(`[data-action="${primaryRequest}"]`);
     if (button) {
       button.addEventListener("click", async () => {
-        // Free-tier plugins don't require a license; all others do
-        if (plugin.licenseTier !== "free" && !isLicensed()) {
+        // Free-tier plugins don't require a license; premium ones do — unless the
+        // plugin offers a public demo build, which unlicensed users may install.
+        if (plugin.licenseTier !== "free" && !isLicensed() && !plugin.demoAvailable) {
           openLicenseDialog();
           return;
         }
@@ -1335,7 +1348,13 @@ async function applyPluginAction(pluginId, action, targetVersion = null) {
       });
     }
 
-    const result = await invoke("apply_plugin_action", { pluginId, action, targetVersion });
+    // Unlicensed users with a demo-capable plugin install the public demo build. The
+    // backend swaps the package; the licensed/full path passes demo=false. (Version
+    // drawer, maintenance, and auto-update only render/run for licensed users, so they
+    // never reach here as demo.)
+    const actingPlugin = (state.dashboard?.plugins ?? []).find((p) => p.pluginId === pluginId);
+    const demo = !!actingPlugin?.demoAvailable && !isLicensed();
+    const result = await invoke("apply_plugin_action", { pluginId, action, targetVersion, demo });
     logActivity(`${result.pluginId}: ${result.message}`);
     await refreshDashboard();
     // DCTL/file-browse completion feedback: reveal the install folder so the user
@@ -1491,6 +1510,7 @@ async function autoUpdatePluginsIfEnabled() {
         pluginId: plugin.pluginId,
         action: "update",
         targetVersion: null,
+        demo: false,
       });
       logActivity(`${plugin.displayName} updated to ${plugin.latestVersion}.`);
     } catch (error) {

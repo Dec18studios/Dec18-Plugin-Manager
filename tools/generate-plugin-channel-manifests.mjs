@@ -245,6 +245,48 @@ async function buildReleaseFromGitHubRelease(config, release, options = {}) {
   };
 }
 
+// Stamp the pinned demo coordinates from the release config onto the current
+// release's platform packages. The demo is a fixed public artifact (its own
+// repo + tag) that does NOT track per-release bumps, so it lives statically in
+// manager-release-config.json rather than being matched from GitHub assets.
+// Only the top-level (current) platforms get demo fields — availableVersions[]
+// stay demo-free, matching how the manager routes unlicensed installs.
+function applyDemoToManifest(manifest, config) {
+  const demo = config.demo;
+  if (!demo) {
+    return manifest;
+  }
+
+  const next = {};
+  for (const [key, value] of Object.entries(manifest)) {
+    next[key] = value;
+    // Place demoVersion immediately after releaseNotesUrl for a stable key order.
+    if (key === "releaseNotesUrl" && typeof demo.version === "string" && demo.version.length > 0) {
+      next.demoVersion = demo.version;
+    }
+  }
+
+  const assets = demo.assets || {};
+  next.platforms = (manifest.platforms || []).map((pkg) => {
+    const demoAsset = assets[`${pkg.platform}-${pkg.arch}`];
+    if (!demoAsset || !demoAsset.downloadUrl || !demoAsset.sha256) {
+      return pkg;
+    }
+    const withDemo = {};
+    for (const [key, value] of Object.entries(pkg)) {
+      withDemo[key] = value;
+      // Insert demo asset fields right after sha256 for a stable key order.
+      if (key === "sha256") {
+        withDemo.demoDownloadUrl = demoAsset.downloadUrl;
+        withDemo.demoSha256 = demoAsset.sha256;
+      }
+    }
+    return withDemo;
+  });
+
+  return next;
+}
+
 function updateIndex(indexPath, pluginId, displayName, category, type, licenseTier) {
   const index = readJson(indexPath);
   index.generatedAt = new Date().toISOString();
@@ -351,9 +393,9 @@ async function generateForConfig(configPath, releasesPath, managerRoot) {
   const betaPath = path.join(pluginDir, "beta.json");
   const indexPath = path.join(managerRoot, "docs", "plugins", "index.json");
 
-  writeJson(stablePath, stableManifest);
+  writeJson(stablePath, applyDemoToManifest(stableManifest, config));
   if (betaManifest) {
-    writeJson(betaPath, betaManifest);
+    writeJson(betaPath, applyDemoToManifest(betaManifest, config));
   } else {
     removeIfExists(betaPath);
   }

@@ -382,6 +382,39 @@ async fn uninstall_plugin(plugin_id: &str, action: &str) -> Result<PluginOperati
     })
 }
 
+/// Number of attempts for filesystem operations targeting a (possibly) network
+/// volume. Two failure modes this absorbs:
+///   1. The macOS "network volume" TCC grant race — the first syscall that
+///      touches the volume triggers the permission prompt and FAILS (EPERM)
+///      while the prompt is pending; once the user grants it, a retry succeeds.
+///      Without a retry the install bailed at directory-create, *before* the
+///      download, so "nothing got downloaded" even though access was granted.
+///   2. Transient SMB/AFP I/O hiccups this user's network mounts are known to
+///      throw (e.g. `os error 45` on the "Server Sync Files" volume).
+const FS_RETRY_ATTEMPTS: usize = 6;
+const FS_RETRY_DELAY_MS: u64 = 250;
+
+/// Run a filesystem closure, retrying a few times with a short fixed backoff so a
+/// just-granted network-volume permission (or a transient mount error) doesn't
+/// become a hard failure on the first syscall. Retries only on `Err`; returns the
+/// last error if every attempt fails. Sleeps are brief and bounded, so blocking
+/// the async task here is acceptable.
+fn fs_retry<T>(mut op: impl FnMut() -> std::io::Result<T>) -> std::io::Result<T> {
+    let mut attempt = 0;
+    loop {
+        match op() {
+            Ok(value) => return Ok(value),
+            Err(err) => {
+                attempt += 1;
+                if attempt >= FS_RETRY_ATTEMPTS {
+                    return Err(err);
+                }
+                std::thread::sleep(std::time::Duration::from_millis(FS_RETRY_DELAY_MS));
+            }
+        }
+    }
+}
+
 async fn install_file_browse(
     plugin_id: &str,
     action: &str,
@@ -394,10 +427,19 @@ async fn install_file_browse(
     let install_dir = resolve_file_browse_dir(plugin_id, &resolved.package.install_path);
     let install_root = PathBuf::from(&install_dir);
 
-    if !install_root.exists() {
-        fs::create_dir_all(&install_root)
-            .with_context(|| format!("Failed to create install directory {}", install_root.display()))?;
-    }
+    // `create_dir_all` is idempotent (Ok if the dir already exists), so call it
+    // directly instead of gating on `install_root.exists()` — on a permission-
+    // pending network volume `exists()` returns false (the stat itself fails),
+    // which used to push us into a single create attempt that EPERM'd before the
+    // user could grant access, failing the whole install (and the download)
+    // silently. Retry through the TCC grant instead.
+    fs_retry(|| fs::create_dir_all(&install_root)).with_context(|| {
+        format!(
+            "Failed to create install directory {}. If it is on a network volume, grant the macOS \
+             network-volume access prompt and try again.",
+            install_root.display()
+        )
+    })?;
 
     let source_spec = parse_package_source_spec(&resolved.package.download_url);
     let bytes = load_package_bytes(&source_spec.source).await?;
@@ -412,7 +454,7 @@ async fn install_file_browse(
     if resolved.package.package_type == "raw" {
         // Single-file download — write directly to install directory
         let dest = install_root.join(&resolved.package.bundle_name);
-        fs::write(&dest, &bytes)
+        fs_retry(|| fs::write(&dest, &bytes))
             .with_context(|| format!("Failed to write {} to {}", resolved.package.bundle_name, dest.display()))?;
         installed_paths.push(dest.display().to_string());
         copied_count = 1;
@@ -451,13 +493,13 @@ async fn install_file_browse(
 
             let dest = install_root.join(relative);
             if entry.file_type().is_dir() {
-                fs::create_dir_all(&dest)
+                fs_retry(|| fs::create_dir_all(&dest))
                     .with_context(|| format!("Failed to create {}", dest.display()))?;
             } else {
                 if let Some(parent) = dest.parent() {
-                    fs::create_dir_all(parent).ok();
+                    fs_retry(|| fs::create_dir_all(parent)).ok();
                 }
-                fs::copy(entry.path(), &dest)
+                fs_retry(|| fs::copy(entry.path(), &dest))
                     .with_context(|| format!("Failed to copy {} to {}", entry.path().display(), dest.display()))?;
                 count += 1;
             }

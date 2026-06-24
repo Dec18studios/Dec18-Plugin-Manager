@@ -18,6 +18,23 @@
   "description": "43-band spectral film emulation engine with multiple film stock presets and full GPU acceleration.",
   "tags": ["film", "spectral", "color", "emulation", "grain"],
   "infoUrl": "https://dec18studios.com/photochemist",
+  "demo": {
+    "version": "2.7.0-beta.7",
+    "assets": {
+      "macos-universal": {
+        "downloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v2.7.0/PhotoChemistDemo_photochemist-v2.7.0-beta.7_macOS_universal_portable.zip",
+        "sha256": "7f56c16a94287798ea3884c09881fdd67a5d8f51333e9bd2c3a2b1307d211e25"
+      },
+      "windows-x86_64": {
+        "downloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v2.7.0/PhotoChemistDemo_photochemist-v2.7.0-beta.7_windows_cuda_portable.zip",
+        "sha256": "e76f106e1a8e7075bc922a558dd733ff8bdb10a66657b007adde130568b87a27"
+      },
+      "linux-x86_64": {
+        "downloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v2.7.0/PhotoChemistDemo_photochemist-v2.7.0-beta.7_linux_cuda_portable.zip",
+        "sha256": "61c9dc175ba24d19d083c80379529aa95c80cf24341a817ee40f900a79e04669"
+      }
+    }
+  },
   "assetRules": [
     {
       "family": "macos",

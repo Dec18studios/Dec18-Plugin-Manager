@@ -13,7 +13,7 @@
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/IDT-Lut-Loaders-DCTL/releases/download/v1.0/IDT-Lut-Loaders-DCTL.zip",
+      "downloadUrl": "https://github.com/Dec18studios/IDT-Lut-Loaders-DCTL/releases/download/v1.0/IDT-Lut-Loaders-DCTL.zip",
       "sha256": "d4fbbf25223ba6daeed6a78250e92014e2f677ebcd09c6fef95f96603707d1e4",
       "packageType": "zip",
       "bundleName": "IDT Lut Loaders.dctle",
@@ -29,7 +29,7 @@
     {
       "platform": "windows",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/IDT-Lut-Loaders-DCTL/releases/download/v1.0/IDT-Lut-Loaders-DCTL.zip",
+      "downloadUrl": "https://github.com/Dec18studios/IDT-Lut-Loaders-DCTL/releases/download/v1.0/IDT-Lut-Loaders-DCTL.zip",
       "sha256": "d4fbbf25223ba6daeed6a78250e92014e2f677ebcd09c6fef95f96603707d1e4",
       "packageType": "zip",
       "bundleName": "IDT Lut Loaders.dctle",
@@ -45,7 +45,7 @@
     {
       "platform": "linux",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/IDT-Lut-Loaders-DCTL/releases/download/v1.0/IDT-Lut-Loaders-DCTL.zip",
+      "downloadUrl": "https://github.com/Dec18studios/IDT-Lut-Loaders-DCTL/releases/download/v1.0/IDT-Lut-Loaders-DCTL.zip",
       "sha256": "d4fbbf25223ba6daeed6a78250e92014e2f677ebcd09c6fef95f96603707d1e4",
       "packageType": "zip",
       "bundleName": "IDT Lut Loaders.dctle",

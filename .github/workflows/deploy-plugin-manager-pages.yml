@@ -157,9 +157,15 @@ jobs:
           # can download the watermarked demo without a token (the proxy would 401 them).
           for manifest in docs/plugins/*/stable.json docs/plugins/*/beta.json; do
             [ -f "$manifest" ] || continue
-            tier=$(node -e "try{const d=require('fs').readFileSync('$manifest','utf8'); console.log(JSON.parse(d).licenseTier||'')}catch{console.log('')}")
+            # licenseTier lives in index.json (the authoritative catalog the app
+            # reads), NOT in the per-plugin manifest (that field is null there).
+            # Look it up by plugin id (= manifest's parent dir) so free plugins
+            # are correctly skipped — a free download must stay a direct public
+            # github.com URL, or logged-out users hit the proxy and get a 401.
+            pid=$(basename "$(dirname "$manifest")")
+            tier=$(node -e "try{const idx=JSON.parse(require('fs').readFileSync('docs/plugins/index.json','utf8'));const list=Array.isArray(idx)?idx:(idx.plugins||[]);const e=list.find(p=>(p.pluginId||p.id)===process.argv[1]);console.log((e&&e.licenseTier)||'')}catch{console.log('')}" "$pid")
             if [ "$tier" = "free" ]; then
-              echo "::notice::Skipping proxy rewrite for free plugin: $(basename $(dirname $manifest))/$(basename $manifest)"
+              echo "::notice::Skipping proxy rewrite for free plugin: ${pid}/$(basename $manifest)"
               continue
             fi
             # Anchor on the "downloadUrl": key so "demoDownloadUrl" is left untouched.

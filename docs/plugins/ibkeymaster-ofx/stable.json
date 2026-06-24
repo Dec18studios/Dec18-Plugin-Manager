@@ -19,7 +19,7 @@
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/IBKeymaster/releases/download/V1.5-macupdate/IBKeymaster.ofx.metal.zip",
+      "downloadUrl": "https://github.com/Dec18studios/IBKeymaster/releases/download/V1.5-macupdate/IBKeymaster.ofx.metal.zip",
       "sha256": "c333bf7e3024f316eb190ab6ddddaf85bb5f6bb9467fa9ff39dc368d8df699c8",
       "packageType": "zip",
       "bundleName": "IBKeymaster.ofx.bundle",
@@ -41,7 +41,7 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/IBKeymaster/releases/download/V1.5-macupdate/IBKeyer-Win64-portable.zip",
+      "downloadUrl": "https://github.com/Dec18studios/IBKeymaster/releases/download/V1.5-macupdate/IBKeyer-Win64-portable.zip",
       "sha256": "672ad928c16a0fcf16ad1b7ed9762deeffb2045e7297bdaa8c9b25f2f53934cb",
       "packageType": "zip",
       "bundleName": "IBKeyer.ofx.bundle",
@@ -63,7 +63,7 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/IBKeymaster/releases/download/V1.5-macupdate/IBKeyer-linux-x86_64.zip",
+      "downloadUrl": "https://github.com/Dec18studios/IBKeymaster/releases/download/V1.5-macupdate/IBKeyer-linux-x86_64.zip",
       "sha256": "c02a547e3638040d769b403081886ecd16804ff66715b4130b6377e08f3c26a6",
       "packageType": "zip",
       "bundleName": "IBKeymaster.ofx.bundle",
@@ -92,7 +92,7 @@
         {
           "platform": "windows",
           "arch": "x86_64",
-          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/IBKeymaster/releases/download/v.1.5.Metal-windows-linux/IBKeyer-Win64-portable.zip",
+          "downloadUrl": "https://github.com/Dec18studios/IBKeymaster/releases/download/v.1.5.Metal-windows-linux/IBKeyer-Win64-portable.zip",
           "sha256": "672ad928c16a0fcf16ad1b7ed9762deeffb2045e7297bdaa8c9b25f2f53934cb",
           "packageType": "zip",
           "bundleName": "IBKeyer.ofx.bundle",
@@ -114,7 +114,7 @@
         {
           "platform": "linux",
           "arch": "x86_64",
-          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/IBKeymaster/releases/download/v.1.5.Metal-windows-linux/IBKeyer-linux-x86_64.zip",
+          "downloadUrl": "https://github.com/Dec18studios/IBKeymaster/releases/download/v.1.5.Metal-windows-linux/IBKeyer-linux-x86_64.zip",
           "sha256": "c02a547e3638040d769b403081886ecd16804ff66715b4130b6377e08f3c26a6",
           "packageType": "zip",
           "bundleName": "IBKeymaster.ofx.bundle",
@@ -143,7 +143,7 @@
         {
           "platform": "macos",
           "arch": "universal",
-          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/IBKeymaster/releases/download/v.1.5-metal/IBKeymaster.ofx.Metal.bundle.zip",
+          "downloadUrl": "https://github.com/Dec18studios/IBKeymaster/releases/download/v.1.5-metal/IBKeymaster.ofx.Metal.bundle.zip",
           "sha256": "946348c668dd09826574a2f196b44dfd2c2a20a34746a9ce9b23a9d70c971682",
           "packageType": "zip",
           "bundleName": "IBKeymaster.ofx.bundle",

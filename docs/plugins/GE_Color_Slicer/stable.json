@@ -13,7 +13,7 @@
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Color-Slicer-DCTL/releases/download/v2.0/Color-Slicer-DCTL-v2.0.zip",
+      "downloadUrl": "https://github.com/Dec18studios/Color-Slicer-DCTL/releases/download/v2.0/Color-Slicer-DCTL-v2.0.zip",
       "sha256": "8df419db01951632d50640d8044f98bd515c62d63e0906a6fb9dad9b609cee9d",
       "packageType": "zip",
       "bundleName": "GE Color Slicer.dctle",
@@ -29,7 +29,7 @@
     {
       "platform": "windows",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Color-Slicer-DCTL/releases/download/v2.0/Color-Slicer-DCTL-v2.0.zip",
+      "downloadUrl": "https://github.com/Dec18studios/Color-Slicer-DCTL/releases/download/v2.0/Color-Slicer-DCTL-v2.0.zip",
       "sha256": "8df419db01951632d50640d8044f98bd515c62d63e0906a6fb9dad9b609cee9d",
       "packageType": "zip",
       "bundleName": "GE Color Slicer.dctle",
@@ -45,7 +45,7 @@
     {
       "platform": "linux",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Color-Slicer-DCTL/releases/download/v2.0/Color-Slicer-DCTL-v2.0.zip",
+      "downloadUrl": "https://github.com/Dec18studios/Color-Slicer-DCTL/releases/download/v2.0/Color-Slicer-DCTL-v2.0.zip",
       "sha256": "8df419db01951632d50640d8044f98bd515c62d63e0906a6fb9dad9b609cee9d",
       "packageType": "zip",
       "bundleName": "GE Color Slicer.dctle",
@@ -68,7 +68,7 @@
         {
           "platform": "macos",
           "arch": "universal",
-          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Color-Slicer-DCTL/releases/download/v1.0.0/Color-Slicer-DCTL-v1.0.0.zip",
+          "downloadUrl": "https://github.com/Dec18studios/Color-Slicer-DCTL/releases/download/v1.0.0/Color-Slicer-DCTL-v1.0.0.zip",
           "sha256": "0477a0f3feeb63e4d8a26620f478196e898d56bde0efbe51e90fae64f84c6f36",
           "packageType": "zip",
           "bundleName": "GE Color Slicer.dctle",
@@ -84,7 +84,7 @@
         {
           "platform": "windows",
           "arch": "universal",
-          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Color-Slicer-DCTL/releases/download/v1.0.0/Color-Slicer-DCTL-v1.0.0.zip",
+          "downloadUrl": "https://github.com/Dec18studios/Color-Slicer-DCTL/releases/download/v1.0.0/Color-Slicer-DCTL-v1.0.0.zip",
           "sha256": "0477a0f3feeb63e4d8a26620f478196e898d56bde0efbe51e90fae64f84c6f36",
           "packageType": "zip",
           "bundleName": "GE Color Slicer.dctle",
@@ -100,7 +100,7 @@
         {
           "platform": "linux",
           "arch": "universal",
-          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Color-Slicer-DCTL/releases/download/v1.0.0/Color-Slicer-DCTL-v1.0.0.zip",
+          "downloadUrl": "https://github.com/Dec18studios/Color-Slicer-DCTL/releases/download/v1.0.0/Color-Slicer-DCTL-v1.0.0.zip",
           "sha256": "0477a0f3feeb63e4d8a26620f478196e898d56bde0efbe51e90fae64f84c6f36",
           "packageType": "zip",
           "bundleName": "GE Color Slicer.dctle",

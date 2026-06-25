@@ -19,19 +19,19 @@
   "tags": ["film", "spectral", "color", "emulation", "grain"],
   "infoUrl": "https://dec18studios.com/photochemist",
   "demo": {
-    "version": "2.7.0-beta.7",
+    "version": "2.7.0",
     "assets": {
       "macos-universal": {
-        "downloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v2.7.0/PhotoChemistDemo_photochemist-v2.7.0-beta.7_macOS_universal_portable.zip",
-        "sha256": "7f56c16a94287798ea3884c09881fdd67a5d8f51333e9bd2c3a2b1307d211e25"
+        "downloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v2.7.0/PhotoChemistDemo_macOS_universal_portable.zip",
+        "sha256": "ee7bd86299d3ace7a30458807bddaaad7e958db05e7c3a8b296c17726fd744cc"
       },
       "windows-x86_64": {
-        "downloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v2.7.0/PhotoChemistDemo_photochemist-v2.7.0-beta.7_windows_cuda_portable.zip",
-        "sha256": "e76f106e1a8e7075bc922a558dd733ff8bdb10a66657b007adde130568b87a27"
+        "downloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v2.7.0/PhotoChemistDemo_windows_cuda_portable.zip",
+        "sha256": "00f7136c2f73c9e3331bfdd704dcb87b44dd742ea585974631037a8cce4b8fa4"
       },
       "linux-x86_64": {
-        "downloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v2.7.0/PhotoChemistDemo_photochemist-v2.7.0-beta.7_linux_cuda_portable.zip",
-        "sha256": "61c9dc175ba24d19d083c80379529aa95c80cf24341a817ee40f900a79e04669"
+        "downloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v2.7.0/PhotoChemistDemo_linux_cuda_portable.zip",
+        "sha256": "a9dbda1862485a1f4284108b358568e21af38f9fb58a14fda26b93f36a36bce0"
       }
     }
   },

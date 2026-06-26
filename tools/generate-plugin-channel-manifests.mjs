@@ -197,6 +197,59 @@ async function sha256ForAsset(asset) {
   return hash.digest("hex");
 }
 
+// In-run cache of demo release lookups, keyed by `${owner}/${repo}@${tag}`, so
+// the three platform assets that share one demo release only hit the API once.
+const demoReleaseAssetCache = new Map();
+
+// Resolve a demo asset's sha256 LIVE from its GitHub release instead of pinning
+// it in manager-release-config.json. The public demo release is delete+recreated
+// on every build (same marketing tag, new bytes → new digest), so a pinned hash
+// goes stale every release while the version-free URL stays valid. Reading
+// asset.digest from the releases API keeps the demo download verifiable with zero
+// maintenance — and zero bandwidth, since GitHub returns the digest in the asset
+// metadata (no zip download, mirroring sha256ForAsset's digest fast-path).
+async function fetchDemoAssetSha256(downloadUrl) {
+  const url = new URL(downloadUrl);
+  const segments = url.pathname.split("/").filter(Boolean);
+  const downloadIdx = segments.indexOf("download");
+  assert(
+    url.hostname === "github.com" && downloadIdx >= 3 && segments[downloadIdx - 1] === "releases",
+    `Demo downloadUrl is not a GitHub release asset URL: ${downloadUrl}`
+  );
+  const owner = segments[0];
+  const repo = segments[1];
+  const tag = decodeURIComponent(segments[downloadIdx + 1]);
+  const assetName = decodeURIComponent(segments.slice(downloadIdx + 2).join("/"));
+
+  const cacheKey = `${owner}/${repo}@${tag}`;
+  let assetsByName = demoReleaseAssetCache.get(cacheKey);
+  if (!assetsByName) {
+    assert(typeof fetch === "function", `Cannot resolve demo sha for ${assetName}: fetch is unavailable in this Node runtime`);
+    const apiUrl = `https://api.github.com/repos/${owner}/${repo}/releases/tags/${encodeURIComponent(tag)}`;
+    const token = process.env.PLUGIN_PAT || process.env.GITHUB_TOKEN || process.env.GH_TOKEN || "";
+    const headers = {
+      Accept: "application/vnd.github+json",
+      "User-Agent": "dec18-plugin-manifest-generator"
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    const response = await fetch(apiUrl, { headers });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch demo release ${cacheKey} for hashing: ${response.status} ${response.statusText}`);
+    }
+    const release = await response.json();
+    assetsByName = new Map((Array.isArray(release.assets) ? release.assets : []).map((asset) => [asset.name, asset]));
+    demoReleaseAssetCache.set(cacheKey, assetsByName);
+  }
+
+  const asset = assetsByName.get(assetName);
+  assert(asset, `Demo release ${cacheKey} has no asset named ${assetName}`);
+  const digest = asset.digest || asset.sha256 || "";
+  assert(typeof digest === "string" && digest.length > 0, `Demo asset ${assetName} in ${cacheKey} exposes no digest`);
+  return digest.startsWith("sha256:") ? digest.slice("sha256:".length) : digest;
+}
+
 async function buildReleaseFromGitHubRelease(config, release, options = {}) {
   const requireFamilies = options.requireFamilies ?? false;
   const matchedPackages = [];
@@ -245,13 +298,17 @@ async function buildReleaseFromGitHubRelease(config, release, options = {}) {
   };
 }
 
-// Stamp the pinned demo coordinates from the release config onto the current
-// release's platform packages. The demo is a fixed public artifact (its own
-// repo + tag) that does NOT track per-release bumps, so it lives statically in
-// manager-release-config.json rather than being matched from GitHub assets.
-// Only the top-level (current) platforms get demo fields — availableVersions[]
-// stay demo-free, matching how the manager routes unlicensed installs.
-function applyDemoToManifest(manifest, config) {
+// Stamp the demo coordinates from the release config onto the current release's
+// platform packages. The demo is a fixed public artifact (its own repo + tag)
+// that does NOT track per-release bumps, so its version + downloadUrl live
+// statically in manager-release-config.json. The sha256, however, changes on
+// every demo rebuild (the marketing tag is delete+recreated with new bytes), so
+// it is resolved LIVE from the demo release rather than pinned — a pinned hash
+// would 404-equivalent (fail verification) on the next build. A sha256 left in
+// the config is still honored as a manual override. Only the top-level (current)
+// platforms get demo fields — availableVersions[] stay demo-free, matching how
+// the manager routes unlicensed installs.
+async function applyDemoToManifest(manifest, config) {
   const demo = config.demo;
   if (!demo) {
     return manifest;
@@ -267,9 +324,17 @@ function applyDemoToManifest(manifest, config) {
   }
 
   const assets = demo.assets || {};
-  next.platforms = (manifest.platforms || []).map((pkg) => {
+  next.platforms = await Promise.all((manifest.platforms || []).map(async (pkg) => {
     const demoAsset = assets[`${pkg.platform}-${pkg.arch}`];
-    if (!demoAsset || !demoAsset.downloadUrl || !demoAsset.sha256) {
+    if (!demoAsset || !demoAsset.downloadUrl) {
+      return pkg;
+    }
+    // Pinned sha256 (if any) wins as a manual override; otherwise resolve it live
+    // from the demo release so it never goes stale across rebuilds.
+    const sha256 = (typeof demoAsset.sha256 === "string" && demoAsset.sha256.length > 0)
+      ? demoAsset.sha256
+      : await fetchDemoAssetSha256(demoAsset.downloadUrl);
+    if (!sha256) {
       return pkg;
     }
     const withDemo = {};
@@ -278,11 +343,11 @@ function applyDemoToManifest(manifest, config) {
       // Insert demo asset fields right after sha256 for a stable key order.
       if (key === "sha256") {
         withDemo.demoDownloadUrl = demoAsset.downloadUrl;
-        withDemo.demoSha256 = demoAsset.sha256;
+        withDemo.demoSha256 = sha256;
       }
     }
     return withDemo;
-  });
+  }));
 
   return next;
 }
@@ -393,9 +458,9 @@ async function generateForConfig(configPath, releasesPath, managerRoot) {
   const betaPath = path.join(pluginDir, "beta.json");
   const indexPath = path.join(managerRoot, "docs", "plugins", "index.json");
 
-  writeJson(stablePath, applyDemoToManifest(stableManifest, config));
+  writeJson(stablePath, await applyDemoToManifest(stableManifest, config));
   if (betaManifest) {
-    writeJson(betaPath, applyDemoToManifest(betaManifest, config));
+    writeJson(betaPath, await applyDemoToManifest(betaManifest, config));
   } else {
     removeIfExists(betaPath);
   }

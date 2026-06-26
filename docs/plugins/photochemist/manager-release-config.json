@@ -18,20 +18,18 @@
   "description": "43-band spectral film emulation engine with multiple film stock presets and full GPU acceleration.",
   "tags": ["film", "spectral", "color", "emulation", "grain"],
   "infoUrl": "https://dec18studios.com/photochemist",
+  "_demoComment": "sha256 is resolved live from the demo release's asset.digest by the generator (the demo tag is delete+recreated each build, so the hash changes every release). Pin version + downloadUrl only; add a sha256 under an asset here only to force a manual override.",
   "demo": {
     "version": "2.7.0",
     "assets": {
       "macos-universal": {
-        "downloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v2.7.0/PhotoChemistDemo_macOS_universal_portable.zip",
-        "sha256": "ee7bd86299d3ace7a30458807bddaaad7e958db05e7c3a8b296c17726fd744cc"
+        "downloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v2.7.0/PhotoChemistDemo_macOS_universal_portable.zip"
       },
       "windows-x86_64": {
-        "downloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v2.7.0/PhotoChemistDemo_windows_cuda_portable.zip",
-        "sha256": "00f7136c2f73c9e3331bfdd704dcb87b44dd742ea585974631037a8cce4b8fa4"
+        "downloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v2.7.0/PhotoChemistDemo_windows_cuda_portable.zip"
       },
       "linux-x86_64": {
-        "downloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v2.7.0/PhotoChemistDemo_linux_cuda_portable.zip",
-        "sha256": "a9dbda1862485a1f4284108b358568e21af38f9fb58a14fda26b93f36a36bce0"
+        "downloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v2.7.0/PhotoChemistDemo_linux_cuda_portable.zip"
       }
     }
   },

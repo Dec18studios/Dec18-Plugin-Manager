@@ -188,6 +188,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Validate catalog (no drift between index.json and website-tools.json)
+        run: |
+          # Fail the deploy if the website tool list references any plugin the app
+          # doesn't actually ship (or vice-versa). index.json is the one source of
+          # truth; website-tools.json may only style tools that exist in it.
+          node tools/validate-catalog.mjs --manager-root "$GITHUB_WORKSPACE"
+
       - name: Prepare Pages content
         run: |
           rm -rf pages-dist

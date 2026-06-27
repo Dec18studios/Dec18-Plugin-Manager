@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-26T00:23:12.973Z",
+  "generatedAt": "2026-06-27T00:03:55.730Z",
   "plugins": [
     {
       "pluginId": "GE_Color_Slicer",
@@ -96,6 +96,14 @@
       "licenseTier": "subscription",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/lookdevtools/stable.json",
       "category": "Color Grading"
+    },
+    {
+      "pluginId": "opendrt",
+      "displayName": "OpenDRT",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/opendrt/stable.json",
+      "category": "Color Grading",
+      "type": "OFX",
+      "licenseTier": "free"
     },
     {
       "pluginId": "perfect-exposure-dctl",

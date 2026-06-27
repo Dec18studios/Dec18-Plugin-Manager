@@ -5,7 +5,8 @@
     "slug": "photochemist",
     "color": "red",
     "desc": "Spectral film-stock emulation — design and develop your own stocks.",
-    "url": "photochemist/"
+    "url": "photochemist/",
+    "demo": true
   },
   {
     "pluginId": "technicolor-drt-ofx",
@@ -22,6 +23,14 @@
     "color": "blue",
     "desc": "A grouped six-in-one look-dev suite — five node-ordered color tools plus a monolith that chains them in a single grade.",
     "url": "lookdevtools/"
+  },
+  {
+    "pluginId": "opendrt",
+    "name": "OpenDRT",
+    "slug": "opendrt",
+    "color": "blue",
+    "desc": "Jed Smith's open-source display rendering transform, free as an OFX — Metal + CUDA, 16 input gamuts, full look-dev modules.",
+    "url": "opendrt/"
   },
   {
     "pluginId": "hue-contrast-compressor-dctl",

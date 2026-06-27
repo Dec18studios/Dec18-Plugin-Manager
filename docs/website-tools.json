@@ -110,7 +110,7 @@
     "desc": "A color-space transform into a film-negative working space.",
     "url": "film-negative-space-cst/",
     "repo": "Film-Negative-Space-CST-DCTL",
-    "dlAsset": "GE.Film.Negative.Space.CST.v2.1.0.zip"
+    "dlAsset": "Film-Negative-Space-CST-DCTL-v2.2.zip"
   },
   {
     "pluginId": "saturation-separator-dctl",

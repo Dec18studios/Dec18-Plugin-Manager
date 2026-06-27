@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "generate:plugin-manifests": "node tools/generate-plugin-channel-manifests.mjs",
+    "validate:catalog": "node tools/validate-catalog.mjs",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build"

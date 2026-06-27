@@ -1,0 +1,162 @@
+{
+  "pluginId": "opendrt",
+  "displayName": "OpenDRT",
+  "description": "Jed Smith's open-source display rendering transform, free as an OFX plugin. GPU-accelerated (Metal on macOS, CUDA on Windows/Linux) with 16 selectable input gamuts and the full look-dev module set. GPL-3.0; built from the public Open-DRT-OFX source with attribution to Jed Smith.",
+  "category": "Color Grading",
+  "licenseTier": "free",
+  "tags": [
+    "DRT",
+    "display rendering transform",
+    "tone mapping",
+    "OFX",
+    "GPU",
+    "open source"
+  ],
+  "infoUrl": null,
+  "version": "2.0.2",
+  "releaseDate": "2026-06-25T23:12:52Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/Open-DRT-OFX/releases/tag/v2.0.2",
+  "platforms": [
+    {
+      "platform": "macos",
+      "arch": "universal",
+      "downloadUrl": "https://github.com/Dec18studios/Open-DRT-OFX/releases/download/v2.0.2/OpenDRT_macOS_universal.zip",
+      "sha256": "4968e7b3aa2ef11881b1160c999e30db1fcc62befb10e966018209eebc6f286d",
+      "packageType": "zip",
+      "bundleName": "OpenDRT.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.OpenDRT",
+      "installPath": "/Library/OFX/Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    },
+    {
+      "platform": "windows",
+      "arch": "x86_64",
+      "downloadUrl": "https://github.com/Dec18studios/Open-DRT-OFX/releases/download/v2.0.2/OpenDRT_windows_cuda.zip",
+      "sha256": "f06cb1cab74f913847535ef777c3d9b2a21ece6fec77c809a0f65944e1a19856",
+      "packageType": "zip",
+      "bundleName": "OpenDRT.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.OpenDRT",
+      "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    },
+    {
+      "platform": "linux",
+      "arch": "x86_64",
+      "downloadUrl": "https://github.com/Dec18studios/Open-DRT-OFX/releases/download/v2.0.2/OpenDRT_linux_cuda.zip",
+      "sha256": "e8817156e378fa48446ab6a7510abca7f2b486d070997e80d32328cd1a0980c5",
+      "packageType": "zip",
+      "bundleName": "OpenDRT.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.OpenDRT",
+      "installPath": "/usr/OFX/Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    }
+  ],
+  "availableVersions": [
+    {
+      "version": "2.0.1",
+      "releaseDate": "2026-06-25T21:23:14Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/Open-DRT-OFX/releases/tag/v2.0.1",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://github.com/Dec18studios/Open-DRT-OFX/releases/download/v2.0.1/OpenDRT_macOS_universal.zip",
+          "sha256": "71d5098e3410427791c658f1f35192d34ec23c50c25eaa792726ad06a79c676a",
+          "packageType": "zip",
+          "bundleName": "OpenDRT.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.OpenDRT",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://github.com/Dec18studios/Open-DRT-OFX/releases/download/v2.0.1/OpenDRT_windows_cuda.zip",
+          "sha256": "a6b75aa03dfaa61cd29eb15be4bc3d2bc8cca99dc46a4a979261b81ef6610108",
+          "packageType": "zip",
+          "bundleName": "OpenDRT.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.OpenDRT",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://github.com/Dec18studios/Open-DRT-OFX/releases/download/v2.0.1/OpenDRT_linux_cuda.zip",
+          "sha256": "abb9df462f66eba8c0c950b6b8a2986907f6289a43d481ea21c9c7eeb1e26a0f",
+          "packageType": "zip",
+          "bundleName": "OpenDRT.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.OpenDRT",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    }
+  ]
+}

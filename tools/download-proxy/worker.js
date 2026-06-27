@@ -248,12 +248,14 @@ export default {
       return errorResponse(assetResp.status, "Failed to fetch asset from GitHub");
     }
 
-    // Stream the asset back to the caller
+    // Stream the asset back to the caller. Name the download after the asset
+    // GitHub actually served (matchedAsset.name) — NOT the request path, which
+    // for glob patterns (single-zip DCTLs use "*") would save the file as "*".
     return new Response(assetResp.body, {
       status: 200,
       headers: {
         "Content-Type": "application/octet-stream",
-        "Content-Disposition": `attachment; filename="${decodeURIComponent(asset)}"`,
+        "Content-Disposition": `attachment; filename="${matchedAsset.name}"`,
         ...CORS_HEADERS,
       },
     });

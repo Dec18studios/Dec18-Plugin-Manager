@@ -1213,6 +1213,28 @@ function syncWebsiteForRelease(pluginId, repoName, assetName) {
     }
   } catch (e) { note(`website-tools update failed: ${e.message}`); }
 
+  // 1.5 Regenerate the app channel manifest (stable.json) from the LIVE GitHub releases,
+  //     so the desktop app AND the derived members download both reflect the version just
+  //     released. This MUST run before step 2: generate-tools-json reads stable.json, so if
+  //     stable.json stays frozen at the prior version the members download gets rebuilt with
+  //     the retired asset name → 404 on latest/download. (Caught 2026-07-03, FN Space CST v3.0.)
+  let manifestRegenerated = false;
+  try {
+    const cfgPath = join(PLUGINS_DIR, pluginId, "manager-release-config.json");
+    if (existsSync(cfgPath)) {
+      const relPath = join(tmpdir(), `d18-releases-${pluginId}-${Date.now()}.json`);
+      const rel = execSync(`gh api repos/dec18studios/${repoName}/releases`,
+        { cwd: REPO_ROOT, stdio: ["ignore", "pipe", "pipe"] }).toString();
+      writeFileSync(relPath, rel);
+      execSync(`node tools/generate-plugin-channel-manifests.mjs --config ${JSON.stringify(cfgPath)} --releases-json ${JSON.stringify(relPath)}`,
+        { cwd: REPO_ROOT, stdio: "pipe" });
+      try { rmSync(relPath, { force: true }); } catch {}
+      manifestRegenerated = true;
+    } else {
+      note(`no manager-release-config for ${pluginId}, skipped stable.json regen`);
+    }
+  } catch (e) { note(`stable.json regen failed: ${e.message}`); }
+
   // 2. Regenerate the pages tools.json (what the main listing + members page fetch live).
   try {
     const out = join(cgtDir, "tools.json");
@@ -1235,6 +1257,25 @@ function syncWebsiteForRelease(pluginId, repoName, assetName) {
       if (patched !== txt) writeFileSync(f, patched);
     }
   } catch (e) { note(`page repoint failed: ${e.message}`); }
+
+  // 3.5 Commit + push the MANAGER repo (regenerated stable.json + updated website-tools.json).
+  //      The desktop app installs from stable.json on the manager repo's GitHub Pages, so this
+  //      push is what makes the new version reach the app; its deploy workflow re-runs the
+  //      generators and converges on the same result. Best-effort — the release already landed.
+  try {
+    execSync(`git add docs/plugins/${pluginId}/stable.json docs/website-tools.json`,
+      { cwd: REPO_ROOT, stdio: "pipe" });
+    try {
+      execSync(`git -c user.name="Greg Enright" -c user.email="create@dec18studios.com" commit -m ${JSON.stringify(`Bump ${pluginId} channel manifest to ${assetName} release`)}`,
+        { cwd: REPO_ROOT, stdio: "pipe" });
+      execSync("git push", { cwd: REPO_ROOT, stdio: "pipe" });
+      result.manifestPushed = true;
+    } catch (commitErr) {
+      const msg = (commitErr.stdout?.toString() || "") + (commitErr.stderr?.toString() || "");
+      if (!msg.includes("nothing to commit")) throw commitErr;
+      note("no manifest changes to push");
+    }
+  } catch (e) { note(`manager push failed: ${e.message}`); }
 
   // 4. Commit + push the pages repo (this is the live deploy).
   try {

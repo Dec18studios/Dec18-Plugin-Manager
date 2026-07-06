@@ -1,0 +1,87 @@
+{
+  "pluginId": "film-negative-space-ofx",
+  "displayName": "Film Negative Space Pro",
+  "description": "Film-negative-space Display Rendering Transform with per-channel tonescale shaping and full GPU acceleration. The Pro edition of the free Film Negative Space CST.",
+  "category": "Film Emulation",
+  "licenseTier": "subscription",
+  "tags": [
+    "film",
+    "negative",
+    "DRT",
+    "emulation",
+    "OFX"
+  ],
+  "infoUrl": "https://dec18studios.com/film-negative-space",
+  "version": "0.8.1",
+  "releaseDate": "2026-07-06T16:53:21Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/Film-Negative-Space-OFX/releases/tag/v0.8.1",
+  "platforms": [
+    {
+      "platform": "macos",
+      "arch": "universal",
+      "downloadUrl": "https://github.com/Dec18studios/Film-Negative-Space-OFX/releases/download/v0.8.1/FilmNegativeSpace_v0.8.1_macOS_universal_portable.zip",
+      "sha256": "5734403d7ec923560e8477d36f901d4e2ca427ec72cafa53185cb4edb428d651",
+      "packageType": "zip",
+      "bundleName": "FilmNegativeSpace.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.FilmNegativeSpace",
+      "installPath": "/Library/OFX/Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    },
+    {
+      "platform": "windows",
+      "arch": "x86_64",
+      "downloadUrl": "https://github.com/Dec18studios/Film-Negative-Space-OFX/releases/download/v0.8.1/FilmNegativeSpace_v0.8.1_windows_cuda_portable.zip",
+      "sha256": "674f6c14215cbd2ed396e44eebe3b6c68f576cb3cf3309cbaa63a5f89f09eb2e",
+      "packageType": "zip",
+      "bundleName": "FilmNegativeSpace.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.FilmNegativeSpace",
+      "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    },
+    {
+      "platform": "linux",
+      "arch": "x86_64",
+      "downloadUrl": "https://github.com/Dec18studios/Film-Negative-Space-OFX/releases/download/v0.8.1/FilmNegativeSpace_v0.8.1_linux_cuda_portable.zip",
+      "sha256": "602bfc954d8b7d7717ff6bf2101b0c7e77d60a11649f05335fb86c0616c05e2d",
+      "packageType": "zip",
+      "bundleName": "FilmNegativeSpace.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.FilmNegativeSpace",
+      "installPath": "/usr/OFX/Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    }
+  ],
+  "availableVersions": []
+}

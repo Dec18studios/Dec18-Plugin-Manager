@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-06T16:59:00.443Z",
+  "generatedAt": "2026-07-06T17:01:31.554Z",
   "plugins": [
     {
       "pluginId": "GE_Color_Slicer",
@@ -32,6 +32,14 @@
       "licenseTier": "free",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/film-negative-space-cst-dctl/stable.json",
       "category": "Film Emulation"
+    },
+    {
+      "pluginId": "film-negative-space-ofx",
+      "displayName": "Film Negative Space Pro",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/film-negative-space-ofx/stable.json",
+      "category": "Film Emulation",
+      "type": "OFX",
+      "licenseTier": "subscription"
     },
     {
       "pluginId": "grade-match",

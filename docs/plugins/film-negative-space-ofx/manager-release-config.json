@@ -1,0 +1,55 @@
+{
+  "pluginId": "film-negative-space-ofx",
+  "displayName": "Film Negative Space Pro",
+  "type": "OFX",
+  "licenseTier": "subscription",
+  "releaseRepo": "dec18studios/Film-Negative-Space-OFX",
+  "minManagerVersion": "0.1.0",
+  "hostProcesses": [
+    "Resolve",
+    "DaVinci Resolve",
+    "Fusion",
+    "Fusion Studio",
+    "Nuke",
+    "NukeX",
+    "NukeStudio",
+    "Hiero"
+  ],
+  "requiredFamilies": ["macos", "windows", "linux"],
+  "category": "Film Emulation",
+  "description": "Film-negative-space Display Rendering Transform with per-channel tonescale shaping and full GPU acceleration. The Pro edition of the free Film Negative Space CST.",
+  "tags": ["film", "negative", "DRT", "emulation", "OFX"],
+  "infoUrl": "https://dec18studios.com/film-negative-space",
+  "assetRules": [
+    {
+      "family": "macos",
+      "platform": "macos",
+      "arch": "universal",
+      "assetPattern": "FilmNegativeSpace.*macOS.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "FilmNegativeSpace.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.FilmNegativeSpace",
+      "installPath": "/Library/OFX/Plugins"
+    },
+    {
+      "family": "windows",
+      "platform": "windows",
+      "arch": "x86_64",
+      "assetPattern": "FilmNegativeSpace.*windows.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "FilmNegativeSpace.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.FilmNegativeSpace",
+      "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins"
+    },
+    {
+      "family": "linux",
+      "platform": "linux",
+      "arch": "x86_64",
+      "assetPattern": "FilmNegativeSpace.*linux.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "FilmNegativeSpace.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.FilmNegativeSpace",
+      "installPath": "/usr/OFX/Plugins"
+    }
+  ]
+}

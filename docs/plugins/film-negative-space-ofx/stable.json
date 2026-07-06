@@ -19,7 +19,7 @@
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://github.com/Dec18studios/Film-Negative-Space-OFX/releases/download/v0.8.1/FilmNegativeSpace_v0.8.1_macOS_universal_portable.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Film-Negative-Space-OFX/releases/download/v0.8.1/FilmNegativeSpace_v0.8.1_macOS_universal_portable.zip",
       "sha256": "5734403d7ec923560e8477d36f901d4e2ca427ec72cafa53185cb4edb428d651",
       "packageType": "zip",
       "bundleName": "FilmNegativeSpace.ofx.bundle",
@@ -41,7 +41,7 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Film-Negative-Space-OFX/releases/download/v0.8.1/FilmNegativeSpace_v0.8.1_windows_cuda_portable.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Film-Negative-Space-OFX/releases/download/v0.8.1/FilmNegativeSpace_v0.8.1_windows_cuda_portable.zip",
       "sha256": "674f6c14215cbd2ed396e44eebe3b6c68f576cb3cf3309cbaa63a5f89f09eb2e",
       "packageType": "zip",
       "bundleName": "FilmNegativeSpace.ofx.bundle",
@@ -63,7 +63,7 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Film-Negative-Space-OFX/releases/download/v0.8.1/FilmNegativeSpace_v0.8.1_linux_cuda_portable.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Film-Negative-Space-OFX/releases/download/v0.8.1/FilmNegativeSpace_v0.8.1_linux_cuda_portable.zip",
       "sha256": "602bfc954d8b7d7717ff6bf2101b0c7e77d60a11649f05335fb86c0616c05e2d",
       "packageType": "zip",
       "bundleName": "FilmNegativeSpace.ofx.bundle",

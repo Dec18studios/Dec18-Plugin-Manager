@@ -93,10 +93,18 @@ function parseDownloadUrl(urlStr) {
 
 // Turn an exact, version-stamped asset name into a glob that survives version
 // bumps, so the proxy/download link keeps resolving the latest release without
-// regeneration: "PhotoChemist_v2.0.1_macOS…zip" + "2.0.1" -> "PhotoChemist_v*_macOS…zip".
+// regeneration: "PhotoChemist_v2.0.1_macOS…zip" + "2.0.1" -> "PhotoChemist_*_macOS…zip".
 // Assets with no version token in the name (e.g. TechnicolorDRT_macOS…zip) pass through.
+//
+// We split on "v<version>" BEFORE bare "<version>" so the leading "v" boundary
+// collapses into the glob too. That keeps the pattern rename-proof against a tag
+// prefix creeping in front of the version — betas tagged "photochemist-v*" ship
+// assets named "PhotoChemist_photochemist-v2.7.0-beta.9_win.zip", which a
+// "PhotoChemist_v*_win.zip" glob (anchored on the literal "v") would miss, but
+// "PhotoChemist_*_win.zip" matches alongside the "PhotoChemist_v2.0.1_win.zip" stable.
 function versionGlob(asset, version) {
-  return version ? asset.split(version).join("*") : asset;
+  if (!version) return asset;
+  return asset.split(`v${version}`).join("*").split(version).join("*");
 }
 
 // Build the members-download catalog entry for one website-tools.json tool by

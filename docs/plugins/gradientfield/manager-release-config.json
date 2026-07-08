@@ -1,0 +1,55 @@
+{
+  "pluginId": "gradientfield",
+  "displayName": "Gradient Field Grading Tools",
+  "type": "OFX",
+  "licenseTier": "subscription",
+  "releaseRepo": "dec18studios/GradientField-OFX",
+  "minManagerVersion": "0.1.0",
+  "hostProcesses": [
+    "Resolve",
+    "DaVinci Resolve",
+    "Fusion",
+    "Fusion Studio",
+    "Nuke",
+    "NukeX",
+    "NukeStudio",
+    "Hiero"
+  ],
+  "requiredFamilies": ["macos", "windows", "linux"],
+  "category": "Color Grading",
+  "description": "Gradient-domain grading suite in a single OFX bundle: halo-free local contrast and clarity (Field Sharpen GD Pro), gradient-domain hue and saturation shaping (Color Vector GD Pro), and edge-aware selective grading (Color Slicer GD Pro). GPU-accelerated on Metal and CUDA.",
+  "tags": ["grading", "gradient-domain", "local-contrast", "clarity", "selective", "OFX"],
+  "infoUrl": "https://dec18studios.com/gradientfield",
+  "assetRules": [
+    {
+      "family": "macos",
+      "platform": "macos",
+      "arch": "universal",
+      "assetPattern": "GradientField.*macOS.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "GradientField.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.GradientField",
+      "installPath": "/Library/OFX/Plugins"
+    },
+    {
+      "family": "windows",
+      "platform": "windows",
+      "arch": "x86_64",
+      "assetPattern": "GradientField.*windows.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "GradientField.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.GradientField",
+      "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins"
+    },
+    {
+      "family": "linux",
+      "platform": "linux",
+      "arch": "x86_64",
+      "assetPattern": "GradientField.*linux.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "GradientField.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.GradientField",
+      "installPath": "/usr/OFX/Plugins"
+    }
+  ]
+}

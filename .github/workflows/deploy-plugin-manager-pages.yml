@@ -62,6 +62,7 @@ jobs:
             "Hue-Contrast-Compressor-OFX|hue-contrast-compressor-ofx"
             "Technically-Technicolor-DRT|technicolor-drt-ofx"
             "PhotoChemist-OFX|photochemist"
+            "GradientField-OFX|gradientfield"
             "OpenDRT-OFX|opendrt-ofx"
             "IBKeymaster|ibkeymaster-ofx"
             "X-Grade-OFX|x-grade-ofx"

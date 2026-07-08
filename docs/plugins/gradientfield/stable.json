@@ -1,0 +1,88 @@
+{
+  "pluginId": "gradientfield",
+  "displayName": "Gradient Field Grading Tools",
+  "description": "Gradient-domain grading suite in a single OFX bundle: halo-free local contrast and clarity (Field Sharpen GD Pro), gradient-domain hue and saturation shaping (Color Vector GD Pro), and edge-aware selective grading (Color Slicer GD Pro). GPU-accelerated on Metal and CUDA.",
+  "category": "Color Grading",
+  "licenseTier": "subscription",
+  "tags": [
+    "grading",
+    "gradient-domain",
+    "local-contrast",
+    "clarity",
+    "selective",
+    "OFX"
+  ],
+  "infoUrl": "https://dec18studios.com/gradientfield",
+  "version": "1.0.0",
+  "releaseDate": "2026-07-08T00:12:13Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/GradientField-OFX/releases/tag/v1.0.0",
+  "platforms": [
+    {
+      "platform": "macos",
+      "arch": "universal",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/GradientField-OFX/releases/download/v1.0.0/GradientField_v1.0.0_macOS_universal_portable.zip",
+      "sha256": "4dc53f2db8acbce288becfc6856b53876c3b8efd3a497c8511b577145a60a2b6",
+      "packageType": "zip",
+      "bundleName": "GradientField.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.GradientField",
+      "installPath": "/Library/OFX/Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    },
+    {
+      "platform": "windows",
+      "arch": "x86_64",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/GradientField-OFX/releases/download/v1.0.0/GradientField_v1.0.0_windows_cuda_portable.zip",
+      "sha256": "5296027d16d06b4f0d84a4e501382c4f74099d569e92cea2bbbb682aad46504f",
+      "packageType": "zip",
+      "bundleName": "GradientField.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.GradientField",
+      "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    },
+    {
+      "platform": "linux",
+      "arch": "x86_64",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/GradientField-OFX/releases/download/v1.0.0/GradientField_v1.0.0_linux_cuda_portable.zip",
+      "sha256": "257acccc81e05f5837b67fd8459d31bcf786a7650ce47f4298e8e1f69ac3db99",
+      "packageType": "zip",
+      "bundleName": "GradientField.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.GradientField",
+      "installPath": "/usr/OFX/Plugins",
+      "installMode": "bundle",
+      "minManagerVersion": "0.1.0",
+      "hostProcesses": [
+        "Resolve",
+        "DaVinci Resolve",
+        "Fusion",
+        "Fusion Studio",
+        "Nuke",
+        "NukeX",
+        "NukeStudio",
+        "Hiero"
+      ]
+    }
+  ],
+  "availableVersions": []
+}

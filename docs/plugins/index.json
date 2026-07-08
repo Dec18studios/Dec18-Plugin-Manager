@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-08T00:13:42.814Z",
+  "generatedAt": "2026-07-08T00:56:24.232Z",
   "plugins": [
     {
       "pluginId": "GE_Color_Slicer",
@@ -51,7 +51,7 @@
     },
     {
       "pluginId": "gradientfield",
-      "displayName": "Gradient Field Grading Tools",
+      "displayName": "Gradient Domain Grading Tools",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/gradientfield/stable.json",
       "category": "Color Grading",
       "type": "OFX",

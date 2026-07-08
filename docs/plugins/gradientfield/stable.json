@@ -1,6 +1,6 @@
 {
   "pluginId": "gradientfield",
-  "displayName": "Gradient Field Grading Tools",
+  "displayName": "Gradient Domain Grading Tools",
   "description": "Gradient-domain grading suite in a single OFX bundle: halo-free local contrast and clarity (Field Sharpen GD Pro), gradient-domain hue and saturation shaping (Color Vector GD Pro), and edge-aware selective grading (Color Slicer GD Pro). GPU-accelerated on Metal and CUDA.",
   "category": "Color Grading",
   "licenseTier": "subscription",

@@ -1,6 +1,6 @@
 {
   "pluginId": "gradientfield",
-  "displayName": "Gradient Field Grading Tools",
+  "displayName": "Gradient Domain Grading Tools",
   "type": "OFX",
   "licenseTier": "subscription",
   "releaseRepo": "dec18studios/GradientField-OFX",

@@ -181,7 +181,7 @@
   },
   {
     "pluginId": "gradientfield",
-    "name": "Gradient Field Grading Tools",
+    "name": "Gradient Domain Grading Tools",
     "slug": "gradientfield",
     "color": "green",
     "desc": "Gradient-domain grading suite — halo-free local contrast (Field Sharpen), gradient-domain hue and saturation (Color Vector), and edge-aware selective grading (Color Slicer) in one GPU-accelerated bundle.",

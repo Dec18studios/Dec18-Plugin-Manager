@@ -163,6 +163,13 @@ function buildMemberEntry(entry, indexEntry, stable) {
   // Landing-page-only premium tools with no release keep their page link.
   if (!repo && entry.url) member.url = entry.url;
 
+  // Beta channel: the members page defaults this tool's download + shown version
+  // to the NEWEST release including prereleases (GitHub's /releases/latest, which
+  // the proxy resolves "latest" to, excludes prereleases — so a tool shipping only
+  // 2.7.0-beta.* would otherwise stay pinned to its last stable). Opt-in per tool
+  // in website-tools.json; only meaningful when there's a release repo to track.
+  if (entry.betaChannel && repo) member.betaChannel = true;
+
   return member;
 }
 

@@ -798,5 +798,14 @@
     "amount": "47.34",
     "tier": "annual",
     "key": "D18.eyJ0IjoiYW5udWFsIiwiZSI6ImluZm9Ab3NjYXJuaWxzc29uLnNlIiwicCI6WyIqIl0sImV4cCI6MTgxNTMzMjc1OH0.Lb2_MKyymF7xp_dtL2OPcwdEpd8hLNB7QlHkYzCPHYfzjwNuLmH9UUEYZBx3coRW-JYtHGEzE7_I0OqE00n7Bw"
+  },
+  "leo@kamerawerk.ch": {
+    "processedAt": "2026-07-13T13:20:59.185Z",
+    "orderId": "6a54e56676b0a8788137a1d7",
+    "orderNumber": "103",
+    "name": "Leo Weissenbach",
+    "amount": "47.34",
+    "tier": "annual",
+    "key": "D18.eyJ0IjoiYW5udWFsIiwiZSI6Imxlb0BrYW1lcmF3ZXJrLmNoIiwicCI6WyIqIl0sImV4cCI6MTgxNTQ4NDg1OH0.YmOucDHFI8F1IADhjLbyIKY26jOZ0msQLpVQK32mTEHeabSGGV2_RVIvQEgl6F66VaxmH30bJ5bMu1YcssYbCw"
   }
 }

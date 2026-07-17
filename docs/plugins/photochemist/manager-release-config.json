@@ -1,6 +1,6 @@
 {
   "pluginId": "photochemist",
-  "displayName": "PhotoChemist",
+  "displayName": "PhotoChemist DRT",
   "releaseRepo": "dec18studios/PhotoChemist-OFX",
   "minManagerVersion": "0.1.0",
   "hostProcesses": [
@@ -13,11 +13,15 @@
     "NukeStudio",
     "Hiero"
   ],
-  "requiredFamilies": ["macos", "windows", "linux"],
+  "requiredFamilies": ["macos"],
   "category": "Film Emulation",
+  "type": "OFX",
+  "licenseTier": "subscription",
   "description": "43-band spectral film emulation engine with multiple film stock presets and full GPU acceleration.",
-  "tags": ["film", "spectral", "color", "emulation", "grain"],
+  "tags": ["film", "spectral", "DRT", "emulation", "OFX"],
   "infoUrl": "https://dec18studios.com/photochemist",
+  "_tagComment": "releaseTagPattern pins this catalog entry to the 2.x line. The same release repo also hosts the PhotoChemist 3.0 Beta line (v3.* tags, PhotoChemist3Beta-* assets) served by docs/plugins/photochemist3beta/. Without this filter the newest v3 prerelease would become this entry's beta head and its assets would (partially) match the loose patterns below.",
+  "releaseTagPattern": "^v2\\.",
   "_demoComment": "sha256 is resolved live from the demo release's asset.digest by the generator (the demo tag is delete+recreated each build, so the hash changes every release). Pin version + downloadUrl only; add a sha256 under an asset here only to force a manual override.",
   "demo": {
     "version": "2.7.0",
@@ -48,7 +52,7 @@
       "family": "windows",
       "platform": "windows",
       "arch": "x86_64",
-      "assetPattern": "PhotoChemist.*[Ww]indows.*x86_64.*\\.zip$",
+      "assetPattern": "PhotoChemist.*windows.*\\.zip$",
       "packageType": "zip",
       "bundleName": "PhotoChemist.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.PhotoChemist",
@@ -58,8 +62,8 @@
       "family": "linux",
       "platform": "linux",
       "arch": "x86_64",
-      "assetPattern": "PhotoChemist.*linux.*x86_64.*\\.tar\\.gz$",
-      "packageType": "tar.gz",
+      "assetPattern": "PhotoChemist.*linux.*\\.zip$",
+      "packageType": "zip",
       "bundleName": "PhotoChemist.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.PhotoChemist",
       "installPath": "/usr/OFX/Plugins"

@@ -1,0 +1,58 @@
+{
+  "pluginId": "photochemist3beta",
+  "displayName": "PhotoChemist 3.0 Beta",
+  "releaseRepo": "dec18studios/PhotoChemist-OFX",
+  "minManagerVersion": "0.1.0",
+  "hostProcesses": [
+    "Resolve",
+    "DaVinci Resolve",
+    "Fusion",
+    "Fusion Studio",
+    "Nuke",
+    "NukeX",
+    "NukeStudio",
+    "Hiero"
+  ],
+  "requiredFamilies": ["macos"],
+  "category": "Film Emulation",
+  "type": "OFX",
+  "licenseTier": "subscription",
+  "description": "PhotoChemist 3.0 public beta — next-generation spectral film engine. Installs side-by-side with PhotoChemist 2.x.",
+  "tags": ["film", "spectral", "DRT", "emulation", "OFX", "beta"],
+  "infoUrl": "https://dec18studios.com/photochemist",
+  "_tagComment": "This entry shares the PhotoChemist-OFX release repo with the 2.x line (docs/plugins/photochemist/). releaseTagPattern pins it to v3.* releases; every 3.0 release is a GitHub prerelease, so prereleaseAsStable makes the newest v3 beta this entry's stable.json (the manager app requires a stable.json for every index entry). Anchored assetPatterns are exact — v3 CI publishes exactly PhotoChemist3Beta-macOS.zip / PhotoChemist3Beta-windows-cuda.zip / PhotoChemist3Beta-linux-cuda.zip per release.",
+  "releaseTagPattern": "^v3\\.",
+  "prereleaseAsStable": true,
+  "assetRules": [
+    {
+      "family": "macos",
+      "platform": "macos",
+      "arch": "universal",
+      "assetPattern": "^PhotoChemist3Beta-macOS\\.zip$",
+      "packageType": "zip",
+      "bundleName": "PhotoChemist3Beta.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+      "installPath": "/Library/OFX/Plugins"
+    },
+    {
+      "family": "windows",
+      "platform": "windows",
+      "arch": "x86_64",
+      "assetPattern": "^PhotoChemist3Beta-windows-cuda\\.zip$",
+      "packageType": "zip",
+      "bundleName": "PhotoChemist3Beta.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+      "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins"
+    },
+    {
+      "family": "linux",
+      "platform": "linux",
+      "arch": "x86_64",
+      "assetPattern": "^PhotoChemist3Beta-linux-cuda\\.zip$",
+      "packageType": "zip",
+      "bundleName": "PhotoChemist3Beta.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+      "installPath": "/usr/OFX/Plugins"
+    }
+  ]
+}

@@ -386,12 +386,42 @@ async function generateForConfig(configPath, releasesPath, managerRoot) {
   const config = readJson(configPath);
   validateConfig(config);
 
-  const allReleases = sortReleases(readJson(releasesPath))
+  let allReleases = sortReleases(readJson(releasesPath))
     .filter((release) => !release.draft)
     .filter((release) => release.tag_name);
 
-  const stableGitHubReleases = allReleases.filter((release) => !release.prerelease);
-  const betaGitHubReleases = allReleases.filter((release) => release.prerelease);
+  // Optional per-config tag filter. Lets two catalog entries share ONE release
+  // repo split by release line (e.g. photochemist "^v2\\." vs
+  // photochemist3beta "^v3\\.") without either line's channel heads bleeding
+  // into the other's manifests.
+  if (typeof config.releaseTagPattern === "string" && config.releaseTagPattern.length > 0) {
+    const tagPattern = new RegExp(config.releaseTagPattern);
+    allReleases = allReleases.filter((release) => tagPattern.test(release.tag_name));
+  }
+
+  // A config whose tag filter matches nothing yet (a release line that hasn't
+  // shipped its first tag) is not an error — skip WITHOUT touching index.json
+  // or writing manifests, so the config can land ahead of the first release.
+  if (allReleases.length === 0) {
+    console.log(
+      `Skipping ${config.pluginId}: no releases in ${config.releaseRepo}` +
+      (config.releaseTagPattern ? ` match releaseTagPattern '${config.releaseTagPattern}'` : "")
+    );
+    return;
+  }
+
+  // prereleaseAsStable: a beta-only release line (every release is a GitHub
+  // prerelease) still needs a stable.json — the manager app always loads
+  // stable.json as the base manifest and fails the whole catalog for an index
+  // entry without one. Treat the newest matching release as the stable channel
+  // and emit no beta.json (there is no separate beta head to offer).
+  const prereleaseAsStable = config.prereleaseAsStable === true;
+  const stableGitHubReleases = prereleaseAsStable
+    ? allReleases
+    : allReleases.filter((release) => !release.prerelease);
+  const betaGitHubReleases = prereleaseAsStable
+    ? []
+    : allReleases.filter((release) => release.prerelease);
 
   assert(stableGitHubReleases.length > 0, `${config.pluginId}: no published stable releases were found in ${config.releaseRepo}`);
 

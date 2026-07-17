@@ -7,7 +7,8 @@
     "desc": "Spectral film-stock emulation — design and develop your own stocks.",
     "url": "photochemist/",
     "demo": true,
-    "betaChannel": true
+    "betaChannel": true,
+    "tagFilter": "^v2\\."
   },
   {
     "pluginId": "technicolor-drt-ofx",

@@ -62,6 +62,7 @@ jobs:
             "Hue-Contrast-Compressor-OFX|hue-contrast-compressor-ofx"
             "Technically-Technicolor-DRT|technicolor-drt-ofx"
             "PhotoChemist-OFX|photochemist"
+            "PhotoChemist-OFX|photochemist3beta"
             "GradientField-OFX|gradientfield"
             "OpenDRT-OFX|opendrt-ofx"
             "IBKeymaster|ibkeymaster-ofx"
@@ -97,6 +98,23 @@ jobs:
             else
               echo "::notice::${REPO}: no config found — skipping"
               continue
+            fi
+
+            # Guard: when several catalog entries share ONE release repo (the
+            # two-card pattern, e.g. photochemist + photochemist3beta), a root
+            # config left in the release repo would win the fetch above for
+            # EVERY entry and silently regenerate the wrong plugin's manifests.
+            # If the resolved config's pluginId doesn't match this entry, fall
+            # back to the local per-edition config (or skip).
+            RESOLVED_ID=$(node -e "try{console.log(JSON.parse(require('fs').readFileSync(process.argv[1],'utf8')).pluginId||'')}catch{console.log('')}" "$CONFIG_FILE")
+            if [ "$RESOLVED_ID" != "$PLUGIN_ID" ]; then
+              if [ -f "$LOCAL_CONFIG" ]; then
+                echo "::warning::${REPO}: resolved config has pluginId '${RESOLVED_ID}' but entry expects '${PLUGIN_ID}' — using local per-edition config (delete the release repo's root manager-release-config.json)"
+                cp "$LOCAL_CONFIG" "$CONFIG_FILE"
+              else
+                echo "::warning::${REPO}: resolved config pluginId '${RESOLVED_ID}' != '${PLUGIN_ID}' and no local config — skipping"
+                continue
+              fi
             fi
 
             # Merge the local "demo" block (if any) onto the resolved config.

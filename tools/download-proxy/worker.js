@@ -180,15 +180,25 @@ export default {
         return errorResponse(403, "Downloads restricted to Dec 18 Studios repos");
       }
       const listResp = await fetch(
-        `https://api.github.com/repos/${owner}/${repo}/releases?per_page=20`,
+        `https://api.github.com/repos/${owner}/${repo}/releases?per_page=100`,
         { headers: ghHeaders }
       );
       if (!listResp.ok) {
         return errorResponse(listResp.status, `Could not list releases for ${repo}`);
       }
       const releases = await listResp.json();
+      // GitHub orders /releases by created_at, which TIES for every release cut
+      // from a single-commit repo (all our release repos) — so "first = newest"
+      // is wrong (e.g. beta.10 sorted below beta.9). Sort by published_at
+      // (actual release recency, fallback created_at) so every consumer of this
+      // endpoint gets true-newest-first without client-side workarounds.
       const trimmed = (Array.isArray(releases) ? releases : [])
         .filter((r) => !r.draft)
+        .sort(
+          (a, b) =>
+            (Date.parse(b.published_at || b.created_at) || 0) -
+            (Date.parse(a.published_at || a.created_at) || 0)
+        )
         .map((r) => ({
           tag: r.tag_name,
           name: r.name,

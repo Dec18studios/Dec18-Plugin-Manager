@@ -170,6 +170,13 @@ function buildMemberEntry(entry, indexEntry, stable) {
   // in website-tools.json; only meaningful when there's a release repo to track.
   if (entry.betaChannel && repo) member.betaChannel = true;
 
+  // Tag filter: when two tools share ONE release repo split by release line
+  // (photochemist "^v2\\." vs photochemist3beta "^v3\\."), the members page
+  // version dropdown must only list this tool's tags — otherwise the other
+  // line's releases pollute the list and its downloads 404 against this
+  // tool's asset glob. Regex string, applied client-side to tag names.
+  if (entry.tagFilter && repo) member.tagFilter = entry.tagFilter;
+
   return member;
 }
 

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-17T22:28:47.800Z",
+  "generatedAt": "2026-07-17T23:37:46.502Z",
   "plugins": [
     {
       "pluginId": "GE_Color_Slicer",
@@ -128,6 +128,14 @@
       "licenseTier": "free",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/perfect-exposure-dctl/stable.json",
       "category": "Workflow"
+    },
+    {
+      "pluginId": "photochemist3beta",
+      "displayName": "PhotoChemist 3.0 Beta",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/photochemist3beta/stable.json",
+      "category": "Film Emulation",
+      "type": "OFX",
+      "licenseTier": "subscription"
     },
     {
       "pluginId": "photochemist",

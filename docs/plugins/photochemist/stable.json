@@ -3,7 +3,7 @@
   "displayName": "PhotoChemist DRT",
   "description": "43-band spectral film emulation engine with multiple film stock presets and full GPU acceleration.",
   "category": "Film Emulation",
-  "licenseTier": null,
+  "licenseTier": "subscription",
   "tags": [
     "film",
     "spectral",
@@ -11,7 +11,7 @@
     "emulation",
     "OFX"
   ],
-  "infoUrl": null,
+  "infoUrl": "https://dec18studios.com/photochemist",
   "version": "2.0.1",
   "releaseDate": "2026-05-31T15:16:36Z",
   "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v2.0.1",

@@ -834,5 +834,14 @@
     "amount": "47.34",
     "tier": "annual",
     "key": "D18.eyJ0IjoiYW5udWFsIiwiZSI6ImVkaXRvcmJvb3BhdGhpQGdtYWlsLmNvbSIsInAiOlsiKiJdLCJleHAiOjE4MTU5MTgzNTV9.j1Wua3tfaTBjWJHkO4b9MTQd1A5z1gJWovCqCEu4vcbe-gz028D8FDCBwqT6PyMEpZUzqUypAiALxQHxP91rBQ"
+  },
+  "mail@thbolliger.ch": {
+    "processedAt": "2026-07-18T14:05:41.122Z",
+    "orderId": "6a5b87321d435c7a3a48e915",
+    "orderNumber": "107",
+    "name": "Thomas Bolliger",
+    "amount": "47.34",
+    "tier": "annual",
+    "key": "D18.eyJ0IjoiYW5udWFsIiwiZSI6Im1haWxAdGhib2xsaWdlci5jaCIsInAiOlsiKiJdLCJleHAiOjE4MTU5MTk1NDB9.V-vux7NeIbF9gmjbYAuP7QHx7gIvQ43ugNlLp308nR-bYn1rRuf49OQDsEAOPjNIYcNtMYJb_lyYZxDgZF6ZBw"
   }
 }

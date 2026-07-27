@@ -294,7 +294,9 @@ async function brevoSend(to, subject, html) {
   const res = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
     headers: { "api-key": BREVO_KEY, accept: "application/json", "content-type": "application/json" },
-    body: JSON.stringify({ sender: FROM, to: [{ email: to }], subject, htmlContent: html }),
+    // tags → filterable in Brevo's Transactional > Logs / Statistics, so this
+    // campaign's opens/clicks/bounces can be read apart from OTP + license mail
+    body: JSON.stringify({ sender: FROM, to: [{ email: to }], subject, htmlContent: html, tags: [`${SLUG}-welcome`] }),
   });
   if (res.status === 201 || res.status === 202) return true;
   let detail = "";

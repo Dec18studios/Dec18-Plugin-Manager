@@ -16,8 +16,11 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const PROCESSED_PATH = join(__dirname, "license-keys", "processed-subscribers.json");
-const LEDGER_PATH = join(__dirname, "license-keys", "ledger.json");
+// Ledger data lives in the private license-ledger repo — set LICENSE_LEDGER_DIR
+// to your clone. Falls back to the legacy in-repo path.
+const LEDGER_DIR = process.env.LICENSE_LEDGER_DIR || join(__dirname, "license-keys");
+const PROCESSED_PATH = join(LEDGER_DIR, "processed-subscribers.json");
+const LEDGER_PATH = join(LEDGER_DIR, "ledger.json");
 
 function base64urlEncode(buffer) {
   return Buffer.from(buffer)

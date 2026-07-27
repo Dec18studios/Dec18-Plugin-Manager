@@ -20,7 +20,7 @@ on:
         default: 'manual'
 
 permissions:
-  contents: write
+  contents: read
 
 env:
   # ── Email ──
@@ -33,12 +33,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # The fulfillment ledger (customer PII + issued keys) lives in a PRIVATE
+      # repo — never in this public one. Checked out via a write deploy key.
+      - name: Check out private license ledger
+        uses: actions/checkout@v4
+        with:
+          repository: Dec18studios/license-ledger
+          ssh-key: ${{ secrets.LEDGER_DEPLOY_KEY }}
+          path: ledger
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
 
       - name: Process new Happy Little Noder purchases
         env:
+          LICENSE_LEDGER_DIR: ${{ github.workspace }}/ledger
           SQUARESPACE_API_KEY: ${{ secrets.SQUARESPACE_API_KEY }}
           LICENSE_SIGNING_PRIVATE_KEY: ${{ secrets.LICENSE_SIGNING_PRIVATE_KEY }}
           # Mail transport: Brevo when BREVO_API_KEY is set, else Gmail fallback.
@@ -47,16 +57,17 @@ jobs:
           GMAIL_TOKEN: ${{ secrets.GMAIL_TOKEN }}
         run: node tools/fulfill-licenses.mjs
 
-      - name: Commit processed subscribers
+      - name: Commit processed subscribers to private ledger
         id: commit
         run: |
+          cd ledger
           git config user.name "license-bot"
           git config user.email "noreply@dec18studios.com"
-          git add tools/license-keys/processed-subscribers.json
+          git add -A
           if git diff --cached --quiet; then
             echo "ledger_changed=false" >> "$GITHUB_OUTPUT"
           else
-            git commit -m "chore: update processed subscribers [skip ci]"
+            git commit -m "chore: update processed subscribers"
             echo "ledger_changed=true" >> "$GITHUB_OUTPUT"
           fi
           git pull --rebase origin main
@@ -73,6 +84,7 @@ jobs:
         if: steps.commit.outputs.ledger_changed == 'true' || github.event_name == 'workflow_dispatch'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          LICENSE_LEDGER_DIR: ${{ github.workspace }}/ledger
         run: |
           cd tools/auth-worker
           node import-subscribers.mjs > /tmp/seed.sql

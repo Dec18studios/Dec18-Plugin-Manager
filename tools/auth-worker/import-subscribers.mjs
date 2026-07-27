@@ -19,7 +19,10 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const PROCESSED_PATH = join(__dirname, "..", "license-keys", "processed-subscribers.json");
+// Ledger lives in the private license-ledger repo; CI sets LICENSE_LEDGER_DIR
+// to its checkout. Falls back to the legacy in-repo path for local use.
+const LEDGER_DIR = process.env.LICENSE_LEDGER_DIR || join(__dirname, "..", "license-keys");
+const PROCESSED_PATH = join(LEDGER_DIR, "processed-subscribers.json");
 
 function base64urlDecode(str) {
   let s = str.replace(/-/g, "+").replace(/_/g, "/");

@@ -1,0 +1,21 @@
+name = "dec18-download-logger"
+main = "worker.js"
+compatibility_date = "2024-09-01"
+# Pinned so CI (CLOUDFLARE_API_TOKEN) can run `wrangler d1 execute` / `wrangler deploy`
+# from this directory without an interactive account picker.
+account_id = "f9cd64771a2e00ceabf42fa0b660eeb7"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "dec18-downloads"
+database_id = "baa19ba6-9804-4887-8287-fef0bfe745b3"
+
+# Secrets (set via `wrangler secret put <NAME>`):
+#   ADMIN_SECRET        — any strong password; required for /export and /notify
+#   GMAIL_CLIENT_ID     — from your existing Google OAuth app
+#   GMAIL_CLIENT_SECRET — from your existing Google OAuth app
+#   GMAIL_REFRESH_TOKEN — long-lived refresh token (same one used by other tools)
+#   GMAIL_FROM          — sending address, e.g. create@dec18studios.com
+
+[vars]
+ALLOWED_ORIGIN = "https://tools.dec18studios.com"

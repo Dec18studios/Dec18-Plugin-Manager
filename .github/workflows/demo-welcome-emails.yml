@@ -1,0 +1,57 @@
+name: Demo Welcome Emails
+
+# Emails PhotoChemist-demo downloaders a one-time "thanks + tips" note.
+# State lives in the download-logger D1 (downloads.welcome_sent) — nothing is
+# committed back to this repo (it's public; the rows are customer emails).
+#
+# The hourly cron is inert until the repo variable DEMO_WELCOME_ENABLED is set
+# to "true" (Settings → Secrets and variables → Actions → Variables). The first
+# enabled run backfills everyone who already downloaded; after that each run
+# picks up new downloads from the past hour.
+#
+# Manual runs (workflow_dispatch):
+#   mode=dry-run    → list masked recipients, send nothing   (default)
+#   mode=send       → real one-off send
+#   test_email=addr → send ONE rendered sample to addr, mark nothing
+
+on:
+  schedule:
+    - cron: "17 * * * *" # hourly at :17
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "dry-run = list only; send = real emails"
+        type: choice
+        options: [dry-run, send]
+        default: dry-run
+      test_email:
+        description: "Send ONE sample email to this address (no marking); overrides mode"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: demo-welcome-emails
+  cancel-in-progress: false
+
+jobs:
+  send:
+    if: github.event_name == 'workflow_dispatch' || vars.DEMO_WELCOME_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Send demo welcome emails
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          DOWNLOAD_LOGGER_SECRET: ${{ secrets.DOWNLOAD_LOGGER_SECRET }}
+          DRY_RUN: ${{ (github.event_name == 'workflow_dispatch' && inputs.mode != 'send' && inputs.test_email == '') && '1' || '' }}
+          TEST_EMAIL: ${{ inputs.test_email }}
+        run: node tools/demo-welcome-email.mjs

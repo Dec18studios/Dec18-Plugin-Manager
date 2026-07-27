@@ -70,11 +70,16 @@ async function d1(sql) {
 const sq = (s) => `'${String(s).replace(/'/g, "''")}'`;
 
 async function ensureWelcomeSentColumn() {
+  // Probe first: wrangler reports a duplicate-column ALTER as exit 1 with the
+  // API error on STDOUT (stderr is empty), so catching it by message is fragile.
+  const cols = await d1("PRAGMA table_info(downloads)");
+  if (cols.some((c) => c.name === "welcome_sent")) return;
   try {
     await d1("ALTER TABLE downloads ADD COLUMN welcome_sent INTEGER DEFAULT 0");
     console.log("Migrated: added downloads.welcome_sent column.");
   } catch (e) {
-    const msg = String(e.stderr || e.message || e);
+    // Belt and braces: tolerate a concurrent run that added it first.
+    const msg = `${e.stdout || ""}${e.stderr || ""}${e.message || e}`;
     if (!/duplicate column/i.test(msg)) throw e;
   }
 }

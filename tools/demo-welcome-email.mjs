@@ -161,7 +161,7 @@ function emailHTML({ unsub }) {
               What you&rsquo;ve got is, I believe, the most honest film simulator on the market. PhotoChemist doesn&rsquo;t chase the look with filters &mdash; it models the physics of film with math, from the light hitting the negative to the print on the projector.
             </p>
             <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
-              And here&rsquo;s where I&rsquo;d start: skip the deep settings and learn to work the <strong style="color:#f4f1ea;">printer lights</strong> &mdash; the hundred-year-old lab system Nolan&rsquo;s team still grades with. Once you can grade the way a color timer would, the whole tool makes sense.
+              And here&rsquo;s where I&rsquo;d start: skip the deep settings and learn to work the <strong style="color:#f4f1ea;">printer lights</strong> &mdash; the historical color timing lab system simulated perfectly with math. Once you can grade the way a color timer would, the whole tool makes sense.
             </p>
           </td>
         </tr>

@@ -126,7 +126,7 @@ function emailHTML({ unsub }) {
 
 <!-- Preheader (hidden preview text) -->
 <div style="display:none; max-height:0; overflow:hidden; mso-hide:all;">
-  A quick thank-you from Dec. 18 Studios &mdash; and a real person to reply to if you need a hand getting started.
+  A quick thank-you from Dec. 18 Studios, and a real person to reply to if you need a hand getting started.
 </div>
 
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#111418;">
@@ -155,13 +155,13 @@ function emailHTML({ unsub }) {
               Hi there!
             </p>
             <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
-              You grabbed the PhotoChemist demo recently &mdash; thank you. It means a lot every time someone gives these tools a shot.
+              You grabbed the PhotoChemist demo recently, and thank you for that. It means a lot every time someone gives these tools a shot.
             </p>
             <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
-              What you&rsquo;ve got is, I believe, the most honest film simulator on the market. PhotoChemist doesn&rsquo;t chase the look with filters &mdash; it models the physics of film with math, from the light hitting the negative to the print on the projector.
+              What you&rsquo;ve got is, I believe, the most honest film simulator on the market. PhotoChemist doesn&rsquo;t chase the look with filters. It models the physics of film with math, from the light hitting the negative to the print on the projector.
             </p>
             <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
-              And here&rsquo;s where I&rsquo;d start: skip the deep settings and learn to work the <strong style="color:#f4f1ea;">printer lights</strong> &mdash; the historical color timing lab system simulated perfectly with math. Once you can grade the way a color timer would, the whole tool makes sense.
+              And here&rsquo;s where I&rsquo;d start: skip the deep settings and learn to work the <strong style="color:#f4f1ea;">printer lights</strong> ... the historical color timing lab system, simulated perfectly with math. Once you can grade the way a color timer would, the whole tool makes sense.
             </p>
           </td>
         </tr>
@@ -177,7 +177,7 @@ function emailHTML({ unsub }) {
               <a href="https://www.youtube.com/watch?v=GFryQzEsaC8" target="_blank" style="color:#f4f1ea; text-decoration:none;">Simulating the Physics of Printer Lights &#9654;</a>
             </p>
             <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:22px; color:#8a9099;">
-              I walk through the full logic chain &mdash; light through the negative, silver activation on the print &mdash; then set up a grade the way a lab would, and finish with something film never let you do: keying printer lights through a mask on your own node.
+              I walk through the full logic chain (light through the negative, silver activation on the print), then set up a grade the way a lab would, and finish with something film never let you do: keying printer lights through a mask on your own node.
             </p>
           </td>
         </tr>
@@ -209,7 +209,7 @@ function emailHTML({ unsub }) {
                 <td style="padding:24px 28px;">
                   <h3 style="margin:0 0 8px 0; font-family:Georgia, 'Times New Roman', serif; font-size:18px; line-height:24px; color:#f4f1ea; font-weight:normal;">Stuck? Curious? Just reply.</h3>
                   <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:22px; color:#c6ccd4;">
-                    If you have any questions about PhotoChemist or need help getting set up &mdash; installation, first grade, anything &mdash; hit reply to this email. It goes straight to me, not a ticket system, and I answer every message.
+                    If you have any questions about PhotoChemist or need help getting set up (installation, first grade, anything), hit reply to this email. It goes straight to me, not a ticket system, and I answer every message.
                   </p>
                 </td>
               </tr>
@@ -232,15 +232,15 @@ function emailHTML({ unsub }) {
             <p style="margin:0 0 6px 0; font-family:Arial, Helvetica, sans-serif; font-size:11px; letter-spacing:2px; color:#d9a441; text-transform:uppercase;">When You&rsquo;re Ready</p>
             <h2 style="margin:0 0 10px 0; font-family:Georgia, 'Times New Roman', serif; font-size:22px; line-height:28px; color:#f4f1ea; font-weight:normal;">The whole Tool Box is $47.34. That&rsquo;s it.</h2>
             <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
-              If the demo wins you over, $47.34 doesn&rsquo;t just unlock PhotoChemist &mdash; it gets you <strong style="color:#f4f1ea;">every premium DCTL and OFX plugin</strong> in the Tool Box, plus a full year of updates, new tools, and actual human support. No tiers, no upsells.
+              If the demo wins you over, $47.34 doesn&rsquo;t just unlock PhotoChemist. It gets you <strong style="color:#f4f1ea;">every premium DCTL and OFX plugin</strong> in the Tool Box, plus a full year of updates, new tools, and actual human support. No tiers, no upsells.
             </p>
             <p style="margin:0 0 20px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
-              And it&rsquo;s not a subscription trap: your tools keep working even if you never renew, and the rate you join at locks in forever &mdash; even if you step away for a year or two and come back.
+              And it&rsquo;s not a subscription trap: your tools keep working even if you never renew, and the rate you join at locks in forever, even if you step away for a year or two and come back.
             </p>
             <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 12px 0;">
               <tr>
                 <td align="center" bgcolor="#d9a441" style="border-radius:6px;">
-                  <a href="https://dec18studios.com/clients?join=1" target="_blank" style="display:inline-block; padding:13px 28px; font-family:Arial, Helvetica, sans-serif; font-size:15px; font-weight:bold; color:#111418; text-decoration:none; border-radius:6px;">Get the Whole Tool Box &mdash; $47.34</a>
+                  <a href="https://dec18studios.com/clients?join=1" target="_blank" style="display:inline-block; padding:13px 28px; font-family:Arial, Helvetica, sans-serif; font-size:15px; font-weight:bold; color:#111418; text-decoration:none; border-radius:6px;">Get the Whole Tool Box for $47.34</a>
                 </td>
               </tr>
             </table>
@@ -248,7 +248,7 @@ function emailHTML({ unsub }) {
               Want the fine print? <a href="https://tools.dec18studios.com/color-grading-tools/pricing/" target="_blank" style="color:#8a9099; text-decoration:underline;">How the pricing works &rarr;</a>
             </p>
             <p style="margin:0 0 8px 0; font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:20px; color:#8a9099;">
-              No pressure &mdash; the demo is yours either way. But if PhotoChemist ends up in your node tree every day, this is how you keep it there.
+              No pressure. The demo is yours either way. But if PhotoChemist ends up in your node tree every day, this is how you keep it there.
             </p>
           </td>
         </tr>

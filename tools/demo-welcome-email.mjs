@@ -91,68 +91,202 @@ function unsubUrl(email, tool) {
 }
 
 // ── email content ─────────────────────────────────────────────────────────────
+// Template: Greg's photochemist-thankyou-email.html draft (2026-07-27), with the
+// Brevo tags swapped for values this sender controls:
+//   {{ contact.FIRSTNAME }} → "there"  (the download gate only captures emails)
+//   {{ unsubscribe }}       → the Worker's token /unsubscribe link
+// plus a guide-links block after the video.
 const SITE = "https://tools.dec18studios.com/color-grading-tools/photochemist";
 
-function esc(s) {
-  return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
-
-const SUBJECT = "Thanks for trying Photo Chemist — a few tips to get the best out of the demo";
+const SUBJECT = "Thanks for taking PhotoChemist for a spin";
 
 function emailHTML({ unsub }) {
-  const link = (href, label) =>
-    `<a href="${href}" style="color:#4a8aff;text-decoration:none;font-weight:600">${esc(label)} →</a>`;
   return `<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#0f1116;font-family:system-ui,-apple-system,sans-serif">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#0f1116;padding:40px 20px">
-<tr><td align="center">
-<table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%">
-  <tr><td style="padding-bottom:28px">
-    <span style="font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4a8aff">Dec 18 Studios</span>
-  </td></tr>
-  <tr><td style="background:#13151c;border:1px solid #2a2d3a;border-radius:12px;padding:36px 32px">
-    <p style="margin:0 0 6px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#888;font-weight:600">Photo Chemist demo</p>
-    <h1 style="margin:0 0 18px;font-size:26px;font-weight:700;color:#e8eaf0;line-height:1.25">Thanks for taking Photo&nbsp;Chemist for a spin</h1>
-    <p style="margin:0 0 24px;font-size:15px;color:#cfd2d8;line-height:1.65">
-      You grabbed the free demo of Photo Chemist — spectral film-stock emulation for DaVinci Resolve.
-      It's the same engine as the full plugin, so everything you dial in here translates directly.
-      A few things that help people get good results fast:
-    </p>
-    <table cellpadding="0" cellspacing="0" style="width:100%;background:#1a1d24;border:1px solid #2a2d3a;border-radius:8px;margin:0 0 24px">
-      <tr><td style="padding:16px 18px">
-        <p style="margin:0;font-size:13px;color:#cfd2d8;line-height:1.7">
-          <b style="color:#e8eaf0">The #1 setup gotcha:</b> Photo Chemist expects a
-          <b style="color:#e8eaf0">DaVinci Wide Gamut / Linear</b> input. Add a CST with
-          <b style="color:#e8eaf0">no tone mapping</b> on the node just before it.<br>
-          <b style="color:#e8eaf0">On macOS:</b> if the system asks, choose <i>Allow Anyway</i> in
-          Privacy &amp; Security, then reopen Resolve.
-        </p>
-      </td></tr>
-    </table>
-    <p style="margin:0 0 10px;font-size:15px;color:#cfd2d8;line-height:1.9">
-      ${link(`${SITE}/quickstart/`, "Quick-start guide")}<br>
-      ${link(`${SITE}/complete-guide/`, "The complete guide")}<br>
-      ${link(`${SITE}/Workflows/`, "Node-tree workflows")}
-    </p>
-    <p style="margin:24px 0 20px;font-size:15px;color:#cfd2d8;line-height:1.65">
-      When you're ready for the clean, unrestricted version — plus the rest of the premium kit,
-      installed and auto-updated through the Tool Box Manager:
-    </p>
-    <a href="https://dec18studios.com/clients?join=1" style="display:inline-block;background:#4a8aff;color:#fff;text-decoration:none;font-size:14px;font-weight:700;padding:13px 28px;border-radius:8px;letter-spacing:.01em">Get the premium tools →</a>
-    <p style="margin:26px 0 0;font-size:14px;color:#cfd2d8;line-height:1.65">
-      Stuck on anything, or got footage that's misbehaving? Just reply to this email — it comes straight to me and I'll help.
-    </p>
-    <p style="margin:24px 0 0;font-size:12px;color:#555;line-height:1.6">
-      You're getting this one-time note because you downloaded the Photo Chemist demo from
-      <a href="https://tools.dec18studios.com" style="color:#555">tools.dec18studios.com</a> and asked for
-      setup tips and release notes. We don't send many.<br><br>
-      <a href="${unsub}" style="color:#555">Unsubscribe from Photo Chemist demo emails</a>
-    </p>
-  </td></tr>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Thanks for Downloading PhotoChemist</title>
+<!--[if mso]>
+<noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
+<![endif]-->
+<style>
+  body, table, td { margin:0; padding:0; }
+  img { border:0; line-height:100%; outline:none; text-decoration:none; }
+  table { border-collapse:collapse !important; }
+  @media only screen and (max-width:620px) {
+    .container { width:100% !important; }
+    .px { padding-left:20px !important; padding-right:20px !important; }
+    .h1 { font-size:26px !important; line-height:32px !important; }
+  }
+</style>
+</head>
+<body style="margin:0; padding:0; background-color:#111418;">
+
+<!-- Preheader (hidden preview text) -->
+<div style="display:none; max-height:0; overflow:hidden; mso-hide:all;">
+  A quick thank-you from Dec. 18 Studios &mdash; and a real person to reply to if you need a hand getting started.
+</div>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#111418;">
+  <tr>
+    <td align="center" style="padding:32px 12px;">
+
+      <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px;">
+
+        <!-- Header -->
+        <tr>
+          <td align="center" style="padding:8px 0 24px 0;">
+            <a href="https://dec18studios.com" style="text-decoration:none;">
+              <span style="font-family:Georgia, 'Times New Roman', serif; font-size:22px; letter-spacing:3px; color:#f4f1ea;">DEC. 18 STUDIOS</span><br>
+              <span style="font-family:Arial, Helvetica, sans-serif; font-size:11px; letter-spacing:2px; color:#8a9099; text-transform:uppercase;">Color Grading Tools</span>
+            </a>
+          </td>
+        </tr>
+
+        <!-- Hero card -->
+        <tr>
+          <td style="background-color:#1a1f26; border-radius:12px 12px 0 0; padding:40px 40px 8px 40px;" class="px">
+            <h1 class="h1" style="margin:0 0 16px 0; font-family:Georgia, 'Times New Roman', serif; font-size:30px; line-height:38px; color:#f4f1ea; font-weight:normal;">
+              Thanks for taking PhotoChemist for a spin
+            </h1>
+            <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
+              Hi there,
+            </p>
+            <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
+              You grabbed the PhotoChemist demo recently &mdash; thank you. It means a lot every time someone gives these tools a shot.
+            </p>
+            <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
+              What you&rsquo;ve got is, I believe, the most honest film simulator on the market. PhotoChemist doesn&rsquo;t chase the look with filters &mdash; it models the physics of film with math, from the light hitting the negative to the print on the projector.
+            </p>
+            <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
+              And here&rsquo;s where I&rsquo;d start: skip the deep settings and learn to work the <strong style="color:#f4f1ea;">printer lights</strong> &mdash; the hundred-year-old lab system Nolan&rsquo;s team still grades with. Once you can grade the way a color timer would, the whole tool makes sense.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Video block -->
+        <tr>
+          <td style="background-color:#1a1f26; padding:8px 40px 8px 40px;" class="px">
+            <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:11px; letter-spacing:2px; color:#d9a441; text-transform:uppercase;">Watch First &bull; 16 Min</p>
+            <a href="https://www.youtube.com/watch?v=GFryQzEsaC8" target="_blank" style="text-decoration:none;">
+              <img src="https://i.ytimg.com/vi/GFryQzEsaC8/maxresdefault.jpg" width="520" alt="Video: Grading as Nolan intended — Simulating the PHYSICS of Printer Lights" style="width:100%; max-width:520px; height:auto; border-radius:8px; display:block;">
+            </a>
+            <p style="margin:14px 0 4px 0; font-family:Georgia, 'Times New Roman', serif; font-size:17px; line-height:23px;">
+              <a href="https://www.youtube.com/watch?v=GFryQzEsaC8" target="_blank" style="color:#f4f1ea; text-decoration:none;">Grading as Nolan Intended &mdash; Simulating the Physics of Printer Lights &#9654;</a>
+            </p>
+            <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:22px; color:#8a9099;">
+              I walk through the full logic chain &mdash; light through the negative, silver activation on the print &mdash; then set up a grade the way a lab would, and finish with something film never let you do: keying printer lights through a mask on your own node.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Guides block -->
+        <tr>
+          <td style="background-color:#1a1f26; padding:16px 40px 8px 40px;" class="px">
+            <p style="margin:0 0 10px 0; font-family:Arial, Helvetica, sans-serif; font-size:11px; letter-spacing:2px; color:#d9a441; text-transform:uppercase;">Go Deeper</p>
+            <p style="margin:0 0 8px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:22px;">
+              <a href="${SITE}/quickstart/" target="_blank" style="color:#f4f1ea; text-decoration:none; font-weight:bold;">Quick-Start Guide &rarr;</a><br>
+              <span style="color:#8a9099;">Install, plus the one setup rule: feed it DaVinci Wide Gamut / Linear (a CST with no tone mapping on the node before). On macOS, &ldquo;Allow Anyway&rdquo; in Privacy &amp; Security if asked.</span>
+            </p>
+            <p style="margin:0 0 8px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:22px;">
+              <a href="${SITE}/complete-guide/" target="_blank" style="color:#f4f1ea; text-decoration:none; font-weight:bold;">The Complete Guide &rarr;</a><br>
+              <span style="color:#8a9099;">Every control explained, from stock selection to the print stage.</span>
+            </p>
+            <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:22px;">
+              <a href="${SITE}/Workflows/" target="_blank" style="color:#f4f1ea; text-decoration:none; font-weight:bold;">Node-Tree Workflows &rarr;</a><br>
+              <span style="color:#8a9099;">Where PhotoChemist sits in a real grade, with example trees.</span>
+            </p>
+          </td>
+        </tr>
+
+        <!-- Help block -->
+        <tr>
+          <td style="background-color:#1a1f26; padding:16px 40px 8px 40px;" class="px">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#22282f; border-radius:8px;">
+              <tr>
+                <td style="padding:24px 28px;">
+                  <h3 style="margin:0 0 8px 0; font-family:Georgia, 'Times New Roman', serif; font-size:18px; line-height:24px; color:#f4f1ea; font-weight:normal;">Stuck? Curious? Just reply.</h3>
+                  <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:22px; color:#c6ccd4;">
+                    If you have any questions about PhotoChemist or need help getting set up &mdash; installation, first grade, anything &mdash; hit reply to this email. It goes straight to me, not a ticket system, and I answer every message.
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Divider -->
+        <tr>
+          <td style="background-color:#1a1f26; padding:20px 40px;" class="px">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr><td style="border-top:1px solid #2c333d; font-size:0; line-height:0;">&nbsp;</td></tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Upgrade block -->
+        <tr>
+          <td style="background-color:#1a1f26; padding:0 40px 8px 40px;" class="px">
+            <p style="margin:0 0 6px 0; font-family:Arial, Helvetica, sans-serif; font-size:11px; letter-spacing:2px; color:#d9a441; text-transform:uppercase;">When You&rsquo;re Ready</p>
+            <h2 style="margin:0 0 10px 0; font-family:Georgia, 'Times New Roman', serif; font-size:22px; line-height:28px; color:#f4f1ea; font-weight:normal;">The whole Tool Box is $47.34. That&rsquo;s it.</h2>
+            <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
+              If the demo wins you over, $47.34 doesn&rsquo;t just unlock PhotoChemist &mdash; it gets you <strong style="color:#f4f1ea;">every premium DCTL and OFX plugin</strong> in the Tool Box, plus a full year of updates, new tools, and actual human support. No tiers, no upsells.
+            </p>
+            <p style="margin:0 0 20px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
+              And it&rsquo;s not a subscription trap: your tools keep working even if you never renew, and the rate you join at locks in forever &mdash; even if you step away for a year or two and come back.
+            </p>
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 12px 0;">
+              <tr>
+                <td align="center" bgcolor="#d9a441" style="border-radius:6px;">
+                  <a href="https://dec18studios.com/clients?join=1" target="_blank" style="display:inline-block; padding:13px 28px; font-family:Arial, Helvetica, sans-serif; font-size:15px; font-weight:bold; color:#111418; text-decoration:none; border-radius:6px;">Get the Whole Tool Box &mdash; $47.34</a>
+                </td>
+              </tr>
+            </table>
+            <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:20px; color:#8a9099;">
+              Want the fine print? <a href="https://tools.dec18studios.com/color-grading-tools/pricing/" target="_blank" style="color:#8a9099; text-decoration:underline;">How the pricing works &rarr;</a>
+            </p>
+            <p style="margin:0 0 8px 0; font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:20px; color:#8a9099;">
+              No pressure &mdash; the demo is yours either way. But if PhotoChemist ends up in your node tree every day, this is how you keep it there.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Sign-off -->
+        <tr>
+          <td style="background-color:#1a1f26; padding:16px 40px 40px 40px; border-radius:0 0 12px 12px;" class="px">
+            <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
+              Happy grading,<br>
+              <span style="color:#f4f1ea;">Greg</span><br>
+              <span style="font-size:13px; color:#8a9099;">Dec. 18 Studios</span>
+            </p>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td align="center" style="padding:28px 40px 8px 40px;" class="px">
+            <p style="margin:0 0 8px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:18px; color:#6b727c;">
+              Dec. 18 Studios &bull; <a href="https://dec18studios.com" style="color:#8a9099; text-decoration:underline;">dec18studios.com</a>
+            </p>
+            <p style="margin:0 0 8px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:18px; color:#6b727c;">
+              You&rsquo;re receiving this because you downloaded the PhotoChemist demo.
+            </p>
+            <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:18px; color:#6b727c;">
+              <a href="${unsub}" style="color:#8a9099; text-decoration:underline;">Unsubscribe</a>
+            </p>
+          </td>
+        </tr>
+
+      </table>
+
+    </td>
+  </tr>
 </table>
-</td></tr></table>
-</body></html>`;
+
+</body>
+</html>`;
 }
 
 // ── Brevo ─────────────────────────────────────────────────────────────────────

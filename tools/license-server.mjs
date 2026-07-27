@@ -18,8 +18,11 @@ import { execSync } from "node:child_process";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const KEYS_DIR = join(__dirname, "license-keys");
-const LEDGER_PATH = join(KEYS_DIR, "ledger.json");
-const SUBS_PATH = join(KEYS_DIR, "processed-subscribers.json");
+// Ledger data lives in the private license-ledger repo — set LICENSE_LEDGER_DIR
+// to your clone. Secrets (private.pem, gmail creds) stay in KEYS_DIR.
+const LEDGER_DIR = process.env.LICENSE_LEDGER_DIR || KEYS_DIR;
+const LEDGER_PATH = join(LEDGER_DIR, "ledger.json");
+const SUBS_PATH = join(LEDGER_DIR, "processed-subscribers.json");
 const PEM_PATH = join(KEYS_DIR, "private.pem");
 const HTML_PATH = join(__dirname, "license-manager.html");
 const GMAIL_CREDS_PATH = join(KEYS_DIR, "gmail-credentials.json");

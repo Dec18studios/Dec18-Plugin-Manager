@@ -21,8 +21,12 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const PROCESSED_PATH = join(__dirname, "license-keys", "processed-subscribers.json");
-const LEDGER_PATH = join(__dirname, "license-keys", "ledger.json");
+// The ledger (customer PII + issued keys) lives in the PRIVATE license-ledger
+// repo. CI checks it out and points LICENSE_LEDGER_DIR at it; locally, export
+// LICENSE_LEDGER_DIR to your license-ledger clone.
+const LEDGER_DIR = process.env.LICENSE_LEDGER_DIR || join(__dirname, "license-keys");
+const PROCESSED_PATH = join(LEDGER_DIR, "processed-subscribers.json");
+const LEDGER_PATH = join(LEDGER_DIR, "ledger.json");
 
 /** The Squarespace product name that triggers license fulfillment. */
 const TARGET_PRODUCT = "Happy Little Noders";
@@ -208,7 +212,16 @@ async function sendViaBrevo(apiKey, toEmail, toName, subject, body) {
 // ── Processed subscribers ledger ───────────────────────────────────
 
 function loadProcessed() {
-  if (!existsSync(PROCESSED_PATH)) return {};
+  if (!existsSync(PROCESSED_PATH)) {
+    // A missing ledger means every past purchaser looks "new" and would be
+    // re-emailed a key. That is never what a normal run wants — fail hard.
+    if (process.env.ALLOW_EMPTY_LEDGER === "1") return {};
+    throw new Error(
+      `Processed-subscribers ledger not found at ${PROCESSED_PATH}. ` +
+        `Set LICENSE_LEDGER_DIR to a checkout of the private license-ledger repo ` +
+        `(or ALLOW_EMPTY_LEDGER=1 to bootstrap a brand-new ledger).`
+    );
+  }
   return JSON.parse(readFileSync(PROCESSED_PATH, "utf8"));
 }
 

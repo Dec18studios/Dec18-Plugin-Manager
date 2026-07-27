@@ -83,15 +83,31 @@ function parseCSV(text) {
 }
 
 // ── best-effort name enrichment from the ledger ────────────────────────────────
+// Ledger files live in the private license-ledger repo (LICENSE_LEDGER_DIR
+// points at a clone); legacy in-repo path is the fallback. Enrichment stays
+// optional — missing files are silently skipped.
+const LEDGER_DIR = process.env.LICENSE_LEDGER_DIR || KEYS_DIR;
 function loadLedgerNames() {
   const map = new Map();
-  const path = join(KEYS_DIR, "ledger.json");
-  if (!existsSync(path)) return map;
   try {
-    const ledger = JSON.parse(readFileSync(path, "utf8"));
-    const entries = Array.isArray(ledger) ? ledger : ledger.entries || [];
-    for (const e of entries) {
-      if (e && e.email && e.name) map.set(e.email.trim().toLowerCase(), e.name.trim());
+    const path = join(LEDGER_DIR, "ledger.json");
+    if (existsSync(path)) {
+      const ledger = JSON.parse(readFileSync(path, "utf8"));
+      const entries = Array.isArray(ledger) ? ledger : ledger.entries || [];
+      for (const e of entries) {
+        if (e && e.email && e.name) map.set(e.email.trim().toLowerCase(), e.name.trim());
+      }
+    }
+  } catch { /* ignore — enrichment is optional */ }
+  try {
+    const subsPath = join(LEDGER_DIR, "processed-subscribers.json");
+    if (existsSync(subsPath)) {
+      const subs = JSON.parse(readFileSync(subsPath, "utf8"));
+      for (const [email, rec] of Object.entries(subs)) {
+        if (rec && rec.name && !map.has(email.trim().toLowerCase())) {
+          map.set(email.trim().toLowerCase(), String(rec.name).trim());
+        }
+      }
     }
   } catch { /* ignore — enrichment is optional */ }
   return map;

@@ -171,10 +171,10 @@ function emailHTML({ unsub }) {
           <td style="background-color:#1a1f26; padding:8px 40px 8px 40px;" class="px">
             <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:11px; letter-spacing:2px; color:#d9a441; text-transform:uppercase;">Watch First &bull; 16 Min</p>
             <a href="https://www.youtube.com/watch?v=GFryQzEsaC8" target="_blank" style="text-decoration:none;">
-              <img src="https://i.ytimg.com/vi/GFryQzEsaC8/maxresdefault.jpg" width="520" alt="Video: Grading as Nolan intended — Simulating the PHYSICS of Printer Lights" style="width:100%; max-width:520px; height:auto; border-radius:8px; display:block;">
+              <img src="https://i.ytimg.com/vi/GFryQzEsaC8/maxresdefault.jpg" width="520" alt="Video: Simulating the Physics of Printer Lights" style="width:100%; max-width:520px; height:auto; border-radius:8px; display:block;">
             </a>
             <p style="margin:14px 0 4px 0; font-family:Georgia, 'Times New Roman', serif; font-size:17px; line-height:23px;">
-              <a href="https://www.youtube.com/watch?v=GFryQzEsaC8" target="_blank" style="color:#f4f1ea; text-decoration:none;">Grading as Nolan Intended &mdash; Simulating the Physics of Printer Lights &#9654;</a>
+              <a href="https://www.youtube.com/watch?v=GFryQzEsaC8" target="_blank" style="color:#f4f1ea; text-decoration:none;">Simulating the Physics of Printer Lights &#9654;</a>
             </p>
             <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:22px; color:#8a9099;">
               I walk through the full logic chain &mdash; light through the negative, silver activation on the print &mdash; then set up a grade the way a lab would, and finish with something film never let you do: keying printer lights through a mask on your own node.

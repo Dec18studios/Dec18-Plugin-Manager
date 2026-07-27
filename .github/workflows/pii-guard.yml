@@ -1,0 +1,30 @@
+name: PII Guard
+
+# This is a PUBLIC repo. Customer data lives in the private
+# Dec18studios/license-ledger repo; signing/mail secrets live only in
+# Actions secrets and local tools/license-keys/. This guard fails any
+# push that re-introduces one of those files into the git tree.
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fail if ledger or secret files are git-tracked
+        run: |
+          bad=$(git ls-files | grep -E \
+            'processed-subscribers\.json|license-keys/ledger\.json|gmail-credentials|gmail-token|private\.pem|brevo-api-key|download-logger-secret' \
+            || true)
+          if [ -n "$bad" ]; then
+            echo "::error::Customer-data/secret files must never be committed to this public repo:"
+            echo "$bad"
+            exit 1
+          fi
+          echo "Clean: no ledger or secret files tracked."

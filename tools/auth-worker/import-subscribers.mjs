@@ -53,7 +53,8 @@ function main() {
     if (!key) continue;
     const payload = decodePayload(key);
     if (!payload) {
-      process.stderr.write(`skip (unparseable key): ${email}\n`);
+      // CI logs are public — mask the address.
+      process.stderr.write(`skip (unparseable key): ${email.replace(/^(.).*(@.*)$/, "$1***$2")}\n`);
       continue;
     }
     const plugins = JSON.stringify(payload.p ?? []);

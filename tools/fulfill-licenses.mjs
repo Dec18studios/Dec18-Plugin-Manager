@@ -31,6 +31,10 @@ const LEDGER_PATH = join(LEDGER_DIR, "ledger.json");
 /** The Squarespace product name that triggers license fulfillment. */
 const TARGET_PRODUCT = "Happy Little Noders";
 
+// Workflow logs on this public repo are world-readable — never print a raw
+// customer email. Same convention as demo-welcome-email.mjs.
+const mask = (e) => String(e).replace(/^(.).*(@.*)$/, "$1***$2");
+
 // ── Base64url helpers ──────────────────────────────────────────────
 
 function base64urlEncode(buffer) {
@@ -339,9 +343,9 @@ async function main() {
 
       keyLedger.push(ledgerEntry);
 
-      console.log(`✓ Sent ${purchaser.tier} key to ${purchaser.email} (order #${purchaser.orderNumber}, $${purchaser.amount})`);
+      console.log(`✓ Sent ${purchaser.tier} key to ${mask(purchaser.email)} (order #${purchaser.orderNumber})`);
     } catch (err) {
-      console.error(`✗ Failed for ${purchaser.email}: ${err.message}`);
+      console.error(`✗ Failed for ${mask(purchaser.email)} (order #${purchaser.orderNumber}): ${err.message}`);
     }
   }
 

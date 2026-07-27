@@ -188,7 +188,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 async function main() {
   console.log(`\nDemo welcome emails — tool "${SLUG}"${DRY_RUN ? "  (DRY RUN)" : ""}${TEST_EMAIL ? `  (TEST → ${TEST_EMAIL})` : ""}\n`);
 
-  if (!DL_SECRET) throw new Error("Missing DOWNLOAD_LOGGER_SECRET (needed for unsubscribe links).");
+  // Unsubscribe links can only be built with the Worker's ADMIN_SECRET, so any
+  // path that actually sends needs it; dry-run doesn't.
+  if (!DRY_RUN && !DL_SECRET) throw new Error("Missing DOWNLOAD_LOGGER_SECRET (needed for unsubscribe links).");
 
   // Test mode: one rendered sample, no D1, no marking.
   if (TEST_EMAIL) {

@@ -152,7 +152,7 @@ function emailHTML({ unsub }) {
               Thanks for taking PhotoChemist for a spin
             </h1>
             <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
-              Hi there,
+              Hi there!
             </p>
             <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
               You grabbed the PhotoChemist demo recently &mdash; thank you. It means a lot every time someone gives these tools a shot.

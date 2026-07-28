@@ -2,11 +2,48 @@ name = "dec18-download-proxy"
 main = "worker.js"
 compatibility_date = "2024-09-01"
 compatibility_flags = ["nodejs_compat"]
+account_id = "f9cd64771a2e00ceabf42fa0b660eeb7"
+
+# Same D1 database the auth worker uses. The proxy reads `accounts` (owned by
+# auth-worker) so revoking an account revokes downloads, and owns
+# `key_denylist` + `download_events` (tools/download-proxy/schema.sql).
+[[d1_databases]]
+binding = "DB"
+database_name = "dec18-auth"
+database_id = "92af9aa8-0072-492b-8c5e-69fc413a4394"
 
 # The public key is NOT a secret — it's the verification key, same one
 # embedded in the Tauri app and frontend.
 [vars]
 PUBLIC_KEY_SPKI_B64 = "MCowBQYDK2VwAyEAAZ7aAuceZRk6w/OQ3LUoYr7/rIZLlE1xHxMh8/Dhjzs="
 
-# Secrets (set via `wrangler secret put GITHUB_PAT`):
-#   GITHUB_PAT  — Fine-grained token with Contents:read on all plugin repos
+# --- Gate toggles ---------------------------------------------------------
+# Each gate can be switched to log-only ("0") if it turns out to block a real
+# customer. Denied requests are always written to download_events either way,
+# so you can watch the log before tightening.
+ENFORCE_ENTITLEMENT = "1"   # key's plugin list must cover the requested repo
+ENFORCE_ACCOUNT     = "1"   # key's email must exist + be active in D1 accounts
+ENFORCE_RATE_LIMIT  = "1"   # per-key download ceiling
+
+# If D1 itself errors (outage), fail OPEN so a database blip can't stop paying
+# customers downloading. Set to "1" to fail closed instead. An explicit "no"
+# from a healthy D1 always denies regardless of this setting.
+STRICT_DB = "0"
+
+# --- Rate limiting --------------------------------------------------------
+RATE_LIMIT_DOWNLOADS = "40"     # asset downloads per key...
+RATE_LIMIT_WINDOW_S  = "3600"   # ...per this many seconds
+
+# --- Short-lived download grants (replaces raw ?token= in URLs) -----------
+GRANT_TTL_S = "300"
+# Keep accepting ?token=<full license key> on the URL. Required until
+# dec18studios.github.io/color-grading-tools/members/ is redeployed to use
+# /v1/grant. Set to "0" once the website is live on grants.
+ALLOW_TOKEN_QUERY = "1"
+
+# Secrets (set via `wrangler secret put <NAME>`):
+#   GITHUB_PAT     — Fine-grained token with Contents:read on all plugin repos
+#   GRANT_SECRET   — random 32+ bytes, HMAC key for download grants.
+#                    Rotating it just invalidates in-flight grants (<5 min).
+#                    openssl rand -base64 48
+#   IP_HASH_SALT   — random string; salts client IPs before they are logged

@@ -28,6 +28,13 @@ if ! wrangler whoami 2>/dev/null | grep -q "Account"; then
   wrangler login
 fi
 
+# Apply the proxy's D1 tables (key_denylist, download_events). They live in the
+# SAME database as the auth worker, because the proxy reads its `accounts`
+# table. Idempotent — everything is IF NOT EXISTS.
+echo ""
+echo "Applying D1 schema to dec18-auth..."
+wrangler d1 execute dec18-auth --remote --file=schema.sql
+
 # Deploy the worker
 echo ""
 echo "Deploying worker..."
@@ -39,6 +46,22 @@ echo "Now set the GITHUB_PAT secret."
 echo "This should be a Fine-grained PAT with Contents:read on your plugin repos."
 echo ""
 wrangler secret put GITHUB_PAT
+
+# Secrets added with the licence-hardening pass. Skip either one if it is
+# already set — `wrangler secret list` will tell you.
+echo ""
+echo "GRANT_SECRET — HMAC key for short-lived download links."
+echo "Paste 32+ random bytes, e.g. from:  openssl rand -base64 48"
+echo "(Rotating this only invalidates in-flight download links.)"
+echo ""
+wrangler secret put GRANT_SECRET
+
+echo ""
+echo "IP_HASH_SALT — salts client IPs before they are written to the download log,"
+echo "so abuse is still detectable without retaining personal data."
+echo "Paste any random string:  openssl rand -base64 24"
+echo ""
+wrangler secret put IP_HASH_SALT
 
 echo ""
 echo "=== Done! ==="

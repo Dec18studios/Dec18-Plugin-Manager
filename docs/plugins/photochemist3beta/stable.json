@@ -1,6 +1,6 @@
 {
   "pluginId": "photochemist3beta",
-  "displayName": "PhotoChemist 3.0 Beta",
+  "displayName": "PhotoChemist 3.0",
   "description": "PhotoChemist 3.0 public beta — next-generation spectral film engine. Installs side-by-side with PhotoChemist 2.x.",
   "category": "Film Emulation",
   "licenseTier": "subscription",

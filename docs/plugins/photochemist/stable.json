@@ -1,6 +1,6 @@
 {
   "pluginId": "photochemist",
-  "displayName": "PhotoChemist DRT",
+  "displayName": "PhotoChemist DRT 2.x (Older Version)",
   "description": "43-band spectral film emulation engine with multiple film stock presets and full GPU acceleration.",
   "category": "Film Emulation",
   "licenseTier": "subscription",

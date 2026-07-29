@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-29T14:19:30.228Z",
+  "generatedAt": "2026-07-29T14:30:19.200Z",
   "plugins": [
     {
       "pluginId": "GE_Color_Slicer",
@@ -131,7 +131,7 @@
     },
     {
       "pluginId": "photochemist3beta",
-      "displayName": "PhotoChemist 3.0 Beta",
+      "displayName": "PhotoChemist 3.0",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/photochemist3beta/stable.json",
       "category": "Film Emulation",
       "type": "OFX",
@@ -139,7 +139,7 @@
     },
     {
       "pluginId": "photochemist",
-      "displayName": "PhotoChemist DRT",
+      "displayName": "PhotoChemist DRT 2.x (Older Version)",
       "type": "OFX",
       "licenseTier": "subscription",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/photochemist/stable.json",

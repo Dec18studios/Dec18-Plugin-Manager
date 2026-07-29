@@ -1,6 +1,6 @@
 {
   "pluginId": "photochemist3beta",
-  "displayName": "PhotoChemist 3.0 Beta",
+  "displayName": "PhotoChemist 3.0",
   "releaseRepo": "dec18studios/PhotoChemist-OFX",
   "minManagerVersion": "0.1.0",
   "hostProcesses": [

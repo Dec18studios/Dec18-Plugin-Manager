@@ -1,6 +1,6 @@
 {
   "pluginId": "photochemist",
-  "displayName": "PhotoChemist DRT",
+  "displayName": "PhotoChemist DRT 2.x (Older Version)",
   "releaseRepo": "dec18studios/PhotoChemist-OFX",
   "minManagerVersion": "0.1.0",
   "hostProcesses": [

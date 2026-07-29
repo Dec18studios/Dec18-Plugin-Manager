@@ -22,21 +22,7 @@
   "infoUrl": "https://dec18studios.com/photochemist",
   "_tagComment": "releaseTagPattern pins this catalog entry to the 2.x line. The same release repo also hosts the PhotoChemist 3.0 Beta line (v3.* tags, PhotoChemist3Beta-* assets) served by docs/plugins/photochemist3beta/. Without this filter the newest v3 prerelease would become this entry's beta head and its assets would (partially) match the loose patterns below.",
   "releaseTagPattern": "^v2\\.",
-  "_demoComment": "sha256 is resolved live from the demo release's asset.digest by the generator (the demo tag is delete+recreated each build, so the hash changes every release). Pin version + downloadUrl only; add a sha256 under an asset here only to force a manual override.",
-  "demo": {
-    "version": "2.7.0",
-    "assets": {
-      "macos-universal": {
-        "downloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v2.7.0/PhotoChemistDemo_macOS_universal_portable.zip"
-      },
-      "windows-x86_64": {
-        "downloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v2.7.0/PhotoChemistDemo_windows_cuda_portable.zip"
-      },
-      "linux-x86_64": {
-        "downloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v2.7.0/PhotoChemistDemo_linux_cuda_portable.zip"
-      }
-    }
-  },
+  "_demoComment": "NO demo block on this entry by design. The watermarked demo is built from the 3.0 beta line and installs as PhotoChemist3Beta.ofx.bundle / com.dec18studios.PhotoChemist3Beta, so it is served by docs/plugins/photochemist3beta/ instead. It cannot be served from here: apply_demo_override() in installer.rs swaps only downloadUrl/sha256/version, while bundleName still comes from the assetRules below (PhotoChemist.ofx.bundle) — pointing this entry at the 3.0 demo zip would stage a bundle name that is not in the archive and fail at install. Unlicensed users on this 2.x entry get the sign-in prompt (main.js handles the no-demoAvailable path).",
   "assetRules": [
     {
       "family": "macos",

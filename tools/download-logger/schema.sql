@@ -10,8 +10,11 @@ CREATE TABLE IF NOT EXISTS downloads (
   download_count   INTEGER DEFAULT 1,
   unsubscribed     INTEGER DEFAULT 0,
   -- Set to 1 by tools/demo-welcome-email.mjs after the one-time welcome email
-  -- goes out. Deliberately NOT reset by /log re-downloads, so nobody gets the
-  -- welcome twice. (Added later via ALTER TABLE; the sender script auto-migrates.)
+  -- goes out, or to 2 when the address is undeliverable (junk typed into the
+  -- download gate, permanent Brevo rejection) so it stops being retried hourly.
+  -- Any non-zero value retires the row. Deliberately NOT reset by /log
+  -- re-downloads, so nobody gets the welcome twice.
+  -- (Added later via ALTER TABLE; the sender script auto-migrates.)
   welcome_sent     INTEGER DEFAULT 0,
   PRIMARY KEY (email, tool_slug)
 );

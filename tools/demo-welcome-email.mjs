@@ -306,7 +306,22 @@ async function brevoSend(to, subject, html) {
   if (res.status === 201 || res.status === 202) return true;
   let detail = "";
   try { detail = JSON.stringify(await res.json()); } catch {}
-  throw new Error(`Brevo send ${res.status} for ${to}: ${detail}`);
+  const err = new Error(`Brevo send ${res.status} for ${to}: ${detail}`);
+  err.status = res.status;
+  throw err;
+}
+
+// A 4xx from Brevo means it will never accept this address, so retrying it every
+// hour is pointless. 408/429 are the exceptions (timeout / rate limit).
+const isPermanentReject = (e) =>
+  typeof e?.status === "number" && e.status >= 400 && e.status < 500 && e.status !== 408 && e.status !== 429;
+
+// Cheap plausibility gate so obvious junk from the download gate (e.g. "a@b.c")
+// never costs an API round trip. Deliberately loose: only rejects what no real
+// address can be. Brevo remains the authority on everything past this.
+function looksSendable(email) {
+  const m = /^[^\s@,;]+@([^\s@,;.]+\.)+([A-Za-z]{2,})$/.exec(email);
+  return !!m && email.length <= 254;
 }
 
 async function brevoContactUpsert(email) {
@@ -371,9 +386,23 @@ async function main() {
     console.log(`Capped at MAX_SENDS=${MAX_SENDS} this run; ${rows.length - batch.length} remaining will go out on later runs.\n`);
   }
 
-  let sent = 0, failed = 0;
+  // welcome_sent = 2 marks "undeliverable, do not retry". The eligibility query
+  // tests COALESCE(welcome_sent,0) = 0, so any non-zero value retires the row —
+  // 2 just keeps it distinguishable from a real send in the table.
+  const retire = (email) =>
+    d1(`UPDATE downloads SET welcome_sent = 2 WHERE email = ${sq(email)} AND tool_slug = ${sq(SLUG)}`);
+
+  let sent = 0, failed = 0, skipped = 0;
   for (const r of batch) {
     const email = r.email.trim().toLowerCase();
+
+    if (!looksSendable(email)) {
+      await retire(email);
+      skipped++;
+      console.log(`  – ${mask(email)} — not a valid address, retired (no retry)`);
+      continue;
+    }
+
     try {
       const html = emailHTML({ unsub: unsubUrl(email, SLUG) });
       await brevoSend(email, SUBJECT, html);
@@ -382,14 +411,23 @@ async function main() {
       sent++;
       console.log(`  ✓ ${mask(email)}`);
     } catch (e) {
-      failed++;
-      console.log(`  ✖ ${mask(email)} — ${String(e.message || e).slice(0, 200)}`);
+      const msg = String(e.message || e).slice(0, 200);
+      if (isPermanentReject(e)) {
+        await retire(email);
+        skipped++;
+        console.log(`  – ${mask(email)} — rejected by Brevo, retired (no retry): ${msg}`);
+      } else {
+        failed++;
+        console.log(`  ✖ ${mask(email)} — ${msg}`);
+      }
     }
     await sleep(200); // gentle pacing for Brevo
   }
 
-  console.log(`\nDone. sent:${sent}  failed:${failed} (failures retry next run)\n`);
-  if (failed && !sent) process.exit(1); // everything failed → surface a red run
+  console.log(`\nDone. sent:${sent}  skipped:${skipped} (retired)  failed:${failed} (retry next run)\n`);
+  // Only genuine, retryable trouble should turn the run red. A run whose only
+  // "failure" was an undeliverable address is a success.
+  if (failed && !sent) process.exit(1);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });

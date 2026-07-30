@@ -1,7 +1,7 @@
 {
   "pluginId": "photochemist3beta",
   "displayName": "PhotoChemist 3.0",
-  "description": "PhotoChemist 3.0 public beta — next-generation spectral film engine. Installs side-by-side with PhotoChemist 2.x.",
+  "description": "Next-generation spectral film engine. Installs side-by-side with PhotoChemist 2.x.",
   "category": "Film Emulation",
   "licenseTier": "subscription",
   "tags": [
@@ -9,8 +9,7 @@
     "spectral",
     "DRT",
     "emulation",
-    "OFX",
-    "beta"
+    "OFX"
   ],
   "infoUrl": "https://dec18studios.com/photochemist",
   "version": "3.0.0-beta.4",

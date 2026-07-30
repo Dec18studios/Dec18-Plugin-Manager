@@ -188,6 +188,33 @@ function accountEntitlement(row) {
   return { keys, plugins, activeUntil: row.active_until ?? null, expired, found: true };
 }
 
+/**
+ * Record an OTP request for an address with no account.
+ *
+ * Deliberately best-effort: a failure here must never change the response or
+ * break sign-in, so it swallows its own errors. It also must not alter what the
+ * caller sees — /auth/start answers identically whether or not an account
+ * exists, and that property is the whole reason probing the endpoint teaches an
+ * attacker nothing. This only writes to our side of the wall.
+ */
+async function logUnknownEmail(env, email, deviceId, ipHash) {
+  try {
+    await env.DB.prepare(
+      "INSERT INTO unknown_email_attempts (email, attempts, first_ts, last_ts, last_ip_hash, last_device_id) " +
+        "VALUES (?, 1, ?, ?, ?, ?) " +
+        "ON CONFLICT(email) DO UPDATE SET " +
+        "attempts = attempts + 1, last_ts = excluded.last_ts, " +
+        "last_ip_hash = excluded.last_ip_hash, last_device_id = excluded.last_device_id, " +
+        // Trying again after we closed it means we got it wrong — reopen.
+        "status = CASE WHEN status = 'resolved' THEN 'new' ELSE status END"
+    )
+      .bind(email, now(), now(), ipHash, deviceId || null)
+      .run();
+  } catch (err) {
+    console.error("unknown-email log failed:", err?.message || err);
+  }
+}
+
 async function logEvent(env, email, deviceId, method, ipHash) {
   await env.DB.prepare(
     "INSERT INTO verification_events (email, device_id, method, ts, ip_hash) VALUES (?, ?, ?, ?, ?)"
@@ -334,6 +361,10 @@ async function handleStart(env, req, ipHash) {
 
   if (!account) {
     // Gate: no purchase => send a "wrong email" notice, but return the SAME response.
+    // Log it first: this is our only signal that someone believes they bought and
+    // cannot get in — a changed email, a typo, or a purchase under another address.
+    // check-unknown-emails.mjs cross-checks these against Squarespace.
+    await logUnknownEmail(env, email, deviceId, ipHash);
     await sendMail(env, email, "Dec 18 Studios sign-in", noPurchaseEmailBody(email));
     return json(200, { sent: true });
   }

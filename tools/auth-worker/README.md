@@ -33,6 +33,54 @@ attempts.
 **Two verification methods, both logged** to `verification_events`:
 `otp` (proved email) vs `silent_key` (holds a valid key — existing users).
 
+## Locked-out sign-ins
+
+`verification_events` only records *successes*, so until recently a request from
+an address with no account was answered and then forgotten. A customer who
+changed their email on Squarespace was therefore invisible to us until they
+emailed support — which is exactly how the first one was found.
+
+`/auth/start` now records those misses in `unknown_email_attempts` (one row per
+address, counted — not append-only, so probing bumps a counter instead of
+growing the table, and the per-IP/per-email rate limits run before the insert).
+The write is best-effort and cannot change the response: `/auth/start` still
+answers identically whether or not an account exists.
+
+`check-unknown-emails.mjs` closes the loop against Squarespace. Two detectors,
+both on the Commerce Orders API the fulfillment cron already has a key for — no
+webhook subscription and no extra API scope:
+
+- **drift** — re-reads every ledger `orderId` and compares Squarespace's
+  *current* `customerEmail` to the address we filed it under. For a recurring
+  subscription that field tracks the customer's current address, so this catches
+  a change before anyone is locked out.
+- **locked** — takes the `unknown_email_attempts` rows and joins them to a known
+  customer through `customerId`, which survives an email change and is the same
+  id as `Contact.id`.
+
+Matching is only ever by order id or `customerId`, **never by name** — anyone can
+create a Squarespace contact with a newsletter signup, so a name match would be a
+route to claiming someone else's license.
+
+```sh
+export SQUARESPACE_API_KEY=…
+export LICENSE_LEDGER_DIR=/path/to/license-ledger   # git pull it first
+
+node check-unknown-emails.mjs              # report only, writes nothing
+node check-unknown-emails.mjs --skip-d1    # drift only, no wrangler call
+node check-unknown-emails.mjs --apply      # migrate the ledger + print the D1 upsert
+```
+
+`--apply` **adds** the new address and keeps the old one; it never renames or
+deletes. Both must stay: `fulfill-licenses.mjs` dedupes on
+`processed[customerEmail]`, so removing either re-triggers issuance, and the
+key's signed `e` claim is still the old address, which the download proxy gates
+on. Then commit the ledger repo and run the printed `wrangler` statement — the
+ledger commit alone does not grant access, the D1 upsert is what does.
+
+Emails are masked when `$CI` is set; pass `--reveal` to override.
+Tests (no network, no credentials, no real ledger): `node test-check-unknown-emails.mjs`.
+
 ## One-time setup
 
 ```sh

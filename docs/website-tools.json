@@ -12,10 +12,10 @@
   },
   {
     "pluginId": "photochemist3beta",
-    "name": "PhotoChemist 3.0 Beta",
+    "name": "PhotoChemist 3.0",
     "slug": "photochemist-3-beta",
     "color": "red",
-    "desc": "PhotoChemist 3.0 public beta — next-gen spectral film engine, installs alongside 2.x.",
+    "desc": "Next-generation spectral film engine — installs alongside PhotoChemist 2.x.",
     "url": "photochemist/",
     "betaChannel": true,
     "tagFilter": "^v3\\."

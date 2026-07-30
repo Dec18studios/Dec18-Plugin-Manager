@@ -59,9 +59,34 @@ function loadLedger() {
     process.exit(1);
   }
   const raw = JSON.parse(readFileSync(p, "utf8"));
-  // The ledger has been through a couple of shapes; accept both.
-  const rows = Array.isArray(raw) ? raw : raw.processed || raw.subscribers || [];
-  return rows.filter((r) => r && r.licenseKey);
+
+  // processed-subscribers.json is an OBJECT keyed by email whose entries hold
+  // the token in `key`. ledger.json is an ARRAY of {email, key}. Older dumps
+  // used `licenseKey`. Normalise all of them to {email, licenseKey}.
+  const entries = Array.isArray(raw)
+    ? raw.map((r) => [r?.email, r])
+    : Object.entries(raw.processed || raw.subscribers || raw);
+
+  // One key can legitimately appear under two addresses (a customer who
+  // changed their email keeps the same key). Keep BOTH rows here so that
+  // `add-email` finds the key under either address; insertRows() collapses
+  // the duplicate hashes.
+  const rows = [];
+  for (const [emailKey, rec] of entries) {
+    if (!rec || typeof rec !== "object") continue;
+    const licenseKey = rec.key || rec.licenseKey;
+    if (typeof licenseKey !== "string" || !licenseKey.startsWith("D18.")) continue;
+    rows.push({ email: String(rec.email || emailKey || "").trim().toLowerCase(), licenseKey });
+  }
+
+  // A shape change that silently matched zero rows once turned add-all into a
+  // no-op that still reported success. Never let that pass quietly again.
+  if (rows.length === 0) {
+    console.error(`No license keys found in ${p} — refusing to continue.`);
+    console.error("The ledger format has probably changed; fix loadLedger() before trusting this.");
+    process.exit(1);
+  }
+  return rows;
 }
 
 function d1(sql) {
@@ -84,7 +109,13 @@ function d1(sql) {
   }
 }
 
-function insertRows(rows, reason) {
+function insertRows(allRows, reason) {
+  // The same key can arrive twice (one customer, two email addresses). The
+  // table is keyed by key_hash, so collapse them before building the SQL.
+  const byHash = new Map();
+  for (const r of allRows) if (!byHash.has(r.hash)) byHash.set(r.hash, r);
+  const rows = [...byHash.values()];
+
   if (!rows.length) {
     console.log("Nothing to add.");
     return;
@@ -136,7 +167,11 @@ switch (cmd) {
 
   case "add-all": {
     const rows = loadLedger().map((r) => ({ hash: hashKey(r.licenseKey), email: r.email }));
-    console.log(`This denylists ALL ${rows.length} keys in the ledger.`);
+    // Count distinct KEYS, not ledger rows — one customer can hold two rows
+    // (old + new email) against a single key, and this prompt must not
+    // overstate the blast radius of the most destructive command here.
+    const distinct = new Set(rows.map((r) => r.hash)).size;
+    console.log(`This denylists ALL ${distinct} keys in the ledger.`);
     console.log("Every existing customer's app stops downloading until they are re-issued a key.");
     if (!has("yes")) {
       console.log("\nRe-run with --yes if that is really what you want.");

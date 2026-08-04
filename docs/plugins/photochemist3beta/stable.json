@@ -12,18 +12,19 @@
     "OFX"
   ],
   "infoUrl": "https://dec18studios.com/photochemist",
-  "version": "3.0.0-beta.4",
-  "releaseDate": "2026-07-30T17:40:46Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.0.0-beta.4",
+  "version": "3.0.0-beta.5",
+  "releaseDate": "2026-08-04T17:59:39Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.0.0-beta.5",
   "demoVersion": "3.0.0",
+  "releaseHighlights": "- Film Stock Editor: dye curves you sculpt now survive closing and\n  reopening the editor exactly as drawn. Previously the chart came back\n  as a flattened approximation of what you drew, and the first drag\n  afterwards could visibly jump the image.\n- Windows and Linux: the Roadshow halation model now matches the Mac\n  renderer — no more dark punch-out over strong highlights, and spread\n  settings below one pixel render instead of switching halation off.\n- Windows and Linux: Emulsion grain is now computed in its own pre-pass\n  ahead of the main kernel, the same speed path the Mac renderer uses.",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.0-beta.4/PhotoChemist3Beta-macOS.zip",
-      "sha256": "48b4952c85b8b2463187e2125ddd03c85980441d93c332847b0ada7113e27efd",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.0-beta.5/PhotoChemist3Beta-macOS.zip",
+      "sha256": "b7b7710ac5b559cd66395ebe25af81bbaec4024024704a92d63172c25fab7698",
       "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.0.0/PhotoChemistDemo_macOS_universal_portable.zip",
-      "demoSha256": "bcd3c0630e1c4151754901c4896d9c222bb2c63888369fb10fcabbe9e6b335fb",
+      "demoSha256": "1c0babb6550b39f61608b7b53b7a35ffbeb927ca2f7089e2403da768f7392b0e",
       "packageType": "zip",
       "bundleName": "PhotoChemist3Beta.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
@@ -44,10 +45,10 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.0-beta.4/PhotoChemist3Beta-windows-cuda.zip",
-      "sha256": "164193924c985442a84f2db463248b7c7ea3af10caf1cdfa1b05d38928edba8f",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.0-beta.5/PhotoChemist3Beta-windows-cuda.zip",
+      "sha256": "1cbd447bccabffad7023dcf2784520e93360397569184f255c2f1553bfa75775",
       "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.0.0/PhotoChemistDemo_windows_cuda_portable.zip",
-      "demoSha256": "bc3901a7324ef44937ab9a3693ca5b284713d332f80c3ad178471f80cf9c4341",
+      "demoSha256": "6f93702ec9baf1be901f5135938dafddb85b0bce68a73d46b65054c2dd5a94e2",
       "packageType": "zip",
       "bundleName": "PhotoChemist3Beta.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
@@ -68,10 +69,10 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.0-beta.4/PhotoChemist3Beta-linux-cuda.zip",
-      "sha256": "cd0298d30643538b24c18629e094fbbce1305de268cc1802469a85a4bd612bde",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.0-beta.5/PhotoChemist3Beta-linux-cuda.zip",
+      "sha256": "5f38ffb3ba593aba3ec4a75640814d043d2e1770b4fd3b95404e72897f4a24f0",
       "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.0.0/PhotoChemistDemo_linux_cuda_portable.zip",
-      "demoSha256": "230607ae16995d08644599c564cfbc5349b8ad368e174d28996ba1e4a6e26817",
+      "demoSha256": "77a0149e095bb22d317a2cb3e54fd140434b73a7ed87d7369897971e14bf86d5",
       "packageType": "zip",
       "bundleName": "PhotoChemist3Beta.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
@@ -91,6 +92,79 @@
     }
   ],
   "availableVersions": [
+    {
+      "version": "3.0.0-beta.4",
+      "releaseDate": "2026-07-30T17:40:46Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.0.0-beta.4",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.0-beta.4/PhotoChemist3Beta-macOS.zip",
+          "sha256": "48b4952c85b8b2463187e2125ddd03c85980441d93c332847b0ada7113e27efd",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.0-beta.4/PhotoChemist3Beta-windows-cuda.zip",
+          "sha256": "164193924c985442a84f2db463248b7c7ea3af10caf1cdfa1b05d38928edba8f",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.0-beta.4/PhotoChemist3Beta-linux-cuda.zip",
+          "sha256": "cd0298d30643538b24c18629e094fbbce1305de268cc1802469a85a4bd612bde",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
     {
       "version": "3.0.0-beta.3",
       "releaseDate": "2026-07-29T13:57:57Z",

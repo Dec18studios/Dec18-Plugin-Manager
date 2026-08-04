@@ -8,6 +8,11 @@ import { createPrivateKey, sign } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  LICENSE_EMAIL_SUBJECT,
+  licenseEmailHTML,
+  licenseEmailText,
+} from "./license-email-template.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -62,32 +67,29 @@ if (!tokenRes.ok) {
 const accessToken = (await tokenRes.json()).access_token;
 console.log("Refreshed Gmail access token");
 
-// 4. Build email
-const body = [
-  "Hi Greg,",
-  "",
-  "Thanks for your purchase! Here is your Dec 18 Studios license key:",
-  "",
-  licenseKey,
-  "",
-  "Paste this key into the Dec 18 Studios Plugin Manager to unlock all plugins.",
-  "",
-  "If you haven't downloaded the Plugin Manager yet, grab it from:",
-  "https://github.com/Dec18studios/Dec18-Plugin-Manager/releases/latest/",
-  "",
-  "Cheers,",
-  "Greg \u2014 Dec 18 Studios",
-  "",
-  "--- DRY RUN TEST ---",
-].join("\n");
+// 4. Build email \u2014 the real fulfillment template, so this doubles as a preview
+const args = { name: "Greg", licenseKey, email };
+const boundary = "----=_d18_license_alt_boundary";
+const part = (mime, content) =>
+  [
+    `--${boundary}`,
+    `Content-Type: ${mime}; charset=UTF-8`,
+    "Content-Transfer-Encoding: base64",
+    "",
+    Buffer.from(content, "utf8").toString("base64").replace(/(.{76})/g, "$1\r\n"),
+  ].join("\r\n");
 
 const raw = [
   "From: Dec 18 Studios <create@dec18studios.com>",
   "To: g.enright47@gmail.com",
-  "Subject: Your Dec 18 Studios License Key (DRY RUN TEST)",
-  "Content-Type: text/plain; charset=UTF-8",
+  `Subject: ${LICENSE_EMAIL_SUBJECT} (DRY RUN TEST)`,
+  "MIME-Version: 1.0",
+  `Content-Type: multipart/alternative; boundary="${boundary}"`,
   "",
-  body,
+  part("text/plain", licenseEmailText(args)),
+  part("text/html", licenseEmailHTML(args)),
+  `--${boundary}--`,
+  "",
 ].join("\r\n");
 
 const rawB64 = Buffer.from(raw).toString("base64url");

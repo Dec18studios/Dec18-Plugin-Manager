@@ -15,6 +15,11 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
+import {
+  LICENSE_EMAIL_SUBJECT,
+  licenseEmailHTML,
+  licenseEmailText,
+} from "./license-email-template.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const KEYS_DIR = join(__dirname, "license-keys");
@@ -248,32 +253,30 @@ const server = createServer(async (req, res) => {
       if (!tokenRes.ok) throw new Error(`Token refresh failed: ${await tokenRes.text()}`);
       const { access_token } = await tokenRes.json();
 
-      // Build email
-      const displayName = name || "there";
-      const subject = "Your Dec 18 Studios License Key";
-      const emailBody = [
-        `Hi ${displayName},`,
-        "",
-        "Thanks for your purchase! Here's your Dec 18 Studios license key:",
-        "",
-        key,
-        "",
-        "Paste this key into the Dec 18 Studios Plugin Manager to unlock all plugins.",
-        "",
-        "If you haven't downloaded the Plugin Manager yet, grab it from:",
-        "https://github.com/Dec18studios/Dec18-Plugin-Manager/releases/latest/",
-        "",
-        "Cheers,",
-        "Greg \u2014 Dec 18 Studios",
-      ].join("\n");
+      // Build email \u2014 same copy the automated fulfillment run sends, so a
+      // manual resend from this UI is not a different email.
+      const args = { name, licenseKey: key, email };
+      const boundary = "----=_d18_license_alt_boundary";
+      const part = (mime, content) =>
+        [
+          `--${boundary}`,
+          `Content-Type: ${mime}; charset=UTF-8`,
+          "Content-Transfer-Encoding: base64",
+          "",
+          Buffer.from(content, "utf8").toString("base64").replace(/(.{76})/g, "$1\r\n"),
+        ].join("\r\n");
 
       const raw = [
         `From: Dec 18 Studios <create@dec18studios.com>`,
         `To: ${email}`,
-        `Subject: ${subject}`,
-        "Content-Type: text/plain; charset=UTF-8",
+        `Subject: ${LICENSE_EMAIL_SUBJECT}`,
+        "MIME-Version: 1.0",
+        `Content-Type: multipart/alternative; boundary="${boundary}"`,
         "",
-        emailBody,
+        part("text/plain", licenseEmailText(args)),
+        part("text/html", licenseEmailHTML(args)),
+        `--${boundary}--`,
+        "",
       ].join("\r\n");
 
       const rawBase64 = Buffer.from(raw).toString("base64url");

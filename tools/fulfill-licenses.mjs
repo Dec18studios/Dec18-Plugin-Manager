@@ -2,7 +2,8 @@
 /**
  * License fulfillment — polls Squarespace Commerce Orders API for purchases
  * of the "Happy Little Noders" subscription product, generates master license
- * keys, and emails them via Gmail API.
+ * keys, and emails the buyer their welcome/onboarding mail (Brevo, or Gmail
+ * as a fallback). Email copy lives in tools/license-email-template.mjs.
  *
  * Required env vars:
  *   SQUARESPACE_API_KEY          — Squarespace API key (Commerce Orders permission)
@@ -19,6 +20,11 @@ import { createPrivateKey, sign } from "node:crypto";
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  LICENSE_EMAIL_SUBJECT,
+  licenseEmailHTML,
+  licenseEmailText,
+} from "./license-email-template.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // The ledger (customer PII + issued keys) lives in the PRIVATE license-ledger
@@ -134,41 +140,39 @@ async function refreshAccessToken(credentials, token) {
   return data.access_token;
 }
 
-const LICENSE_EMAIL_SUBJECT = "Your Dec 18 Studios License Key";
-
-function licenseEmailBody(toName, licenseKey) {
-  const name = toName ?? "there";
-  return [
-    `Hi ${name},`,
-    "",
-    "Thanks for your purchase! Here's your Dec 18 Studios license key:",
-    "",
-    licenseKey,
-    "",
-    "Paste this key into the Dec 18 Studios Plugin Manager to unlock all plugins.",
-    "",
-    "If you haven't downloaded the Plugin Manager yet, grab it from:",
-    "https://github.com/Dec18studios/Dec18-Plugin-Manager/releases/latest/",
-    "",
-    "Cheers,",
-    "Greg — Dec 18 Studios",
-  ].join("\n");
-}
-
 function buildLicenseEmail(toEmail, toName, licenseKey) {
-  const subject = LICENSE_EMAIL_SUBJECT;
-  const body = licenseEmailBody(toName, licenseKey);
+  const args = { name: toName, licenseKey, email: toEmail };
+  const text = licenseEmailText(args);
+  const html = licenseEmailHTML(args);
 
   const fromName = process.env.FROM_NAME ?? "Dec 18 Studios";
   const fromEmail = process.env.FROM_EMAIL ?? "create@dec18studios.com";
 
+  // multipart/alternative so plain-text clients still get a readable email.
+  // The boundary only has to be absent from the parts; a fixed ASCII string
+  // that cannot appear in base64 body text is enough.
+  const boundary = "----=_d18_license_alt_boundary";
+  const part = (mime, content) =>
+    [
+      `--${boundary}`,
+      `Content-Type: ${mime}; charset=UTF-8`,
+      "Content-Transfer-Encoding: base64",
+      "",
+      // RFC 2045 caps encoded lines at 76 characters.
+      Buffer.from(content, "utf8").toString("base64").replace(/(.{76})/g, "$1\r\n"),
+    ].join("\r\n");
+
   const raw = [
     `From: ${fromName} <${fromEmail}>`,
     `To: ${toEmail}`,
-    `Subject: ${subject}`,
-    "Content-Type: text/plain; charset=UTF-8",
+    `Subject: ${LICENSE_EMAIL_SUBJECT}`,
+    "MIME-Version: 1.0",
+    `Content-Type: multipart/alternative; boundary="${boundary}"`,
     "",
-    body,
+    part("text/plain", text),
+    part("text/html", html),
+    `--${boundary}--`,
+    "",
   ].join("\r\n");
 
   return Buffer.from(raw).toString("base64url");
@@ -191,7 +195,8 @@ async function sendEmail(accessToken, rawBase64) {
 // Preferred mail transport when BREVO_API_KEY is set (keeps these clerical
 // sends off the personal Gmail's sending reputation). Falls back to Gmail.
 
-async function sendViaBrevo(apiKey, toEmail, toName, subject, body) {
+async function sendViaBrevo(apiKey, toEmail, toName, licenseKey) {
+  const args = { name: toName, licenseKey, email: toEmail };
   const res = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
     headers: {
@@ -205,8 +210,12 @@ async function sendViaBrevo(apiKey, toEmail, toName, subject, body) {
         email: process.env.FROM_EMAIL ?? "create@dec18studios.com",
       },
       to: [toName ? { email: toEmail, name: toName } : { email: toEmail }],
-      subject,
-      textContent: body,
+      subject: LICENSE_EMAIL_SUBJECT,
+      htmlContent: licenseEmailHTML(args),
+      textContent: licenseEmailText(args),
+      // tag → this campaign's opens/clicks/bounces read apart from OTP and
+      // demo-welcome mail in Brevo's Transactional > Logs / Statistics.
+      tags: ["license-fulfillment"],
     }),
   });
   if (!res.ok) throw new Error(`Brevo send failed: ${res.status} ${await res.text()}`);
@@ -307,13 +316,7 @@ async function main() {
     try {
       const licenseKey = generateLicenseKeyFromTier(privateKey, purchaser.email, purchaser.tier);
       if (brevoKey) {
-        await sendViaBrevo(
-          brevoKey,
-          purchaser.email,
-          purchaser.name,
-          LICENSE_EMAIL_SUBJECT,
-          licenseEmailBody(purchaser.name, licenseKey),
-        );
+        await sendViaBrevo(brevoKey, purchaser.email, purchaser.name, licenseKey);
       } else {
         const rawEmail = buildLicenseEmail(purchaser.email, purchaser.name, licenseKey);
         await sendEmail(accessToken, rawEmail);

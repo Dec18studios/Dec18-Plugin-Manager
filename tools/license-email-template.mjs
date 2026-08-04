@@ -12,9 +12,12 @@
  *      key is no longer something the buyer has to handle.
  *   2. dec18studios.com/all-tools is the member page for grabbing installers by
  *      hand, for anyone who would rather not run the Manager at all.
- *   3. The key still ships, but as the fallback for when the code email does
- *      not arrive. It is still the real credential the download proxy checks,
- *      so it is worth keeping, just not worth leading with.
+ *
+ * The licence key is deliberately NOT in here. Both routes above authenticate
+ * off the buyer's email address, so the key would be a third credential nobody
+ * needs, sitting in an inbox forever. Fulfillment still mints and records one;
+ * if someone writes in stuck, the mail arriving from their purchase address is
+ * the same proof the OTP would have asked for, and Greg has the key on file.
  *
  * House style matches tools/demo-welcome-email.mjs: 600px dark table layout,
  * Georgia headings, gold accents. No em dashes in body copy (Greg's rule).
@@ -43,7 +46,7 @@ function greetingName(name) {
 }
 
 /** Plain-text alternative. Sent alongside the HTML, never on its own. */
-export function licenseEmailText({ name, licenseKey, email }) {
+export function licenseEmailText({ name, email }) {
   return [
     `Hi ${greetingName(name)},`,
     "",
@@ -67,15 +70,8 @@ export function licenseEmailText({ name, licenseKey, email }) {
     "Log in with the same email address and every tool is listed there to download by",
     "hand, if you would rather skip the Manager.",
     "",
-    "YOUR LICENSE KEY (backup)",
-    "",
-    licenseKey,
-    "",
-    "You should not need this. If the sign-in code never turns up, choose \"Paste it",
-    "instead\" in the Manager's sign-in window and paste the key above. Worth keeping",
-    "somewhere safe either way.",
-    "",
-    "Stuck on any of it, just reply to this email. It comes straight to me.",
+    "Stuck on any of it, or the code never turns up, just reply to this email. It comes",
+    "straight to me and I will get you in.",
     "",
     "Happy grading,",
     "Greg",
@@ -86,9 +82,8 @@ export function licenseEmailText({ name, licenseKey, email }) {
 }
 
 /** The real email. */
-export function licenseEmailHTML({ name, licenseKey, email }) {
+export function licenseEmailHTML({ name, email }) {
   const hi = escapeHTML(greetingName(name));
-  const key = escapeHTML(licenseKey);
   const addr = email ? escapeHTML(email) : "the address you purchased with";
 
   return `<!DOCTYPE html>
@@ -116,7 +111,7 @@ export function licenseEmailHTML({ name, licenseKey, email }) {
 
 <!-- Preheader (hidden preview text) -->
 <div style="display:none; max-height:0; overflow:hidden; mso-hide:all;">
-  Sign in to the Plugin Manager with your email address and it installs everything for you. Your license key is inside as a backup.
+  Sign in to the Plugin Manager with your email address and it installs everything for you, or grab the plugins by hand from the site.
 </div>
 
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#111418;">
@@ -211,36 +206,6 @@ export function licenseEmailHTML({ name, licenseKey, email }) {
           </td>
         </tr>
 
-        <!-- Divider -->
-        <tr>
-          <td style="background-color:#1a1f26; padding:12px 40px;" class="px">
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-              <tr><td style="border-top:1px solid #2c333d; font-size:0; line-height:0;">&nbsp;</td></tr>
-            </table>
-          </td>
-        </tr>
-
-        <!-- License key (fallback) -->
-        <tr>
-          <td style="background-color:#1a1f26; padding:0 40px 8px 40px;" class="px">
-            <p style="margin:0 0 6px 0; font-family:Arial, Helvetica, sans-serif; font-size:11px; letter-spacing:2px; color:#8a9099; text-transform:uppercase;">Backup</p>
-            <h2 style="margin:0 0 12px 0; font-family:Georgia, 'Times New Roman', serif; font-size:22px; line-height:28px; color:#f4f1ea; font-weight:normal;">Your license key</h2>
-            <p style="margin:0 0 16px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
-              You should not need this. But if the sign-in code never turns up, choose <strong style="color:#f4f1ea;">Paste it instead</strong> in the Manager&rsquo;s sign-in window and use this:
-            </p>
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#22282f; border-radius:8px; margin:0 0 12px 0;">
-              <tr>
-                <td style="padding:18px 20px; font-family:'Courier New', Courier, monospace; font-size:13px; line-height:20px; color:#f4f1ea; word-break:break-all;">
-                  ${key}
-                </td>
-              </tr>
-            </table>
-            <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:20px; color:#8a9099;">
-              Keep it somewhere safe, and keep it to yourself. It unlocks every download on your account.
-            </p>
-          </td>
-        </tr>
-
         <!-- Help block -->
         <tr>
           <td style="background-color:#1a1f26; padding:16px 40px 8px 40px;" class="px">
@@ -249,7 +214,7 @@ export function licenseEmailHTML({ name, licenseKey, email }) {
                 <td style="padding:24px 28px;">
                   <h3 style="margin:0 0 8px 0; font-family:Georgia, 'Times New Roman', serif; font-size:18px; line-height:24px; color:#f4f1ea; font-weight:normal;">Stuck? Just reply.</h3>
                   <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:22px; color:#c6ccd4;">
-                    If the code does not arrive, a plugin will not load, or you just want a hand getting set up, hit reply. It goes straight to me, not a ticket system, and I answer every message.
+                    If the code does not arrive, a plugin will not load, or you just want a hand getting set up, hit reply. It goes straight to me, not a ticket system, and I will get you in.
                   </p>
                 </td>
               </tr>

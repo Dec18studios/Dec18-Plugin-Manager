@@ -1,58 +1,22 @@
 #!/usr/bin/env node
 /**
- * One-off dry run: generate a license key and email it.
+ * Send yourself the purchase-fulfillment email, to see it in a real client.
  * Usage: node tools/test-send-key.mjs
+ *
+ * No licence key involved: the email does not carry one any more, so this
+ * needs nothing but the Gmail credentials.
  */
 
-import { createPrivateKey, sign } from "node:crypto";
 import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import {
   LICENSE_EMAIL_SUBJECT,
   licenseEmailHTML,
   licenseEmailText,
 } from "./license-email-template.mjs";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-function base64urlEncode(buffer) {
-  return Buffer.from(buffer)
-    .toString("base64")
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/, "");
-}
-
 const email = "g.enright47@gmail.com";
 
-// 1. Generate license key.
-// private.pem is gitignored and normally only exists as a CI secret, so on a
-// working copy there is usually no signer here. The key is just text in the
-// email, so fall back to an unsigned placeholder rather than refusing to run:
-// this script exists to preview the mail, not to mint a usable licence.
-function makeLicenseKey() {
-  const payloadB64 = base64urlEncode(
-    Buffer.from(JSON.stringify({ t: "master", e: email, p: ["*"] }), "utf8")
-  );
-  let pem;
-  try {
-    pem = readFileSync(join(__dirname, "license-keys", "private.pem"), "utf8");
-  } catch (err) {
-    if (err.code !== "ENOENT") throw err;
-    console.warn(
-      "No tools/license-keys/private.pem, using an unsigned sample key (preview only)"
-    );
-    return `D18.${payloadB64}.${base64urlEncode(Buffer.alloc(64, "SAMPLE"))}`;
-  }
-  const sig = sign(null, Buffer.from(payloadB64, "utf8"), createPrivateKey(pem));
-  return `D18.${payloadB64}.${base64urlEncode(sig)}`;
-}
-
-const licenseKey = makeLicenseKey();
-console.log("Generated license key:", licenseKey);
-
-// 2. Load Gmail credentials
+// 1. Load Gmail credentials
 const creds = JSON.parse(
   readFileSync("/Volumes/Server Sync Files/Other Scripts/Gmail Board/gmail_credentials.json", "utf8")
 );
@@ -60,7 +24,7 @@ const token = JSON.parse(
   readFileSync("/Volumes/Server Sync Files/Other Scripts/Gmail Board/gmail_token.json", "utf8")
 );
 
-// 3. Refresh access token
+// 2. Refresh access token
 const { client_id, client_secret } = creds.installed;
 const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
   method: "POST",
@@ -79,8 +43,8 @@ if (!tokenRes.ok) {
 const accessToken = (await tokenRes.json()).access_token;
 console.log("Refreshed Gmail access token");
 
-// 4. Build email \u2014 the real fulfillment template, so this doubles as a preview
-const args = { name: "Greg", licenseKey, email };
+// 3. Build email \u2014 the real fulfillment template, so this doubles as a preview
+const args = { name: "Greg", email };
 const boundary = "----=_d18_license_alt_boundary";
 const part = (mime, content) =>
   [
@@ -106,7 +70,7 @@ const raw = [
 
 const rawB64 = Buffer.from(raw).toString("base64url");
 
-// 5. Send
+// 4. Send
 const sendRes = await fetch(
   "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
   {

@@ -140,8 +140,8 @@ async function refreshAccessToken(credentials, token) {
   return data.access_token;
 }
 
-function buildLicenseEmail(toEmail, toName, licenseKey) {
-  const args = { name: toName, licenseKey, email: toEmail };
+function buildLicenseEmail(toEmail, toName) {
+  const args = { name: toName, email: toEmail };
   const text = licenseEmailText(args);
   const html = licenseEmailHTML(args);
 
@@ -195,8 +195,8 @@ async function sendEmail(accessToken, rawBase64) {
 // Preferred mail transport when BREVO_API_KEY is set (keeps these clerical
 // sends off the personal Gmail's sending reputation). Falls back to Gmail.
 
-async function sendViaBrevo(apiKey, toEmail, toName, licenseKey) {
-  const args = { name: toName, licenseKey, email: toEmail };
+async function sendViaBrevo(apiKey, toEmail, toName) {
+  const args = { name: toName, email: toEmail };
   const res = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
     headers: {
@@ -316,9 +316,9 @@ async function main() {
     try {
       const licenseKey = generateLicenseKeyFromTier(privateKey, purchaser.email, purchaser.tier);
       if (brevoKey) {
-        await sendViaBrevo(brevoKey, purchaser.email, purchaser.name, licenseKey);
+        await sendViaBrevo(brevoKey, purchaser.email, purchaser.name);
       } else {
-        const rawEmail = buildLicenseEmail(purchaser.email, purchaser.name, licenseKey);
+        const rawEmail = buildLicenseEmail(purchaser.email, purchaser.name);
         await sendEmail(accessToken, rawEmail);
       }
 

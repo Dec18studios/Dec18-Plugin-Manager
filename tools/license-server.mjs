@@ -255,7 +255,7 @@ const server = createServer(async (req, res) => {
 
       // Build email \u2014 same copy the automated fulfillment run sends, so a
       // manual resend from this UI is not a different email.
-      const args = { name, licenseKey: key, email };
+      const args = { name, email };
       const boundary = "----=_d18_license_alt_boundary";
       const part = (mime, content) =>
         [

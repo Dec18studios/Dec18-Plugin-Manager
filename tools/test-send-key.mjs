@@ -24,20 +24,32 @@ function base64urlEncode(buffer) {
     .replace(/=+$/, "");
 }
 
-// 1. Generate license key
-const pem = readFileSync(join(__dirname, "license-keys", "private.pem"), "utf8");
-const privateKey = createPrivateKey(pem);
-
 const email = "g.enright47@gmail.com";
-const payload = {
-  t: "master",
-  e: email,
-  p: ["*"],
-};
-const payloadB64 = base64urlEncode(Buffer.from(JSON.stringify(payload), "utf8"));
-const sig = sign(null, Buffer.from(payloadB64, "utf8"), privateKey);
-const licenseKey = `D18.${payloadB64}.${base64urlEncode(sig)}`;
 
+// 1. Generate license key.
+// private.pem is gitignored and normally only exists as a CI secret, so on a
+// working copy there is usually no signer here. The key is just text in the
+// email, so fall back to an unsigned placeholder rather than refusing to run:
+// this script exists to preview the mail, not to mint a usable licence.
+function makeLicenseKey() {
+  const payloadB64 = base64urlEncode(
+    Buffer.from(JSON.stringify({ t: "master", e: email, p: ["*"] }), "utf8")
+  );
+  let pem;
+  try {
+    pem = readFileSync(join(__dirname, "license-keys", "private.pem"), "utf8");
+  } catch (err) {
+    if (err.code !== "ENOENT") throw err;
+    console.warn(
+      "No tools/license-keys/private.pem, using an unsigned sample key (preview only)"
+    );
+    return `D18.${payloadB64}.${base64urlEncode(Buffer.alloc(64, "SAMPLE"))}`;
+  }
+  const sig = sign(null, Buffer.from(payloadB64, "utf8"), createPrivateKey(pem));
+  return `D18.${payloadB64}.${base64urlEncode(sig)}`;
+}
+
+const licenseKey = makeLicenseKey();
 console.log("Generated license key:", licenseKey);
 
 // 2. Load Gmail credentials

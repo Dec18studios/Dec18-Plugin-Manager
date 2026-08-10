@@ -28,11 +28,14 @@ export const LICENSE_EMAIL_SUBJECT = "You're in. Here's how to get your tools";
 const MANAGER_URL = "https://github.com/Dec18studios/Dec18-Plugin-Manager/releases/latest/";
 const ALL_TOOLS_URL = "https://dec18studios.com/all-tools";
 const ACCOUNT_URL = "https://dec18studios.com/account";
-// Public Discord for the tools. Shared with tools/demo-welcome-email.mjs. This
-// goes out in permanent automated mail, so the invite behind it MUST be set to
-// never expire and unlimited uses, or every email sent after the expiry date
-// carries a dead link.
-const DISCORD_URL = "https://discord.gg/uUx6N9Ake";
+// Public Discord for the tools. Duplicated in tools/demo-welcome-email.mjs,
+// which is a standalone script and does not import this module, so any change
+// here has to be made there too. This goes out in permanent automated mail, so
+// the invite MUST be a never-expiring one or every email sent after the expiry
+// carries a dead link. Verified non-expiring 2026-08-10:
+//   curl -s "https://discord.com/api/v10/invites/<code>?with_counts=true"
+// must come back with "expires_at": null.
+const DISCORD_URL = "https://discord.gg/rvY88mZJPR";
 
 function escapeHTML(s) {
   return String(s)

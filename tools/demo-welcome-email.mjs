@@ -103,11 +103,14 @@ function unsubUrl(email, tool) {
 // plus a guide-links block after the video.
 const SITE = "https://tools.dec18studios.com/color-grading-tools/photochemist";
 
-// Public Discord for the tools. Shared with tools/license-email-template.mjs.
-// This goes out in permanent automated mail, so the invite behind it MUST be set
-// to never expire and unlimited uses, or every email sent after the expiry date
-// carries a dead link.
-const DISCORD_URL = "https://discord.gg/uUx6N9Ake";
+// Public Discord for the tools. Duplicated in tools/license-email-template.mjs,
+// which this script does not import, so any change here has to be made there
+// too. This goes out in permanent automated mail, so the invite MUST be a
+// never-expiring one or every email sent after the expiry carries a dead link.
+// Verified non-expiring 2026-08-10:
+//   curl -s "https://discord.com/api/v10/invites/<code>?with_counts=true"
+// must come back with "expires_at": null.
+const DISCORD_URL = "https://discord.gg/rvY88mZJPR";
 
 const SUBJECT = "Thanks for taking PhotoChemist for a spin";
 

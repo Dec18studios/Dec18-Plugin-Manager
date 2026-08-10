@@ -28,6 +28,11 @@ export const LICENSE_EMAIL_SUBJECT = "You're in. Here's how to get your tools";
 const MANAGER_URL = "https://github.com/Dec18studios/Dec18-Plugin-Manager/releases/latest/";
 const ALL_TOOLS_URL = "https://dec18studios.com/all-tools";
 const ACCOUNT_URL = "https://dec18studios.com/account";
+// Public Discord for the tools. Shared with tools/demo-welcome-email.mjs. This
+// goes out in permanent automated mail, so the invite behind it MUST be set to
+// never expire and unlimited uses, or every email sent after the expiry date
+// carries a dead link.
+const DISCORD_URL = "https://discord.gg/uUx6N9Ake";
 
 function escapeHTML(s) {
   return String(s)
@@ -72,6 +77,13 @@ export function licenseEmailText({ name, email }) {
     "",
     "Stuck on any of it, or the code never turns up, just reply to this email. It comes",
     "straight to me and I will get you in.",
+    "",
+    "COME SAY HI ON DISCORD",
+    "",
+    `${DISCORD_URL}`,
+    "",
+    "There is a public Discord where people talk about the tools, swap node trees, ask",
+    "questions and see what is coming next. Free to join, and I am in there most days.",
     "",
     "Happy grading,",
     "Greg",
@@ -219,6 +231,27 @@ export function licenseEmailHTML({ name, email }) {
                 </td>
               </tr>
             </table>
+          </td>
+        </tr>
+
+        <!-- Discord block -->
+        <tr>
+          <td style="background-color:#1a1f26; padding:20px 40px 8px 40px;" class="px">
+            <p style="margin:0 0 6px 0; font-family:Arial, Helvetica, sans-serif; font-size:11px; letter-spacing:2px; color:#d9a441; text-transform:uppercase;">Come Say Hi</p>
+            <h2 style="margin:0 0 12px 0; font-family:Georgia, 'Times New Roman', serif; font-size:22px; line-height:28px; color:#f4f1ea; font-weight:normal;">There&rsquo;s a Discord for all of this</h2>
+            <p style="margin:0 0 20px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
+              Free, public, and full of people using these tools on real work. Swap node trees, ask questions, hear what is coming next, or just watch. I am in there most days.
+            </p>
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 8px 0;">
+              <tr>
+                <td align="center" style="border:1px solid #d9a441; border-radius:6px;">
+                  <a href="${DISCORD_URL}" target="_blank" style="display:inline-block; padding:12px 26px; font-family:Arial, Helvetica, sans-serif; font-size:15px; font-weight:bold; color:#d9a441; text-decoration:none; border-radius:6px;">Join the Discord</a>
+                </td>
+              </tr>
+            </table>
+            <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:20px; color:#8a9099;">
+              <a href="${DISCORD_URL}" target="_blank" style="color:#8a9099; text-decoration:underline;">${DISCORD_URL.replace("https://", "")}</a>
+            </p>
           </td>
         </tr>
 

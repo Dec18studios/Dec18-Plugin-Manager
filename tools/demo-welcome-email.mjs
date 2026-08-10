@@ -103,6 +103,12 @@ function unsubUrl(email, tool) {
 // plus a guide-links block after the video.
 const SITE = "https://tools.dec18studios.com/color-grading-tools/photochemist";
 
+// Public Discord for the tools. Shared with tools/license-email-template.mjs.
+// This goes out in permanent automated mail, so the invite behind it MUST be set
+// to never expire and unlimited uses, or every email sent after the expiry date
+// carries a dead link.
+const DISCORD_URL = "https://discord.gg/uUx6N9Ake";
+
 const SUBJECT = "Thanks for taking PhotoChemist for a spin";
 
 function emailHTML({ unsub }) {
@@ -219,6 +225,27 @@ function emailHTML({ unsub }) {
                 </td>
               </tr>
             </table>
+          </td>
+        </tr>
+
+        <!-- Discord block -->
+        <tr>
+          <td style="background-color:#1a1f26; padding:20px 40px 8px 40px;" class="px">
+            <p style="margin:0 0 6px 0; font-family:Arial, Helvetica, sans-serif; font-size:11px; letter-spacing:2px; color:#d9a441; text-transform:uppercase;">Come Say Hi</p>
+            <h2 style="margin:0 0 12px 0; font-family:Georgia, 'Times New Roman', serif; font-size:22px; line-height:28px; color:#f4f1ea; font-weight:normal;">There&rsquo;s a Discord for all of this</h2>
+            <p style="margin:0 0 20px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
+              Free, public, and full of people running these tools on real work. Post a frame and get feedback, swap node trees, ask why your printer lights are doing something strange, or just lurk. I am in there most days.
+            </p>
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 8px 0;">
+              <tr>
+                <td align="center" style="border:1px solid #d9a441; border-radius:6px;">
+                  <a href="${DISCORD_URL}" target="_blank" style="display:inline-block; padding:12px 26px; font-family:Arial, Helvetica, sans-serif; font-size:15px; font-weight:bold; color:#d9a441; text-decoration:none; border-radius:6px;">Join the Discord</a>
+                </td>
+              </tr>
+            </table>
+            <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:20px; color:#8a9099;">
+              <a href="${DISCORD_URL}" target="_blank" style="color:#8a9099; text-decoration:underline;">${DISCORD_URL.replace("https://", "")}</a>
+            </p>
           </td>
         </tr>
 

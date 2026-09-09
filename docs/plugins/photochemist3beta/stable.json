@@ -12,17 +12,17 @@
     "OFX"
   ],
   "infoUrl": "https://dec18studios.com/photochemist",
-  "version": "3.0.0-beta.6",
-  "releaseDate": "2026-08-04T22:46:43Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.0.0-beta.6",
+  "version": "3.0.1",
+  "releaseDate": "2026-09-09T23:57:21Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.0.1",
   "demoVersion": "3.0.0",
-  "releaseHighlights": "- Halation: fixed a thin dark line that hugged the edge of blown\n  highlights with the Roadshow model. The glow now peaks right at the\n  highlight edge and falls off smoothly; the color and reach of the\n  halo band are unchanged.\n- New Halation Test Chart checkbox (Textures group): replaces the input\n  with a synthetic scene-linear chart — a stop ramp into a fully blown\n  super-white plateau plus partial-highlight and warm patches — so you\n  can see exactly how your current halation settings respond.\n  Diagnostic only; uncheck before rendering.\n- Windows and Linux: Emulsion grain is now computed at the same stage\n  of the film pipeline as the Mac renderer. Grain no longer renders\n  noticeably heavier than on Mac at the same settings.\n- Textures editor: checking a module's master box while its format\n  dropdown still read \"Off\" left the dropdown and the active values\n  disagreeing; the check now lands the dropdown on its first real\n  gauge.",
+  "releaseHighlights": "- AMD and Windows: new OpenCL renderer. The full film pipeline now runs\n  on AMD GPUs, including fixes for the white-frame-on-load and\n  grain-not-rendering issues from the betas.\n- Deep Black Neutral (Printer Calibration): deep shadows now settle on a\n  clean neutral black floor instead of holding a faint color tint from\n  the print sensitivity balance. On by default; set it to 0 for the\n  legacy response. Deep Black Range sets how deep in the scene, in stops\n  below mid grey, the neutralization completes (default 5.0).\n- HDR output: Output Display and Scene White nit targets with Display\n  Peak highlight headroom, and a re-laddered set of nit presets around\n  the theatrical zone.\n- Film Motion: standalone Gate Weave driven by timeline position, so\n  renders match playback; Textures presets now capture film motion\n  settings.\n- Gate Sizing group: per-stage gauge widths with opt-in grain and\n  halation scope.\n- Development Field: interimage coupling with adjacency effects,\n  gate-width response, and ISO coupling. Negative dye inhibition now\n  defaults to 0 (was 0.05); raise it to restore the previous default\n  look.\n- Preset manager: the filename is the preset name, the family menus\n  match the real dropdowns, and overwritten or deleted presets are\n  backed up as .bak files.\n- MTF forensic chart (calibration mode 3) for verifying sharpness\n  response, and the halation test chart now renders on NVIDIA.\n- Spectral sharpening: green emphasis ramps from zero, removing a\n  visible pop at low strength.",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.0-beta.6/PhotoChemist3Beta-macOS.zip",
-      "sha256": "7a5cd5ef682d30a4de287ad85b33a0b4b50168571d92b22697573fbd04861292",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.1/PhotoChemist3Beta-macOS.zip",
+      "sha256": "24f9697019fdce46d1e613671901f3a4f5cecf619a91b9699992c8c733925bab",
       "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.0.0/PhotoChemistDemo_macOS_universal_portable.zip",
       "demoSha256": "3d3a312506c7da80166bd01595c68ee953083f7462fbf2a19b7ce181e7b83e4d",
       "packageType": "zip",
@@ -45,8 +45,8 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.0-beta.6/PhotoChemist3Beta-windows-cuda.zip",
-      "sha256": "17e503d809c1bc7c46480a8aba8e99442229038af0edef65c1b709b5700e9599",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.1/PhotoChemist3Beta-windows-cuda.zip",
+      "sha256": "fd90a0479dae385154b046c83cdfa35da7698937a69745b9a4f37736479b6db2",
       "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.0.0/PhotoChemistDemo_windows_cuda_portable.zip",
       "demoSha256": "40f679e60fe4ff573c787fa80e9243c34fe72be5c23c8f5d8bb00fc652cc7fff",
       "packageType": "zip",
@@ -69,8 +69,8 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.0-beta.6/PhotoChemist3Beta-linux-cuda.zip",
-      "sha256": "340981fb565ef321cf4c1b9a61276c9456ca999f7d46be2feb88888b62ce48e3",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.1/PhotoChemist3Beta-linux-cuda.zip",
+      "sha256": "027fef938bcfc77754fdc599f00df73157fc0090a3236b6a886ea28c396969e0",
       "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.0.0/PhotoChemistDemo_linux_cuda_portable.zip",
       "demoSha256": "a3eb461b266519a3d271523bf7905eb143bcff99a14e9b8bcee630e8c337838c",
       "packageType": "zip",
@@ -92,6 +92,80 @@
     }
   ],
   "availableVersions": [
+    {
+      "version": "3.0.0-beta.6",
+      "releaseDate": "2026-08-04T22:46:43Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.0.0-beta.6",
+      "releaseHighlights": "- Halation: fixed a thin dark line that hugged the edge of blown\n  highlights with the Roadshow model. The glow now peaks right at the\n  highlight edge and falls off smoothly; the color and reach of the\n  halo band are unchanged.\n- New Halation Test Chart checkbox (Textures group): replaces the input\n  with a synthetic scene-linear chart — a stop ramp into a fully blown\n  super-white plateau plus partial-highlight and warm patches — so you\n  can see exactly how your current halation settings respond.\n  Diagnostic only; uncheck before rendering.\n- Windows and Linux: Emulsion grain is now computed at the same stage\n  of the film pipeline as the Mac renderer. Grain no longer renders\n  noticeably heavier than on Mac at the same settings.\n- Textures editor: checking a module's master box while its format\n  dropdown still read \"Off\" left the dropdown and the active values\n  disagreeing; the check now lands the dropdown on its first real\n  gauge.",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.0-beta.6/PhotoChemist3Beta-macOS.zip",
+          "sha256": "7a5cd5ef682d30a4de287ad85b33a0b4b50168571d92b22697573fbd04861292",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.0-beta.6/PhotoChemist3Beta-windows-cuda.zip",
+          "sha256": "17e503d809c1bc7c46480a8aba8e99442229038af0edef65c1b709b5700e9599",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.0-beta.6/PhotoChemist3Beta-linux-cuda.zip",
+          "sha256": "340981fb565ef321cf4c1b9a61276c9456ca999f7d46be2feb88888b62ce48e3",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
     {
       "version": "3.0.0-beta.5",
       "releaseDate": "2026-08-04T17:59:39Z",

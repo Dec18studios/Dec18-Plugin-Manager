@@ -15,15 +15,16 @@
     "log"
   ],
   "infoUrl": null,
-  "version": "1.4.6",
-  "releaseDate": "2026-06-25T23:12:51Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/tag/v1.4.6",
+  "version": "1.5.0",
+  "releaseDate": "2026-09-09T20:14:34Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/tag/v1.5.0",
+  "releaseHighlights": "- New node: S1 Balance. Lift, gamma, gain, offset and saturation, per channel and master, applied in linear light under the look. Neutral defaults are a bitwise pass through.\n- New node: T1000 Timeline Agent. A pass-through timeline node that lets a controlling Claude session see the frame the viewer is showing.\n- Every node in the suite can now be driven from a Claude session through a file based control channel. The wiring guide and the grading playbook ship inside the bundle.\n- Two builds per platform: the standard build defaults every node to a Linear working space, the _intermediate build defaults to DaVinci Intermediate.\n- Suite and the free standalone OpenDRT now co-install without crashing Resolve at startup.",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.4.6/LookDevTools_v1.4.6_macOS_universal_portable_intermediate.zip",
-      "sha256": "548865d7e762ac5863cbc49027b5a0ec5b07602f6f51601c7170e54f3bb4dc1b",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.5.0/LookDevTools_v1.5.0_macOS_universal_portable_intermediate.zip",
+      "sha256": "44f58e6d5828ce953a6eb8a1c1e8a796c6074a2507a4393dfa7a2100573c1ecf",
       "packageType": "zip",
       "bundleName": "LookDevTools.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookDevTools",
@@ -44,8 +45,8 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.4.6/LookDevTools_v1.4.6_windows_cuda_portable_intermediate.zip",
-      "sha256": "b4f8559aca26f352b4ea9aa9261593c65bd4747054511c3a9802507e1ad27f7d",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.5.0/LookDevTools_v1.5.0_windows_cuda_portable_intermediate.zip",
+      "sha256": "c7a279bd6ac0594a09aac744117502c13a428ddba212ebc4f5da6d886bf40723",
       "packageType": "zip",
       "bundleName": "LookDevTools.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookDevTools",
@@ -66,8 +67,8 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.4.6/LookDevTools_v1.4.6_linux_cuda_portable_intermediate.zip",
-      "sha256": "e1624c6f1762ee862f9b6e662f197f5b645d1303206dbb17831807dbee315ebe",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.5.0/LookDevTools_v1.5.0_linux_cuda_portable_intermediate.zip",
+      "sha256": "cd1ddd95164d394368319093e748d120723c3459f58d54f5412b8b60e00fb9cf",
       "packageType": "zip",
       "bundleName": "LookDevTools.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookDevTools",
@@ -87,6 +88,79 @@
     }
   ],
   "availableVersions": [
+    {
+      "version": "1.4.6",
+      "releaseDate": "2026-06-25T23:12:51Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/tag/v1.4.6",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.4.6/LookDevTools_v1.4.6_macOS_universal_portable_intermediate.zip",
+          "sha256": "548865d7e762ac5863cbc49027b5a0ec5b07602f6f51601c7170e54f3bb4dc1b",
+          "packageType": "zip",
+          "bundleName": "LookDevTools.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookDevTools",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.4.6/LookDevTools_v1.4.6_windows_cuda_portable_intermediate.zip",
+          "sha256": "b4f8559aca26f352b4ea9aa9261593c65bd4747054511c3a9802507e1ad27f7d",
+          "packageType": "zip",
+          "bundleName": "LookDevTools.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookDevTools",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v1.4.6/LookDevTools_v1.4.6_linux_cuda_portable_intermediate.zip",
+          "sha256": "e1624c6f1762ee862f9b6e662f197f5b645d1303206dbb17831807dbee315ebe",
+          "packageType": "zip",
+          "bundleName": "LookDevTools.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookDevTools",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
     {
       "version": "1.4.5",
       "releaseDate": "2026-06-25T21:23:12Z",

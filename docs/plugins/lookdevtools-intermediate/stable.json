@@ -15,16 +15,16 @@
     "log"
   ],
   "infoUrl": null,
-  "version": "2.0.0",
-  "releaseDate": "2026-09-09T20:41:53Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/tag/v2.0.0",
-  "releaseHighlights": "- New node: S1 Balance. Lift, gamma, gain, offset and saturation, per channel and master, applied in linear light under the look. Neutral defaults are a bitwise pass through.\n- New node: T1000 Timeline Agent. A pass-through timeline node that lets a controlling Claude session see the frame the viewer is showing.\n- Every node in the suite can now be driven from a Claude session through a file based control channel. The wiring guide and the grading playbook ship inside the bundle.\n- Two builds per platform: the standard build defaults every node to a Linear working space, the _intermediate build defaults to DaVinci Intermediate.\n- All nine nodes now carry their own artwork in the Resolve effect list, including the new S1 Balance and T1000 Timeline Agent icons.\n- Suite and the free standalone OpenDRT now co-install without crashing Resolve at startup.",
+  "version": "2.0.1",
+  "releaseDate": "2026-09-09T21:06:29Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/tag/v2.0.1",
+  "releaseHighlights": "- S1 Balance: the Master group now sits at the top of the panel, and every group runs Gain, Gamma, Lift, Offset.\n- S1 Balance: the saturation slider is gone. Saturation belongs in the look, so use 2D Hue Saturation Pro above it.\n- Everything from v2.0.0 is included: S1 Balance, T1000 Timeline Agent, the Claude control channel, effect list icons, Linear and Intermediate builds per platform.",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v2.0.0/LookDevTools_v2.0.0_macOS_universal_portable_intermediate.zip",
-      "sha256": "0a9bbd375456489fe188502b5ade5e05650d61621a4b75f3a2b26ab4597dcfb1",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v2.0.1/LookDevTools_v2.0.1_macOS_universal_portable_intermediate.zip",
+      "sha256": "208cd456eb0b616143d743aff6908f257b02f7a7ae66ac306041a0c7649d7e16",
       "packageType": "zip",
       "bundleName": "LookDevTools.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookDevTools",
@@ -45,8 +45,8 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v2.0.0/LookDevTools_v2.0.0_windows_cuda_portable_intermediate.zip",
-      "sha256": "913ff570068f75511f4a2aa3b712785045737dbea88c79fc576295e8e6fd889f",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v2.0.1/LookDevTools_v2.0.1_windows_cuda_portable_intermediate.zip",
+      "sha256": "9a92a2e2eda6f4298424267b1388e5a60652b10b581bffd7f3bd54e9714c8008",
       "packageType": "zip",
       "bundleName": "LookDevTools.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookDevTools",
@@ -67,8 +67,8 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v2.0.0/LookDevTools_v2.0.0_linux_cuda_portable_intermediate.zip",
-      "sha256": "c140f42c290a6c19d8d4bc8a3e0c24873ff510f528a4d6525641989ca159239b",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v2.0.1/LookDevTools_v2.0.1_linux_cuda_portable_intermediate.zip",
+      "sha256": "4ac62373d4316e72235dd37d99726b69bbca34a5e38d72899d457d25d9f1afcb",
       "packageType": "zip",
       "bundleName": "LookDevTools.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookDevTools",
@@ -88,6 +88,80 @@
     }
   ],
   "availableVersions": [
+    {
+      "version": "2.0.0",
+      "releaseDate": "2026-09-09T20:41:53Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/tag/v2.0.0",
+      "releaseHighlights": "- New node: S1 Balance. Lift, gamma, gain, offset and saturation, per channel and master, applied in linear light under the look. Neutral defaults are a bitwise pass through.\n- New node: T1000 Timeline Agent. A pass-through timeline node that lets a controlling Claude session see the frame the viewer is showing.\n- Every node in the suite can now be driven from a Claude session through a file based control channel. The wiring guide and the grading playbook ship inside the bundle.\n- Two builds per platform: the standard build defaults every node to a Linear working space, the _intermediate build defaults to DaVinci Intermediate.\n- All nine nodes now carry their own artwork in the Resolve effect list, including the new S1 Balance and T1000 Timeline Agent icons.\n- Suite and the free standalone OpenDRT now co-install without crashing Resolve at startup.",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v2.0.0/LookDevTools_v2.0.0_macOS_universal_portable_intermediate.zip",
+          "sha256": "0a9bbd375456489fe188502b5ade5e05650d61621a4b75f3a2b26ab4597dcfb1",
+          "packageType": "zip",
+          "bundleName": "LookDevTools.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookDevTools",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v2.0.0/LookDevTools_v2.0.0_windows_cuda_portable_intermediate.zip",
+          "sha256": "913ff570068f75511f4a2aa3b712785045737dbea88c79fc576295e8e6fd889f",
+          "packageType": "zip",
+          "bundleName": "LookDevTools.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookDevTools",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v2.0.0/LookDevTools_v2.0.0_linux_cuda_portable_intermediate.zip",
+          "sha256": "c140f42c290a6c19d8d4bc8a3e0c24873ff510f528a4d6525641989ca159239b",
+          "packageType": "zip",
+          "bundleName": "LookDevTools.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookDevTools",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
     {
       "version": "1.5.0",
       "releaseDate": "2026-09-09T20:14:34Z",

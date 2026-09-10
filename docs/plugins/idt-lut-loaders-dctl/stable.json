@@ -6,15 +6,15 @@
   "licenseTier": null,
   "tags": [],
   "infoUrl": null,
-  "version": "1.1",
-  "releaseDate": "2026-07-18T17:50:02Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/IDT-Lut-Loaders-DCTL/releases/tag/v1.1",
+  "version": "1.2",
+  "releaseDate": "2026-09-10T01:42:17Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/IDT-Lut-Loaders-DCTL/releases/tag/v1.2",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://github.com/Dec18studios/IDT-Lut-Loaders-DCTL/releases/download/v1.1/IDT-Lut-Loaders-DCTL-v1.1.zip",
-      "sha256": "d65636e6ef0ef46b9fefb7d4d3e0df3930e1f6a1351d24aa9d0b950367cd7504",
+      "downloadUrl": "https://github.com/Dec18studios/IDT-Lut-Loaders-DCTL/releases/download/v1.2/IDT-Lut-Loaders-DCTL-v1.2.zip",
+      "sha256": "9c895759cae9d99601448d4f169d65f01e77424fda0cbe6383f3fc9b96cc57fa",
       "packageType": "zip",
       "bundleName": "IDT Lut Loaders.dctle",
       "bundleIdentifier": "com.dec18studios.idt-lut-loaders-dctl",
@@ -29,8 +29,8 @@
     {
       "platform": "windows",
       "arch": "universal",
-      "downloadUrl": "https://github.com/Dec18studios/IDT-Lut-Loaders-DCTL/releases/download/v1.1/IDT-Lut-Loaders-DCTL-v1.1.zip",
-      "sha256": "d65636e6ef0ef46b9fefb7d4d3e0df3930e1f6a1351d24aa9d0b950367cd7504",
+      "downloadUrl": "https://github.com/Dec18studios/IDT-Lut-Loaders-DCTL/releases/download/v1.2/IDT-Lut-Loaders-DCTL-v1.2.zip",
+      "sha256": "9c895759cae9d99601448d4f169d65f01e77424fda0cbe6383f3fc9b96cc57fa",
       "packageType": "zip",
       "bundleName": "IDT Lut Loaders.dctle",
       "bundleIdentifier": "com.dec18studios.idt-lut-loaders-dctl",
@@ -45,8 +45,8 @@
     {
       "platform": "linux",
       "arch": "universal",
-      "downloadUrl": "https://github.com/Dec18studios/IDT-Lut-Loaders-DCTL/releases/download/v1.1/IDT-Lut-Loaders-DCTL-v1.1.zip",
-      "sha256": "d65636e6ef0ef46b9fefb7d4d3e0df3930e1f6a1351d24aa9d0b950367cd7504",
+      "downloadUrl": "https://github.com/Dec18studios/IDT-Lut-Loaders-DCTL/releases/download/v1.2/IDT-Lut-Loaders-DCTL-v1.2.zip",
+      "sha256": "9c895759cae9d99601448d4f169d65f01e77424fda0cbe6383f3fc9b96cc57fa",
       "packageType": "zip",
       "bundleName": "IDT Lut Loaders.dctle",
       "bundleIdentifier": "com.dec18studios.idt-lut-loaders-dctl",
@@ -60,6 +60,61 @@
     }
   ],
   "availableVersions": [
+    {
+      "version": "1.1",
+      "releaseDate": "2026-07-18T17:50:02Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/IDT-Lut-Loaders-DCTL/releases/tag/v1.1",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://github.com/Dec18studios/IDT-Lut-Loaders-DCTL/releases/download/v1.1/IDT-Lut-Loaders-DCTL-v1.1.zip",
+          "sha256": "d65636e6ef0ef46b9fefb7d4d3e0df3930e1f6a1351d24aa9d0b950367cd7504",
+          "packageType": "zip",
+          "bundleName": "IDT Lut Loaders.dctle",
+          "bundleIdentifier": "com.dec18studios.idt-lut-loaders-dctl",
+          "installPath": "/Library/Application Support/Blackmagic Design/DaVinci Resolve/LUT/DCTL",
+          "installMode": "file-browse",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "universal",
+          "downloadUrl": "https://github.com/Dec18studios/IDT-Lut-Loaders-DCTL/releases/download/v1.1/IDT-Lut-Loaders-DCTL-v1.1.zip",
+          "sha256": "d65636e6ef0ef46b9fefb7d4d3e0df3930e1f6a1351d24aa9d0b950367cd7504",
+          "packageType": "zip",
+          "bundleName": "IDT Lut Loaders.dctle",
+          "bundleIdentifier": "com.dec18studios.idt-lut-loaders-dctl",
+          "installPath": "C:\\ProgramData\\Blackmagic Design\\DaVinci Resolve\\Support\\LUT\\DCTL",
+          "installMode": "file-browse",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "universal",
+          "downloadUrl": "https://github.com/Dec18studios/IDT-Lut-Loaders-DCTL/releases/download/v1.1/IDT-Lut-Loaders-DCTL-v1.1.zip",
+          "sha256": "d65636e6ef0ef46b9fefb7d4d3e0df3930e1f6a1351d24aa9d0b950367cd7504",
+          "packageType": "zip",
+          "bundleName": "IDT Lut Loaders.dctle",
+          "bundleIdentifier": "com.dec18studios.idt-lut-loaders-dctl",
+          "installPath": "/opt/resolve/LUT/DCTL",
+          "installMode": "file-browse",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve"
+          ]
+        }
+      ]
+    },
     {
       "version": "1.0",
       "releaseDate": "2026-06-13T23:30:17Z",

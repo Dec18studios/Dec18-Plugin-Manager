@@ -12,17 +12,17 @@
     "OFX"
   ],
   "infoUrl": "https://dec18studios.com/photochemist",
-  "version": "3.0.2",
-  "releaseDate": "2026-09-12T02:36:45Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.0.2",
+  "version": "3.0.3",
+  "releaseDate": "2026-09-12T23:36:33Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.0.3",
   "demoVersion": "3.0.0",
-  "releaseHighlights": "- New Input Primaries dropdown (Input/Output Config): feed camera-native\n  linear footage in ARRI Wide Gamut 3, DaVinci Wide Gamut, Sony\n  S-Gamut3, or ACES AP0 without an upstream gamut conversion. Classic\n  keeps the original Rec.709 path bit for bit.\n- New ARRI LogC3 input mode decodes LogC3 (EI 800) camera footage\n  directly, everywhere the DaVinci Intermediate decode applied,\n  including LUT export.\n- Fresh instances now start on 65mm grain: the Grain Format dropdown and\n  every grain value default to the 65mm gauge, so the values and the\n  label agree from the first frame. Grain itself still starts unchecked.\n- Theater Screen Sim now lives with the projector Light Controls and\n  defaults to 0.010 with a floor of 0.\n- Film Stock Editor opens in Single View showing the Negative Dye page\n  (Print Dye in Print Only mode), and the Textures Editor opens in\n  Single View, for a cleaner first look.\n- Tidier inspector: the Quick Textures block sits below Film\n  Development, the Negative and Print preset groups start closed, and\n  the retired Balanced Modern and Legacy Default full presets are\n  labeled \"(Retired)\" but remain selectable for older grades.\n- Naming cleanup: beta labels are gone from the plugin, the demo, and\n  the bundled companion node, which is now called Printer Light Control\n  Node.",
+  "releaseHighlights": "- Demo now renders clean with no watermark\n- Demo film stock and projector looks are preset driven: the Negative, Print, and Full presets all work, while the individual sensitivity, dye, and curve dropdowns are visible but locked\n- Demo shows the Enhanced development, printer calibration, and projector light controls greyed out so you can see what the full version unlocks\n- Demo hides Film Motion, Alternate Models, Preset Manager, and LUT Export; the Film Stock and Texture editor buttons no longer open the editors\n- New Purchase Full Plugin and Learn more in Discord buttons at the top of the demo controls",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.2/PhotoChemist3Beta-macOS.zip",
-      "sha256": "c077808c36340a3fbecd9367bbf951e8e789c8144d9ff61062a74fc640fb412f",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.3/PhotoChemist3Beta-macOS.zip",
+      "sha256": "a6ee49f31086cf1bdf5ed57311265440b00d9c9a1d5041cbb4fe27a1de0d1048",
       "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.0.0/PhotoChemistDemo_macOS_universal_portable.zip",
       "demoSha256": "3d3a312506c7da80166bd01595c68ee953083f7462fbf2a19b7ce181e7b83e4d",
       "packageType": "zip",
@@ -45,8 +45,8 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.2/PhotoChemist3Beta-windows-cuda.zip",
-      "sha256": "c81127219ec53c66b65f166af660e0ed4b42aebb8438d4153341c54b1246974e",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.3/PhotoChemist3Beta-windows-cuda.zip",
+      "sha256": "2abce49ebfaa98046608f7dd12affbbd48ba9a4f1abb75e042f31de76501be8a",
       "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.0.0/PhotoChemistDemo_windows_cuda_portable.zip",
       "demoSha256": "40f679e60fe4ff573c787fa80e9243c34fe72be5c23c8f5d8bb00fc652cc7fff",
       "packageType": "zip",
@@ -69,8 +69,8 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.2/PhotoChemist3Beta-linux-cuda.zip",
-      "sha256": "72e7d4c575062b4e2dbc62543a81f84692819c33d79e28533bd49b2a4a61e390",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.3/PhotoChemist3Beta-linux-cuda.zip",
+      "sha256": "2445242203fc9b2a5b920c63281054091f05862bc06c3ae81a7b34e714d640ee",
       "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.0.0/PhotoChemistDemo_linux_cuda_portable.zip",
       "demoSha256": "a3eb461b266519a3d271523bf7905eb143bcff99a14e9b8bcee630e8c337838c",
       "packageType": "zip",
@@ -92,6 +92,80 @@
     }
   ],
   "availableVersions": [
+    {
+      "version": "3.0.2",
+      "releaseDate": "2026-09-12T02:36:45Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.0.2",
+      "releaseHighlights": "- New Input Primaries dropdown (Input/Output Config): feed camera-native\n  linear footage in ARRI Wide Gamut 3, DaVinci Wide Gamut, Sony\n  S-Gamut3, or ACES AP0 without an upstream gamut conversion. Classic\n  keeps the original Rec.709 path bit for bit.\n- New ARRI LogC3 input mode decodes LogC3 (EI 800) camera footage\n  directly, everywhere the DaVinci Intermediate decode applied,\n  including LUT export.\n- Fresh instances now start on 65mm grain: the Grain Format dropdown and\n  every grain value default to the 65mm gauge, so the values and the\n  label agree from the first frame. Grain itself still starts unchecked.\n- Theater Screen Sim now lives with the projector Light Controls and\n  defaults to 0.010 with a floor of 0.\n- Film Stock Editor opens in Single View showing the Negative Dye page\n  (Print Dye in Print Only mode), and the Textures Editor opens in\n  Single View, for a cleaner first look.\n- Tidier inspector: the Quick Textures block sits below Film\n  Development, the Negative and Print preset groups start closed, and\n  the retired Balanced Modern and Legacy Default full presets are\n  labeled \"(Retired)\" but remain selectable for older grades.\n- Naming cleanup: beta labels are gone from the plugin, the demo, and\n  the bundled companion node, which is now called Printer Light Control\n  Node.",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.2/PhotoChemist3Beta-macOS.zip",
+          "sha256": "c077808c36340a3fbecd9367bbf951e8e789c8144d9ff61062a74fc640fb412f",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.2/PhotoChemist3Beta-windows-cuda.zip",
+          "sha256": "c81127219ec53c66b65f166af660e0ed4b42aebb8438d4153341c54b1246974e",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.2/PhotoChemist3Beta-linux-cuda.zip",
+          "sha256": "72e7d4c575062b4e2dbc62543a81f84692819c33d79e28533bd49b2a4a61e390",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
     {
       "version": "3.0.1",
       "releaseDate": "2026-09-09T23:57:21Z",

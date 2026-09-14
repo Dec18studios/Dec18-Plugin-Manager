@@ -149,7 +149,7 @@ fn build_plugin_status(
     let demo_available = package.demo_download_url.is_some();
     // The artifact currently on disk is the demo build. The version-comparison machinery
     // below would otherwise read the demo's higher version line as "Beta installed" or
-    // "Catalog behind"; demo installs short-circuit those into a clean "Demo installed".
+    // "Catalog behind"; demo installs short-circuit those into a clean "Lite installed".
     let demo_installed = installed
         && (stamp.as_ref().map(|item| item.is_demo).unwrap_or(false)
             || record.map(|item| item.is_demo).unwrap_or(false));
@@ -184,7 +184,7 @@ fn build_plugin_status(
     let status = if !installed {
         "Ready to install".to_string()
     } else if demo_installed {
-        "Demo installed".to_string()
+        "Lite installed".to_string()
     } else if !managed_install {
         "Unmanaged install".to_string()
     } else if channel_switch_mode.as_deref() == Some("stable_update_available") {

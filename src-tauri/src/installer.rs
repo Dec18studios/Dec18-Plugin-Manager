@@ -172,12 +172,12 @@ fn apply_demo_override(resolved: &mut crate::models::ResolvedPlugin) -> Result<(
         .package
         .demo_download_url
         .clone()
-        .ok_or_else(|| anyhow!("A demo build is not available for this plugin."))?;
+        .ok_or_else(|| anyhow!("A Lite build is not available for this plugin."))?;
     let demo_sha = resolved
         .package
         .demo_sha256
         .clone()
-        .ok_or_else(|| anyhow!("The demo build for this plugin is missing its checksum."))?;
+        .ok_or_else(|| anyhow!("The Lite build for this plugin is missing its checksum."))?;
     resolved.package.download_url = demo_url;
     resolved.package.sha256 = demo_sha;
     if let Some(demo_version) = resolved.manifest.demo_version.clone() {

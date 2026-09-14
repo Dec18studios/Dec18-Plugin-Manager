@@ -335,7 +335,7 @@ function closeReleaseHighlightsDialog() {
 }
 
 function statusClass(status) {
-  if (status === "Installed" || status === "Up to date" || status === "Demo installed") return "ok";
+  if (status === "Installed" || status === "Up to date" || status === "Lite installed") return "ok";
   if (
     status === "Update available" ||
     status === "Stable available" ||
@@ -357,8 +357,8 @@ function canInstallDemo(plugin) {
 function actionLabel(plugin) {
   // A demo is on disk and the user is now licensed → offer the full build.
   if (plugin.demoInstalled && isLicensed()) return "Upgrade to Full";
-  if (!plugin.installed) return canInstallDemo(plugin) ? "Install Demo" : "Install";
-  if (plugin.demoInstalled) return "Reinstall Demo";
+  if (!plugin.installed) return canInstallDemo(plugin) ? "Install Lite" : "Install";
+  if (plugin.demoInstalled) return "Reinstall Lite";
   if (plugin.channelSwitchMode === "stable_update_available") return "Update to stable";
   if (plugin.channelSwitchMode === "return_to_stable") return "Install stable";
   if (plugin.catalogBehindInstalled) return "Reinstall";
@@ -782,7 +782,7 @@ function renderPlugins() {
           ${plugin.licenseTier === "free"
             ? `<span class="license-tier-pill free">Free</span>`
             : canInstallDemo(plugin)
-              ? `<span class="license-tier-pill subscription" title="Install a watermarked demo now; sign in to unlock the full build">Demo</span>`
+              ? `<span class="license-tier-pill subscription" title="Install the free Lite edition now; sign in to unlock the full build">Lite</span>`
               : `<span class="license-tier-pill subscription">License</span>`}
           </div>
         </div>

@@ -50,7 +50,7 @@ pub struct PluginStatus {
     pub license_tier: String,
     pub install_mode: String,
     /// The current platform package ships a public demo build, so an unlicensed user
-    /// can install it (the frontend relabels the button "Install Demo").
+    /// can install it (the frontend relabels the button "Install Lite").
     pub demo_available: bool,
     /// The currently installed artifact is the demo build (vs. the full licensed build).
     pub demo_installed: bool,
@@ -191,7 +191,7 @@ pub struct InstallRecord {
     #[serde(default)]
     pub installed_paths: Vec<String>,
     /// True when the installed artifact is the public demo build rather than the
-    /// licensed full build. Drives the "Demo installed" status and the upgrade prompt.
+    /// licensed full build. Drives the "Lite installed" status and the upgrade prompt.
     #[serde(default)]
     pub is_demo: bool,
 }

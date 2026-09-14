@@ -12,19 +12,19 @@
     "OFX"
   ],
   "infoUrl": "https://dec18studios.com/photochemist",
-  "version": "3.0.3",
-  "releaseDate": "2026-09-12T23:36:33Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.0.3",
-  "demoVersion": "3.0.3",
-  "releaseHighlights": "- Demo now renders clean with no watermark\n- Demo film stock and projector looks are preset driven: the Negative, Print, and Full presets all work, while the individual sensitivity, dye, and curve dropdowns are visible but locked\n- Demo shows the Enhanced development, printer calibration, and projector light controls greyed out so you can see what the full version unlocks\n- Demo hides Film Motion, Alternate Models, Preset Manager, and LUT Export; the Film Stock and Texture editor buttons no longer open the editors\n- New Purchase Full Plugin and Learn more in Discord buttons at the top of the demo controls",
+  "version": "3.0.4",
+  "releaseDate": "2026-09-14T19:31:43Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.0.4",
+  "demoVersion": "3.0.4",
+  "releaseHighlights": "- Grain Amount slider now travels 0 to 3 so the useful fine grain zone fills the whole track; type a value into the readout for more, up to 15\n- Every slider value readout in the Texture editor is now directly typeable: click the number, type, press Enter. Escape reverts, and Cmd+Click type in still works\n- Input Condition group is now Scene Adjustments (Pre Film Sim), and the rescaler pair is now Input Range and Target Range with hints explaining they act as a contrast ratio pair\n- Preset labels now use real film stock names throughout: Vision3, Vision2, Vision, Eastman, EXR, Kodak, and Fuji replace the old placeholder names. The default Full Preset is now labeled Kodak Cine\n- The free edition is renamed from Demo to Lite and unlocks the individual negative and print stock dropdowns plus the Film Stock Editor, alongside the full preset library",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.3/PhotoChemist3Beta-macOS.zip",
-      "sha256": "a6ee49f31086cf1bdf5ed57311265440b00d9c9a1d5041cbb4fe27a1de0d1048",
-      "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.0.3/PhotoChemistDemo_macOS_universal_portable.zip",
-      "demoSha256": "3687c3594e6f305ef937bc73c5c3f38360d781af711a87b1d66be5b36e888408",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.4/PhotoChemist3Beta-macOS.zip",
+      "sha256": "e3bb857f213e470dcdb0fc192a1baa2102384f1eed5d8cf722f679e04a5dba99",
+      "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.0.4/PhotoChemistDemo_macOS_universal_portable.zip",
+      "demoSha256": "1c055c9b4dae09d06f6780e6aa2252a2274c4327b9fbf3dfc96d49f58b8bdeac",
       "packageType": "zip",
       "bundleName": "PhotoChemist3Beta.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
@@ -45,10 +45,10 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.3/PhotoChemist3Beta-windows-cuda.zip",
-      "sha256": "2abce49ebfaa98046608f7dd12affbbd48ba9a4f1abb75e042f31de76501be8a",
-      "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.0.3/PhotoChemistDemo_windows_cuda_portable.zip",
-      "demoSha256": "0692a89c1bc75af754bf16605dcd7e2c0d2b7b9721546c75bd2d2188a910e8da",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.4/PhotoChemist3Beta-windows-cuda.zip",
+      "sha256": "f452588d27f839295e8dc39966e156f85c94543c17ad915a810725f259d00656",
+      "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.0.4/PhotoChemistDemo_windows_cuda_portable.zip",
+      "demoSha256": "ea76345f83c99922195a2803fd82c3e91ff28e5c513410b6e9a0b0933f544b81",
       "packageType": "zip",
       "bundleName": "PhotoChemist3Beta.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
@@ -69,10 +69,10 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.3/PhotoChemist3Beta-linux-cuda.zip",
-      "sha256": "2445242203fc9b2a5b920c63281054091f05862bc06c3ae81a7b34e714d640ee",
-      "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.0.3/PhotoChemistDemo_linux_cuda_portable.zip",
-      "demoSha256": "5c51cfda43501c700d28d17f6aa933762bf80a8000db926152b633eb283692e7",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.4/PhotoChemist3Beta-linux-cuda.zip",
+      "sha256": "5be31547ef317b75a54d95b551fc9073662481b149919c2e2aebe6bb9783c25f",
+      "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.0.4/PhotoChemistDemo_linux_cuda_portable.zip",
+      "demoSha256": "4b02c2f068087aacc012b3e89ea23564cb9853314747bbf9d9e2f9d0a6be26eb",
       "packageType": "zip",
       "bundleName": "PhotoChemist3Beta.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
@@ -92,6 +92,80 @@
     }
   ],
   "availableVersions": [
+    {
+      "version": "3.0.3",
+      "releaseDate": "2026-09-12T23:36:33Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.0.3",
+      "releaseHighlights": "- Demo now renders clean with no watermark\n- Demo film stock and projector looks are preset driven: the Negative, Print, and Full presets all work, while the individual sensitivity, dye, and curve dropdowns are visible but locked\n- Demo shows the Enhanced development, printer calibration, and projector light controls greyed out so you can see what the full version unlocks\n- Demo hides Film Motion, Alternate Models, Preset Manager, and LUT Export; the Film Stock and Texture editor buttons no longer open the editors\n- New Purchase Full Plugin and Learn more in Discord buttons at the top of the demo controls",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.3/PhotoChemist3Beta-macOS.zip",
+          "sha256": "a6ee49f31086cf1bdf5ed57311265440b00d9c9a1d5041cbb4fe27a1de0d1048",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.3/PhotoChemist3Beta-windows-cuda.zip",
+          "sha256": "2abce49ebfaa98046608f7dd12affbbd48ba9a4f1abb75e042f31de76501be8a",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.0.3/PhotoChemist3Beta-linux-cuda.zip",
+          "sha256": "2445242203fc9b2a5b920c63281054091f05862bc06c3ae81a7b34e714d640ee",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
     {
       "version": "3.0.2",
       "releaseDate": "2026-09-12T02:36:45Z",

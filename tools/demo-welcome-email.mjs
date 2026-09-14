@@ -2,8 +2,9 @@
 /*
  * demo-welcome-email.mjs
  *
- * Sends the one-time "thanks for trying the demo" email to PhotoChemist-demo
- * downloaders captured by the dec18-download-logger Worker.
+ * Sends the one-time "thanks for trying PhotoChemist Lite" email to downloaders
+ * of the free edition captured by the dec18-download-logger Worker. The edition
+ * was renamed Demo to Lite in 3.0.3; the slug, repo and zip names keep "demo".
  *
  * Data AND state live in the logger's D1 database (dec18-downloads.downloads) —
  * nothing is written to the repo, because this repo is public and the rows are
@@ -112,7 +113,7 @@ const SITE = "https://tools.dec18studios.com/color-grading-tools/photochemist";
 // must come back with "expires_at": null.
 const DISCORD_URL = "https://discord.gg/rvY88mZJPR";
 
-const SUBJECT = "Thanks for taking PhotoChemist for a spin";
+const SUBJECT = "Thanks for taking PhotoChemist Lite for a spin";
 
 function emailHTML({ unsub }) {
   return `<!DOCTYPE html>
@@ -121,7 +122,7 @@ function emailHTML({ unsub }) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Thanks for Downloading PhotoChemist</title>
+<title>Thanks for Downloading PhotoChemist Lite</title>
 <!--[if mso]>
 <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
 <![endif]-->
@@ -163,13 +164,16 @@ function emailHTML({ unsub }) {
         <tr>
           <td style="background-color:#1a1f26; border-radius:12px 12px 0 0; padding:40px 40px 8px 40px;" class="px">
             <h1 class="h1" style="margin:0 0 16px 0; font-family:Georgia, 'Times New Roman', serif; font-size:30px; line-height:38px; color:#f4f1ea; font-weight:normal;">
-              Thanks for taking PhotoChemist for a spin
+              Thanks for taking PhotoChemist Lite for a spin
             </h1>
             <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
               Hi there!
             </p>
             <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
-              You grabbed the PhotoChemist demo recently, and thank you for that. It means a lot every time someone gives these tools a shot.
+              You grabbed PhotoChemist Lite recently, and thank you for that. It means a lot every time someone gives these tools a shot.
+            </p>
+            <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
+              Lite is the free edition, and it&rsquo;s yours to keep. <strong style="color:#f4f1ea;">No watermark</strong>, so it renders clean on real work. You pick your film stock and projector from presets, and a few of the deep controls (like the Film Stock Editor) are saved for the full version.
             </p>
             <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
               What you&rsquo;ve got is, I believe, the most honest film simulator on the market. PhotoChemist doesn&rsquo;t chase the look with filters. It models the physics of film with math, from the light hitting the negative to the print on the projector.
@@ -267,7 +271,7 @@ function emailHTML({ unsub }) {
             <p style="margin:0 0 6px 0; font-family:Arial, Helvetica, sans-serif; font-size:11px; letter-spacing:2px; color:#d9a441; text-transform:uppercase;">When You&rsquo;re Ready</p>
             <h2 style="margin:0 0 10px 0; font-family:Georgia, 'Times New Roman', serif; font-size:22px; line-height:28px; color:#f4f1ea; font-weight:normal;">The whole Tool Box is $47.34. That&rsquo;s it.</h2>
             <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
-              If the demo wins you over, $47.34 doesn&rsquo;t just unlock PhotoChemist. It gets you <strong style="color:#f4f1ea;">every premium DCTL and OFX plugin</strong> in the Tool Box, plus a full year of updates, new tools, and actual human support. No tiers, no upsells.
+              If Lite wins you over, $47.34 doesn&rsquo;t just unlock PhotoChemist. It gets you <strong style="color:#f4f1ea;">every premium DCTL and OFX plugin</strong> in the Tool Box, plus a full year of updates, new tools, and actual human support. No tiers, no upsells.
             </p>
             <p style="margin:0 0 20px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;">
               And it&rsquo;s not a subscription trap: your tools keep working even if you never renew, and the rate you join at locks in forever, even if you step away for a year or two and come back.
@@ -283,7 +287,7 @@ function emailHTML({ unsub }) {
               Want the fine print? <a href="https://tools.dec18studios.com/color-grading-tools/pricing/" target="_blank" style="color:#8a9099; text-decoration:underline;">How the pricing works &rarr;</a>
             </p>
             <p style="margin:0 0 8px 0; font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:20px; color:#8a9099;">
-              No pressure. The demo is yours either way. But if PhotoChemist ends up in your node tree every day, this is how you keep it there.
+              No pressure. Lite is yours either way. But if PhotoChemist ends up in your node tree every day, this is how you keep it there.
             </p>
           </td>
         </tr>
@@ -306,7 +310,7 @@ function emailHTML({ unsub }) {
               Dec. 18 Studios &bull; <a href="https://dec18studios.com" style="color:#8a9099; text-decoration:underline;">dec18studios.com</a>
             </p>
             <p style="margin:0 0 8px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:18px; color:#6b727c;">
-              You&rsquo;re receiving this because you downloaded the PhotoChemist demo.
+              You&rsquo;re receiving this because you downloaded PhotoChemist Lite.
             </p>
             <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:18px; color:#6b727c;">
               <a href="${unsub}" style="color:#8a9099; text-decoration:underline;">Unsubscribe</a>

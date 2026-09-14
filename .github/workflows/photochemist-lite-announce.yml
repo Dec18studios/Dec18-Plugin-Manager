@@ -1,0 +1,57 @@
+name: PhotoChemist Lite Announcement
+
+# One-off "the watermark is gone" email to people who downloaded the
+# watermarked PhotoChemist demo (last download before the v3.0.3 release).
+# Manual dispatch ONLY, no schedule. State lives in the download-logger D1
+# (downloads.lite_announce_sent), so re-running never emails anyone twice.
+#
+#   mode=dry-run    → list masked recipients, send nothing   (default)
+#   mode=send       → real send, up to max_sends this run
+#   test_email=addr → send ONE rendered sample to addr, mark nothing
+#
+# Brevo's free tier is 300/day, shared with the hourly demo welcome, licence
+# and OTP mail, so a list bigger than max_sends goes out over separate days.
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "dry-run = list only; send = real emails"
+        type: choice
+        options: [dry-run, send]
+        default: dry-run
+      test_email:
+        description: "Send ONE sample email to this address (no marking); overrides mode"
+        required: false
+        default: ""
+      max_sends:
+        description: "Cap for this run"
+        required: false
+        default: "100"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: photochemist-lite-announce
+  cancel-in-progress: false
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Send PhotoChemist Lite announcement
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          DOWNLOAD_LOGGER_SECRET: ${{ secrets.DOWNLOAD_LOGGER_SECRET }}
+          DRY_RUN: ${{ (inputs.mode != 'send' && inputs.test_email == '') && '1' || '' }}
+          TEST_EMAIL: ${{ inputs.test_email }}
+          MAX_SENDS: ${{ inputs.max_sends }}
+        run: node tools/photochemist-lite-announce.mjs

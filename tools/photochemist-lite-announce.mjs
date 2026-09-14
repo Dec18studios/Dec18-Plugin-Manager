@@ -2,35 +2,46 @@
 /*
  * photochemist-lite-announce.mjs
  *
- * One-off announcement to people who downloaded the watermarked PhotoChemist
- * demo: as of 3.0.3 the free edition is PhotoChemist Lite and renders clean,
- * with no watermark. Never runs on a schedule; a human dispatches every send.
+ * One-off announcement to EVERY free-tool downloader (all slugs in the
+ * download-logger), one email per person: PhotoChemist 3.0 has a free Lite
+ * edition that renders clean, with no watermark. Never runs on a schedule; a
+ * human dispatches every send.
  *
  * Same data source and conventions as demo-welcome-email.mjs. Data AND state
  * live in the download-logger D1 (dec18-downloads.downloads), never in this
  * public repo, because the rows are customer email addresses.
  *
- *   eligible  = tool_slug = SLUG AND unsubscribed = 0
- *               AND COALESCE(welcome_sent,0) <> 2        (known undeliverable)
- *               AND COALESCE(lite_announce_sent,0) = 0   (not already told)
- *               AND last_downloaded < BEFORE             (only had a watermarked build)
- *   per row   → Brevo transactional send, tag "photochemist-lite-announce"
- *   success   → UPDATE lite_announce_sent = 1 (2 = undeliverable, never retried)
+ * Rows are per (email, tool), so everything is aggregated per email:
  *
- * Marking is per row, so a run can be repeated safely: nobody gets it twice,
- * and a capped run just leaves the rest for the next dispatch.
+ *   eligible  = no row unsubscribed                    (opting out of ANY tool counts)
+ *               AND no row welcome_sent = 2            (known undeliverable)
+ *               AND no row lite_announce_sent <> 0     (not already told, or retired)
+ *               AND no PC_SLUG row downloaded >= BEFORE (those already have Lite and
+ *                                                        got the Lite welcome email)
+ *   variant   = "demo" if they have a PC_SLUG row (so they had the watermarked
+ *               build), else "general" (never downloaded PhotoChemist)
+ *   per email → Brevo transactional send, tag "photochemist-lite-announce"
+ *   success   → UPDATE lite_announce_sent = 1 on ALL of that email's rows
+ *               (2 = undeliverable, never retried)
+ *
+ * The unsubscribe link uses the PC_SLUG row when there is one, else the
+ * person's first tool. The Worker opts out that one (email, tool) row, which
+ * is enough to keep them out of any rerun of this script.
  *
  * Env:
  *   CLOUDFLARE_API_TOKEN    required (wrangler d1 execute, run from tools/download-logger)
  *   BREVO_API_KEY           required for live sends
  *   DOWNLOAD_LOGGER_SECRET  required to send; the Worker's ADMIN_SECRET, for unsubscribe links
  *   DRY_RUN=1               list masked recipients, send nothing, mark nothing
- *   TEST_EMAIL=addr         send ONE rendered sample to addr, mark nothing
- *   RENDER_TO=path          write the HTML (placeholder unsubscribe link) to path and exit
- *   SLUG                    default "photochemist-demo"
- *   BEFORE                  ISO cutoff, default the v3.0.3 release (first unwatermarked build)
- *   MAX_SENDS               per-run cap, default 100 (Brevo free tier is 300/day,
- *                           shared with the hourly welcome, licence and OTP mail)
+ *   TEST_EMAIL=addr         send BOTH variants to addr (two emails), mark nothing
+ *   RENDER_TO=path          write the general HTML to path and the demo variant to
+ *                           path with ".demo" before the extension (placeholder
+ *                           unsubscribe link), then exit
+ *   BEFORE                  ISO cutoff, default the v3.0.3 release (first unwatermarked
+ *                           build); set BEFORE=none to include recent Lite downloaders
+ *   MAX_SENDS               per-run cap, default 100. Brevo free tier is 300/day, shared
+ *                           with the hourly welcome, licence and OTP mail, so ~560 people
+ *                           go out over three days at 200 a dispatch.
  */
 
 import { createHash } from "node:crypto";
@@ -50,9 +61,10 @@ const D1_NAME = "dec18-downloads";
 const DRY_RUN = process.env.DRY_RUN === "1";
 const TEST_EMAIL = (process.env.TEST_EMAIL || "").trim();
 const RENDER_TO = (process.env.RENDER_TO || "").trim();
-const SLUG = (process.env.SLUG || "photochemist-demo").trim();
+const PC_SLUG = "photochemist-demo";
 // PhotoChemist-Demo v3.0.3 published_at: the first build with no watermark.
-const BEFORE = (process.env.BEFORE || "2026-09-12T23:37:01Z").trim();
+const BEFORE_RAW = (process.env.BEFORE || "2026-09-12T23:37:01Z").trim();
+const BEFORE = BEFORE_RAW.toLowerCase() === "none" ? "" : BEFORE_RAW;
 const MAX_SENDS = Number(process.env.MAX_SENDS || "100");
 const TAG = "photochemist-lite-announce";
 
@@ -107,19 +119,24 @@ const SITE = "https://tools.dec18studios.com/color-grading-tools/photochemist";
 // never-expiring invite ("expires_at": null from the Discord invites API).
 const DISCORD_URL = "https://discord.gg/rvY88mZJPR";
 
-const SUBJECT = "PhotoChemist Lite is here, and the watermark is gone";
+const SUBJECTS = {
+  general: "PhotoChemist Lite: my film emulation plugin is now free",
+  demo: "PhotoChemist Lite is here, and the watermark is gone",
+};
 
 const P = `margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:24px; color:#c6ccd4;`;
 const LI = `margin:0 0 8px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:22px; color:#c6ccd4;`;
 
-function emailHTML({ unsub }) {
+// variant "demo" = had the watermarked PhotoChemist demo; "general" = any other free tool.
+function emailHTML({ unsub, variant = "general" }) {
+  const demo = variant === "demo";
   return `<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>PhotoChemist Lite: No More Watermark</title>
+<title>PhotoChemist Lite: Free, No Watermark</title>
 <!--[if mso]>
 <noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
 <![endif]-->
@@ -138,7 +155,9 @@ function emailHTML({ unsub }) {
 
 <!-- Preheader (hidden preview text) -->
 <div style="display:none; max-height:0; overflow:hidden; mso-hide:all;">
-  The free edition of PhotoChemist 3.0 renders clean now. Grab the new build and use it on real work.
+  ${demo
+    ? "The free edition of PhotoChemist 3.0 renders clean now. Grab the new build and use it on real work."
+    : "My spectral film emulation plugin for Resolve has a free edition now. Clean renders, no watermark."}
 </div>
 
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#111418;">
@@ -160,19 +179,29 @@ function emailHTML({ unsub }) {
         <!-- Hero card -->
         <tr>
           <td style="background-color:#1a1f26; border-radius:12px 12px 0 0; padding:40px 40px 8px 40px;" class="px">
-            <p style="margin:0 0 10px 0; font-family:Arial, Helvetica, sans-serif; font-size:11px; letter-spacing:2px; color:#d9a441; text-transform:uppercase;">New in PhotoChemist 3.0</p>
+            <p style="margin:0 0 10px 0; font-family:Arial, Helvetica, sans-serif; font-size:11px; letter-spacing:2px; color:#d9a441; text-transform:uppercase;">${demo ? "New in PhotoChemist 3.0" : "Free for Resolve"}</p>
             <h1 class="h1" style="margin:0 0 16px 0; font-family:Georgia, 'Times New Roman', serif; font-size:30px; line-height:38px; color:#f4f1ea; font-weight:normal;">
-              The watermark is gone
+              ${demo ? "The watermark is gone" : "PhotoChemist Lite is free, with no watermark"}
             </h1>
             <p style="${P}">
               Hi there!
             </p>
+${demo ? `
             <p style="${P}">
               A while back you downloaded the PhotoChemist demo. Thanks again for giving it a shot. I know a watermark across the frame made it hard to do anything real with it.
             </p>
             <p style="${P}">
               So with version 3.0 the demo is now <strong style="color:#f4f1ea;">PhotoChemist Lite</strong>, and it renders clean. <strong style="color:#f4f1ea;">No watermark.</strong> It&rsquo;s free, it&rsquo;s yours to keep, and you can put it on actual client work.
+            </p>` : `
+            <p style="${P}">
+              A while back you grabbed one of my free tools. Thanks for that! I wanted to give you a heads up about a new free one I think you&rsquo;ll actually use.
             </p>
+            <p style="${P}">
+              <strong style="color:#f4f1ea;">PhotoChemist</strong> is my spectral film emulation plugin for DaVinci Resolve. Instead of stacking a LUT on top, it runs your image through a simulated negative and print, the way film really works.
+            </p>
+            <p style="${P}">
+              With version 3.0 there&rsquo;s a free edition, <strong style="color:#f4f1ea;">PhotoChemist Lite</strong>, and it renders clean. <strong style="color:#f4f1ea;">No watermark.</strong> It&rsquo;s yours to keep, and you can put it on actual client work.
+            </p>`}
           </td>
         </tr>
 
@@ -207,7 +236,9 @@ function emailHTML({ unsub }) {
               </tr>
             </table>
             <p style="margin:0 0 8px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:22px; color:#8a9099;">
-              Your old demo won&rsquo;t update itself. Delete the old PhotoChemist Demo bundle from your OFX plugins folder, drop in the new one, and restart Resolve. Same setup rule as before: feed it DaVinci Wide Gamut / Linear (a CST with no tone mapping on the node before).
+              ${demo
+                ? "Your old demo won&rsquo;t update itself. Delete the old PhotoChemist Demo bundle from your OFX plugins folder, drop in the new one, and restart Resolve. Same setup rule as before: feed it DaVinci Wide Gamut / Linear (a CST with no tone mapping on the node before)."
+                : "It&rsquo;s an OFX plugin. Drop it in your OFX plugins folder and restart Resolve. The one setup rule: feed it DaVinci Wide Gamut / Linear (a CST with no tone mapping on the node before)."}
             </p>
             <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:22px;">
               <a href="${SITE}/quickstart/" target="_blank" style="color:#f4f1ea; text-decoration:none; font-weight:bold;">Quick-Start Guide &rarr;</a>
@@ -300,7 +331,7 @@ function emailHTML({ unsub }) {
               Dec. 18 Studios &bull; <a href="https://dec18studios.com" style="color:#8a9099; text-decoration:underline;">dec18studios.com</a>
             </p>
             <p style="margin:0 0 8px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:18px; color:#6b727c;">
-              You&rsquo;re receiving this because you downloaded the PhotoChemist demo.
+              You&rsquo;re receiving this because you downloaded ${demo ? "the PhotoChemist demo" : "a free tool from Dec. 18 Studios"}.
             </p>
             <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:18px; color:#6b727c;">
               <a href="${unsub}" style="color:#8a9099; text-decoration:underline;">Unsubscribe</a>
@@ -348,19 +379,24 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 // ── main ──────────────────────────────────────────────────────────────────────
 async function main() {
   if (RENDER_TO) {
-    writeFileSync(RENDER_TO, emailHTML({ unsub: `${WORKER_URL}/unsubscribe?preview=1` }));
-    console.log(`Rendered to ${RENDER_TO}. Nothing sent.`);
+    const unsub = `${WORKER_URL}/unsubscribe?preview=1`;
+    const demoPath = /\.[^./]+$/.test(RENDER_TO) ? RENDER_TO.replace(/(\.[^./]+)$/, ".demo$1") : `${RENDER_TO}.demo`;
+    writeFileSync(RENDER_TO, emailHTML({ unsub, variant: "general" }));
+    writeFileSync(demoPath, emailHTML({ unsub, variant: "demo" }));
+    console.log(`Rendered general to ${RENDER_TO} and demo to ${demoPath}. Nothing sent.`);
     return;
   }
 
-  console.log(`\nPhotoChemist Lite announcement, tool "${SLUG}", before ${BEFORE}${DRY_RUN ? "  (DRY RUN)" : ""}${TEST_EMAIL ? `  (TEST to ${TEST_EMAIL})` : ""}\n`);
+  console.log(`\nPhotoChemist Lite announcement, all free-tool downloaders${BEFORE ? `, skipping ${PC_SLUG} downloads since ${BEFORE}` : ""}${DRY_RUN ? "  (DRY RUN)" : ""}${TEST_EMAIL ? `  (TEST to ${TEST_EMAIL})` : ""}\n`);
 
   if (!DRY_RUN && !DL_SECRET) throw new Error("Missing DOWNLOAD_LOGGER_SECRET (needed for unsubscribe links).");
 
   if (TEST_EMAIL) {
     if (!BREVO_KEY) throw new Error("Missing BREVO_API_KEY.");
-    await brevoSend(TEST_EMAIL, `[TEST] ${SUBJECT}`, emailHTML({ unsub: unsubUrl(TEST_EMAIL, SLUG) }));
-    console.log(`Sent one test email to ${TEST_EMAIL}. Nothing marked in D1.\n`);
+    for (const variant of ["general", "demo"]) {
+      await brevoSend(TEST_EMAIL, `[TEST ${variant}] ${SUBJECTS[variant]}`, emailHTML({ unsub: unsubUrl(TEST_EMAIL, PC_SLUG), variant }));
+    }
+    console.log(`Sent both variants to ${TEST_EMAIL}. Nothing marked in D1.\n`);
     return;
   }
 
@@ -371,17 +407,28 @@ async function main() {
   const cols = await d1("PRAGMA table_info(downloads)");
   const hasCol = cols.some((c) => c.name === "lite_announce_sent");
   if (!DRY_RUN) await ensureAnnounceColumn();
-  const notYet = hasCol || !DRY_RUN ? "AND COALESCE(lite_announce_sent, 0) = 0 " : "";
+  const notYet = hasCol || !DRY_RUN ? "AND MAX(COALESCE(lite_announce_sent, 0)) = 0 " : "";
+  const notRecentLite = BEFORE
+    ? `AND MAX(CASE WHEN tool_slug = ${sq(PC_SLUG)} AND last_downloaded >= ${sq(BEFORE)} THEN 1 ELSE 0 END) = 0 `
+    : "";
 
+  // The Worker lowercases on /log, so email is already the per-person key.
   const rows = await d1(
-    `SELECT email, first_downloaded, last_downloaded FROM downloads ` +
-    `WHERE tool_slug = ${sq(SLUG)} AND unsubscribed = 0 AND COALESCE(welcome_sent, 0) <> 2 ` +
-    `${notYet}AND last_downloaded < ${sq(BEFORE)} ` +
-    `ORDER BY last_downloaded DESC`
+    `SELECT email, ` +
+    `MAX(CASE WHEN tool_slug = ${sq(PC_SLUG)} THEN 1 ELSE 0 END) AS had_demo, ` +
+    `MIN(tool_slug) AS first_slug, COUNT(*) AS tools, MAX(last_downloaded) AS last_downloaded ` +
+    `FROM downloads GROUP BY email ` +
+    `HAVING MAX(unsubscribed) = 0 AND MAX(COALESCE(welcome_sent, 0)) <> 2 ` +
+    `${notYet}${notRecentLite}` +
+    `ORDER BY had_demo DESC, last_downloaded DESC`
   );
 
-  console.log(`Eligible (had a watermarked build, not unsubscribed, not yet told): ${rows.length}`);
-  for (const r of rows) console.log(`  ${mask(r.email).padEnd(28)} last:${(r.last_downloaded || "").slice(0, 10)}`);
+  const demoCount = rows.filter((r) => Number(r.had_demo) === 1).length;
+  console.log(`Eligible people: ${rows.length}  (demo variant: ${demoCount}, general: ${rows.length - demoCount})`);
+  for (const r of rows) {
+    const v = Number(r.had_demo) === 1 ? "demo" : "general";
+    console.log(`  ${mask(r.email).padEnd(28)} ${v.padEnd(8)} tools:${String(r.tools).padEnd(3)} last:${(r.last_downloaded || "").slice(0, 10)}`);
+  }
   console.log("");
 
   if (DRY_RUN) { console.log("Dry run: nothing sent, nothing marked.\n"); return; }
@@ -392,12 +439,15 @@ async function main() {
     console.log(`Capped at MAX_SENDS=${MAX_SENDS}; ${rows.length - batch.length} left for the next dispatch.\n`);
   }
 
+  // Mark every row for the person, so a rerun never picks them up via another tool.
   const mark = (email, v) =>
-    d1(`UPDATE downloads SET lite_announce_sent = ${v} WHERE email = ${sq(email)} AND tool_slug = ${sq(SLUG)}`);
+    d1(`UPDATE downloads SET lite_announce_sent = ${v} WHERE email = ${sq(email)}`);
 
   let sent = 0, failed = 0, skipped = 0;
   for (const r of batch) {
     const email = r.email.trim().toLowerCase();
+    const variant = Number(r.had_demo) === 1 ? "demo" : "general";
+    const unsubSlug = variant === "demo" ? PC_SLUG : r.first_slug;
     if (!looksSendable(email)) {
       await mark(r.email, 2);
       skipped++;
@@ -405,10 +455,10 @@ async function main() {
       continue;
     }
     try {
-      await brevoSend(email, SUBJECT, emailHTML({ unsub: unsubUrl(email, SLUG) }));
+      await brevoSend(email, SUBJECTS[variant], emailHTML({ unsub: unsubUrl(email, unsubSlug), variant }));
       await mark(r.email, 1);
       sent++;
-      console.log(`  ✓ ${mask(email)}`);
+      console.log(`  ✓ ${mask(email)} (${variant})`);
     } catch (e) {
       const msg = String(e.message || e).slice(0, 200);
       if (isPermanentReject(e)) {

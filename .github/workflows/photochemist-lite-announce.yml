@@ -1,16 +1,19 @@
 name: PhotoChemist Lite Announcement
 
-# One-off "the watermark is gone" email to people who downloaded the
-# watermarked PhotoChemist demo (last download before the v3.0.3 release).
-# Manual dispatch ONLY, no schedule. State lives in the download-logger D1
-# (downloads.lite_announce_sent), so re-running never emails anyone twice.
+# One-off "PhotoChemist Lite is free, no watermark" email to EVERY free-tool
+# downloader (all tools, one email per person). People who had the watermarked
+# PhotoChemist demo get the "watermark is gone" variant; everyone else gets an
+# intro to PhotoChemist. Anyone who downloaded the demo since v3.0.3 already
+# has Lite and is skipped. Manual dispatch ONLY, no schedule. State lives in
+# the download-logger D1 (downloads.lite_announce_sent, set on every row for
+# the person), so re-running never emails anyone twice.
 #
-#   mode=dry-run    → list masked recipients, send nothing   (default)
+#   mode=dry-run    → list masked recipients + variant, send nothing   (default)
 #   mode=send       → real send, up to max_sends this run
-#   test_email=addr → send ONE rendered sample to addr, mark nothing
+#   test_email=addr → send BOTH variants to addr (two emails), mark nothing
 #
 # Brevo's free tier is 300/day, shared with the hourly demo welcome, licence
-# and OTP mail, so a list bigger than max_sends goes out over separate days.
+# and OTP mail. The list is ~560 people, so send 200 a day over three days.
 
 on:
   workflow_dispatch:
@@ -27,7 +30,7 @@ on:
       max_sends:
         description: "Cap for this run"
         required: false
-        default: "100"
+        default: "200"
 
 permissions:
   contents: read

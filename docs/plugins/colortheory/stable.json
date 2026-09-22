@@ -14,16 +14,16 @@
     "GPU"
   ],
   "infoUrl": null,
-  "version": "1.1.0",
-  "releaseDate": "2026-09-22T21:11:40Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/tag/v1.1.0",
-  "releaseHighlights": "- Pipeline Test Images: four real scene linear frames (Blue Bar, Red Christmas Lights, Light Saber, Camera Frame Wide Gamut 4) with commentary on the stored colour space and what to look for. Output is untouched linear by default, so put a Colour Space Transform after the node and judge your pipeline.\n- RGB Chips: a clean chip chart with primaries, secondaries and ramps in the same category.\n- New Generated illusion: Perceived Luminance Visualizer. A hue sweep with grey ramp shutters, markers where the grey matches the hue, a corner swatch and a live readout. Keyframe Hue Offset to scroll it.\n- Image Options group: Scene Linear or Encoded Preview output, fit, exposure and border level.\n- Join the Discord button at the bottom of the panel.",
+  "version": "1.1.1",
+  "releaseDate": "2026-09-22T22:44:56Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/tag/v1.1.1",
+  "releaseHighlights": "- RGB Chips now matches the RGB Chips DCTL control for control: Saturation, Number of Hues, Number of Columns, Mid Gray, Min and Max Clamp, Clamp Output, Gray Ramp, Vertical, Band Interval, Model (HSV or Spherical), Continuous Mode and Row Gaps. Output leaves the node raw like the DCTL, so put a Colour Space Transform after it.\n- Perceived Luminance Visualizer: Shutter Count 0 turns the shutters off and leaves just the hue sweep with the probe markers, and the swatch now shows the perceived luminance percentage.\n- The four photographic test images are hidden for now. The download is back to about 1.5 MB.",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.1.0/ColorTheory_macOS_universal.zip",
-      "sha256": "7f5955eaf2d2343848821fdf4acff29c7a2d59e33044e4233586d5fa3724121b",
+      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.1.1/ColorTheory_macOS_universal.zip",
+      "sha256": "d1d44fd76b30fd58fbf66f5db25faa00588056b49ffe25d6a820abb18c7b9843",
       "packageType": "zip",
       "bundleName": "ColorTheory.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.ColorTheory",
@@ -44,8 +44,8 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.1.0/ColorTheory_windows_cuda.zip",
-      "sha256": "95ad340c8e18bff63abe5fd5cb95f7c9bdc3a0e19e2f78cfc39b71a335f5c564",
+      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.1.1/ColorTheory_windows_cuda.zip",
+      "sha256": "90cd6a9f990e662f6e6ad1b10757c3eaf3bf932e8c36ad4bbf990dfbe46239bb",
       "packageType": "zip",
       "bundleName": "ColorTheory.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.ColorTheory",
@@ -66,8 +66,8 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.1.0/ColorTheory_linux_cuda.zip",
-      "sha256": "0ee7439e5e051141847070dbf31d7877066ef859341264aea2c7dfb1cbdb485e",
+      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.1.1/ColorTheory_linux_cuda.zip",
+      "sha256": "1d40eb0e30828a37ad9f6b801c03b882c2c39492da3b565a320cc8833820d437",
       "packageType": "zip",
       "bundleName": "ColorTheory.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.ColorTheory",
@@ -87,6 +87,80 @@
     }
   ],
   "availableVersions": [
+    {
+      "version": "1.1.0",
+      "releaseDate": "2026-09-22T21:11:40Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/tag/v1.1.0",
+      "releaseHighlights": "- Pipeline Test Images: four real scene linear frames (Blue Bar, Red Christmas Lights, Light Saber, Camera Frame Wide Gamut 4) with commentary on the stored colour space and what to look for. Output is untouched linear by default, so put a Colour Space Transform after the node and judge your pipeline.\n- RGB Chips: a clean chip chart with primaries, secondaries and ramps in the same category.\n- New Generated illusion: Perceived Luminance Visualizer. A hue sweep with grey ramp shutters, markers where the grey matches the hue, a corner swatch and a live readout. Keyframe Hue Offset to scroll it.\n- Image Options group: Scene Linear or Encoded Preview output, fit, exposure and border level.\n- Join the Discord button at the bottom of the panel.",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.1.0/ColorTheory_macOS_universal.zip",
+          "sha256": "7f5955eaf2d2343848821fdf4acff29c7a2d59e33044e4233586d5fa3724121b",
+          "packageType": "zip",
+          "bundleName": "ColorTheory.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.ColorTheory",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.1.0/ColorTheory_windows_cuda.zip",
+          "sha256": "95ad340c8e18bff63abe5fd5cb95f7c9bdc3a0e19e2f78cfc39b71a335f5c564",
+          "packageType": "zip",
+          "bundleName": "ColorTheory.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.ColorTheory",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.1.0/ColorTheory_linux_cuda.zip",
+          "sha256": "0ee7439e5e051141847070dbf31d7877066ef859341264aea2c7dfb1cbdb485e",
+          "packageType": "zip",
+          "bundleName": "ColorTheory.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.ColorTheory",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
     {
       "version": "1.0.1",
       "releaseDate": "2026-09-22T20:10:34Z",

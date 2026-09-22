@@ -216,10 +216,11 @@ ${demo ? `
                   <p style="margin:0 0 12px 0; font-family:Arial, Helvetica, sans-serif; font-size:11px; letter-spacing:2px; color:#d9a441; text-transform:uppercase;">What You Get in Lite</p>
                   <p style="${LI}"><span style="color:#d9a441;">&#10003;</span>&nbsp; Clean renders, no watermark</p>
                   <p style="${LI}"><span style="color:#d9a441;">&#10003;</span>&nbsp; The same spectral film engine as the full plugin, negative through print</p>
-                  <p style="${LI}"><span style="color:#d9a441;">&#10003;</span>&nbsp; Film stocks and projectors picked from presets</p>
+                  <p style="${LI}"><span style="color:#d9a441;">&#10003;</span>&nbsp; The whole preset library: film stocks, printer setups, projectors</p>
+                  <p style="${LI}"><span style="color:#d9a441;">&#10003;</span>&nbsp; The <strong style="color:#f4f1ea;">Film Stock Editor</strong>, so you can draw your own sensitivity, dye and H&amp;D curves</p>
                   <p style="${LI}"><span style="color:#d9a441;">&#10003;</span>&nbsp; macOS, Windows and Linux</p>
                   <p style="margin:12px 0 8px 0; font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:20px; color:#8a9099;">
-                    The deep stuff (Film Stock Editor, Textures editor, Film Motion, Preset Manager, LUT export) stays in the full version.
+                    The full version adds the Textures editor, Film Motion, saving and exporting your own presets, LUT export, and hands-on printer, scanner and projector calibration.
                   </p>
                 </td>
               </tr>

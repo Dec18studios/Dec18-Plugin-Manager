@@ -62,8 +62,10 @@ const DRY_RUN = process.env.DRY_RUN === "1";
 const TEST_EMAIL = (process.env.TEST_EMAIL || "").trim();
 const RENDER_TO = (process.env.RENDER_TO || "").trim();
 const PC_SLUG = "photochemist-demo";
-// PhotoChemist-Demo v3.0.3 published_at: the first build with no watermark.
-const BEFORE_RAW = (process.env.BEFORE || "2026-09-12T23:37:01Z").trim();
+// PhotoChemist-Demo v3.0.4 published_at: the first release built and named as
+// Lite. (v3.0.3's assets were re-uploaded on 2026-09-14, so anything earlier is
+// not a safe "they already have the clean build" signal.)
+const BEFORE_RAW = (process.env.BEFORE || "2026-09-14T19:32:16Z").trim();
 const BEFORE = BEFORE_RAW.toLowerCase() === "none" ? "" : BEFORE_RAW;
 const MAX_SENDS = Number(process.env.MAX_SENDS || "100");
 const TAG = "photochemist-lite-announce";

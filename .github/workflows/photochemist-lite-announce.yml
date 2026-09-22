@@ -31,6 +31,10 @@ on:
         description: "Cap for this run"
         required: false
         default: "200"
+      before:
+        description: "Skip people who downloaded the demo since this ISO time (none = skip nobody)"
+        required: false
+        default: ""
 
 permissions:
   contents: read
@@ -57,4 +61,5 @@ jobs:
           DRY_RUN: ${{ (inputs.mode != 'send' && inputs.test_email == '') && '1' || '' }}
           TEST_EMAIL: ${{ inputs.test_email }}
           MAX_SENDS: ${{ inputs.max_sends }}
+          BEFORE: ${{ inputs.before }}
         run: node tools/photochemist-lite-announce.mjs

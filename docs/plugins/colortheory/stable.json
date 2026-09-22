@@ -14,16 +14,16 @@
     "GPU"
   ],
   "infoUrl": null,
-  "version": "1.0.0",
-  "releaseDate": "2026-09-22T19:47:29Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/tag/v1.0.0",
-  "releaseHighlights": "- Free. No licence key, no watermark, no sign up.\n- Draws colour vision illusions procedurally in DaVinci Resolve, one illusion at a time.\n- Generated illusions: Simultaneous Contrast, Gamut Expansion, Contrast vs Expansion Lab Stimulus, Colour Assimilation Stripes, Transparent Filter, Pinwheel Transparency, Contrast as Transparency, Umbrella Stripes, Checker Shadow, Coloured Holes, Gradient Lightness, Shared Texture Discs, Overlapping Squares.\n- Passthru illusions that run on your own footage: Histogram Compression, Two Colour Method, Palette Reconstruction.\n- Pipeline test image: Grey Reference Card.\n- Reveal slider gives the trick away. Keyframe it to wipe the answer in on camera.\n- Commentary overlay burns a short explanation panel into the frame, with control over position, size and opacity.\n- Runs on the GPU. macOS universal Metal build, Windows and Linux CUDA builds.",
+  "version": "1.0.1",
+  "releaseDate": "2026-09-22T20:10:34Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/tag/v1.0.1",
+  "releaseHighlights": "- Two buttons at the top of the panel: Learn More opens the Color Theory page, Get the Whole Toolbox opens the Dec18 Studios tools page.\n- No render changes. Same illusions, same output as v1.0.0.",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.0.0/ColorTheory_macOS_universal.zip",
-      "sha256": "bca5e0bcb459b2b90c7f9647a089153602019ead83d79a2c9c93ada79ce2c327",
+      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.0.1/ColorTheory_macOS_universal.zip",
+      "sha256": "ddc3d69600a94f5e7103c66cf0f6c5e9efa6b07c03432905d0cc96d32277ccc8",
       "packageType": "zip",
       "bundleName": "ColorTheory.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.ColorTheory",
@@ -44,8 +44,8 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.0.0/ColorTheory_windows_cuda.zip",
-      "sha256": "94b691e30efa42081acb9bfc613b44502773f441eff864d048e96ce6f863ed7b",
+      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.0.1/ColorTheory_windows_cuda.zip",
+      "sha256": "1b61c34b8db19f692d2bf809a31d83af18898f0341504566709dc180d36b9a92",
       "packageType": "zip",
       "bundleName": "ColorTheory.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.ColorTheory",
@@ -66,8 +66,8 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.0.0/ColorTheory_linux_cuda.zip",
-      "sha256": "67be0d7e6299db3f23816abe26b974117e73e9797a9cdc673b876edc17c5c15c",
+      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.0.1/ColorTheory_linux_cuda.zip",
+      "sha256": "d2be4e719cf289f992c53d910d901864b9970ae2c14ec2a51f3bb695db59f391",
       "packageType": "zip",
       "bundleName": "ColorTheory.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.ColorTheory",
@@ -86,5 +86,80 @@
       ]
     }
   ],
-  "availableVersions": []
+  "availableVersions": [
+    {
+      "version": "1.0.0",
+      "releaseDate": "2026-09-22T19:47:29Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/tag/v1.0.0",
+      "releaseHighlights": "- Free. No licence key, no watermark, no sign up.\n- Draws colour vision illusions procedurally in DaVinci Resolve, one illusion at a time.\n- Generated illusions: Simultaneous Contrast, Gamut Expansion, Contrast vs Expansion Lab Stimulus, Colour Assimilation Stripes, Transparent Filter, Pinwheel Transparency, Contrast as Transparency, Umbrella Stripes, Checker Shadow, Coloured Holes, Gradient Lightness, Shared Texture Discs, Overlapping Squares.\n- Passthru illusions that run on your own footage: Histogram Compression, Two Colour Method, Palette Reconstruction.\n- Pipeline test image: Grey Reference Card.\n- Reveal slider gives the trick away. Keyframe it to wipe the answer in on camera.\n- Commentary overlay burns a short explanation panel into the frame, with control over position, size and opacity.\n- Runs on the GPU. macOS universal Metal build, Windows and Linux CUDA builds.",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.0.0/ColorTheory_macOS_universal.zip",
+          "sha256": "bca5e0bcb459b2b90c7f9647a089153602019ead83d79a2c9c93ada79ce2c327",
+          "packageType": "zip",
+          "bundleName": "ColorTheory.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.ColorTheory",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.0.0/ColorTheory_windows_cuda.zip",
+          "sha256": "94b691e30efa42081acb9bfc613b44502773f441eff864d048e96ce6f863ed7b",
+          "packageType": "zip",
+          "bundleName": "ColorTheory.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.ColorTheory",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.0.0/ColorTheory_linux_cuda.zip",
+          "sha256": "67be0d7e6299db3f23816abe26b974117e73e9797a9cdc673b876edc17c5c15c",
+          "packageType": "zip",
+          "bundleName": "ColorTheory.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.ColorTheory",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    }
+  ]
 }

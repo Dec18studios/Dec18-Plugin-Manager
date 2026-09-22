@@ -45,6 +45,14 @@
     "url": "opendrt/"
   },
   {
+    "pluginId": "colortheory",
+    "name": "Color Theory",
+    "slug": "color-theory",
+    "color": "magenta",
+    "desc": "Free colour vision illusions generated on the timeline, with commentary, a Reveal wipe, and a simulated percept.",
+    "url": "color-theory/"
+  },
+  {
     "pluginId": "hue-contrast-compressor-dctl",
     "name": "Hue Contrast Compressor",
     "slug": "hue-contrast-compressor",

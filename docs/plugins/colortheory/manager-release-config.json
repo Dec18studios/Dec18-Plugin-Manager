@@ -1,0 +1,45 @@
+{
+  "pluginId": "colortheory",
+  "displayName": "Color Theory",
+  "type": "OFX",
+  "releaseRepo": "Dec18studios/Color-Theory-OFX",
+  "minManagerVersion": "0.1.0",
+  "hostProcesses": ["Resolve", "DaVinci Resolve", "Fusion", "Fusion Studio", "Nuke", "NukeX", "NukeStudio", "Hiero"],
+  "requiredFamilies": ["macos"],
+  "category": "Diagnostics",
+  "description": "A free teaching and reference generator that builds classic colour vision illusions right on the timeline, with a burned in commentary overlay that explains what each one is doing. A Reveal slider wipes the surround to neutral grey so you can prove the trick to yourself, and Simulate Appearance draws the percept your eye reports instead of the numbers. Also carries passthru modes that run on your own footage plus a grey reference card for checking a pipeline.",
+  "licenseTier": "free",
+  "tags": ["colour perception", "illusions", "teaching", "reference", "test images", "OFX", "GPU"],
+  "assetRules": [
+    {
+      "family": "macos",
+      "platform": "macos",
+      "arch": "universal",
+      "assetPattern": "ColorTheory.*macOS.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "ColorTheory.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.ColorTheory",
+      "installPath": "/Library/OFX/Plugins"
+    },
+    {
+      "family": "windows",
+      "platform": "windows",
+      "arch": "x86_64",
+      "assetPattern": "ColorTheory.*windows.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "ColorTheory.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.ColorTheory",
+      "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins"
+    },
+    {
+      "family": "linux",
+      "platform": "linux",
+      "arch": "x86_64",
+      "assetPattern": "ColorTheory.*linux.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "ColorTheory.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.ColorTheory",
+      "installPath": "/usr/OFX/Plugins"
+    }
+  ]
+}

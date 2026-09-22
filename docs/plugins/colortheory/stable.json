@@ -14,16 +14,16 @@
     "GPU"
   ],
   "infoUrl": null,
-  "version": "1.0.1",
-  "releaseDate": "2026-09-22T20:10:34Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/tag/v1.0.1",
-  "releaseHighlights": "- Two buttons at the top of the panel: Learn More opens the Color Theory page, Get the Whole Toolbox opens the Dec18 Studios tools page.\n- No render changes. Same illusions, same output as v1.0.0.",
+  "version": "1.1.0",
+  "releaseDate": "2026-09-22T21:11:40Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/tag/v1.1.0",
+  "releaseHighlights": "- Pipeline Test Images: four real scene linear frames (Blue Bar, Red Christmas Lights, Light Saber, Camera Frame Wide Gamut 4) with commentary on the stored colour space and what to look for. Output is untouched linear by default, so put a Colour Space Transform after the node and judge your pipeline.\n- RGB Chips: a clean chip chart with primaries, secondaries and ramps in the same category.\n- New Generated illusion: Perceived Luminance Visualizer. A hue sweep with grey ramp shutters, markers where the grey matches the hue, a corner swatch and a live readout. Keyframe Hue Offset to scroll it.\n- Image Options group: Scene Linear or Encoded Preview output, fit, exposure and border level.\n- Join the Discord button at the bottom of the panel.",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.0.1/ColorTheory_macOS_universal.zip",
-      "sha256": "ddc3d69600a94f5e7103c66cf0f6c5e9efa6b07c03432905d0cc96d32277ccc8",
+      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.1.0/ColorTheory_macOS_universal.zip",
+      "sha256": "7f5955eaf2d2343848821fdf4acff29c7a2d59e33044e4233586d5fa3724121b",
       "packageType": "zip",
       "bundleName": "ColorTheory.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.ColorTheory",
@@ -44,8 +44,8 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.0.1/ColorTheory_windows_cuda.zip",
-      "sha256": "1b61c34b8db19f692d2bf809a31d83af18898f0341504566709dc180d36b9a92",
+      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.1.0/ColorTheory_windows_cuda.zip",
+      "sha256": "95ad340c8e18bff63abe5fd5cb95f7c9bdc3a0e19e2f78cfc39b71a335f5c564",
       "packageType": "zip",
       "bundleName": "ColorTheory.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.ColorTheory",
@@ -66,8 +66,8 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.0.1/ColorTheory_linux_cuda.zip",
-      "sha256": "d2be4e719cf289f992c53d910d901864b9970ae2c14ec2a51f3bb695db59f391",
+      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.1.0/ColorTheory_linux_cuda.zip",
+      "sha256": "0ee7439e5e051141847070dbf31d7877066ef859341264aea2c7dfb1cbdb485e",
       "packageType": "zip",
       "bundleName": "ColorTheory.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.ColorTheory",
@@ -87,6 +87,80 @@
     }
   ],
   "availableVersions": [
+    {
+      "version": "1.0.1",
+      "releaseDate": "2026-09-22T20:10:34Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/tag/v1.0.1",
+      "releaseHighlights": "- Two buttons at the top of the panel: Learn More opens the Color Theory page, Get the Whole Toolbox opens the Dec18 Studios tools page.\n- No render changes. Same illusions, same output as v1.0.0.",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.0.1/ColorTheory_macOS_universal.zip",
+          "sha256": "ddc3d69600a94f5e7103c66cf0f6c5e9efa6b07c03432905d0cc96d32277ccc8",
+          "packageType": "zip",
+          "bundleName": "ColorTheory.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.ColorTheory",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.0.1/ColorTheory_windows_cuda.zip",
+          "sha256": "1b61c34b8db19f692d2bf809a31d83af18898f0341504566709dc180d36b9a92",
+          "packageType": "zip",
+          "bundleName": "ColorTheory.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.ColorTheory",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.0.1/ColorTheory_linux_cuda.zip",
+          "sha256": "d2be4e719cf289f992c53d910d901864b9970ae2c14ec2a51f3bb695db59f391",
+          "packageType": "zip",
+          "bundleName": "ColorTheory.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.ColorTheory",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
     {
       "version": "1.0.0",
       "releaseDate": "2026-09-22T19:47:29Z",

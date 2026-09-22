@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-17T18:13:16.257Z",
+  "generatedAt": "2026-09-22T19:48:22.753Z",
   "plugins": [
     {
       "pluginId": "GE_Color_Slicer",
@@ -8,6 +8,14 @@
       "licenseTier": "free",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/GE_Color_Slicer/stable.json",
       "category": "Color Grading"
+    },
+    {
+      "pluginId": "colortheory",
+      "displayName": "Color Theory",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/colortheory/stable.json",
+      "category": "Diagnostics",
+      "type": "OFX",
+      "licenseTier": "free"
     },
     {
       "pluginId": "hue-contrast-compressor-ofx",

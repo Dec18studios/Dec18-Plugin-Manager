@@ -49,8 +49,13 @@
     "name": "Color Theory",
     "slug": "color-theory",
     "color": "magenta",
-    "desc": "Free colour vision illusions generated on the timeline, with commentary, a Reveal wipe, and a simulated percept.",
-    "url": "color-theory/"
+    "desc": "Free colour vision illusions generated on the timeline, plus a Perceived Luminance Visualizer and six pipeline test images for checking your pipeline.",
+    "url": "color-theory/",
+    "downloads": [
+      { "label": "macOS", "url": "https://github.com/Dec18studios/Color-Theory-OFX/releases/latest/download/ColorTheory_macOS_universal.zip" },
+      { "label": "Windows", "url": "https://github.com/Dec18studios/Color-Theory-OFX/releases/latest/download/ColorTheory_windows_cuda.zip" },
+      { "label": "Linux", "url": "https://github.com/Dec18studios/Color-Theory-OFX/releases/latest/download/ColorTheory_linux_cuda.zip" }
+    ]
   },
   {
     "pluginId": "hue-contrast-compressor-dctl",
@@ -170,6 +175,7 @@
     "name": "Dolby Vision Spoofer",
     "slug": "dolby-vision",
     "color": "magenta",
+    "url": "dolby-vision/",
     "desc": "Preview a Dolby Vision-style trim without the full pipeline.",
     "repo": "Dolby-Vision-Spoofer-DCTL",
     "dlAsset": "Dolby-Vision-Spoofer-v1.0.0.zip"

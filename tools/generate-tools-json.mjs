@@ -286,10 +286,15 @@ function main() {
       ...(entry.repo ? { repo: entry.repo } : {}),
       ...(dlAsset ? { dlAsset } : {}),
       ...(dlUrl ? { dlUrl } : {}),
+      // Per-platform direct downloads for multi-OS free tools (e.g. an OFX with
+      // macOS/Windows/Linux zips). Curated in website-tools.json; the card renders
+      // one gated link per entry instead of the single Download link.
+      ...(Array.isArray(entry.downloads) && entry.downloads.length ? { downloads: entry.downloads } : {}),
       ...(entry.demo ? { demo: true } : {}),
     };
 
     tools.push(tool);
+    if (tool.downloads) dlSource = `per-platform:${tool.downloads.length}`;
     console.log(`  + ${tool.name} [${tool.tier}] → ${tool.slug}  (download: ${dlSource})`);
 
     // Members catalog entry — sourced from the app's own stable.json manifest.

@@ -16,16 +16,16 @@
     "GPU"
   ],
   "infoUrl": null,
-  "version": "1.0.0",
-  "releaseDate": "2026-09-30T00:40:59Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/tag/v1.0.0",
-  "releaseHighlights": "- Free. No licence key, no watermark, no sign up.\n- Eight looks, each with its own label and notes, burned right into the image so the client always knows which look they are seeing.\n- Change Active Look and Look Notes flips your look nodes for you: label a node to match the look (or just \"Look 1\", \"Look 2\") and it turns on while the others turn off.\n- Works on clip nodes and at the timeline level, and a repeated label across a split look flips every matching node together.\n- Position: Bottom, Top or Center, plus PowerGrade Mode that fills the frame with just the label so Gallery stills show which look they hold.\n- Garamond, Pixel or your own fonts, with colour, size, opacity and alignment controls.\n- How To Set Up button opens a step by step guide.\n- Runs on the GPU. macOS universal Metal build, Windows and Linux CUDA builds.",
+  "version": "1.1.0",
+  "releaseDate": "2026-09-30T18:41:20Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/tag/v1.1.0",
+  "releaseHighlights": "- New Reframe checkbox: Bottom Strip or Side Panel. The picture shrinks to fit and the notes get their own panel instead of sitting on the image, with Panel Size, Background and Background Brightness controls.\n- New Palette: 3 to 12 colour swatches pulled from the image, shown in the reframe panel. Sort by hue, dominance or brightness, and skip near blacks, near whites and greys.\n- Node toggling now works on Windows too (needs Python 3 from python.org), and it is always on, so the Toggle Look Nodes switch is gone.\n- New Get the Whole Toolbox button opens the Dec18 Studios tools page.\n- EB Garamond is now bundled, so Garamond mode works everywhere even without a system Garamond.\n- Saved projects keep their looks, notes and settings.",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/download/v1.0.0/LookNotes_macOS_universal.zip",
-      "sha256": "188996c5c941d79f38e5782b4c6d82ef0622cc5ea77c50d360d8cec04a6d7253",
+      "downloadUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/download/v1.1.0/LookNotes_macOS_universal.zip",
+      "sha256": "2434392fdb36d7bcd8997346b06afee7c266ad614de72386ee998e166c83f0e5",
       "packageType": "zip",
       "bundleName": "LookNotes.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookNotes",
@@ -46,8 +46,8 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/download/v1.0.0/LookNotes_windows_cuda.zip",
-      "sha256": "033273fd8a5822ab6484a9d94fbcf2f5736be8ed0f29b1abe86ff28cd25bf221",
+      "downloadUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/download/v1.1.0/LookNotes_windows_cuda.zip",
+      "sha256": "a3353080e98c646f93a4c2ceb1c84c418999a0826c9bb6b668c7ea8da8cec813",
       "packageType": "zip",
       "bundleName": "LookNotes.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookNotes",
@@ -68,8 +68,8 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/download/v1.0.0/LookNotes_linux_cuda.zip",
-      "sha256": "3c1a703e386d5cc06042ce51a282a100e7f640784048a5a88ac1e999c5793e2d",
+      "downloadUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/download/v1.1.0/LookNotes_linux_cuda.zip",
+      "sha256": "9214dc22bbfe40ff7730bd84404051bf619d3d85a75e93e197d5c75c8b221697",
       "packageType": "zip",
       "bundleName": "LookNotes.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookNotes",
@@ -88,5 +88,80 @@
       ]
     }
   ],
-  "availableVersions": []
+  "availableVersions": [
+    {
+      "version": "1.0.0",
+      "releaseDate": "2026-09-30T00:40:59Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/tag/v1.0.0",
+      "releaseHighlights": "- Free. No licence key, no watermark, no sign up.\n- Eight looks, each with its own label and notes, burned right into the image so the client always knows which look they are seeing.\n- Change Active Look and Look Notes flips your look nodes for you: label a node to match the look (or just \"Look 1\", \"Look 2\") and it turns on while the others turn off.\n- Works on clip nodes and at the timeline level, and a repeated label across a split look flips every matching node together.\n- Position: Bottom, Top or Center, plus PowerGrade Mode that fills the frame with just the label so Gallery stills show which look they hold.\n- Garamond, Pixel or your own fonts, with colour, size, opacity and alignment controls.\n- How To Set Up button opens a step by step guide.\n- Runs on the GPU. macOS universal Metal build, Windows and Linux CUDA builds.",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/download/v1.0.0/LookNotes_macOS_universal.zip",
+          "sha256": "188996c5c941d79f38e5782b4c6d82ef0622cc5ea77c50d360d8cec04a6d7253",
+          "packageType": "zip",
+          "bundleName": "LookNotes.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookNotes",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/download/v1.0.0/LookNotes_windows_cuda.zip",
+          "sha256": "033273fd8a5822ab6484a9d94fbcf2f5736be8ed0f29b1abe86ff28cd25bf221",
+          "packageType": "zip",
+          "bundleName": "LookNotes.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookNotes",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/download/v1.0.0/LookNotes_linux_cuda.zip",
+          "sha256": "3c1a703e386d5cc06042ce51a282a100e7f640784048a5a88ac1e999c5793e2d",
+          "packageType": "zip",
+          "bundleName": "LookNotes.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookNotes",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    }
+  ]
 }

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-25T01:01:17.676Z",
+  "generatedAt": "2026-09-30T00:41:06.377Z",
   "plugins": [
     {
       "pluginId": "GE_Color_Slicer",
@@ -120,6 +120,14 @@
       "licenseTier": "subscription",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/lookdevtools/stable.json",
       "category": "Color Grading"
+    },
+    {
+      "pluginId": "looknotes",
+      "displayName": "Look Notes",
+      "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/looknotes/stable.json",
+      "category": "Workflow",
+      "type": "OFX",
+      "licenseTier": "free"
     },
     {
       "pluginId": "opendrt",

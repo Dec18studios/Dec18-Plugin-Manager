@@ -1,0 +1,66 @@
+{
+  "pluginId": "looknotes",
+  "displayName": "Look Notes",
+  "type": "OFX",
+  "releaseRepo": "Dec18studios/Look-Notes-OFX",
+  "minManagerVersion": "0.1.0",
+  "hostProcesses": [
+    "Resolve",
+    "DaVinci Resolve",
+    "Fusion",
+    "Fusion Studio",
+    "Nuke",
+    "NukeX",
+    "NukeStudio",
+    "Hiero"
+  ],
+  "requiredFamilies": [
+    "macos"
+  ],
+  "category": "Workflow",
+  "description": "A free look label for client sessions. Burns a label and notes into the frame for up to eight looks, and when you change Active Look it flips your look nodes for you, clip or timeline, split looks included. Label a node to match the look (or just Look 1, Look 2) and it turns on while the others turn off. Bottom, Top and Center positions, plus a PowerGrade Mode that fills the frame with the label so Gallery stills show which look they hold. Garamond, Pixel or your own fonts.",
+  "licenseTier": "free",
+  "tags": [
+    "looks",
+    "client sessions",
+    "labels",
+    "notes",
+    "node toggling",
+    "PowerGrades",
+    "workflow",
+    "OFX",
+    "GPU"
+  ],
+  "assetRules": [
+    {
+      "family": "macos",
+      "platform": "macos",
+      "arch": "universal",
+      "assetPattern": "LookNotes.*macOS.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "LookNotes.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.LookNotes",
+      "installPath": "/Library/OFX/Plugins"
+    },
+    {
+      "family": "windows",
+      "platform": "windows",
+      "arch": "x86_64",
+      "assetPattern": "LookNotes.*windows.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "LookNotes.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.LookNotes",
+      "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins"
+    },
+    {
+      "family": "linux",
+      "platform": "linux",
+      "arch": "x86_64",
+      "assetPattern": "LookNotes.*linux.*\\.zip$",
+      "packageType": "zip",
+      "bundleName": "LookNotes.ofx.bundle",
+      "bundleIdentifier": "com.dec18studios.LookNotes",
+      "installPath": "/usr/OFX/Plugins"
+    }
+  ]
+}

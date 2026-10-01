@@ -1,6 +1,6 @@
 {
   "pluginId": "looknotes",
-  "displayName": "Look Notes",
+  "displayName": "Look Notes Pro",
   "type": "OFX",
   "releaseRepo": "Dec18studios/Look-Notes-OFX",
   "minManagerVersion": "0.1.0",
@@ -18,8 +18,22 @@
     "macos"
   ],
   "category": "Workflow",
-  "description": "A free look label for client sessions. Burns a label and notes into the frame for up to eight looks, and when you change Active Look it flips your look nodes for you, clip or timeline, split looks included. Label a node to match the look (or just Look 1, Look 2) and it turns on while the others turn off. Bottom, Top and Center positions, plus a PowerGrade Mode that fills the frame with the label so Gallery stills show which look they hold. Garamond, Pixel or your own fonts.",
-  "licenseTier": "free",
+  "description": "Look labels for client sessions. Burns a label and notes into the frame for up to eight looks, and when you change Active Look it flips your look nodes for you, clip or timeline, split looks included. Export All Looks saves a still of every look plus a Look Grid with them side by side, and Export Current Look saves the frame you're on as PNG, JPG or 16 bit TIFF. Reframe mode with an image sampled palette, PowerGrade Mode for Gallery stills, Garamond, Pixel or your own fonts, and your own colours. Part of the Dec18 Toolbox. Try Look Notes Lite free: 3 looks, node toggling and JPG export.",
+  "licenseTier": "subscription",
+  "demo": {
+    "version": "1.2.0",
+    "assets": {
+      "macos-universal": {
+        "downloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.2.0/LookNotes_Lite_macOS_universal.zip"
+      },
+      "windows-x86_64": {
+        "downloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.2.0/LookNotes_Lite_windows_cuda.zip"
+      },
+      "linux-x86_64": {
+        "downloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.2.0/LookNotes_Lite_linux_cuda.zip"
+      }
+    }
+  },
   "tags": [
     "looks",
     "client sessions",
@@ -28,15 +42,18 @@
     "node toggling",
     "PowerGrades",
     "workflow",
+    "stills",
+    "look grid",
     "OFX",
     "GPU"
   ],
+  "infoUrl": "https://tools.dec18studios.com/color-grading-tools/look-notes/",
   "assetRules": [
     {
       "family": "macos",
       "platform": "macos",
       "arch": "universal",
-      "assetPattern": "LookNotes.*macOS.*\\.zip$",
+      "assetPattern": "^LookNotes_macOS_universal\\.zip$",
       "packageType": "zip",
       "bundleName": "LookNotes.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookNotes",
@@ -46,7 +63,7 @@
       "family": "windows",
       "platform": "windows",
       "arch": "x86_64",
-      "assetPattern": "LookNotes.*windows.*\\.zip$",
+      "assetPattern": "^LookNotes_windows_cuda\\.zip$",
       "packageType": "zip",
       "bundleName": "LookNotes.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookNotes",
@@ -56,7 +73,7 @@
       "family": "linux",
       "platform": "linux",
       "arch": "x86_64",
-      "assetPattern": "LookNotes.*linux.*\\.zip$",
+      "assetPattern": "^LookNotes_linux_cuda\\.zip$",
       "packageType": "zip",
       "bundleName": "LookNotes.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookNotes",

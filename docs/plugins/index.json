@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-30T18:42:34.544Z",
+  "generatedAt": "2026-10-01T01:09:14.491Z",
   "plugins": [
     {
       "pluginId": "GE_Color_Slicer",
@@ -123,11 +123,11 @@
     },
     {
       "pluginId": "looknotes",
-      "displayName": "Look Notes",
+      "displayName": "Look Notes Pro",
       "manifestUrl": "https://dec18studios.github.io/Dec18-Plugin-Manager/plugins/looknotes/stable.json",
       "category": "Workflow",
       "type": "OFX",
-      "licenseTier": "free"
+      "licenseTier": "subscription"
     },
     {
       "pluginId": "opendrt",

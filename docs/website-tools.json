@@ -59,16 +59,12 @@
   },
   {
     "pluginId": "looknotes",
-    "name": "Look Notes",
+    "name": "Look Notes Pro",
     "slug": "look-notes",
     "color": "green",
-    "desc": "Free look labels and notes burned into the frame, and it flips your look nodes when you change looks.",
+    "desc": "Look labels and notes burned into the frame, node flipping when you change looks, and one click stills of every look. Free Lite edition too.",
     "url": "look-notes/",
-    "downloads": [
-      { "label": "macOS", "url": "https://github.com/Dec18studios/Look-Notes-OFX/releases/latest/download/LookNotes_macOS_universal.zip" },
-      { "label": "Windows", "url": "https://github.com/Dec18studios/Look-Notes-OFX/releases/latest/download/LookNotes_windows_cuda.zip" },
-      { "label": "Linux", "url": "https://github.com/Dec18studios/Look-Notes-OFX/releases/latest/download/LookNotes_linux_cuda.zip" }
-    ]
+    "demo": true
   },
   {
     "pluginId": "hue-contrast-compressor-dctl",

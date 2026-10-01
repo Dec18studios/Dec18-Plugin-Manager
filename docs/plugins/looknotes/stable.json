@@ -27,7 +27,7 @@
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/download/v1.2.0/LookNotes_macOS_universal.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.2.0/LookNotes_macOS_universal.zip",
       "sha256": "031c47eb82fab7e8400ad906e64f41d26d268e13f5e49885ff7e192ced7422df",
       "demoDownloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.2.0/LookNotes_Lite_macOS_universal.zip",
       "demoSha256": "486a04e50bc64fb9e06dc7750f0c5863b48388c32b592a26c867be68164cec2d",
@@ -51,7 +51,7 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/download/v1.2.0/LookNotes_windows_cuda.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.2.0/LookNotes_windows_cuda.zip",
       "sha256": "3229d7dbc9e5b04fe259e1b9fa1015f17df7b68f9bb87c7dc53517e8332d4e09",
       "demoDownloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.2.0/LookNotes_Lite_windows_cuda.zip",
       "demoSha256": "8ea617d7759d2eafd74072cf61512e61614c4d899525377b1243cc3ead17eea8",
@@ -75,7 +75,7 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/download/v1.2.0/LookNotes_linux_cuda.zip",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.2.0/LookNotes_linux_cuda.zip",
       "sha256": "f7804862277ee9b900f305f398f41f5b8d200531b150e8aad043a03b34b466a2",
       "demoDownloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.2.0/LookNotes_Lite_linux_cuda.zip",
       "demoSha256": "ee9927a3469d447a3918f48ef2f6c0bd3e7e06558f4e6fd469ab40e4198a5564",
@@ -107,7 +107,7 @@
         {
           "platform": "macos",
           "arch": "universal",
-          "downloadUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/download/v1.1.0/LookNotes_macOS_universal.zip",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.1.0/LookNotes_macOS_universal.zip",
           "sha256": "2434392fdb36d7bcd8997346b06afee7c266ad614de72386ee998e166c83f0e5",
           "packageType": "zip",
           "bundleName": "LookNotes.ofx.bundle",
@@ -129,7 +129,7 @@
         {
           "platform": "windows",
           "arch": "x86_64",
-          "downloadUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/download/v1.1.0/LookNotes_windows_cuda.zip",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.1.0/LookNotes_windows_cuda.zip",
           "sha256": "a3353080e98c646f93a4c2ceb1c84c418999a0826c9bb6b668c7ea8da8cec813",
           "packageType": "zip",
           "bundleName": "LookNotes.ofx.bundle",
@@ -151,7 +151,7 @@
         {
           "platform": "linux",
           "arch": "x86_64",
-          "downloadUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/download/v1.1.0/LookNotes_linux_cuda.zip",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.1.0/LookNotes_linux_cuda.zip",
           "sha256": "9214dc22bbfe40ff7730bd84404051bf619d3d85a75e93e197d5c75c8b221697",
           "packageType": "zip",
           "bundleName": "LookNotes.ofx.bundle",
@@ -181,7 +181,7 @@
         {
           "platform": "macos",
           "arch": "universal",
-          "downloadUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/download/v1.0.0/LookNotes_macOS_universal.zip",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.0.0/LookNotes_macOS_universal.zip",
           "sha256": "188996c5c941d79f38e5782b4c6d82ef0622cc5ea77c50d360d8cec04a6d7253",
           "packageType": "zip",
           "bundleName": "LookNotes.ofx.bundle",
@@ -203,7 +203,7 @@
         {
           "platform": "windows",
           "arch": "x86_64",
-          "downloadUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/download/v1.0.0/LookNotes_windows_cuda.zip",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.0.0/LookNotes_windows_cuda.zip",
           "sha256": "033273fd8a5822ab6484a9d94fbcf2f5736be8ed0f29b1abe86ff28cd25bf221",
           "packageType": "zip",
           "bundleName": "LookNotes.ofx.bundle",
@@ -225,7 +225,7 @@
         {
           "platform": "linux",
           "arch": "x86_64",
-          "downloadUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/download/v1.0.0/LookNotes_linux_cuda.zip",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.0.0/LookNotes_linux_cuda.zip",
           "sha256": "3c1a703e386d5cc06042ce51a282a100e7f640784048a5a88ac1e999c5793e2d",
           "packageType": "zip",
           "bundleName": "LookNotes.ofx.bundle",

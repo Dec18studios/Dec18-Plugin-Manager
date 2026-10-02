@@ -12,19 +12,19 @@
     "OFX"
   ],
   "infoUrl": "https://dec18studios.com/photochemist",
-  "version": "3.1.0",
-  "releaseDate": "2026-10-01T20:43:28Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.1.0",
-  "demoVersion": "3.1.0",
-  "releaseHighlights": "- Roadshow 2.0 is the new default halation model: the glow now scales with how bright the source is, so practicals and specular hits bloom more than a white wall does\n- Auto Calibrate keeps mid grey printing neutral as you change stocks or development, and Calibration Target sets where that grey lands (40 IRE by default)\n- New Grain Intensity, Halation Intensity, Halation Spread and MTF Intensity sliders trim the current look up or down without touching the underlying settings\n- Halation puck and per channel controls in the Textures editor, plus a cleaned up Textures and Film Stock Editor layout\n- Printer Calibration has its own group, and Lamp Ceiling and the Deep Black controls moved into Advanced Trims\n- PhotoChemist now tells you when an update is out: an Update available button appears at the top of the controls and opens the Plugins app or your downloads page\n- New starting defaults for halation, acutance, spectral sharpening, layer bias and Deep Black Neutral. Older grades that relied on the old defaults will render differently",
+  "version": "3.1.1",
+  "releaseDate": "2026-10-02T16:14:19Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.1.1",
+  "demoVersion": "3.1.1",
+  "releaseHighlights": "- The Textures and Film Stock Editor previews no longer jump to a random clip or frame when you change a setting\n- Using PhotoChemist on the timeline node together with PhotoChemist on clips no longer makes the editor link label flicker\n- When the editor is linked to the timeline node it stays linked and says \"Linked to the timeline PhotoChemist node\"",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.1.0/PhotoChemist3Beta-macOS.zip",
-      "sha256": "89f8314a17349a3836c73c5246b7357f232ddb0d0e930840e06fe80a671c6345",
-      "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.1.0/PhotoChemistDemo_macOS_universal_portable.zip",
-      "demoSha256": "768a0ace565a0eb524a5f8835e1e4d8f1e323ba03e401098f68c55f4dd137dd5",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.1.1/PhotoChemist3Beta-macOS.zip",
+      "sha256": "0748cb3a9f1c4b7981ce582bede57005f31de7835ad807f69572e332344d057b",
+      "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.1.1/PhotoChemistDemo_macOS_universal_portable.zip",
+      "demoSha256": "9e6dabe324362e9b097569262e568acc2f1df99a66f4b2e5602b8cc59fd38cc5",
       "packageType": "zip",
       "bundleName": "PhotoChemist3Beta.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
@@ -45,10 +45,10 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.1.0/PhotoChemist3Beta-windows-cuda.zip",
-      "sha256": "f75a3235388a132c3ece992203adfc69a9ab776a6321cb936cd53c34064ce746",
-      "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.1.0/PhotoChemistDemo_windows_cuda_portable.zip",
-      "demoSha256": "c60d474be48dae28683f30abccf146c8f10aa4ec1907c4a1470ee4f6302af7c7",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.1.1/PhotoChemist3Beta-windows-cuda.zip",
+      "sha256": "ea07b7a80d7dc5758f758ca02aeb87f176d4186c4a6597d9996fc4a4923fd2db",
+      "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.1.1/PhotoChemistDemo_windows_cuda_portable.zip",
+      "demoSha256": "a7afe35dc23bce8b4bfd0d27e06e01e6f8fccfe958e604d3741a8f81fc6aa57d",
       "packageType": "zip",
       "bundleName": "PhotoChemist3Beta.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
@@ -69,10 +69,10 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.1.0/PhotoChemist3Beta-linux-cuda.zip",
-      "sha256": "d0372c4d52f59249710c23ab3d4249acd820155ab18ea7bfc6c19b950ec8e4ed",
-      "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.1.0/PhotoChemistDemo_linux_cuda_portable.zip",
-      "demoSha256": "cde4b7d77c543391c22f7e0515f3234ead36ea688e8a2a0a32b0417f055a7e50",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.1.1/PhotoChemist3Beta-linux-cuda.zip",
+      "sha256": "37960134dd17506c942047917121ecab99ed5a9c422974ddc4fc5eb75904af14",
+      "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.1.1/PhotoChemistDemo_linux_cuda_portable.zip",
+      "demoSha256": "e464d5de31334ff3c6ffb5dede42384c1056a5fca728bec4ab6c86369de59e8e",
       "packageType": "zip",
       "bundleName": "PhotoChemist3Beta.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
@@ -92,6 +92,80 @@
     }
   ],
   "availableVersions": [
+    {
+      "version": "3.1.0",
+      "releaseDate": "2026-10-01T20:43:28Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.1.0",
+      "releaseHighlights": "- Roadshow 2.0 is the new default halation model: the glow now scales with how bright the source is, so practicals and specular hits bloom more than a white wall does\n- Auto Calibrate keeps mid grey printing neutral as you change stocks or development, and Calibration Target sets where that grey lands (40 IRE by default)\n- New Grain Intensity, Halation Intensity, Halation Spread and MTF Intensity sliders trim the current look up or down without touching the underlying settings\n- Halation puck and per channel controls in the Textures editor, plus a cleaned up Textures and Film Stock Editor layout\n- Printer Calibration has its own group, and Lamp Ceiling and the Deep Black controls moved into Advanced Trims\n- PhotoChemist now tells you when an update is out: an Update available button appears at the top of the controls and opens the Plugins app or your downloads page\n- New starting defaults for halation, acutance, spectral sharpening, layer bias and Deep Black Neutral. Older grades that relied on the old defaults will render differently",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.1.0/PhotoChemist3Beta-macOS.zip",
+          "sha256": "89f8314a17349a3836c73c5246b7357f232ddb0d0e930840e06fe80a671c6345",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.1.0/PhotoChemist3Beta-windows-cuda.zip",
+          "sha256": "f75a3235388a132c3ece992203adfc69a9ab776a6321cb936cd53c34064ce746",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.1.0/PhotoChemist3Beta-linux-cuda.zip",
+          "sha256": "d0372c4d52f59249710c23ab3d4249acd820155ab18ea7bfc6c19b950ec8e4ed",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
     {
       "version": "3.0.4",
       "releaseDate": "2026-09-14T19:31:43Z",

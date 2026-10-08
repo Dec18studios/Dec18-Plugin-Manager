@@ -531,15 +531,37 @@ async function bootLicenses(){
   }
 }
 
+// The license key payload is the authoritative record of tier and expiry: the
+// download proxy gates paid downloads on payload.exp. Ledger rows carry explicit
+// tier/expiresAt fields, but rows that only exist in processed-subscribers.json
+// do not, so decode the key instead of showing those as never-expiring.
+function decodeKeyPayload(key){
+  try{
+    var parts=(key||"").split(".");
+    if(parts.length<2||parts[0]!=="D18")return null;
+    var b=parts[1].replace(/-/g,"+").replace(/_/g,"/");
+    while(b.length%4)b+="=";
+    return JSON.parse(atob(b));
+  }catch(e){return null;}
+}
+function keyExpiry(key){
+  var p=decodeKeyPayload(key);
+  return p&&typeof p.exp==="number"?new Date(p.exp*1000).toISOString():"";
+}
+function keyTier(key){
+  var p=decodeKeyPayload(key);
+  return p&&p.t?p.t:"";
+}
+
 function mergeData(ledger,subscribers){
   var subMap={};
   Object.keys(subscribers).forEach(function(email){subMap[email.toLowerCase()]=subscribers[email];});
   mergedData=ledger.map(function(entry,idx){
     var email=(entry.email||"").toLowerCase();
     var sub=subMap[email];
-    return{_ledgerIdx:idx,name:entry.name||(sub?sub.name:"")||"",email:email,tier:entry.tier||"",
+    return{_ledgerIdx:idx,name:entry.name||(sub?sub.name:"")||"",email:email,tier:entry.tier||keyTier(entry.key),
       plugins:(entry.plugins||[]).join(", "),key:entry.key||"",donation:(sub?sub.donationAmount||sub.amount:"")||"",
-      date:entry.generatedAt||entry.issuedAt||"",expires:entry.expiresAt||"",source:sub?"squarespace":"manual"};
+      date:entry.generatedAt||entry.issuedAt||"",expires:entry.expiresAt||keyExpiry(entry.key),source:sub?"squarespace":"manual"};
   });
   var ledgerEmails={};
   mergedData.forEach(function(d){ledgerEmails[d.email]=true;});
@@ -547,13 +569,13 @@ function mergeData(ledger,subscribers){
     var le=email.toLowerCase();
     if(!ledgerEmails[le]){
       var info=subscribers[email];
-      var subTier=info.tier||"";
+      var subTier=info.tier||keyTier(info.key);
       var subKey=info.key||"(no key issued)";
       var subPlugins=(subTier==="master"||subTier==="annual")?"*":subTier;
       mergedData.push({_ledgerIdx:-1,name:info.name||"",email:le,
         tier:subTier,plugins:subPlugins,key:subKey,
         donation:info.donationAmount||info.amount||"",
-        date:info.processedAt||"",expires:info.expiresAt||"",source:"squarespace"});
+        date:info.processedAt||"",expires:info.expiresAt||keyExpiry(info.key),source:"squarespace"});
     }
   });
 }

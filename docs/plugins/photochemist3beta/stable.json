@@ -12,17 +12,17 @@
     "OFX"
   ],
   "infoUrl": "https://dec18studios.com/photochemist",
-  "version": "3.1.1",
-  "releaseDate": "2026-10-02T16:14:19Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.1.1",
+  "version": "3.1.2",
+  "releaseDate": "2026-10-09T02:43:58Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.1.2",
   "demoVersion": "3.1.1",
-  "releaseHighlights": "- The Textures and Film Stock Editor previews no longer jump to a random clip or frame when you change a setting\n- Using PhotoChemist on the timeline node together with PhotoChemist on clips no longer makes the editor link label flicker\n- When the editor is linked to the timeline node it stays linked and says \"Linked to the timeline PhotoChemist node\"",
+  "releaseHighlights": "- The Textures and Film Stock Editors show a small Live / Not live indicator so you know whether the viewer will update as you edit\n- When live preview is off, the editor shows a short note on how to turn it on. You can hide it, and click Not live to bring it back\n- Windows: after a drag in the editors the viewer always lands on the final frame instead of sticking on an in-between one\n- Linux: fixed a crash as soon as PhotoChemist was added to a node\n- Auto Calibrate no longer re-solves when you change Film Development (push/pull, bleach bypass and the rest). Grade those back with the printer lights, like a lab would\n- New nodes start with negative Spectral Sharpening at 0.2 instead of 0.5, which reads closer to the print side",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.1.1/PhotoChemist3Beta-macOS.zip",
-      "sha256": "0748cb3a9f1c4b7981ce582bede57005f31de7835ad807f69572e332344d057b",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.1.2/PhotoChemist3Beta-macOS.zip",
+      "sha256": "33efb29fea1540402379790adef12f84ee54aa1a7049afb7cc89ad4bd01fa480",
       "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.1.1/PhotoChemistDemo_macOS_universal_portable.zip",
       "demoSha256": "9e6dabe324362e9b097569262e568acc2f1df99a66f4b2e5602b8cc59fd38cc5",
       "packageType": "zip",
@@ -45,8 +45,8 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.1.1/PhotoChemist3Beta-windows-cuda.zip",
-      "sha256": "ea07b7a80d7dc5758f758ca02aeb87f176d4186c4a6597d9996fc4a4923fd2db",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.1.2/PhotoChemist3Beta-windows-cuda.zip",
+      "sha256": "56633d0f9e2dfbaae5177b1d88a0b18764e52662a96e760cabf50df9b964d88c",
       "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.1.1/PhotoChemistDemo_windows_cuda_portable.zip",
       "demoSha256": "a7afe35dc23bce8b4bfd0d27e06e01e6f8fccfe958e604d3741a8f81fc6aa57d",
       "packageType": "zip",
@@ -69,8 +69,8 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.1.1/PhotoChemist3Beta-linux-cuda.zip",
-      "sha256": "37960134dd17506c942047917121ecab99ed5a9c422974ddc4fc5eb75904af14",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.1.2/PhotoChemist3Beta-linux-cuda.zip",
+      "sha256": "70a1614fdb80a176d795873aa30a51ad77d7df7a5677b4e8eb765a4bf5cae4a0",
       "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.1.1/PhotoChemistDemo_linux_cuda_portable.zip",
       "demoSha256": "e464d5de31334ff3c6ffb5dede42384c1056a5fca728bec4ab6c86369de59e8e",
       "packageType": "zip",
@@ -92,6 +92,80 @@
     }
   ],
   "availableVersions": [
+    {
+      "version": "3.1.1",
+      "releaseDate": "2026-10-02T16:14:19Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.1.1",
+      "releaseHighlights": "- The Textures and Film Stock Editor previews no longer jump to a random clip or frame when you change a setting\n- Using PhotoChemist on the timeline node together with PhotoChemist on clips no longer makes the editor link label flicker\n- When the editor is linked to the timeline node it stays linked and says \"Linked to the timeline PhotoChemist node\"",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.1.1/PhotoChemist3Beta-macOS.zip",
+          "sha256": "0748cb3a9f1c4b7981ce582bede57005f31de7835ad807f69572e332344d057b",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.1.1/PhotoChemist3Beta-windows-cuda.zip",
+          "sha256": "ea07b7a80d7dc5758f758ca02aeb87f176d4186c4a6597d9996fc4a4923fd2db",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.1.1/PhotoChemist3Beta-linux-cuda.zip",
+          "sha256": "37960134dd17506c942047917121ecab99ed5a9c422974ddc4fc5eb75904af14",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
     {
       "version": "3.1.0",
       "releaseDate": "2026-10-01T20:43:28Z",

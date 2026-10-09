@@ -14,15 +14,16 @@
     "CMY"
   ],
   "infoUrl": null,
-  "version": "12.1.2",
-  "releaseDate": "2026-06-16T00:49:46Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/Technically-Technicolor-DRT/releases/tag/v12.1.2",
+  "version": "12.2.0",
+  "releaseDate": "2026-10-09T02:59:26Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/Technically-Technicolor-DRT/releases/tag/v12.2.0",
+  "releaseHighlights": "- New Preset Manager: save, update, rename, delete, import and export your own presets as .json files for Full Preset, Full Neg Preset, Neg Sensitivity, Neg Dye, Neg HD Curve, Dye Shaping and Textures\n- New Full Preset menu with four built-in looks: Modern (Single Stock + Xenon), 3 Strip (Process 4 + White Flame arc), 2 Strip (Process 3 + Carbon Arc) and 2 Strip Blue (Process 3 + Xenon). Your saved whole looks live here too\n- Preset menus now show \"(Custom)\" as soon as you change something, including when you draw curves in the Film Stock Editor\n- Auto Calibrate keeps mid grey printing neutral at your Calibration Target when you change stock, dyes or process. Works in Single Stock, Process 3 and Process 4\n- New Halation Model choice with Roadshow and Roadshow 2.0, where brighter sources glow more and the glow takes the source colour\n- New hue and amount puck in the Textures editor: drag it to set halation colour and strength in one move\n- New Grain Model choice (Classic or Emulsion), and grain no longer goes blotchy at high Grain Intensity, most noticeable on 16mm\n- Textures: new Texture Preset menu with 65mm, 35mm and 16mm formats plus Save Custom, and Edit Grain, Edit Halation and Edit MTF buttons that open that section in Single View\n- Single View now pans and zooms: drag to pan, scroll to zoom up to 20x, double-click to jump in on a spot and double-click again to go back\n- New MTF Pressure slider plus per-channel Bump Width and Fine Crispness. High Pressure no longer rings or fringes\n- New Input Primaries choice for ARRI Wide Gamut 3, DaVinci Wide Gamut, Sony S-Gamut3 and ACES AP0. Classic keeps the old behaviour\n- Carbon Arc and White Flame bulbs are rescaled to 100% brightness, so they no longer scorch highlights\n- The plugin now tells you in the inspector when an update is available\n- Fixed a crash at startup when Technicolor DRT was loaded alongside other Dec 18 plugins",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v12.1.2/TechnicolorDRT_macOS_universal_portable.zip",
-      "sha256": "285f4bfc7dbf4a23087d3d7a7c4e64fede7cf7d1990a824d7cd79179d5e07a36",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v12.2.0/TechnicolorDRT_macOS_universal_portable.zip",
+      "sha256": "0ca3dcd1518cd83da2df2c5be4ad650e02f0f0da6603fd460b09dcf49b8c1911",
       "packageType": "zip",
       "bundleName": "TechnicolorDRT.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.TechnicolorDRT",
@@ -43,8 +44,8 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v12.1.2/TechnicolorDRT_windows_x64_portable.zip",
-      "sha256": "4e8f5ff146360b4cac061355057212b7a441e526005edf823621dbacf2a87b19",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v12.2.0/TechnicolorDRT_windows_x64_portable.zip",
+      "sha256": "5ddfeba4d823b2656a081b71d3e9e94b078bb514ba08a96ab2e0f2e62358234d",
       "packageType": "zip",
       "bundleName": "TechnicolorDRT.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.TechnicolorDRT",
@@ -65,8 +66,8 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v12.1.2/TechnicolorDRT_linux_x86_64_portable.zip",
-      "sha256": "9acb1bd36646de5887c34f16c58ad8abacd003723bf7f8db53b1d59a7a9f2e9d",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v12.2.0/TechnicolorDRT_linux_x86_64_portable.zip",
+      "sha256": "d7a4bdb408078443dbdfbd75a871df4fd7348ed4760987df7b0121d553a4138c",
       "packageType": "zip",
       "bundleName": "TechnicolorDRT.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.TechnicolorDRT",
@@ -86,6 +87,79 @@
     }
   ],
   "availableVersions": [
+    {
+      "version": "12.1.2",
+      "releaseDate": "2026-06-16T00:49:46Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/Technically-Technicolor-DRT/releases/tag/v12.1.2",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v12.1.2/TechnicolorDRT_macOS_universal_portable.zip",
+          "sha256": "285f4bfc7dbf4a23087d3d7a7c4e64fede7cf7d1990a824d7cd79179d5e07a36",
+          "packageType": "zip",
+          "bundleName": "TechnicolorDRT.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.TechnicolorDRT",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v12.1.2/TechnicolorDRT_windows_x64_portable.zip",
+          "sha256": "4e8f5ff146360b4cac061355057212b7a441e526005edf823621dbacf2a87b19",
+          "packageType": "zip",
+          "bundleName": "TechnicolorDRT.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.TechnicolorDRT",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Technically-Technicolor-DRT/releases/download/v12.1.2/TechnicolorDRT_linux_x86_64_portable.zip",
+          "sha256": "9acb1bd36646de5887c34f16c58ad8abacd003723bf7f8db53b1d59a7a9f2e9d",
+          "packageType": "zip",
+          "bundleName": "TechnicolorDRT.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.TechnicolorDRT",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
     {
       "version": "12.1.1",
       "releaseDate": "2026-06-15T03:31:53Z",

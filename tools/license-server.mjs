@@ -4,7 +4,8 @@
  *
  * Usage:   node tools/license-server.mjs
  *
- * Reads/writes ledger.json + processed-subscribers.json in tools/license-keys/.
+ * Reads/writes ledger.json + processed-subscribers.json in LICENSE_LEDGER_DIR
+ * (the private license-ledger repo), falling back to tools/license-keys/.
  * Signs new keys with private.pem (Ed25519).  Auto-opens the browser.
  */
 
@@ -1301,17 +1302,25 @@ function syncWebsiteForRelease(pluginId, repoName, assetName) {
   return result;
 }
 
-function gitSync() {
+function gitPull(cwd, label) {
   try {
-    execSync("git stash", { cwd: REPO_ROOT, stdio: "pipe" });
-    try {
-      execSync("git pull --rebase origin main", { cwd: REPO_ROOT, stdio: "pipe" });
-      console.log("[sync] Pulled latest from GitHub");
-    } finally {
-      try { execSync("git stash pop", { cwd: REPO_ROOT, stdio: "pipe" }); } catch {}
-    }
+    // --autostash keeps uncommitted edits (the viewer writes ledger.json in place)
+    // without touching the shared stash stack the way a bare git stash would.
+    execSync("git pull --rebase --autostash origin main", { cwd, stdio: "pipe" });
+    console.log(`[sync] Pulled latest ${label}`);
   } catch (err) {
-    console.warn(`[sync] git pull failed: ${err.stderr?.toString().trim() || err.message}`);
+    console.warn(`[sync] ${label} pull failed: ${err.stderr?.toString().trim() || err.message}`);
+  }
+}
+
+function gitSync() {
+  gitPull(REPO_ROOT, "Dec18-Plugin-Manager");
+  // The ledger lives in its own private repo whenever LICENSE_LEDGER_DIR is set,
+  // and the Licenses tab reads it straight off disk. Without this second pull the
+  // tab silently freezes at whatever that clone last fetched, while the Downloads
+  // tab keeps looking current because it fetches live from the Worker.
+  if (LEDGER_DIR !== KEYS_DIR && existsSync(join(LEDGER_DIR, ".git"))) {
+    gitPull(LEDGER_DIR, "license-ledger");
   }
 }
 

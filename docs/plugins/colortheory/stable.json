@@ -14,16 +14,16 @@
     "GPU"
   ],
   "infoUrl": null,
-  "version": "1.1.2",
-  "releaseDate": "2026-09-23T00:53:56Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/tag/v1.1.2",
-  "releaseHighlights": "- The four photographic test images are back: Blue Bar, Red Christmas Lights, Light Saber and Diver. Each one now just names its colour space and says where a poor picture formation breaks the picture. The download is about 51 MB again.\n- Image Options gains a DaVinci Wide Gamut / Intermediate output. ARRI Wide Gamut 4 (Diver), Rec.709 and sRGB sources are converted to DaVinci Wide Gamut and encoded with the Intermediate curve, no clamp, so the node drops straight into a DWG/I timeline.\n- Palette Reconstruction gains a Sampled From Image preset. It reads the frame every render, finds the colours that cover most of it and fills the palette in coverage order, Colour 1 being the most common. Colour Count still sets how many.",
+  "version": "1.2.0",
+  "releaseDate": "2026-10-20T15:49:24Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/tag/v1.2.0",
+  "releaseHighlights": "- New Dye Layer Stack illusion. Three dye layers stack in density, so light passing through multiplies. Compare a film layer against a flat veil, watch overlapping dyes build new colours, or pull the layers apart and stack them back together.\n- New Dye Layer Separation passthru. Splits your clip into its cyan, magenta and yellow dye layers, lets you switch, gain or kill each one, and restacks them. View each layer, the density, or side by side strips.\n- New Surround A/B. Two identical patches on a bright and a dark surround, set in stops around mid grey, with a master exposure, an increment and decrement link, and a readout that says SAME VALUE when the numbers match.\n- New Crispening Ladder. Even steps in stops on a surround you control, as a row, as pairs, or as a grid that climbs both ways from a black corner. The steps near the surround are the ones that look the most different.\n- New Viewing Matte passthru. Shrinks your clip and puts it on a uniform matte. Store a dark and a bright matte and flip between them to see the same picture change.\n- Every new mode has Demo presets that set the sliders for you.",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.1.2/ColorTheory_macOS_universal.zip",
-      "sha256": "e18abbdaceff9fbdf456443d4c5dcd09f5e07ba44d599c81dc943ba8abbd63f2",
+      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.2.0/ColorTheory_macOS_universal.zip",
+      "sha256": "d6f97599a4c6065eaa71ad88856f725e09721c3f9c732efe4640fc14786c8a8e",
       "packageType": "zip",
       "bundleName": "ColorTheory.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.ColorTheory",
@@ -44,8 +44,8 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.1.2/ColorTheory_windows_cuda.zip",
-      "sha256": "ad66f696b0729858315298eaf7042a2d0161d1039645782c9367f44a460bc804",
+      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.2.0/ColorTheory_windows_cuda.zip",
+      "sha256": "497379ca44faec7c198a450b18753c6dd4303d07e1e26f0cd10e9299244b28fc",
       "packageType": "zip",
       "bundleName": "ColorTheory.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.ColorTheory",
@@ -66,8 +66,8 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.1.2/ColorTheory_linux_cuda.zip",
-      "sha256": "7560f7b4c69edf81c6d78e91aa36d9a32a10d2e54a7cff88fc87fb0f5ee83ad5",
+      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.2.0/ColorTheory_linux_cuda.zip",
+      "sha256": "daa584b79d22e622cd0aa4947f44b85ebe52f0a46848ff4e8f818d4a90acc98b",
       "packageType": "zip",
       "bundleName": "ColorTheory.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.ColorTheory",
@@ -87,6 +87,80 @@
     }
   ],
   "availableVersions": [
+    {
+      "version": "1.1.2",
+      "releaseDate": "2026-09-23T00:53:56Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/tag/v1.1.2",
+      "releaseHighlights": "- The four photographic test images are back: Blue Bar, Red Christmas Lights, Light Saber and Diver. Each one now just names its colour space and says where a poor picture formation breaks the picture. The download is about 51 MB again.\n- Image Options gains a DaVinci Wide Gamut / Intermediate output. ARRI Wide Gamut 4 (Diver), Rec.709 and sRGB sources are converted to DaVinci Wide Gamut and encoded with the Intermediate curve, no clamp, so the node drops straight into a DWG/I timeline.\n- Palette Reconstruction gains a Sampled From Image preset. It reads the frame every render, finds the colours that cover most of it and fills the palette in coverage order, Colour 1 being the most common. Colour Count still sets how many.",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.1.2/ColorTheory_macOS_universal.zip",
+          "sha256": "e18abbdaceff9fbdf456443d4c5dcd09f5e07ba44d599c81dc943ba8abbd63f2",
+          "packageType": "zip",
+          "bundleName": "ColorTheory.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.ColorTheory",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.1.2/ColorTheory_windows_cuda.zip",
+          "sha256": "ad66f696b0729858315298eaf7042a2d0161d1039645782c9367f44a460bc804",
+          "packageType": "zip",
+          "bundleName": "ColorTheory.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.ColorTheory",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.1.2/ColorTheory_linux_cuda.zip",
+          "sha256": "7560f7b4c69edf81c6d78e91aa36d9a32a10d2e54a7cff88fc87fb0f5ee83ad5",
+          "packageType": "zip",
+          "bundleName": "ColorTheory.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.ColorTheory",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
     {
       "version": "1.1.1",
       "releaseDate": "2026-09-22T22:44:56Z",

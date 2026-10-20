@@ -4,6 +4,9 @@
 //   GET  /export           — download full CSV  (requires ?secret=ADMIN_SECRET)
 //   POST /notify           — send release email to subscribers (requires secret in body)
 //   GET  /unsubscribe      — opt-out link (?email=&tool=&secret= — secret is a per-row hash)
+//   GET  /newsletter-optout  : monthly-newsletter opt-out (?email=&token=), works for
+//                              anyone, including buyers who have no downloads row
+//   POST /newsletter-optout  : same thing for RFC 8058 one-click unsubscribe
 
 const CORS_HEADERS = (origin, env) => ({
   'Access-Control-Allow-Origin': (origin === env.ALLOWED_ORIGIN || origin === 'http://localhost:3077') ? origin : env.ALLOWED_ORIGIN,
@@ -26,6 +29,15 @@ function now() {
 // Simple per-row unsubscribe token so we don't need sessions
 async function unsubToken(email, tool, env) {
   const msg = `unsub:${email}:${tool}:${env.ADMIN_SECRET}`;
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 16);
+}
+
+// Newsletter opt-out is keyed on the address alone, not on a tool, because buyers
+// who never used the free download gate have no downloads row to hang a flag on.
+// Distinct prefix so a newsletter token can never be replayed as a per-tool one.
+async function newsletterToken(email, env) {
+  const msg = `newsletter-optout:${email}:${env.ADMIN_SECRET}`;
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 16);
 }
@@ -121,7 +133,7 @@ export default {
         const unsubUrl = `https://dec18-download-logger.dec18studios.workers.dev/unsubscribe?email=${encodeURIComponent(row.email)}&tool=${encodeURIComponent(tool_slug)}&token=${token}`;
 
         const html = emailHTML({ tool_name: tool_name || tool_slug, version, download_url, message, unsubUrl });
-        const subject = `${tool_name || tool_slug} — v${version} is out`;
+        const subject = `${tool_name || tool_slug} v${version} is out`;
 
         const ok = await sendGmail({ accessToken, to: row.email, subject, html, env });
         if (ok) sent++; else failed++;
@@ -150,6 +162,51 @@ export default {
       return new Response(unsubPage(`You've been unsubscribed from updates for ${tool}. You won't hear from us again for this tool.`, true), {
         headers: { 'Content-Type': 'text/html' },
       });
+    }
+
+    // ── GET|POST /newsletter-optout ────────────────────────────────────
+    // POST is what Gmail and Yahoo call for one-click unsubscribe (RFC 8058); GET is
+    // the link a human clicks. Both do the same write and both are idempotent.
+    if ((request.method === 'GET' || request.method === 'POST') && url.pathname === '/newsletter-optout') {
+      let email = (url.searchParams.get('email') || '').trim().toLowerCase();
+      let token = url.searchParams.get('token') || '';
+
+      // One-click posts the form body rather than the query string.
+      if (request.method === 'POST' && (!email || !token)) {
+        try {
+          const form = await request.formData();
+          email = email || (form.get('email') || '').toString().trim().toLowerCase();
+          token = token || (form.get('token') || '').toString();
+        } catch { /* body was not a form; fall through to the check below */ }
+      }
+
+      const expected = email ? await newsletterToken(email, env) : '';
+      if (!email || !token || token !== expected) {
+        if (request.method === 'POST') return json({ ok: false, error: 'bad token' }, 403);
+        return new Response(unsubPage('Invalid or expired unsubscribe link.', false), {
+          status: 200,
+          headers: { 'Content-Type': 'text/html' },
+        });
+      }
+
+      await env.DB.prepare(`
+        INSERT INTO newsletter_optouts (email, opted_out_at, source)
+        VALUES (?, ?, ?)
+        ON CONFLICT(email) DO UPDATE SET opted_out_at = excluded.opted_out_at
+      `).bind(email, now(), request.method === 'POST' ? 'one-click' : 'link').run();
+
+      // Somebody clicking unsubscribe means "stop the marketing email", not "stop
+      // this one list", so retire their download rows too. Harmless when there are
+      // none, which is the case for buyers who never used the free download gate.
+      await env.DB.prepare(`
+        UPDATE downloads SET unsubscribed = 1 WHERE email = ?
+      `).bind(email).run();
+
+      if (request.method === 'POST') return json({ ok: true });
+      return new Response(unsubPage(
+        "You're off the list. No more monthly updates or release announcements. Licence and account email still works, so your tools and downloads are unaffected.",
+        true
+      ), { headers: { 'Content-Type': 'text/html' } });
     }
 
     return new Response('Not found', { status: 404 });

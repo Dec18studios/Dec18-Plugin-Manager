@@ -21,3 +21,33 @@ CREATE TABLE IF NOT EXISTS downloads (
 
 CREATE INDEX IF NOT EXISTS idx_tool ON downloads(tool_slug);
 CREATE INDEX IF NOT EXISTS idx_email ON downloads(email);
+
+-- ── Newsletter campaigns ─────────────────────────────────────────────────────
+-- One row per (address, campaign). Used by tools/monthly-update-announce.mjs so
+-- a rerun cannot mail the same person twice. A column per campaign does not work
+-- for a monthly send, and buyers who never used the download gate have no
+-- downloads row to flag at all, so campaign state lives here instead.
+--   state 0 = queued/attempted, 1 = sent, 2 = undeliverable, never retried
+CREATE TABLE IF NOT EXISTS campaign_sends (
+  email      TEXT    NOT NULL,
+  campaign   TEXT    NOT NULL,
+  audience   TEXT,
+  state      INTEGER NOT NULL DEFAULT 0,
+  updated_at TEXT    NOT NULL,
+  PRIMARY KEY (email, campaign)
+);
+
+CREATE INDEX IF NOT EXISTS idx_campaign_sends_campaign
+  ON campaign_sends(campaign);
+
+-- Daily-quota accounting reads this by date, so keep it indexed.
+CREATE INDEX IF NOT EXISTS idx_campaign_sends_updated
+  ON campaign_sends(updated_at);
+
+-- Written by GET|POST /newsletter-optout in worker.js. Keyed on the address only,
+-- so it covers buyers with no downloads row. Suppresses every future newsletter.
+CREATE TABLE IF NOT EXISTS newsletter_optouts (
+  email        TEXT PRIMARY KEY,
+  opted_out_at TEXT NOT NULL,
+  source       TEXT
+);

@@ -127,7 +127,7 @@
  *                           full toolbox access and do get the member version.
  *   MAX_SENDS               per-run cap, default 75.
  *   DAILY_BUDGET            newsletter sends allowed per calendar day (UTC),
- *                           default 150, leaving 150 of Brevo's 300 for
+ *                           default 225, leaving 75 of Brevo's 300 for
  *                           transactional mail. The run caps itself at whatever
  *                           is left of this and stops cleanly at zero.
  *
@@ -137,7 +137,17 @@
  * itself. The hourly demo-welcome run, licence fulfillment and the sign-in OTP
  * mail all draw on the same 300, and OTP is the one that must never bounce off
  * a quota wall, because a member who cannot sign in cannot install anything.
- * Reserve about 150 a day for that traffic and roughly 150 are left.
+ *
+ * The reserve is sized from measured traffic, not a guess. Over 2026-10-01 to
+ * 10-22 the download gate averaged about 10 distinct addresses a day and peaked
+ * at 34 on release day, and welcome mail is one per new address. So 75 a day is
+ * roughly twice the observed peak with room for licence and OTP mail on top,
+ * which leaves 225 for the newsletter.
+ *
+ * Do not reach for the full 300. Going past 250 buys literally no time: 926
+ * recipients is 4 days at 250 and still 4 days at 300, so the last 50 a day
+ * only costs you the entire safety margin. If a release lands mid-newsletter,
+ * that margin is what keeps new buyers getting their keys.
  *
  * You do not have to do that arithmetic yourself. Before each batch the script
  * counts the campaign_sends rows already written today (every campaign, and
@@ -151,12 +161,11 @@
  * it says. Reruns are safe, because a sent address is marked before the next
  * send goes out and marked addresses are not eligible again.
  *
- * MAX_SENDS=75 with DAILY_BUDGET=150 means two batches a day. Both audiences
- * together came to about 930 addresses in October, so a full newsletter is a
- * week of dispatches, not an evening. Run the dry run first every time: it
+ * MAX_SENDS=75 with DAILY_BUDGET=225 means three batches a day. Both audiences
+ * together came to about 930 addresses in October, so a full newsletter is five
+ * days of dispatches, not an evening. Run the dry run first every time: it
  * prints today's remaining budget, how many go out on the next run, and roughly
- * how many days the whole list takes. Raising DAILY_BUDGET shortens that, but it
- * spends the headroom that licence, welcome and sign-in mail rely on.
+ * how many days the whole list takes.
  */
 
 import { createHash } from "node:crypto";
@@ -188,7 +197,7 @@ const MAX_SENDS = Number(process.env.MAX_SENDS || "75");
 // welcome mail, licence delivery and OTP sign-in all draw on the same bucket.
 // Reserve half of it for that transactional traffic, because a colourist who
 // cannot sign in is a worse outcome than a newsletter that takes an extra day.
-const DAILY_BUDGET = Number(process.env.DAILY_BUDGET || "150");
+const DAILY_BUDGET = Number(process.env.DAILY_BUDGET || "225");
 
 const BREVO_KEY = (process.env.BREVO_API_KEY || "").trim();
 // The Worker's ADMIN_SECRET, used to sign unsubscribe links. Nothing exports it

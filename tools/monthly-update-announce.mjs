@@ -564,8 +564,24 @@ function freeBody() {
       `            <p style="${KICKER}">Out today, still free</p>
             <h1 class="h1" style="margin:0 0 16px 0; font-family:Georgia, 'Times New Roman', serif; font-size:30px; line-height:38px; color:#f4f1ea; font-weight:normal;">Color Theory 1.2.0, and five new ways to break your own eyes</h1>
             <p style="${P}">Hi there,</p>
-            <p style="${P}">You grabbed one of my free tools at some point, so here is the monthly note on where they stand. ${strong("Color Theory")} shipped a new version today and it is the bulk of this email. There is a short, honest paragraph at the bottom about what the paid tools got, and you can ignore it without hurting my feelings.</p>`,
+            <p style="${P}">You grabbed one of my free tools at some point, so here is the monthly note on where they stand.</p>`,
       "40px 40px 8px 40px"
+    ),
+
+    // TLDR box. Deliberately the first thing after the greeting: most people
+    // scan one screen and leave, so the whole shape of the email goes here and
+    // the intro no longer repeats it in prose.
+    row(
+      panel(
+        "The short version",
+        "What is in this email",
+        `${bullet(`${strong("Color Theory 1.2.0 is out today")} with five new modes. Still free, no watermark, no sign up.`)}
+${bullet(`Still on the first build? There is a list of everything added since late September.`)}
+${bullet(`${strong("PhotoChemist Lite got updated too")}, with the new halation model and the printer calibration sliders now unlocked in the free edition.`)}
+${bullet(`A short paragraph on what the paid tools got. Skip it, no hard feelings.`)}
+${bullet(`The Plugin Manager updates the free tools too, and does not ask you to sign in for them.`)}`
+      ),
+      "0 40px 8px 40px"
     ),
 
     row(
@@ -590,12 +606,27 @@ ${CT_SINCE_LAUNCH}`,
     divider(),
 
     row(
+      `            <p style="${KICKER}">Also updated this month</p>
+            <h2 style="${H2}">PhotoChemist Lite got the new halation</h2>
+            <p style="${P}">The free edition of my spectral film emulation plugin follows the 3.0 line, so it picked up most of what the full plugin got this month. It still renders clean with no watermark, and you still get the whole preset library and the Film Stock Editor.</p>
+${bullet(`${strong("Roadshow 2.0 halation is built in.")} The glow scales with how bright the source is, so practicals and specular hits bloom more than a white wall does.`)}
+${bullet(`${strong("Printer Calibration is unlocked in Lite")}, sliders and test pattern, in their own group. Re-solved at 40 IRE, range -25 to 75, with 25 still neutral.`)}
+${bullet(`${strong("It tells you when an update is out.")} An Update available button shows up at the top of the controls. The check runs once a day, sends nothing about you, and stays quiet when you are offline.`)}
+${bullet(`Grain no longer shimmers on a parked frame, the Film Stock Editor preview stopped jumping to other clips, and both editors now show a Live / Not live indicator so you know whether the viewer is really updating as you edit.`)}
+${bullet(`Linux: fixed a crash as soon as PhotoChemist was added to a node.`)}
+            <p style="${SMALL}">Worth knowing: the starting defaults changed in 3.1.0, so an older Lite grade that never touched halation, acutance or spectral sharpening can render differently now.</p>
+${primaryBtn(PHOTOCHEMIST_URL, "Get PhotoChemist Lite")}`,
+      "0 40px 8px 40px"
+    ),
+
+    divider(),
+
+    row(
       `            <p style="${KICKER}">Easy to miss</p>
-            <h2 style="${H2}">Two more free editions</h2>
-            <p style="${P}">Neither of these is new this month, but people keep telling me they did not know they existed.</p>
-${bullet(`${strong("PhotoChemist Lite.")} The free edition of my spectral film emulation plugin. It renders clean, no watermark, and you get the whole preset library plus the Film Stock Editor, so you can draw your own sensitivity, dye and H&amp;D curves. <a href="${PHOTOCHEMIST_URL}" target="_blank" style="color:#d9a441; text-decoration:none;">Have a look &rarr;</a>`)}
+            <h2 style="${H2}">One more free edition</h2>
+            <p style="${P}">Not new this month, but people keep telling me they did not know it existed.</p>
 ${bullet(`${strong("Look Notes Lite.")} Burns a look label and notes into the frame for client sessions, and flips your look nodes for you when you change the active look. Clip level or timeline level, split looks included. <a href="${LOOK_NOTES_URL}" target="_blank" style="color:#d9a441; text-decoration:none;">Have a look &rarr;</a>`)}
-            <p style="${SMALL}">Both are free and yours to keep.</p>`,
+            <p style="${SMALL}">Free and yours to keep.</p>`,
       "0 40px 8px 40px"
     ),
 
@@ -806,9 +837,19 @@ function emailText({ unsub, variant }) {
       "Hi there,",
       "",
       "You grabbed one of my free tools at some point, so here is the monthly note on",
-      "where they stand. Color Theory shipped a new version today and it is the bulk of",
-      "this email. There is a short, honest paragraph at the bottom about what the paid",
-      "tools got, and you can ignore it without hurting my feelings.",
+      "where they stand.",
+      "",
+      "WHAT IS IN THIS EMAIL",
+      "",
+      "* Color Theory 1.2.0 is out today with five new modes. Still free, no watermark,",
+      "  no sign up.",
+      "* Still on the first build? There is a list of everything added since late",
+      "  September.",
+      "* PhotoChemist Lite got updated too, with the new halation model and the printer",
+      "  calibration sliders now unlocked in the free edition.",
+      "* A short paragraph on what the paid tools got. Skip it, no hard feelings.",
+      "* The Plugin Manager updates the free tools too, and does not ask you to sign in",
+      "  for them.",
       "",
       "Color Theory 1.2.0, five new modes (out today)",
       "",
@@ -861,18 +902,37 @@ function emailText({ unsub, variant }) {
       "",
       `Get Color Theory: ${COLOR_THEORY_URL}`,
       "",
-      "Two more free editions, easy to miss",
+      "PhotoChemist Lite got the new halation",
       "",
-      "* PhotoChemist Lite. The free edition of my spectral film emulation plugin. It",
-      "  renders clean, no watermark, and you get the whole preset library plus the Film",
-      "  Stock Editor, so you can draw your own sensitivity, dye and H&D curves.",
-      `  ${PHOTOCHEMIST_URL}`,
+      "The free edition of my spectral film emulation plugin follows the 3.0 line, so it",
+      "picked up most of what the full plugin got this month. It still renders clean with",
+      "no watermark, and you still get the whole preset library and the Film Stock Editor.",
+      "",
+      "* Roadshow 2.0 halation is built in. The glow scales with how bright the source",
+      "  is, so practicals and specular hits bloom more than a white wall does.",
+      "* Printer Calibration is unlocked in Lite, sliders and test pattern, in their own",
+      "  group. Re-solved at 40 IRE, range -25 to 75, with 25 still neutral.",
+      "* It tells you when an update is out. An Update available button shows up at the",
+      "  top of the controls. The check runs once a day, sends nothing about you, and",
+      "  stays quiet when you are offline.",
+      "* Grain no longer shimmers on a parked frame, the Film Stock Editor preview",
+      "  stopped jumping to other clips, and both editors now show a Live / Not live",
+      "  indicator so you know whether the viewer is really updating as you edit.",
+      "* Linux: fixed a crash as soon as PhotoChemist was added to a node.",
+      "",
+      "Worth knowing: the starting defaults changed in 3.1.0, so an older Lite grade that",
+      "never touched halation, acutance or spectral sharpening can render differently now.",
+      "",
+      `Get PhotoChemist Lite: ${PHOTOCHEMIST_URL}`,
+      "",
+      "One more free edition, easy to miss",
+      "",
       "* Look Notes Lite. Burns a look label and notes into the frame for client sessions,",
       "  and flips your look nodes for you when you change the active look. Clip level or",
       "  timeline level, split looks included.",
       `  ${LOOK_NOTES_URL}`,
       "",
-      "Both are free and yours to keep.",
+      "Free and yours to keep.",
       "",
       "What the paid tools got this month",
       "",

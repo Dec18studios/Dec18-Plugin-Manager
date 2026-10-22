@@ -113,8 +113,15 @@
  *                           before the extension, lite-announce style. Uses a
  *                           placeholder unsubscribe link.
  *   AUDIENCE=free|member|both     default both.
+ *   CAMPAIGN=monthly-YYYY-MM
+ *                           the suppression key, default monthly-2026-10. Keep
+ *                           it fixed for the whole run of batches. Changing it
+ *                           mid-send re-sends to everybody already mailed, and
+ *                           reusing an old month sends to nobody at all.
  *   LICENSE_LEDGER_DIR      checkout of the private license-ledger repo.
- *                           Required for the member audience.
+ *                           Required for BOTH audiences: member addresses come
+ *                           from it, and a live free send refuses without it
+ *                           because it is also the de-duplication list.
  *   CLOUDFLARE_API_TOKEN    only if wrangler is not already logged in. A normal
  *                           `wrangler login` with d1 write covers everything here.
  *   BREVO_API_KEY           required for live sends and for TEST_EMAIL.
@@ -182,8 +189,12 @@ const WORKER_DIR = join(__dirname, "download-logger");
 const WORKER_URL = "https://dec18-download-logger.dec18studios.workers.dev";
 const D1_NAME = "dec18-downloads";
 
-const CAMPAIGN = "monthly-2026-10";
-const TAG = "monthly-update-2026-10";
+// campaign_sends is keyed on (email, campaign), so this string is what stops a
+// resend. Overridable so next month is a workflow input rather than a code edit,
+// but NEVER reuse a past month's value: every address already marked for it is
+// suppressed, and a brand new one re-sends to the entire list.
+const CAMPAIGN = (process.env.CAMPAIGN || "monthly-2026-10").trim();
+const TAG = `monthly-update-${CAMPAIGN.replace(/^monthly-/, "")}`;
 
 // The ONLY way to arm a live send. DRY_RUN=0 on its own is still a dry run.
 const LIVE = process.env.CONFIRM_SEND === "yes-send-for-real";

@@ -2,23 +2,43 @@ name: Monthly Update Announcement
 
 # The monthly "here is what changed" email, in two variants: free-tool
 # downloaders get the upgrade-flavoured version, licence holders get the
-# member version. Manual dispatch ONLY, no schedule, so a send is always
-# somebody pressing the button.
+# member version.
 #
-#   mode=dry-run    → list masked recipients, budget and day count, send
-#                     nothing, mark nothing                          (default)
-#   mode=send       → real send, up to max_sends this run
-#   test_email=addr → send BOTH variants to addr (two emails), mark nothing
+# HOW A CAMPAIGN GOES OUT
+# Set two repository variables and then forget about it:
+#
+#   gh variable set NEWSLETTER_CAMPAIGN --body monthly-2026-10
+#   gh variable set NEWSLETTER_AUTOSEND --body true
+#
+# The schedule below then sends 75 at a time, three times a day, until the
+# whole list is done, which is about five days for ~930 people. When the
+# audience is finished the script sends nothing on every later run, so leaving
+# autosend on costs nothing.
+#
+# NEWSLETTER_CAMPAIGN is the real go button, not AUTOSEND. The campaign id is
+# both the suppression key and the arming switch: while it points at a
+# finished campaign every cron run is a no-op, and bumping it to a new month
+# is what starts the next send. So bump it only AFTER that month's copy is
+# written and you have read a dry run, because the cron will not wait for you
+# to look.
+#
+# MANUAL RUNS
+#   mode=dry-run    = list masked recipients, budget and day count, send
+#                     nothing, mark nothing                        (default)
+#   mode=send       = real send, up to max_sends this run. Use it to kick the
+#                     first batch off now instead of waiting for the cron
+#   test_email=addr = send BOTH variants to addr (two emails), mark nothing
 #
 # State lives in the download-logger D1 (campaign_sends, keyed on email +
 # campaign), so every run picks up exactly where the last one stopped and
-# nobody is ever emailed twice for the same campaign.
+# nobody is ever emailed twice for the same campaign. That is what makes an
+# unattended schedule safe: a duplicate run is a no-op, not a second email.
 #
 # Batching: Brevo's free tier is 300/day shared with licence fulfillment, the
 # hourly demo welcome and OTP sign-in mail, so the script holds 75/day back
-# for those and spends at most 225 on the newsletter. ~930 recipients is five
-# days of dispatches. Run dry-run first: it prints what is left of today's
-# budget, how many go out on the next run, and how many days the list takes.
+# for those and spends at most 225 on the newsletter. The three cron times sit
+# inside one UTC day on purpose, because the script's daily budget counter
+# rolls over at UTC midnight.
 #
 # The private licence ledger is checked out below with LEDGER_DEPLOY_KEY, and
 # it is NOT optional for either audience: the member audience is built from it,
@@ -26,6 +46,9 @@ name: Monthly Update Announcement
 # member who also grabbed a free tool from getting the free version.
 
 on:
+  schedule:
+    # 14:00, 18:00 and 22:00 UTC. Three runs x 75 = the 225/day budget.
+    - cron: "0 14,18,22 * * *"
   workflow_dispatch:
     inputs:
       mode:
@@ -51,9 +74,9 @@ on:
         required: false
         default: "225"
       campaign:
-        description: "Campaign id. NEVER reuse a past month, and never invent a new one mid-send or the whole list re-sends"
+        description: "Override the NEWSLETTER_CAMPAIGN variable for this run only"
         required: false
-        default: "monthly-2026-10"
+        default: ""
       skip_master:
         description: "Leave the perpetual master keys out of the member audience"
         type: boolean
@@ -68,8 +91,24 @@ concurrency:
 
 jobs:
   send:
+    # A scheduled run only sends when autosend is armed. A manual dispatch
+    # always runs, so a dry run works whatever the variables say.
+    if: github.event_name == 'workflow_dispatch' || vars.NEWSLETTER_AUTOSEND == 'true'
     runs-on: ubuntu-latest
+    env:
+      CAMPAIGN: ${{ inputs.campaign || vars.NEWSLETTER_CAMPAIGN }}
     steps:
+      # The script falls back to its own hardcoded default when CAMPAIGN is
+      # empty, which would quietly mail an unattended campaign nobody chose.
+      # Refuse instead.
+      - name: Require a campaign id
+        if: env.CAMPAIGN == ''
+        run: |
+          echo "::error::No campaign id. Set the NEWSLETTER_CAMPAIGN repository variable" \
+            "(gh variable set NEWSLETTER_CAMPAIGN --body monthly-YYYY-MM) or pass the" \
+            "campaign input. Refusing to guess which campaign to send."
+          exit 1
+
       - uses: actions/checkout@v4
 
       - name: Check out licence ledger
@@ -89,13 +128,13 @@ jobs:
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
           DOWNLOAD_LOGGER_SECRET: ${{ secrets.DOWNLOAD_LOGGER_SECRET }}
           LICENSE_LEDGER_DIR: ${{ github.workspace }}/ledger
-          CAMPAIGN: ${{ inputs.campaign }}
-          AUDIENCE: ${{ inputs.audience }}
+          # inputs.* are all empty on a scheduled run, hence every fallback.
+          AUDIENCE: ${{ inputs.audience || 'both' }}
           TEST_EMAIL: ${{ inputs.test_email }}
-          MAX_SENDS: ${{ inputs.max_sends }}
-          DAILY_BUDGET: ${{ inputs.daily_budget }}
+          MAX_SENDS: ${{ inputs.max_sends || '75' }}
+          DAILY_BUDGET: ${{ inputs.daily_budget || '225' }}
           SKIP_MASTER: ${{ inputs.skip_master && '1' || '' }}
           # CONFIRM_SEND is the only thing that arms a real send. A test_email
           # run deliberately leaves it empty: two samples, nothing marked.
-          CONFIRM_SEND: ${{ (inputs.mode == 'send' && inputs.test_email == '') && 'yes-send-for-real' || '' }}
+          CONFIRM_SEND: ${{ (github.event_name == 'schedule' || (inputs.mode == 'send' && inputs.test_email == '')) && 'yes-send-for-real' || '' }}
         run: node tools/monthly-update-announce.mjs

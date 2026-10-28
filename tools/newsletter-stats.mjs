@@ -94,14 +94,14 @@ async function d1(sql) {
 
 // Every event page is 2500 rows. Stop at 40 pages: 100k events is far past any
 // plausible month and a runaway loop here burns API quota for nothing.
-async function allEvents(event) {
+async function eventPages(event, extra = {}) {
   const out = [];
   for (let page = 0; page < 40; page++) {
     const { events = [] } = await brevo("statistics/events", {
       event,
-      tags: JSON.stringify([TAG]),
       limit: "2500",
       offset: String(page * 2500),
+      ...extra,
     });
     out.push(...events);
     if (events.length < 2500) break;
@@ -109,9 +109,27 @@ async function allEvents(event) {
   return out;
 }
 
+// The documented tags filter on this endpoint came back empty against a window
+// that the aggregated report says has clicks in it, so do not trust it. Try it
+// first because it is the cheap path, then fall back to pulling every event in
+// the window and matching on the tag each row carries. Volume makes that safe:
+// the whole account is capped at 300 sends a day, so even 90 days of events is
+// a handful of pages.
+async function allEvents(event) {
+  const tagged = await eventPages(event, { tags: JSON.stringify([TAG]) });
+  if (tagged.length) return tagged;
+  const everything = await eventPages(event);
+  const mine = everything.filter((e) => e.tag === TAG);
+  if (everything.length && !mine.length) return [];
+  if (mine.length) {
+    console.log(`  (tags filter returned nothing for ${event}; matched ${mine.length} of ${everything.length} events on the tag instead)`);
+  }
+  return mine;
+}
+
 const pct = (n, of) => (of > 0 ? `${((n / of) * 100).toFixed(1)}%` : "n/a");
 const pad = (s, w) => String(s).padEnd(w);
-const num = (n, w = 6) => String(n).padStart(w);
+const num = (n, w = 7) => String(n).padStart(w);
 
 function heading(s) {
   console.log(`\n${s}`);

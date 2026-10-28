@@ -1,0 +1,73 @@
+name: Newsletter Report
+
+# Opens, clicks and bounces for a monthly newsletter, read back out of Brevo
+# and D1. Dispatch only, and it cannot send mail: tools/newsletter-stats.mjs
+# never calls /v3/smtp/email at all.
+#
+# The newsletter goes out as transactional mail, one message per recipient, so
+# Brevo's Campaigns tab shows nothing for it. This reads the transactional
+# statistics endpoints filtered by the tag the sender stamps on every message,
+# which is derived from the campaign id exactly as the sender derives it.
+#
+# Everything printed is a count. No addresses, not even masked ones, because
+# this repo is public and so are these logs.
+
+on:
+  workflow_dispatch:
+    inputs:
+      campaign:
+        description: "Campaign id. Blank uses the NEWSLETTER_CAMPAIGN variable"
+        required: false
+        default: ""
+      days:
+        description: "How many days back to look, 1 to 90"
+        required: false
+        default: "14"
+      start_date:
+        description: "YYYY-MM-DD. Overrides days. Needs end_date too"
+        required: false
+        default: ""
+      end_date:
+        description: "YYYY-MM-DD. Needs start_date too"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    env:
+      CAMPAIGN: ${{ inputs.campaign || vars.NEWSLETTER_CAMPAIGN }}
+    steps:
+      - name: Require a campaign id
+        if: env.CAMPAIGN == ''
+        run: |
+          echo "::error::No campaign id. Pass the campaign input or set the" \
+            "NEWSLETTER_CAMPAIGN repository variable."
+          exit 1
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Pull the report
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          DAYS: ${{ inputs.days || '14' }}
+          START_DATE: ${{ inputs.start_date }}
+          END_DATE: ${{ inputs.end_date }}
+        run: node tools/newsletter-stats.mjs | tee report.txt
+
+      - name: Put it in the run summary
+        if: always()
+        run: |
+          {
+            echo '```'
+            cat report.txt 2>/dev/null || echo "(no report produced)"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

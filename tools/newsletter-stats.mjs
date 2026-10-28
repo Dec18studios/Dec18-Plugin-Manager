@@ -128,6 +128,16 @@ async function allEvents(event) {
 }
 
 const pct = (n, of) => (of > 0 ? `${((n / of) * 100).toFixed(1)}%` : "n/a");
+
+// NEVER print a link as Brevo hands it back. The unsubscribe link carries the
+// recipient's address in the query string, so a raw link list publishes real
+// addresses into a public Actions log. Drop the query and fragment, which also
+// collapses every per-person unsubscribe URL into one honest row, then scrub
+// anything still address-shaped in case a link carries one in its path.
+function tidyLink(raw) {
+  const cut = String(raw || "").split(/[?#]/)[0];
+  return cut.replace(/[^\s/@]+@[^\s/@]+\.[^\s/@]+/g, "[address removed]") || "(unknown link)";
+}
 const pad = (s, w) => String(s).padEnd(w);
 const num = (n, w = 7) => String(n).padStart(w);
 
@@ -242,7 +252,7 @@ async function main() {
   if (clicks.length) {
     const byLink = new Map();
     for (const e of clicks) {
-      const link = e.link || "(unknown link)";
+      const link = tidyLink(e.link);
       if (!byLink.has(link)) byLink.set(link, { total: 0, people: new Set() });
       const row = byLink.get(link);
       row.total++;

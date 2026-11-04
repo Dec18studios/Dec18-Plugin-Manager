@@ -12,17 +12,17 @@
     "OFX"
   ],
   "infoUrl": "https://dec18studios.com/photochemist",
-  "version": "3.2.0",
-  "releaseDate": "2026-11-04T18:35:17Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.2.0",
+  "version": "3.2.1",
+  "releaseDate": "2026-11-04T21:23:51Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.2.1",
   "demoVersion": "3.1.1",
-  "releaseHighlights": "- New film sharpness (MTF) model: sharpness and softening now land at full strength instead of a fraction of it\n- New Print MTF Format dropdown so the print can use its own format (defaults to Match Negative)\n- Film Stock Editor: new Shift sliders under Neg/Print Sensitivity and Neg/Print Dye slide a whole curve left or right in nm. It stays put, you can keep editing points, and it saves with the project and in presets\n- Factory Settings: save your own starting points and pick one as the default for new nodes. The reset arrow lands on it too\n- Halation now scales with frame width like grain and MTF. Looks dialed on UHD are unchanged; HD projects get a tighter glow than before",
+  "releaseHighlights": "- Fixed: presets saved with an FSE Shift now reload with the Shift on the slider instead of 0\n- New Full preset: Kodak Cine 2.0, Kodak Cine with the magenta neg dye shifted 22nm\n- New Neg Dye preset: Violet Shift (Lomography)\n- Saved grades now remember which preset they used, so adding or deleting your own presets no longer changes what other grades point to",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.2.0/PhotoChemist3Beta-macOS.zip",
-      "sha256": "e689117ca890c00ffaef081aa03259aaf15858732e1a4e26fba7c12046e3dbab",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.2.1/PhotoChemist3Beta-macOS.zip",
+      "sha256": "f37edc43c918cb6158af0291901fe3c2763753a45de6da4fda46fdd9f5e63b28",
       "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.1.1/PhotoChemistDemo_macOS_universal_portable.zip",
       "demoSha256": "9e6dabe324362e9b097569262e568acc2f1df99a66f4b2e5602b8cc59fd38cc5",
       "packageType": "zip",
@@ -45,8 +45,8 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.2.0/PhotoChemist3Beta-windows-cuda.zip",
-      "sha256": "6bcd56a510b6941e5f12f049c6ee4c2e2ee74ede95db4cbd08a48111443a20bb",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.2.1/PhotoChemist3Beta-windows-cuda.zip",
+      "sha256": "1e51cde558e51b94dd33668c5881da4aa46017cbcccdedd595ef218f057c0743",
       "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.1.1/PhotoChemistDemo_windows_cuda_portable.zip",
       "demoSha256": "a7afe35dc23bce8b4bfd0d27e06e01e6f8fccfe958e604d3741a8f81fc6aa57d",
       "packageType": "zip",
@@ -69,8 +69,8 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.2.0/PhotoChemist3Beta-linux-cuda.zip",
-      "sha256": "173ccee96a310b2c38754c6fc5a19b283750656972cd357dab98628e6810d029",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.2.1/PhotoChemist3Beta-linux-cuda.zip",
+      "sha256": "e96bec3ed68ed955aa3b50109cbda79a7a4db0254eb14c8c652552d91c233ee4",
       "demoDownloadUrl": "https://github.com/Dec18studios/PhotoChemist-Demo/releases/download/v3.1.1/PhotoChemistDemo_linux_cuda_portable.zip",
       "demoSha256": "e464d5de31334ff3c6ffb5dede42384c1056a5fca728bec4ab6c86369de59e8e",
       "packageType": "zip",
@@ -92,6 +92,80 @@
     }
   ],
   "availableVersions": [
+    {
+      "version": "3.2.0",
+      "releaseDate": "2026-11-04T18:35:17Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/PhotoChemist-OFX/releases/tag/v3.2.0",
+      "releaseHighlights": "- New film sharpness (MTF) model: sharpness and softening now land at full strength instead of a fraction of it\n- New Print MTF Format dropdown so the print can use its own format (defaults to Match Negative)\n- Film Stock Editor: new Shift sliders under Neg/Print Sensitivity and Neg/Print Dye slide a whole curve left or right in nm. It stays put, you can keep editing points, and it saves with the project and in presets\n- Factory Settings: save your own starting points and pick one as the default for new nodes. The reset arrow lands on it too\n- Halation now scales with frame width like grain and MTF. Looks dialed on UHD are unchanged; HD projects get a tighter glow than before",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.2.0/PhotoChemist3Beta-macOS.zip",
+          "sha256": "e689117ca890c00ffaef081aa03259aaf15858732e1a4e26fba7c12046e3dbab",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.2.0/PhotoChemist3Beta-windows-cuda.zip",
+          "sha256": "6bcd56a510b6941e5f12f049c6ee4c2e2ee74ede95db4cbd08a48111443a20bb",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/PhotoChemist-OFX/releases/download/v3.2.0/PhotoChemist3Beta-linux-cuda.zip",
+          "sha256": "173ccee96a310b2c38754c6fc5a19b283750656972cd357dab98628e6810d029",
+          "packageType": "zip",
+          "bundleName": "PhotoChemist3Beta.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.PhotoChemist3Beta",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
     {
       "version": "3.1.2",
       "releaseDate": "2026-10-09T02:43:58Z",

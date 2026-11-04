@@ -1,7 +1,7 @@
 {
   "pluginId": "looknotes",
   "displayName": "Look Notes Pro",
-  "description": "Look labels for client sessions. Burns a label and notes into the frame for up to eight looks, and when you change Active Look it flips your look nodes for you, clip or timeline, split looks included. Export All Looks saves a still of every look plus a Look Grid with them side by side, and Export Current Look saves the frame you're on as PNG, JPG or 16 bit TIFF. Reframe mode with an image sampled palette, PowerGrade Mode for Gallery stills, Garamond, Pixel or your own fonts, and your own colours. Part of the Dec18 Toolbox. Try Look Notes Lite free: 3 looks, node toggling and JPG export.",
+  "description": "Look labels for client sessions. Burns a label and notes into the frame for up to 20 looks, and when you change Active Look it flips your look nodes for you, clip or timeline, split looks included. Skin Tone Selector and Perfect Exposure with face detection, Compare against a second input or a held frame, and on the Mac a Look Board window, Look Scopes in their own window and a Stream Deck plugin. Export All Looks saves a still of every look plus a Look Grid, and Export Current Look saves the frame as PNG, JPG or 16 bit TIFF. Reframe with an image sampled palette, PowerGrade Mode, your own fonts and colours. Part of the Dec18 Toolbox. Try Look Notes Lite free: 3 looks, node toggling and JPG export.",
   "category": "Workflow",
   "licenseTier": "subscription",
   "tags": [
@@ -18,19 +18,19 @@
     "GPU"
   ],
   "infoUrl": "https://tools.dec18studios.com/color-grading-tools/look-notes/",
-  "version": "1.2.0",
-  "releaseDate": "2026-10-01T01:08:51Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/tag/v1.2.0",
-  "demoVersion": "1.2.0",
-  "releaseHighlights": "- Look Notes is now Look Notes Pro, part of the Dec18 Toolbox membership. A free Lite edition is available too.\n- New Export All Looks: pick a folder and it switches to each look in turn, saves a still of the frame named with the look's label and the date, then puts your original look back.\n- New Build Grid: Export All Looks also saves a Look Grid image with every look side by side, ready to send to a client.\n- New Export Current Look: one click saves the frame as it is right now into your last export folder and shows you the file. Export again after changes and it adds _2, _3 and so on.\n- New Still Format: PNG, JPG or 16 bit TIFF. The Look Grid isn't available with JPG.\n- The Get the Whole Toolbox button is gone from Pro.\n- Saved projects keep their looks, notes and settings.",
+  "version": "1.5.0",
+  "releaseDate": "2026-11-04T23:11:59Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/tag/v1.5.0",
+  "demoVersion": "1.5.0",
+  "releaseHighlights": "- Up to 20 looks per node (Lite keeps 3).\n- New Skin Tone Selector and Perfect Exposure, with face detection and a built-in vectorscope.\n- New Compare: wipe or side by side against a second input or a held frame.\n- New Look Board: a control window with your looks, stills, Hold from Still and Apply to All Clips. Mac only for now.\n- New Look Scopes in their own window, fed straight from the node: 3D cube, CIE, vectorscopes, waveform, histogram, blacks. Drag panes around and save your own layouts. Mac only for now.\n- New Stream Deck plugin for switching looks and skin views. Mac only for now.\n- Starting Point: save your own defaults.\n- Windows and Linux now run on the GPU with OpenCL as well as CUDA, and get face detection.\n- Saved projects keep their looks, notes and settings.",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.2.0/LookNotes_macOS_universal.zip",
-      "sha256": "031c47eb82fab7e8400ad906e64f41d26d268e13f5e49885ff7e192ced7422df",
-      "demoDownloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.2.0/LookNotes_Lite_macOS_universal.zip",
-      "demoSha256": "486a04e50bc64fb9e06dc7750f0c5863b48388c32b592a26c867be68164cec2d",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.5.0/LookNotes_macOS_universal.zip",
+      "sha256": "813b6fb8a7efc4091081767fe76e37408163fc5996e731621613252201e388cb",
+      "demoDownloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.5.0/LookNotes_Lite_macOS_universal.zip",
+      "demoSha256": "29cee16d937137e414560c7db345e240599217fdf3bc8de0e836ed17644d48ce",
       "packageType": "zip",
       "bundleName": "LookNotes.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookNotes",
@@ -51,10 +51,10 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.2.0/LookNotes_windows_cuda.zip",
-      "sha256": "3229d7dbc9e5b04fe259e1b9fa1015f17df7b68f9bb87c7dc53517e8332d4e09",
-      "demoDownloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.2.0/LookNotes_Lite_windows_cuda.zip",
-      "demoSha256": "8ea617d7759d2eafd74072cf61512e61614c4d899525377b1243cc3ead17eea8",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.5.0/LookNotes_windows_cuda.zip",
+      "sha256": "de686fd694e6bd36571e0339bc3cf93321099532ba76657d86d2500a0d0172c3",
+      "demoDownloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.5.0/LookNotes_Lite_windows_cuda.zip",
+      "demoSha256": "7148979e4b7d520d6465a580c8a89c168a585eaace3ee86f1f7a7eb9faa40dac",
       "packageType": "zip",
       "bundleName": "LookNotes.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookNotes",
@@ -75,10 +75,10 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.2.0/LookNotes_linux_cuda.zip",
-      "sha256": "f7804862277ee9b900f305f398f41f5b8d200531b150e8aad043a03b34b466a2",
-      "demoDownloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.2.0/LookNotes_Lite_linux_cuda.zip",
-      "demoSha256": "ee9927a3469d447a3918f48ef2f6c0bd3e7e06558f4e6fd469ab40e4198a5564",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.5.0/LookNotes_linux_cuda.zip",
+      "sha256": "764c2cb1daa84f15f35c416d3ac2472fef6dc341e52f07c779c5debfb730b1f3",
+      "demoDownloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.5.0/LookNotes_Lite_linux_cuda.zip",
+      "demoSha256": "61ee07767000a938c48f76380f618f0c7afcf80dab0bf1afa786c9f8e8821d41",
       "packageType": "zip",
       "bundleName": "LookNotes.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookNotes",
@@ -98,6 +98,80 @@
     }
   ],
   "availableVersions": [
+    {
+      "version": "1.2.0",
+      "releaseDate": "2026-10-01T01:08:51Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/tag/v1.2.0",
+      "releaseHighlights": "- Look Notes is now Look Notes Pro, part of the Dec18 Toolbox membership. A free Lite edition is available too.\n- New Export All Looks: pick a folder and it switches to each look in turn, saves a still of the frame named with the look's label and the date, then puts your original look back.\n- New Build Grid: Export All Looks also saves a Look Grid image with every look side by side, ready to send to a client.\n- New Export Current Look: one click saves the frame as it is right now into your last export folder and shows you the file. Export again after changes and it adds _2, _3 and so on.\n- New Still Format: PNG, JPG or 16 bit TIFF. The Look Grid isn't available with JPG.\n- The Get the Whole Toolbox button is gone from Pro.\n- Saved projects keep their looks, notes and settings.",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.2.0/LookNotes_macOS_universal.zip",
+          "sha256": "031c47eb82fab7e8400ad906e64f41d26d268e13f5e49885ff7e192ced7422df",
+          "packageType": "zip",
+          "bundleName": "LookNotes.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookNotes",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.2.0/LookNotes_windows_cuda.zip",
+          "sha256": "3229d7dbc9e5b04fe259e1b9fa1015f17df7b68f9bb87c7dc53517e8332d4e09",
+          "packageType": "zip",
+          "bundleName": "LookNotes.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookNotes",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.2.0/LookNotes_linux_cuda.zip",
+          "sha256": "f7804862277ee9b900f305f398f41f5b8d200531b150e8aad043a03b34b466a2",
+          "packageType": "zip",
+          "bundleName": "LookNotes.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookNotes",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
     {
       "version": "1.1.0",
       "releaseDate": "2026-09-30T18:41:20Z",

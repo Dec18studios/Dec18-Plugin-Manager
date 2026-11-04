@@ -18,19 +18,19 @@
     "macos"
   ],
   "category": "Workflow",
-  "description": "Look labels for client sessions. Burns a label and notes into the frame for up to eight looks, and when you change Active Look it flips your look nodes for you, clip or timeline, split looks included. Export All Looks saves a still of every look plus a Look Grid with them side by side, and Export Current Look saves the frame you're on as PNG, JPG or 16 bit TIFF. Reframe mode with an image sampled palette, PowerGrade Mode for Gallery stills, Garamond, Pixel or your own fonts, and your own colours. Part of the Dec18 Toolbox. Try Look Notes Lite free: 3 looks, node toggling and JPG export.",
+  "description": "Look labels for client sessions. Burns a label and notes into the frame for up to 20 looks, and when you change Active Look it flips your look nodes for you, clip or timeline, split looks included. Skin Tone Selector and Perfect Exposure with face detection, Compare against a second input or a held frame, and on the Mac a Look Board window, Look Scopes in their own window and a Stream Deck plugin. Export All Looks saves a still of every look plus a Look Grid, and Export Current Look saves the frame as PNG, JPG or 16 bit TIFF. Reframe with an image sampled palette, PowerGrade Mode, your own fonts and colours. Part of the Dec18 Toolbox. Try Look Notes Lite free: 3 looks, node toggling and JPG export.",
   "licenseTier": "subscription",
   "demo": {
-    "version": "1.2.0",
+    "version": "1.5.0",
     "assets": {
       "macos-universal": {
-        "downloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.2.0/LookNotes_Lite_macOS_universal.zip"
+        "downloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.5.0/LookNotes_Lite_macOS_universal.zip"
       },
       "windows-x86_64": {
-        "downloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.2.0/LookNotes_Lite_windows_cuda.zip"
+        "downloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.5.0/LookNotes_Lite_windows_cuda.zip"
       },
       "linux-x86_64": {
-        "downloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.2.0/LookNotes_Lite_linux_cuda.zip"
+        "downloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.5.0/LookNotes_Lite_linux_cuda.zip"
       }
     }
   },

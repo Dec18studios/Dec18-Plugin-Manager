@@ -18,19 +18,19 @@
     "GPU"
   ],
   "infoUrl": "https://tools.dec18studios.com/color-grading-tools/look-notes/",
-  "version": "1.5.1",
-  "releaseDate": "2026-11-05T15:45:01Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/tag/v1.5.1",
-  "demoVersion": "1.5.1",
-  "releaseHighlights": "- New Install Stream Deck Plugin button at the bottom of the Look Notes panel. Press it and Stream Deck asks to install the Look Notes keys.\n- The Stream Deck plugin now works on Windows too, not just Mac.\n- Look Scopes: the CIE chart shows a faint Planckian locus (the neutral white curve) instead of the D65 dot.\n- Look Scopes: the vectorscope zooms toward the centre under a fixed hue ring, so you always know where you are.",
+  "version": "1.5.2",
+  "releaseDate": "2026-11-12T19:01:20Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/tag/v1.5.2",
+  "demoVersion": "1.5.2",
+  "releaseHighlights": "- Look Board now sticks to the clip you're on. Edits no longer spill onto other clips that have their own Look Notes node.\n- Look Board connects right away after Resolve opens a project, without needing to change a setting first.\n- Hold as Compare always grabs the real viewer frame, never a thumbnail.",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.5.1/LookNotes_macOS_universal.zip",
-      "sha256": "ae23c066f9639971fd8f87d8464d4c931b8e2cb060c5cb08c68f45f525aa17e3",
-      "demoDownloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.5.1/LookNotes_Lite_macOS_universal.zip",
-      "demoSha256": "559ace8298580cbe6535e4651c7f130c1ffd43d5588d3b01f3b4d9359a65fc36",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.5.2/LookNotes_macOS_universal.zip",
+      "sha256": "c56ff03b9ce4f6604b884695fe4b45f7335f0b5a139e5a8fb0bec24f99f179dc",
+      "demoDownloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.5.2/LookNotes_Lite_macOS_universal.zip",
+      "demoSha256": "4c09968c86854bec2c8c73356864ef13a5b2fd04c9722eab2e2d0825f24653ff",
       "packageType": "zip",
       "bundleName": "LookNotes.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookNotes",
@@ -51,10 +51,10 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.5.1/LookNotes_windows_cuda.zip",
-      "sha256": "9846d214b89adf28e1668c6289a144e4d7de4e790d1b7eaf2d890e08d2c52f58",
-      "demoDownloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.5.1/LookNotes_Lite_windows_cuda.zip",
-      "demoSha256": "07aaf1cc56146b6a42769492c2f55706275596857b4d75affbf0fd2531f24ce3",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.5.2/LookNotes_windows_cuda.zip",
+      "sha256": "d3f0f166ac1b2aaa8e52b54d20ed00470da3420dda46c24f498cebae8bfdf1f4",
+      "demoDownloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.5.2/LookNotes_Lite_windows_cuda.zip",
+      "demoSha256": "dcbe2b07f5c0efbe1d6a61a7e58253e7e99883f36f506b4ae05d856e24e1e1ad",
       "packageType": "zip",
       "bundleName": "LookNotes.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookNotes",
@@ -75,10 +75,10 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.5.1/LookNotes_linux_cuda.zip",
-      "sha256": "d712ba7e499d36b93eb3dac145155ca4cdd78a9feed61c52f429cb5284a975be",
-      "demoDownloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.5.1/LookNotes_Lite_linux_cuda.zip",
-      "demoSha256": "9fed9b60f66d9240e7a0376faaf2cff7ce45363ef841724bae1619371473d400",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.5.2/LookNotes_linux_cuda.zip",
+      "sha256": "2f222e2081ed5828ef4534cfbbd7659dae1a6aec84e654e0133fd8af73d452b3",
+      "demoDownloadUrl": "https://github.com/Dec18studios/Look-Notes-Lite/releases/download/v1.5.2/LookNotes_Lite_linux_cuda.zip",
+      "demoSha256": "d4871a3bc8a2c15f80d3bb266239d438deff0cd279d7d3f6aa637ee26751c42f",
       "packageType": "zip",
       "bundleName": "LookNotes.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookNotes",
@@ -98,6 +98,80 @@
     }
   ],
   "availableVersions": [
+    {
+      "version": "1.5.1",
+      "releaseDate": "2026-11-05T15:45:01Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/Look-Notes-OFX/releases/tag/v1.5.1",
+      "releaseHighlights": "- New Install Stream Deck Plugin button at the bottom of the Look Notes panel. Press it and Stream Deck asks to install the Look Notes keys.\n- The Stream Deck plugin now works on Windows too, not just Mac.\n- Look Scopes: the CIE chart shows a faint Planckian locus (the neutral white curve) instead of the D65 dot.\n- Look Scopes: the vectorscope zooms toward the centre under a fixed hue ring, so you always know where you are.",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.5.1/LookNotes_macOS_universal.zip",
+          "sha256": "ae23c066f9639971fd8f87d8464d4c931b8e2cb060c5cb08c68f45f525aa17e3",
+          "packageType": "zip",
+          "bundleName": "LookNotes.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookNotes",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.5.1/LookNotes_windows_cuda.zip",
+          "sha256": "9846d214b89adf28e1668c6289a144e4d7de4e790d1b7eaf2d890e08d2c52f58",
+          "packageType": "zip",
+          "bundleName": "LookNotes.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookNotes",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/Look-Notes-OFX/releases/download/v1.5.1/LookNotes_linux_cuda.zip",
+          "sha256": "d712ba7e499d36b93eb3dac145155ca4cdd78a9feed61c52f429cb5284a975be",
+          "packageType": "zip",
+          "bundleName": "LookNotes.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookNotes",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
     {
       "version": "1.5.0",
       "releaseDate": "2026-11-04T23:11:59Z",

@@ -13,16 +13,16 @@
     "GPU"
   ],
   "infoUrl": null,
-  "version": "2.0.2",
-  "releaseDate": "2026-09-09T22:26:40Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/tag/v2.0.2",
-  "releaseHighlights": "- Docs only. The Claude wiring guide and grading playbook inside the bundle now cover a Resolve caching case where a write to S1 Balance echoed but never showed in the viewer.\n- No change to any node, kernel, parameter or saved grade. If you do not use the Claude control channel there is nothing new here.\n- Everything from v2.0.1 is included: S1 Balance panel order, T1000 Timeline Agent, the control channel, Linear and Intermediate builds per platform.",
+  "version": "2.5.0",
+  "releaseDate": "2026-11-15T22:11:50Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/tag/v2.5.0",
+  "releaseHighlights": "- Factory Settings in every tool. Save your own starting points and pick which one new nodes open with, or stay on the built-in Factory setup.\n- OpenDRT gets a Model control with five models: Current, v1.0.1, v1.1, Tesseract and Chromagnon. Existing grades stay on Current and do not change.\n- OpenDRT preset manager. Save your own presets, load them from My Presets, and share them as files with Save and Share.\n- New OpenCL path on Windows and Linux for AMD and Intel GPUs. NVIDIA cards keep using CUDA, Macs keep using Metal.\n- OpenDRT Stickshift Mode is now one group with every module always visible and its own Enable switch for quick on and off checks.",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v2.0.2/LookDevTools_v2.0.2_macOS_universal_portable.zip",
-      "sha256": "0075ed56174b840ecebffe5f39e1979aad57ddd8db218a100880ddad2e7c0dfa",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v2.5.0/LookDevTools_v2.5.0_macOS_universal_portable.zip",
+      "sha256": "6c29159fe410323e411536110a39400cdbd684a918b03be5fc1dcf308dd490d5",
       "packageType": "zip",
       "bundleName": "LookDevTools.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookDevTools",
@@ -43,8 +43,8 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v2.0.2/LookDevTools_v2.0.2_windows_cuda_portable.zip",
-      "sha256": "944be9e0e47efdfca1b944c54d9d0c8397f77a6950765000374ac83e50a70c71",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v2.5.0/LookDevTools_v2.5.0_windows_cuda_portable.zip",
+      "sha256": "3659122a2edb8a90b23a3ab8ea71540a881f9aa06375b72bb90e63e981561e49",
       "packageType": "zip",
       "bundleName": "LookDevTools.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookDevTools",
@@ -65,8 +65,8 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v2.0.2/LookDevTools_v2.0.2_linux_cuda_portable.zip",
-      "sha256": "fb263fa8184f10d9ceae59e8326da1f75f38d9bfce08ff2f0cb58959ca629843",
+      "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v2.5.0/LookDevTools_v2.5.0_linux_cuda_portable.zip",
+      "sha256": "b9253863f763c9b9c3060a40b58c2143dc5fcfbc6e99e082ac9191d837a70e9a",
       "packageType": "zip",
       "bundleName": "LookDevTools.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.LookDevTools",
@@ -86,6 +86,80 @@
     }
   ],
   "availableVersions": [
+    {
+      "version": "2.0.2",
+      "releaseDate": "2026-09-09T22:26:40Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/LookDevTools-OFX/releases/tag/v2.0.2",
+      "releaseHighlights": "- Docs only. The Claude wiring guide and grading playbook inside the bundle now cover a Resolve caching case where a write to S1 Balance echoed but never showed in the viewer.\n- No change to any node, kernel, parameter or saved grade. If you do not use the Claude control channel there is nothing new here.\n- Everything from v2.0.1 is included: S1 Balance panel order, T1000 Timeline Agent, the control channel, Linear and Intermediate builds per platform.",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v2.0.2/LookDevTools_v2.0.2_macOS_universal_portable.zip",
+          "sha256": "0075ed56174b840ecebffe5f39e1979aad57ddd8db218a100880ddad2e7c0dfa",
+          "packageType": "zip",
+          "bundleName": "LookDevTools.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookDevTools",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v2.0.2/LookDevTools_v2.0.2_windows_cuda_portable.zip",
+          "sha256": "944be9e0e47efdfca1b944c54d9d0c8397f77a6950765000374ac83e50a70c71",
+          "packageType": "zip",
+          "bundleName": "LookDevTools.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookDevTools",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://dec18-download-proxy.dec18studios.workers.dev/v1/Dec18studios/LookDevTools-OFX/releases/download/v2.0.2/LookDevTools_v2.0.2_linux_cuda_portable.zip",
+          "sha256": "fb263fa8184f10d9ceae59e8326da1f75f38d9bfce08ff2f0cb58959ca629843",
+          "packageType": "zip",
+          "bundleName": "LookDevTools.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.LookDevTools",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
     {
       "version": "2.0.1",
       "releaseDate": "2026-09-09T21:06:29Z",

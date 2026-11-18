@@ -53,6 +53,9 @@ async function fetchAllOrders(apiKey) {
 const num = (o) => Number(o.orderNumber) || 0;
 const names = (o) => (o.lineItems ?? []).map((li) => li.productName ?? "(unnamed)");
 
+// Logs here are PUBLIC. Same masking convention as fulfill-licenses.mjs.
+const mask = (e) => String(e || "(none)").replace(/^(.).*(@.*)$/, "$1***$2");
+
 async function main() {
   const apiKey = process.env.SQUARESPACE_API_KEY;
   if (!apiKey) {
@@ -105,6 +108,31 @@ async function main() {
       (gaps.length ? ` -> ${gaps.join(", ")}` : ""));
   }
 
+  // ── Repeat buyers ───────────────────────────────────────────────
+  // Fulfillment dedups by email, so a second purchase from an address
+  // already in the ledger is dropped with no log line at all. This finds
+  // those from the order data alone, no ledger needed.
+  const firstSeen = new Map();
+  const repeats = [];
+  for (const o of [...matching].sort((a, b) => num(a) - num(b))) {
+    const email = (o.customerEmail ?? "").trim().toLowerCase();
+    if (!email) continue;
+    if (firstSeen.has(email)) {
+      repeats.push({ order: o, first: firstSeen.get(email), email });
+    } else {
+      firstSeen.set(email, o);
+    }
+  }
+  console.log(`\nUNIQUE BUYER ADDRESSES ACROSS MATCHING ORDERS: ${firstSeen.size}`);
+  console.log(`REPEAT PURCHASES (dedup drops these silently): ${repeats.length}`);
+  for (const r of repeats) {
+    const days = Math.round(
+      (Date.parse(r.order.createdOn) - Date.parse(r.first.createdOn)) / 86400000);
+    console.log(`  #${r.order.orderNumber}  ${(r.order.createdOn ?? "").slice(0, 10)}  ` +
+      `${mask(r.email)}  repeat of #${r.first.orderNumber} ` +
+      `(${(r.first.createdOn ?? "").slice(0, 10)}, ${days} days earlier)`);
+  }
+
   // ── Recent detail ───────────────────────────────────────────────
   const sorted = [...orders].sort((a, b) => num(b) - num(a));
   console.log(`\nNEWEST ${Math.min(RECENT_COUNT, sorted.length)} ORDERS BY NUMBER:`);
@@ -113,7 +141,7 @@ async function main() {
     const created = (o.createdOn ?? "").slice(0, 16);
     const total = o.grandTotal?.value ?? "?";
     console.log(`  ${hit}#${o.orderNumber}  ${created}  ${String(total).padStart(8)}  ` +
-      `${o.fulfillmentStatus ?? "-"}  ${JSON.stringify(names(o))}`);
+      `${o.fulfillmentStatus ?? "-"}  ${mask(o.customerEmail)}  ${JSON.stringify(names(o))}`);
   }
 
   // ── The window the user is asking about ─────────────────────────
@@ -123,7 +151,8 @@ async function main() {
   for (const o of recent.sort((a, b) => Date.parse(a.createdOn) - Date.parse(b.createdOn))) {
     const hit = names(o).some((n) => n === TARGET_PRODUCT) ? "MATCH " : "SKIP  ";
     console.log(`  ${hit}#${o.orderNumber}  ${o.createdOn}  ` +
-      `${o.fulfillmentStatus ?? "-"}  test=${o.testmode ?? false}  ${JSON.stringify(names(o))}`);
+      `${o.fulfillmentStatus ?? "-"}  test=${o.testmode ?? false}  ` +
+      `${mask(o.customerEmail)}  ${JSON.stringify(names(o))}`);
   }
 
   console.log("\nAudit complete. No data was written, no mail was sent.");

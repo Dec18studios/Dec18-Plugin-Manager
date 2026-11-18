@@ -282,17 +282,44 @@ async function main() {
   // 1. Fetch all Squarespace orders containing the target product
   console.log(`Polling Squarespace orders for "${TARGET_PRODUCT}" purchases...`);
   const orders = await fetchSubscriptionOrders(apiKey);
-  console.log(`Found ${orders.length} fulfilled order(s) with "${TARGET_PRODUCT}".`);
+  console.log(`Found ${orders.length} order(s) containing "${TARGET_PRODUCT}" (any status).`);
 
   // 2. Load already-processed ledger
   const processed = loadProcessed();
   const keyLedger = loadLedger();
   const newPurchasers = [];
+  const renewals = [];
+  let noEmail = 0;
 
   for (const order of orders) {
     const email = order.customerEmail?.trim().toLowerCase();
-    if (!email) continue;
-    if (processed[email]) continue;
+    if (!email) { noEmail += 1; continue; }
+
+    const prior = processed[email];
+    if (prior) {
+      // This address is already in the ledger, but that does NOT mean this
+      // order was handled. It may be a brand new payment from a returning
+      // customer, i.e. an annual renewal. Those used to disappear right here
+      // with no log line at all, so a renewal looked identical to a quiet run.
+      // Still not auto-issued (renewal handling is a deliberate manual step),
+      // but never again silent.
+      const seen = new Set(
+        [prior.orderNumber, ...(prior.renewals ?? []).map((r) => r.orderNumber)]
+          .filter((n) => n !== undefined && n !== null)
+          .map(String)
+      );
+      if (!seen.has(String(order.orderNumber))) {
+        renewals.push({
+          email,
+          orderNumber: order.orderNumber,
+          placedOn: (order.createdOn ?? "").slice(0, 10),
+          amount: order.grandTotal?.value ?? "unknown",
+          priorOrderNumber: prior.orderNumber ?? "(none: perpetual/manual grant)",
+          priorTier: prior.tier ?? "(unknown)",
+        });
+      }
+      continue;
+    }
 
     const ba = order.billingAddress ?? order.shippingAddress ?? {};
     const name = [ba.firstName, ba.lastName].filter(Boolean).join(" ") || null;
@@ -301,8 +328,29 @@ async function main() {
     newPurchasers.push({ email, name, orderId: order.id, orderNumber: order.orderNumber, amount: total, tier });
   }
 
+  if (noEmail) {
+    console.log(`Skipped ${noEmail} order(s) carrying no customer email.`);
+  }
+
+  if (renewals.length) {
+    console.log(`\n!! ${renewals.length} UNRECORDED PAYMENT(S) from addresses already in the ledger.`);
+    console.log("   Repeat purchases, i.e. annual renewals. Nothing was emailed and nothing");
+    console.log("   was written for these. They need handling by hand:");
+    for (const r of renewals) {
+      console.log(
+        `     order #${r.orderNumber}  ${r.placedOn}  ${r.amount}  ${mask(r.email)}` +
+        `  (ledger holds #${r.priorOrderNumber}, tier ${r.priorTier})`
+      );
+    }
+    console.log("");
+  }
+
   if (!newPurchasers.length) {
-    console.log("No new purchasers to process.");
+    console.log(
+      renewals.length
+        ? "No new first-time purchasers. See the unrecorded payment(s) above."
+        : "No new purchasers to process."
+    );
     return;
   }
 

@@ -1,0 +1,41 @@
+name: Squarespace Order Audit
+
+# READ ONLY diagnostic. Dispatch only, never scheduled.
+# Prints what the Commerce Orders API actually returns so the fulfillment
+# product-name matcher can be fixed against real data. Writes nothing,
+# sends no mail, does not touch the private ledger.
+#
+# Logs on this repo are PUBLIC: the script prints order numbers, product
+# names, statuses and dates only, never a customer email or address.
+
+on:
+  workflow_dispatch:
+    inputs:
+      since_days:
+        description: "Detail window in days"
+        required: false
+        default: "21"
+      recent_count:
+        description: "How many newest orders to list"
+        required: false
+        default: "25"
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Audit Squarespace orders
+        env:
+          SQUARESPACE_API_KEY: ${{ secrets.SQUARESPACE_API_KEY }}
+          SINCE_DAYS: ${{ github.event.inputs.since_days || '21' }}
+          RECENT_COUNT: ${{ github.event.inputs.recent_count || '25' }}
+        run: node tools/squarespace-order-audit.mjs

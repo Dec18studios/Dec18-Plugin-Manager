@@ -14,16 +14,16 @@
     "GPU"
   ],
   "infoUrl": null,
-  "version": "1.2.0",
-  "releaseDate": "2026-10-20T15:49:24Z",
-  "releaseNotesUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/tag/v1.2.0",
-  "releaseHighlights": "- New Dye Layer Stack illusion. Three dye layers stack in density, so light passing through multiplies. Compare a film layer against a flat veil, watch overlapping dyes build new colours, or pull the layers apart and stack them back together.\n- New Dye Layer Separation passthru. Splits your clip into its cyan, magenta and yellow dye layers, lets you switch, gain or kill each one, and restacks them. View each layer, the density, or side by side strips.\n- New Surround A/B. Two identical patches on a bright and a dark surround, set in stops around mid grey, with a master exposure, an increment and decrement link, and a readout that says SAME VALUE when the numbers match.\n- New Crispening Ladder. Even steps in stops on a surround you control, as a row, as pairs, or as a grid that climbs both ways from a black corner. The steps near the surround are the ones that look the most different.\n- New Viewing Matte passthru. Shrinks your clip and puts it on a uniform matte. Store a dark and a bright matte and flip between them to see the same picture change.\n- Every new mode has Demo presets that set the sliders for you.",
+  "version": "1.3.0",
+  "releaseDate": "2026-11-21T01:31:10Z",
+  "releaseNotesUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/tag/v1.3.0",
+  "releaseHighlights": "- New Negative Afterimage illusion. Stare at the red dot on a colour inverted picture, then rest your mouse on Switch To Black And White and click when you are ready. Your eyes paint the colour back into the black and white image. The longer you stare, the stronger it gets.\n- Works as a generated scene or as a passthru on your own clip, with Hue Flip or Full Negative inversion, a Stare Saturation push, dot size, colour and ring controls, and a Show Original compare.\n- New OpenCL render path on Windows and Linux, so AMD and Intel GPUs render on the GPU instead of falling back.\n- The Global group now starts closed to keep the panel tidy.",
   "platforms": [
     {
       "platform": "macos",
       "arch": "universal",
-      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.2.0/ColorTheory_macOS_universal.zip",
-      "sha256": "d6f97599a4c6065eaa71ad88856f725e09721c3f9c732efe4640fc14786c8a8e",
+      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.3.0/ColorTheory_macOS_universal.zip",
+      "sha256": "8cd5feef6a599edcb69a351de0469abf8b4f4f87d504de6c02abb7177c9ae2e7",
       "packageType": "zip",
       "bundleName": "ColorTheory.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.ColorTheory",
@@ -44,8 +44,8 @@
     {
       "platform": "windows",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.2.0/ColorTheory_windows_cuda.zip",
-      "sha256": "497379ca44faec7c198a450b18753c6dd4303d07e1e26f0cd10e9299244b28fc",
+      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.3.0/ColorTheory_windows_cuda.zip",
+      "sha256": "75c5eb19799db55b11a1cf76506bdd53bb6c85823b2eeed455067e064a1f6484",
       "packageType": "zip",
       "bundleName": "ColorTheory.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.ColorTheory",
@@ -66,8 +66,8 @@
     {
       "platform": "linux",
       "arch": "x86_64",
-      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.2.0/ColorTheory_linux_cuda.zip",
-      "sha256": "daa584b79d22e622cd0aa4947f44b85ebe52f0a46848ff4e8f818d4a90acc98b",
+      "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.3.0/ColorTheory_linux_cuda.zip",
+      "sha256": "e0d16f33f294ef560cabe05b776eeb0f7cdf4d054bdad3e5fe8a75816627118d",
       "packageType": "zip",
       "bundleName": "ColorTheory.ofx.bundle",
       "bundleIdentifier": "com.dec18studios.ColorTheory",
@@ -87,6 +87,80 @@
     }
   ],
   "availableVersions": [
+    {
+      "version": "1.2.0",
+      "releaseDate": "2026-10-20T15:49:24Z",
+      "releaseNotesUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/tag/v1.2.0",
+      "releaseHighlights": "- New Dye Layer Stack illusion. Three dye layers stack in density, so light passing through multiplies. Compare a film layer against a flat veil, watch overlapping dyes build new colours, or pull the layers apart and stack them back together.\n- New Dye Layer Separation passthru. Splits your clip into its cyan, magenta and yellow dye layers, lets you switch, gain or kill each one, and restacks them. View each layer, the density, or side by side strips.\n- New Surround A/B. Two identical patches on a bright and a dark surround, set in stops around mid grey, with a master exposure, an increment and decrement link, and a readout that says SAME VALUE when the numbers match.\n- New Crispening Ladder. Even steps in stops on a surround you control, as a row, as pairs, or as a grid that climbs both ways from a black corner. The steps near the surround are the ones that look the most different.\n- New Viewing Matte passthru. Shrinks your clip and puts it on a uniform matte. Store a dark and a bright matte and flip between them to see the same picture change.\n- Every new mode has Demo presets that set the sliders for you.",
+      "platforms": [
+        {
+          "platform": "macos",
+          "arch": "universal",
+          "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.2.0/ColorTheory_macOS_universal.zip",
+          "sha256": "d6f97599a4c6065eaa71ad88856f725e09721c3f9c732efe4640fc14786c8a8e",
+          "packageType": "zip",
+          "bundleName": "ColorTheory.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.ColorTheory",
+          "installPath": "/Library/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "windows",
+          "arch": "x86_64",
+          "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.2.0/ColorTheory_windows_cuda.zip",
+          "sha256": "497379ca44faec7c198a450b18753c6dd4303d07e1e26f0cd10e9299244b28fc",
+          "packageType": "zip",
+          "bundleName": "ColorTheory.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.ColorTheory",
+          "installPath": "C:\\Program Files\\Common Files\\OFX\\Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        },
+        {
+          "platform": "linux",
+          "arch": "x86_64",
+          "downloadUrl": "https://github.com/Dec18studios/Color-Theory-OFX/releases/download/v1.2.0/ColorTheory_linux_cuda.zip",
+          "sha256": "daa584b79d22e622cd0aa4947f44b85ebe52f0a46848ff4e8f818d4a90acc98b",
+          "packageType": "zip",
+          "bundleName": "ColorTheory.ofx.bundle",
+          "bundleIdentifier": "com.dec18studios.ColorTheory",
+          "installPath": "/usr/OFX/Plugins",
+          "installMode": "bundle",
+          "minManagerVersion": "0.1.0",
+          "hostProcesses": [
+            "Resolve",
+            "DaVinci Resolve",
+            "Fusion",
+            "Fusion Studio",
+            "Nuke",
+            "NukeX",
+            "NukeStudio",
+            "Hiero"
+          ]
+        }
+      ]
+    },
     {
       "version": "1.1.2",
       "releaseDate": "2026-09-23T00:53:56Z",
